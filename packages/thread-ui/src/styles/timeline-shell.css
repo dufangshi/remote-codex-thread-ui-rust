@@ -83,6 +83,10 @@
   color: var(--theme-fg);
 }
 
+.thread-ui-shell .thread-graph-worked-interrupted {
+  color: color-mix(in srgb, var(--theme-fg-muted) 82%, #f59e0b 18%);
+}
+
 .thread-ui-shell .thread-graph-worked-rule {
   background: var(--theme-border);
 }

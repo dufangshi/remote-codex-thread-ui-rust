@@ -414,6 +414,47 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain('11s');
   });
 
+  it('uses the completion time and labels an interrupted turn', () => {
+    const startedAt = new Date(Date.UTC(2026, 6, 3, 20, 10, 0)).toISOString();
+    const completedAt = new Date(
+      Date.UTC(2026, 6, 3, 20, 22, 30),
+    ).toISOString();
+    const element = render(
+      <ThreadTimeline
+        autoCollapseCompletedTurns
+        liveOutput=""
+        turns={[
+          {
+            id: 'turn-1',
+            startedAt,
+            completedAt,
+            status: 'interrupted',
+            error: null,
+            items: [
+              {
+                id: 'user-1',
+                kind: 'userMessage',
+                text: 'Run the long task.',
+                createdAt: startedAt,
+              },
+              {
+                id: 'reasoning-1',
+                kind: 'reasoning',
+                text: 'Still working.',
+                createdAt: new Date(
+                  Date.UTC(2026, 6, 3, 20, 10, 1),
+                ).toISOString(),
+              },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    expect(element.textContent).toContain('Worked for 12m 30s');
+    expect(element.textContent).toContain('Interrupted by user');
+  });
+
   it('renders a command batch without redundant activity or batch labels', () => {
     const element = render(
       <ThreadTimeline

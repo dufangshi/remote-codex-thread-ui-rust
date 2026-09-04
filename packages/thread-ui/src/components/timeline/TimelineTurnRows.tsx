@@ -442,10 +442,14 @@ function latestActivityTimestamp(
 
 function formatWorkedDuration(
   startedAt: string | null | undefined,
+  completedAt: string | null | undefined,
   items: ThreadHistoryItemDto[],
 ) {
   const startMillis = Date.parse(startedAt ?? '');
-  const endMillis = latestItemTimestamp(items);
+  const completedMillis = Date.parse(completedAt ?? '');
+  const endMillis = Number.isFinite(completedMillis)
+    ? completedMillis
+    : latestItemTimestamp(items);
   if (
     !Number.isFinite(startMillis) ||
     endMillis === null ||
@@ -748,9 +752,15 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [groupedItems],
   );
   const workedLabel = useMemo(
-    () => formatWorkedDuration(turn.startedAt, mergedItems),
-    [mergedItems, turn.startedAt],
+    () => formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
+    [mergedItems, turn.completedAt, turn.startedAt],
   );
+  const interruptedLabel =
+    turn.status === 'interrupted' ? (
+      <span className="thread-graph-worked-interrupted shrink-0 text-[11px]">
+        Interrupted by user
+      </span>
+    ) : null;
   const hasCollapsedHiddenItems =
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
@@ -767,6 +777,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         <span className="thread-graph-worked-label shrink-0">
           {workedLabel}
         </span>
+        {interruptedLabel}
         <ChevronDown className="h-4 w-4 shrink-0 transition group-hover:translate-y-0.5" />
         <span
           className="thread-graph-worked-rule h-px min-w-0 flex-1"
@@ -816,6 +827,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
                 ? 'History unavailable, retry'
                 : workedLabel}
           </span>
+          {interruptedLabel}
           <ChevronRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5" />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
