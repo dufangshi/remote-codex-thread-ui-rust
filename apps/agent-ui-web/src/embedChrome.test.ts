@@ -33,16 +33,16 @@ describe("agent-ui-web embed chrome flags", () => {
 
   it("applies Treer iframe query flags", () => {
     const search =
-      "?presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0";
+      "?presentation=workspace&explorer=1&shell=0&permissions=0&nav=0";
     expect(readAgentUiChromeOverrides(search)).toEqual({
-      presentation: "embedded-single-thread",
+      presentation: "workspace",
       explorer: true,
       shell: false,
       permissions: false,
       nav: false,
     });
     expect(readAgentUiChromeFlags(search)).toEqual({
-      presentation: "embedded-single-thread",
+      presentation: "workspace",
       explorer: true,
       shell: false,
       permissions: false,

@@ -16,6 +16,7 @@ import {
   ThreadDetailSurface,
   type AppShellNavContextValue,
   type ThreadDetailUiAdapter,
+  type ThreadWorkspaceAdapter,
 } from "@remote-codex/thread-ui";
 import { builtinFrontendPlugins } from "@remote-codex/thread-ui/builtin-plugins";
 
@@ -24,6 +25,7 @@ import {
   AGENT_UI_WEB_CHROME_DEFAULTS,
   readAgentUiChromeOverrides,
 } from "./embedChrome";
+import { createAisWorkspaceAdapter } from "./workspaceFiles";
 
 interface StatePayload {
   ready: boolean;
@@ -350,6 +352,11 @@ export function App() {
     );
   }, [applyState]);
 
+  const workspaceAdapter = useMemo<ThreadWorkspaceAdapter>(
+    () => createAisWorkspaceAdapter(),
+    [],
+  );
+
   const adapter = useMemo<ThreadDetailUiAdapter>(
     () => ({
       openThread: () => {},
@@ -357,8 +364,9 @@ export function App() {
       sendPrompt,
       interrupt,
       updateSettings,
+      ...(chrome.explorer ? { workspace: workspaceAdapter } : {}),
     }),
-    [interrupt, sendPrompt, updateSettings],
+    [chrome.explorer, interrupt, sendPrompt, updateSettings, workspaceAdapter],
   );
 
   const nav = useMemo<AppShellNavContextValue>(
@@ -421,6 +429,8 @@ export function App() {
             hidePermissionCards={chromeOverrides.permissions === false}
             hideNav={!chrome.nav}
             chrome={chromeOverrides}
+            shellEffectiveTheme="dark"
+            shellThemeMode="dark"
             threads={state?.threads ?? []}
             detail={detail}
             loading={!state}
