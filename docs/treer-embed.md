@@ -27,7 +27,7 @@ Pass flags on the iframe URL, for example:
 
 Boolean values accept `1` / `0`, `true` / `false`, `on` / `off`, and `yes` / `no`.
 
-Recommended Treer iframe query:
+Recommended Treer iframe query (hides rooms, New Chat, and account chrome):
 
 ```text
 presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0
