@@ -73,6 +73,7 @@ function renderToolbar({
   onUpdateSettings = vi.fn(),
   model = 'gpt-5',
   availableModels = modelOptions,
+  sendButtonLabel = 'Send',
 }: {
   initialOpenMenu?: SettingsMenu;
   reasoningEffort?: ReasoningEffortDto | null;
@@ -87,6 +88,7 @@ function renderToolbar({
   onUpdateSettings?: (input: UpdateThreadSettingsInput) => void;
   model?: string;
   availableModels?: ModelOptionDto[];
+  sendButtonLabel?: string;
 } = {}) {
   function Harness() {
     const [openMenu, setOpenMenu] = useState<SettingsMenu>(initialOpenMenu);
@@ -113,7 +115,7 @@ function renderToolbar({
           activeView={activeView}
           disabled={disabled}
           fastMode={false}
-          sendButtonLabel="Send"
+          sendButtonLabel={sendButtonLabel}
           sendButtonClassName="send-state"
           modelControlsDisabled={false}
           effortControlsDisabled={effortControlsDisabled}
@@ -162,6 +164,11 @@ describe('ComposerSettingsToolbar', () => {
     container?.remove();
     root = null;
     container = null;
+  });
+
+  it('spins the send button while a prompt is in flight', () => {
+    const view = renderToolbar({ sendButtonLabel: 'Sending...' });
+    expect(view.querySelector('.animate-spin')).not.toBeNull();
   });
 
   it('opens the model menu and selects a model with its default effort', () => {

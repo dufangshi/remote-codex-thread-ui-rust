@@ -5,7 +5,7 @@ import type {
   ThreadContextUsageDto,
   UpdateThreadSettingsInput,
 } from '@remote-codex/shared';
-import { Check, ChevronRight } from 'lucide-react';
+import { Check, ChevronRight, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 import { InputGroupButton } from '../graph-ui/InputGroup';
@@ -106,6 +106,10 @@ export function ComposerSettingsToolbar({
     model ||
     'Select model'
   ).replace(/\s+\([^)]+\)\s*$/, '');
+  const sendBusy =
+    sendButtonLabel === 'Sending...' ||
+    sendButtonLabel === 'Connecting...' ||
+    sendButtonLabel === 'Setting...';
 
   return (
     <>
@@ -308,17 +312,21 @@ export function ComposerSettingsToolbar({
         disabled={goalBusy || (activeView === 'chat' ? disabled : false)}
         className={`${sendButtonBaseClassName} h-9 w-9 rounded-full text-sm font-medium disabled:cursor-not-allowed sm:h-8 sm:w-8 ${sendButtonClassName}`}
       >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 16 16"
-          className="h-4 w-4 fill-none stroke-current"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M8 13V3" />
-          <path d="m4 7 4-4 4 4" />
-        </svg>
+        {sendBusy ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 16 16"
+            className="h-4 w-4 fill-none stroke-current"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M8 13V3" />
+            <path d="m4 7 4-4 4 4" />
+          </svg>
+        )}
       </InputGroupButton>
     </>
   );

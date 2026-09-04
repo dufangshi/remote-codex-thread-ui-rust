@@ -269,15 +269,16 @@ export function App() {
         return false;
       }
       setBusy(true);
+      setDraft("");
       try {
         const payload = await api<StatePayload>("api/prompt", {
           method: "POST",
           body: JSON.stringify({ prompt }),
         });
         applyState(payload);
-        setDraft("");
         return true;
       } catch (reason) {
+        setDraft(prompt);
         setError(reason instanceof Error ? reason.message : String(reason));
         return false;
       } finally {
@@ -466,6 +467,8 @@ export function App() {
             }}
             composerProps={{
               disabled: busy || !detail,
+              busy,
+              threadConnected: Boolean(state?.ready),
               toolboxItems: state?.auth ? loginToolboxItems : [],
               settingsBusy,
               draftPrompt: draft,
