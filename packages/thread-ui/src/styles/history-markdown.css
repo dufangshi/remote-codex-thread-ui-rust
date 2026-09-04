@@ -2397,7 +2397,8 @@
 }
 
 .thread-ui-shell .thread-graph-message-content.is-assistant {
-  max-width: 74ch;
+  width: 100%;
+  max-width: none;
 }
 
 .thread-ui-shell .thread-graph-message-prose,
