@@ -12202,6 +12202,17 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
       ]
     }
   ) : null;
+  const interruptedWorkedNode = turn.status === "interrupted" && !hasCollapsedHiddenItems ? /* @__PURE__ */ jsxs37("div", { className: "thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm", children: [
+    /* @__PURE__ */ jsx43("span", { className: "thread-graph-worked-label shrink-0", children: workedLabel }),
+    interruptedLabel,
+    /* @__PURE__ */ jsx43(
+      "span",
+      {
+        className: "thread-graph-worked-rule h-px min-w-0 flex-1",
+        "aria-hidden": "true"
+      }
+    )
+  ] }) : null;
   const firstUserEntryIndex = groupedItems.findIndex(
     (entry) => entry.kind === "item" && entry.item.kind === "userMessage"
   );
@@ -12269,7 +12280,10 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
         renderHistoryEntries(
           groupedItems.slice(expandedLeadEntryCount)
         )
-      ] }) : historyNode,
+      ] }) : /* @__PURE__ */ jsxs37(Fragment12, { children: [
+        historyNode,
+        interruptedWorkedNode
+      ] }),
       liveHookPrompt: liveHookPromptNode,
       liveOutput: liveOutputNode,
       livePlan: displayedLivePlan

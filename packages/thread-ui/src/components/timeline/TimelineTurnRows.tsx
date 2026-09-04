@@ -785,6 +785,19 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         />
       </button>
     ) : null;
+  const interruptedWorkedNode =
+    turn.status === 'interrupted' && !hasCollapsedHiddenItems ? (
+      <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
+        <span className="thread-graph-worked-label shrink-0">
+          {workedLabel}
+        </span>
+        {interruptedLabel}
+        <span
+          className="thread-graph-worked-rule h-px min-w-0 flex-1"
+          aria-hidden="true"
+        />
+      </div>
+    ) : null;
   const firstUserEntryIndex = groupedItems.findIndex(
     (entry) =>
       entry.kind === 'item' && entry.item.kind === 'userMessage',
@@ -872,7 +885,10 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
             )}
           </>
         ) : (
-          historyNode
+          <>
+            {historyNode}
+            {interruptedWorkedNode}
+          </>
         )
       }
       liveHookPrompt={liveHookPromptNode}

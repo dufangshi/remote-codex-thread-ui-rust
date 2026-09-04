@@ -437,14 +437,6 @@ describe('ThreadTimeline', () => {
                 text: 'Run the long task.',
                 createdAt: startedAt,
               },
-              {
-                id: 'reasoning-1',
-                kind: 'reasoning',
-                text: 'Still working.',
-                createdAt: new Date(
-                  Date.UTC(2026, 6, 3, 20, 10, 1),
-                ).toISOString(),
-              },
             ],
           },
         ]}
