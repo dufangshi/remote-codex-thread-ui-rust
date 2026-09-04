@@ -5,7 +5,7 @@ import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { PendingRequestCard } from "./TimelineRequestCards";
+import { PendingRequestCard, RequestEntrySection } from "./TimelineRequestCards";
 
 let root: Root | null = null;
 let container: HTMLDivElement | null = null;
@@ -72,5 +72,48 @@ describe("PendingRequestCard permissions", () => {
         permission: { answers: ["Allow always"] },
       },
     });
+  });
+
+  it("does not render permission or request cards when permissions=0", () => {
+    const request: ThreadActionRequestDto = {
+      id: "perm-hidden",
+      kind: "permissionRequest",
+      title: "Run cargo test",
+      description: "execute: cargo test",
+      turnId: "turn-1",
+      itemId: "call-1",
+      createdAt: "2026-09-04T00:00:00Z",
+      questions: [
+        {
+          id: "permission",
+          header: "Permission",
+          question: "Run cargo test",
+          isOther: false,
+          isSecret: false,
+          options: [{ label: "Allow once", description: "allow once" }],
+        },
+      ],
+    };
+    container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
+    flushSync(() => {
+      root?.render(
+        <RequestEntrySection
+          hidePermissionCards
+          entries={[
+            {
+              kind: "request",
+              id: request.id,
+              createdAt: request.createdAt,
+              request,
+            },
+          ]}
+        />,
+      );
+    });
+
+    expect(container.textContent).not.toContain("Permission required");
+    expect(container.querySelector(".timeline-pending-card")).toBeNull();
   });
 });

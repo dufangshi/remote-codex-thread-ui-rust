@@ -741,4 +741,39 @@ describe('ThreadTimeline', () => {
       behavior: 'smooth',
     });
   });
+
+  it('hides permission request cards when hidePermissionCards is set', () => {
+    const element = render(
+      <ThreadTimeline
+        autoCollapseCompletedTurns={false}
+        liveOutput=""
+        hidePermissionCards
+        pendingRequests={[
+          {
+            id: 'perm-1',
+            kind: 'permissionRequest',
+            title: 'Run cargo test',
+            description: 'execute: cargo test',
+            turnId: null,
+            itemId: null,
+            createdAt: '2026-09-04T00:00:00Z',
+            questions: [
+              {
+                id: 'permission',
+                header: 'Permission',
+                question: 'Run cargo test',
+                isOther: false,
+                isSecret: false,
+                options: [{ label: 'Allow once', description: 'allow once' }],
+              },
+            ],
+          },
+        ]}
+        turns={[]}
+      />,
+    );
+
+    expect(element.textContent).not.toContain('Permission required');
+    expect(element.querySelector('.timeline-pending-card')).toBeNull();
+  });
 });

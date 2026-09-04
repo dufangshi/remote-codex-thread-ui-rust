@@ -65,6 +65,18 @@ export {
   ThreadDetailSurface,
   type ThreadDetailSurfaceProps,
 } from './ThreadDetailSurface';
+export {
+  DEFAULT_THREAD_CHROME_FLAGS,
+  parseHostThreadChromeFlags,
+  parseThreadChromeFlagOverrides,
+  readThreadChromeBootstrap,
+  resolveThreadChromeFlags,
+  resolveThreadDetailChrome,
+  type ThreadChromeFlagOverrides,
+  type ThreadChromeFlagSource,
+  type ThreadChromeFlags,
+  type ThreadPresentationMode,
+} from './threadChromeFlags';
 
 export {
   createDefaultPluginContextValue,

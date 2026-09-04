@@ -430,6 +430,8 @@ export function ThreadWorkspaceLayout({
   onThemeModeChange,
   showMobileNewThreadShortcut = true,
   hideRoomsRail = false,
+  appMenuButton,
+  appNavigationMenu,
   settingsDialogOpen,
   onSettingsDialogOpenChange,
   mobileHeaderAction,
@@ -1227,6 +1229,15 @@ export function ThreadWorkspaceLayout({
                       >
                         <Menu className="h-4 w-4" />
                       </button>
+                    ) : null}
+                    {appMenuButton ? (
+                      <div
+                        className="relative shrink-0"
+                        data-testid="thread-app-nav"
+                      >
+                        {appMenuButton}
+                        {appNavigationMenu}
+                      </div>
                     ) : null}
                     <div className="min-w-0">
                       <h1

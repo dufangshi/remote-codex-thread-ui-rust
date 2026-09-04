@@ -81,4 +81,23 @@ describe('PluginProvider', () => {
     });
     expect(latest!.plugins[0]?.enabled).toBe(false);
   });
+
+  it('omits terminal panels when hideTerminalPanels is set', async () => {
+    let latest: PluginContextValue | null = null;
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    root = createRoot(container);
+    await act(async () => {
+      root?.render(
+        <PluginProvider
+          hideTerminalPanels
+          builtinPlugins={[terminalModule]}
+        >
+          <Capture onValue={(value) => { latest = value; }} />
+        </PluginProvider>,
+      );
+    });
+
+    expect(latest!.getThreadPanels()).toEqual([]);
+  });
 });

@@ -103,6 +103,7 @@ export interface ThreadTimelineProps {
   }) => void;
   adapter?: ThreadTimelineAdapter | undefined;
   autoCollapseCompletedTurns?: boolean;
+  hidePermissionCards?: boolean;
 }
 
 function isTerminalTurnStatus(status: TimelineTurn['status']) {
@@ -181,6 +182,7 @@ function ThreadTimelineComponent({
   onSelectHistoryItemDetail,
   adapter,
   autoCollapseCompletedTurns,
+  hidePermissionCards = false,
 }: ThreadTimelineProps) {
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns =
@@ -434,11 +436,17 @@ function ThreadTimelineComponent({
     () =>
       buildRequestEntryAnchors({
         answeredRequestNotes,
-        pendingRequests,
+        pendingRequests: hidePermissionCards ? [] : pendingRequests,
         visibleTurns,
         optimisticTurn,
       }),
-    [answeredRequestNotes, optimisticTurn, pendingRequests, visibleTurns],
+    [
+      answeredRequestNotes,
+      hidePermissionCards,
+      optimisticTurn,
+      pendingRequests,
+      visibleTurns,
+    ],
   );
   const activityNoteAnchors = useMemo(
     () =>
@@ -614,6 +622,7 @@ function ThreadTimelineComponent({
                       entries={requestEntryAnchors.beforeTurnId.get(turn.id) ?? []}
                       respondingRequestId={respondingRequestId}
                       onRespondToRequest={onRespondToRequest ?? undefined}
+                      hidePermissionCards={hidePermissionCards}
                     />
                   ) : null}
                   {(() => {
@@ -694,6 +703,7 @@ function ThreadTimelineComponent({
                       requests={requestEntryAnchors.pendingRequestsByTurnId.get(turn.id) ?? []}
                       respondingRequestId={respondingRequestId}
                       onRespondToRequest={onRespondToRequest ?? undefined}
+                      hidePermissionCards={hidePermissionCards}
                     />
                   ) : null}
                 </div>
@@ -715,6 +725,7 @@ function ThreadTimelineComponent({
                       }
                       respondingRequestId={respondingRequestId}
                       onRespondToRequest={onRespondToRequest ?? undefined}
+                      hidePermissionCards={hidePermissionCards}
                     />
                   ) : null}
                   {(() => {
@@ -834,6 +845,7 @@ function ThreadTimelineComponent({
               onRespondToRequest={onRespondToRequest ?? undefined}
               onOpenThread={onOpenThread}
               onOpenLinkedThread={openLinkedThread}
+              hidePermissionCards={hidePermissionCards}
             />
           )}
 

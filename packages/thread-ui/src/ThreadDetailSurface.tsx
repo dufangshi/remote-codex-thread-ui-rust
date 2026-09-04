@@ -19,6 +19,11 @@ import type {
 import type { ThreadDetailUiAdapter } from "./adapters";
 import type { ThemeMode } from "./app-shell/AppShellNavContext";
 import {
+  resolveThreadDetailChrome,
+  type ThreadChromeFlagOverrides,
+  type ThreadPresentationMode,
+} from "./threadChromeFlags";
+import {
   createDefaultPluginContextValue,
   PluginContext,
   type PluginContextValue,
@@ -189,7 +194,12 @@ export interface ThreadDetailSurfaceProps {
   currentWorkspaceId?: string | null;
   currentWorkspaceLabel?: string | null;
   onCloseAppNavigation?: () => void;
-  presentation?: "workspace" | "embedded-single-thread";
+  presentation?: ThreadPresentationMode;
+  chrome?: ThreadChromeFlagOverrides;
+  hideExplorer?: boolean;
+  hideShell?: boolean;
+  hidePermissionCards?: boolean;
+  hideNav?: boolean;
   className?: string;
   activeView?: "chat" | "shell";
   liveOutput?: string;
@@ -261,6 +271,11 @@ export function ThreadDetailSurface({
   currentWorkspaceLabel,
   onCloseAppNavigation,
   presentation = "workspace",
+  chrome,
+  hideExplorer,
+  hideShell,
+  hidePermissionCards,
+  hideNav,
   className = "thread-detail-surface relative flex h-full min-h-0 flex-1 flex-col overflow-hidden",
   activeView = "chat",
   liveOutput = "",
@@ -287,6 +302,14 @@ export function ThreadDetailSurface({
     () => (rawDetail ? sanitizeThreadDetailHistory(rawDetail) : null),
     [rawDetail],
   );
+  const chromeState = resolveThreadDetailChrome({
+    presentation,
+    hideExplorer,
+    hideShell,
+    hidePermissionCards,
+    hideNav,
+    ...(chrome ? { chrome } : {}),
+  });
   const contextPlugins = usePlugins();
   const plugins =
     providedPlugins ?? contextPlugins ?? createDefaultPluginContextValue();
@@ -323,9 +346,9 @@ export function ThreadDetailSurface({
       openThread,
     ],
   );
-  const terminalPanelEnabled = plugins
-    .getThreadPanels()
-    .some((panel) => panel.kind === "terminal");
+  const terminalPanelEnabled =
+    !chromeState.hideShell &&
+    plugins.getThreadPanels().some((panel) => panel.kind === "terminal");
   const threadUsageSummary = useMemo(
     () => (detail ? summarizeThreadUsage(detail) : null),
     [detail],
@@ -344,21 +367,22 @@ export function ThreadDetailSurface({
         : 0,
     [detail],
   );
-  const resolvedWorkspaceContent =
-    workspaceContent ??
-    (detail ? (
-      <ThreadGraphWorkspacePanel
-        detail={detail}
-        status={status}
-        plugins={plugins}
-        workspaceAdapter={adapter.workspace ?? null}
-        metaContent={metaContent}
-        settingsContent={settingsContent}
-        activeView={activeView}
-        features={workspaceFeatures}
-        focusPathRequest={workspaceFocusPathRequest}
-      />
-    ) : null);
+  const resolvedWorkspaceContent = chromeState.hideExplorer
+    ? null
+    : (workspaceContent ??
+      (detail ? (
+        <ThreadGraphWorkspacePanel
+          detail={detail}
+          status={status}
+          plugins={plugins}
+          workspaceAdapter={adapter.workspace ?? null}
+          metaContent={metaContent}
+          settingsContent={settingsContent}
+          activeView={activeView}
+          features={workspaceFeatures}
+          focusPathRequest={workspaceFocusPathRequest}
+        />
+      ) : null));
 
   const defaultContent = loading ? (
     (loadingContent ?? (
@@ -406,8 +430,23 @@ export function ThreadDetailSurface({
             floatingMobileComposerBottomOffset
           }
           {...(beforeTimelineContent ? { beforeTimelineContent } : {})}
-          {...(composerProps ? { composerProps } : {})}
-          {...(timelineProps ? { timelineProps } : {})}
+          {...(composerProps
+            ? {
+                composerProps: chromeState.hideShell
+                  ? { ...composerProps, shellAvailable: false }
+                  : composerProps,
+              }
+            : {})}
+          {...(timelineProps || chromeState.hidePermissionCards
+            ? {
+                timelineProps: {
+                  ...timelineProps,
+                  ...(chromeState.hidePermissionCards
+                    ? { hidePermissionCards: true }
+                    : {}),
+                },
+              }
+            : {})}
           {...(composerHostRef ? { composerHostRef } : {})}
         />
       </div>
@@ -500,14 +539,22 @@ export function ThreadDetailSurface({
       mobileHeaderAction={mobileHeaderAction}
       effectiveTheme={shellEffectiveTheme}
       themeMode={shellThemeMode}
-      appMenuButton={appMenuButton}
-      appNavigationMenu={appNavigationMenu}
-      workspaceReturnHref={workspaceReturnHref}
-      {...(onWorkspaceReturn ? { onWorkspaceReturn } : {})}
-      showMobileAppMenu={Boolean(appMenuButton)}
-      showMobileThreadNavToggle={presentation !== "embedded-single-thread"}
+      appMenuButton={chromeState.hideNav ? undefined : appMenuButton}
+      appNavigationMenu={chromeState.hideNav ? undefined : appNavigationMenu}
+      workspaceReturnHref={
+        chromeState.hideNav ? undefined : workspaceReturnHref
+      }
+      {...(!chromeState.hideNav && onWorkspaceReturn
+        ? { onWorkspaceReturn }
+        : {})}
+      showMobileAppMenu={Boolean(
+        !chromeState.hideNav && appMenuButton,
+      )}
+      showMobileThreadNavToggle={
+        chromeState.presentation !== "embedded-single-thread"
+      }
       showMobileNewThreadShortcut={false}
-      hideRoomsRail={presentation === "embedded-single-thread"}
+      hideRoomsRail={chromeState.presentation === "embedded-single-thread"}
       onOpenThread={adapter.openThread}
       workspaceContent={resolvedWorkspaceContent}
       workspaceTitle={workspaceTitle ?? "Workspace"}

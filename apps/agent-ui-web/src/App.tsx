@@ -9,14 +9,21 @@ import type {
   UpdateThreadSettingsInput,
 } from "@remote-codex/shared";
 import {
+  AppShellMenuButton,
   AppShellNavContext,
+  AppShellNavigationMenu,
   PluginProvider,
   ThreadDetailSurface,
   type AppShellNavContextValue,
   type ThreadDetailUiAdapter,
 } from "@remote-codex/thread-ui";
+import { builtinFrontendPlugins } from "@remote-codex/thread-ui/builtin-plugins";
 
 import { api, connectEvents, resolvePageHref } from "./api";
+import {
+  AGENT_UI_WEB_CHROME_DEFAULTS,
+  readAgentUiChromeOverrides,
+} from "./embedChrome";
 
 interface StatePayload {
   ready: boolean;
@@ -203,6 +210,13 @@ export function App() {
   const [followTail, setFollowTail] = useState(true);
   const [settingsBusy, setSettingsBusy] = useState(false);
   const [authInput, setAuthInput] = useState("");
+  const [navOpen, setNavOpen] = useState(false);
+  const [activeView, setActiveView] = useState<"chat" | "shell">("chat");
+  const chromeOverrides = useMemo(() => readAgentUiChromeOverrides(), []);
+  const chrome = useMemo(
+    () => ({ ...AGENT_UI_WEB_CHROME_DEFAULTS, ...chromeOverrides }),
+    [chromeOverrides],
+  );
 
   const applyState = useCallback((payload: StatePayload) => {
     const displayName = payload.auth?.displayName ?? "ACP agent";
@@ -349,10 +363,10 @@ export function App() {
 
   const nav = useMemo<AppShellNavContextValue>(
     () => ({
-      navOpen: false,
-      openNav: () => {},
-      toggleNav: () => {},
-      closeNav: () => {},
+      navOpen: chrome.nav ? navOpen : false,
+      openNav: chrome.nav ? () => setNavOpen(true) : () => {},
+      toggleNav: chrome.nav ? () => setNavOpen((open) => !open) : () => {},
+      closeNav: chrome.nav ? () => setNavOpen(false) : () => {},
       settingsOpen: false,
       openSettings: () => {},
       closeSettings: () => {},
@@ -364,7 +378,7 @@ export function App() {
       autoCollapseCompletedTurns: true,
       setAutoCollapseCompletedTurns: () => {},
     }),
-    [],
+    [chrome.nav, navOpen],
   );
 
   const detail = state?.detail ?? null;
@@ -396,9 +410,17 @@ export function App() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <AppShellNavContext.Provider value={nav}>
-        <PluginProvider builtinPlugins={[]}>
+        <PluginProvider
+          builtinPlugins={chrome.shell ? builtinFrontendPlugins : []}
+          hideTerminalPanels={chromeOverrides.shell === false}
+        >
           <ThreadDetailSurface
-            presentation="embedded-single-thread"
+            presentation={chrome.presentation}
+            hideExplorer={chromeOverrides.explorer === false}
+            hideShell={chromeOverrides.shell === false}
+            hidePermissionCards={chromeOverrides.permissions === false}
+            hideNav={!chrome.nav}
+            chrome={chromeOverrides}
             threads={state?.threads ?? []}
             detail={detail}
             loading={!state}
@@ -409,7 +431,14 @@ export function App() {
             currentThreadId={detail?.thread.id}
             currentWorkspaceId={detail?.workspace.id}
             currentWorkspaceLabel={detail?.workspace.label ?? "Codex"}
-            activeView="chat"
+            activeView={chrome.shell ? activeView : "chat"}
+            appMenuButton={chrome.nav ? <AppShellMenuButton /> : undefined}
+            appNavigationMenu={
+              chrome.nav ? <AppShellNavigationMenu items={[]} /> : undefined
+            }
+            onCloseAppNavigation={
+              chrome.nav ? () => setNavOpen(false) : undefined
+            }
             emptyContent={
               authPanel ?? (
                 <div className="flex flex-1 items-center justify-center px-6 py-12 text-center text-[var(--theme-fg-muted)]">
@@ -419,7 +448,7 @@ export function App() {
             }
             beforeTimelineContent={authPanel}
             workspaceFeatures={{
-              workspace: false,
+              workspace: chrome.explorer,
               toolUsage: false,
               guide: false,
               threadGraph: false,
@@ -449,6 +478,17 @@ export function App() {
               followTail,
               onToggleFollow: () => setFollowTail(true),
               hideSandboxModeControl: true,
+              ...(chromeOverrides.shell === false
+                ? { shellAvailable: false }
+                : chrome.shell
+                  ? {
+                      shellAvailable: true,
+                      onToggleView: () =>
+                        setActiveView((current) =>
+                          current === "chat" ? "shell" : "chat",
+                        ),
+                    }
+                  : {}),
             }}
           />
         </PluginProvider>

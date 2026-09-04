@@ -6276,6 +6276,8 @@ function ThreadWorkspaceLayout({
   onThemeModeChange,
   showMobileNewThreadShortcut = true,
   hideRoomsRail = false,
+  appMenuButton,
+  appNavigationMenu,
   settingsDialogOpen,
   onSettingsDialogOpenChange,
   mobileHeaderAction,
@@ -6916,6 +6918,17 @@ function ThreadWorkspaceLayout({
                         title: "Open rooms",
                         className: "thread-icon-button thread-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
                         children: /* @__PURE__ */ jsx26(Menu, { className: "h-4 w-4" })
+                      }
+                    ) : null,
+                    appMenuButton ? /* @__PURE__ */ jsxs22(
+                      "div",
+                      {
+                        className: "relative shrink-0",
+                        "data-testid": "thread-app-nav",
+                        children: [
+                          appMenuButton,
+                          appNavigationMenu
+                        ]
                       }
                     ) : null,
                     /* @__PURE__ */ jsxs22("div", { className: "min-w-0", children: [
@@ -9410,12 +9423,14 @@ function ActivityNoteSection({
 function RequestEntrySection({
   entries,
   respondingRequestId,
-  onRespondToRequest
+  onRespondToRequest,
+  hidePermissionCards = false
 }) {
-  if (entries.length === 0) {
+  const visibleEntries = hidePermissionCards ? entries.filter((entry) => entry.kind !== "request") : entries;
+  if (visibleEntries.length === 0) {
     return null;
   }
-  return /* @__PURE__ */ jsx34("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: entries.map(
+  return /* @__PURE__ */ jsx34("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: visibleEntries.map(
     (entry) => entry.kind === "note" ? /* @__PURE__ */ jsx34(AnsweredRequestNote, { note: entry.note }, entry.id) : /* @__PURE__ */ jsx34(
       PendingRequestCard,
       {
@@ -9431,7 +9446,8 @@ function RequestEntrySectionForTurn({
   notes,
   requests,
   respondingRequestId,
-  onRespondToRequest
+  onRespondToRequest,
+  hidePermissionCards = false
 }) {
   const entries = [
     ...notes.map((note) => ({
@@ -9452,7 +9468,8 @@ function RequestEntrySectionForTurn({
     {
       entries,
       respondingRequestId,
-      onRespondToRequest
+      onRespondToRequest,
+      hidePermissionCards
     }
   );
 }
@@ -9461,12 +9478,14 @@ function ActivityRequestEntrySection({
   respondingRequestId,
   onRespondToRequest,
   onOpenThread,
-  onOpenLinkedThread
+  onOpenLinkedThread,
+  hidePermissionCards = false
 }) {
-  if (entries.length === 0) {
+  const visibleEntries = hidePermissionCards ? entries.filter((entry) => entry.kind !== "request") : entries;
+  if (visibleEntries.length === 0) {
     return null;
   }
-  return /* @__PURE__ */ jsx34("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: [...entries].sort((left, right) => left.createdAt.localeCompare(right.createdAt)).map(
+  return /* @__PURE__ */ jsx34("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: [...visibleEntries].sort((left, right) => left.createdAt.localeCompare(right.createdAt)).map(
     (entry) => entry.kind === "activity" ? /* @__PURE__ */ jsx34(
       ActivityNoteCard,
       {
@@ -13057,7 +13076,8 @@ function ThreadTimelineComponent({
   onSelectArtifact,
   onSelectHistoryItemDetail,
   adapter,
-  autoCollapseCompletedTurns
+  autoCollapseCompletedTurns,
+  hidePermissionCards = false
 }) {
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns = autoCollapseCompletedTurns ?? shellNav?.autoCollapseCompletedTurns ?? false;
@@ -13234,11 +13254,17 @@ function ThreadTimelineComponent({
   const requestEntryAnchors = useMemo8(
     () => buildRequestEntryAnchors({
       answeredRequestNotes,
-      pendingRequests,
+      pendingRequests: hidePermissionCards ? [] : pendingRequests,
       visibleTurns,
       optimisticTurn
     }),
-    [answeredRequestNotes, optimisticTurn, pendingRequests, visibleTurns]
+    [
+      answeredRequestNotes,
+      hidePermissionCards,
+      optimisticTurn,
+      pendingRequests,
+      visibleTurns
+    ]
   );
   const activityNoteAnchors = useMemo8(
     () => buildActivityNoteAnchors({
@@ -13378,7 +13404,8 @@ function ThreadTimelineComponent({
                 {
                   entries: requestEntryAnchors.beforeTurnId.get(turn.id) ?? [],
                   respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
+                  onRespondToRequest: onRespondToRequest ?? void 0,
+                  hidePermissionCards
                 }
               ) : null,
               (() => {
@@ -13448,7 +13475,8 @@ function ThreadTimelineComponent({
                   notes: requestEntryAnchors.notesByTurnId.get(turn.id) ?? [],
                   requests: requestEntryAnchors.pendingRequestsByTurnId.get(turn.id) ?? [],
                   respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
+                  onRespondToRequest: onRespondToRequest ?? void 0,
+                  hidePermissionCards
                 }
               ) : null
             ] }, turn.id)),
@@ -13466,7 +13494,8 @@ function ThreadTimelineComponent({
                 {
                   entries: requestEntryAnchors.beforeTurnId.get(optimisticTurn.id) ?? [],
                   respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
+                  onRespondToRequest: onRespondToRequest ?? void 0,
+                  hidePermissionCards
                 }
               ) : null,
               (() => {
@@ -13566,7 +13595,8 @@ function ThreadTimelineComponent({
               respondingRequestId,
               onRespondToRequest: onRespondToRequest ?? void 0,
               onOpenThread,
-              onOpenLinkedThread: openLinkedThread
+              onOpenLinkedThread: openLinkedThread,
+              hidePermissionCards
             }
           ),
           ephemeralUserNote && /* @__PURE__ */ jsx44("div", { className: "thread-graph-message-section px-3 py-2.5 sm:px-5", children: /* @__PURE__ */ jsx44(
@@ -17118,6 +17148,131 @@ import {
   useMemo as useMemo13
 } from "react";
 
+// src/threadChromeFlags.ts
+var DEFAULT_THREAD_CHROME_FLAGS = {
+  presentation: "workspace",
+  explorer: true,
+  shell: true,
+  permissions: true,
+  nav: true
+};
+var BOOTSTRAP_GLOBAL_KEYS = [
+  "__REMOTE_CODEX_THREAD_UI__",
+  "__REMOTE_CODEX_EMBED__"
+];
+function parseBooleanFlag(value) {
+  if (value == null || value === "") {
+    return void 0;
+  }
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value === "number") {
+    if (value === 1) {
+      return true;
+    }
+    if (value === 0) {
+      return false;
+    }
+    return void 0;
+  }
+  const normalized = String(value).trim().toLowerCase();
+  if (normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on") {
+    return true;
+  }
+  if (normalized === "0" || normalized === "false" || normalized === "no" || normalized === "off") {
+    return false;
+  }
+  return void 0;
+}
+function parsePresentationFlag(value) {
+  if (value === "workspace" || value === "embedded-single-thread") {
+    return value;
+  }
+  return void 0;
+}
+function recordFromSearchParams(params) {
+  return Object.fromEntries(params.entries());
+}
+function recordFromSource(source) {
+  if (source == null) {
+    return {};
+  }
+  if (typeof URLSearchParams !== "undefined" && source instanceof URLSearchParams) {
+    return recordFromSearchParams(source);
+  }
+  if (typeof URL !== "undefined" && source instanceof URL) {
+    return recordFromSearchParams(source.searchParams);
+  }
+  if (typeof source === "string") {
+    const trimmed = source.trim();
+    if (!trimmed) {
+      return {};
+    }
+    if (/^https?:\/\//i.test(trimmed)) {
+      try {
+        return recordFromSearchParams(new URL(trimmed).searchParams);
+      } catch {
+        return {};
+      }
+    }
+    const query = trimmed.startsWith("?") ? trimmed.slice(1) : trimmed;
+    return recordFromSearchParams(new URLSearchParams(query));
+  }
+  if (typeof source === "object") {
+    return { ...source };
+  }
+  return {};
+}
+function parseThreadChromeFlagOverrides(source) {
+  const record = recordFromSource(source);
+  const presentation = parsePresentationFlag(record.presentation);
+  const explorer = parseBooleanFlag(record.explorer);
+  const shell = parseBooleanFlag(record.shell);
+  const permissions = parseBooleanFlag(record.permissions);
+  const nav = parseBooleanFlag(record.nav);
+  return {
+    ...presentation ? { presentation } : {},
+    ...explorer !== void 0 ? { explorer } : {},
+    ...shell !== void 0 ? { shell } : {},
+    ...permissions !== void 0 ? { permissions } : {},
+    ...nav !== void 0 ? { nav } : {}
+  };
+}
+function parseHostThreadChromeFlags(input = {}) {
+  return {
+    ...parseThreadChromeFlagOverrides(input.bootstrap),
+    ...parseThreadChromeFlagOverrides(input.search)
+  };
+}
+function resolveThreadChromeFlags(source, defaults = DEFAULT_THREAD_CHROME_FLAGS) {
+  return {
+    ...defaults,
+    ...parseThreadChromeFlagOverrides(source)
+  };
+}
+function readThreadChromeBootstrap(globalObject = globalThis) {
+  if (!globalObject) {
+    return null;
+  }
+  for (const key of BOOTSTRAP_GLOBAL_KEYS) {
+    const value = globalObject[key];
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value;
+    }
+  }
+  return null;
+}
+function resolveThreadDetailChrome(input) {
+  return {
+    presentation: input.chrome?.presentation ?? input.presentation ?? "workspace",
+    hideExplorer: input.hideExplorer === true,
+    hideShell: input.hideShell ?? input.chrome?.shell === false,
+    hidePermissionCards: input.hidePermissionCards ?? input.chrome?.permissions === false,
+    hideNav: input.hideNav ?? input.chrome?.nav === false
+  };
+}
+
 // src/components/graph-chat/GraphChatThreadChatPanel.tsx
 import {
   useCallback as useCallback17,
@@ -17547,6 +17702,11 @@ function ThreadDetailSurface({
   currentWorkspaceLabel,
   onCloseAppNavigation,
   presentation = "workspace",
+  chrome,
+  hideExplorer,
+  hideShell,
+  hidePermissionCards,
+  hideNav,
   className = "thread-detail-surface relative flex h-full min-h-0 flex-1 flex-col overflow-hidden",
   activeView = "chat",
   liveOutput = "",
@@ -17573,6 +17733,14 @@ function ThreadDetailSurface({
     () => rawDetail ? sanitizeThreadDetailHistory(rawDetail) : null,
     [rawDetail]
   );
+  const chromeState = resolveThreadDetailChrome({
+    presentation,
+    hideExplorer,
+    hideShell,
+    hidePermissionCards,
+    hideNav,
+    ...chrome ? { chrome } : {}
+  });
   const contextPlugins = usePlugins();
   const plugins = providedPlugins ?? contextPlugins ?? createDefaultPluginContextValue();
   const {
@@ -17603,7 +17771,7 @@ function ThreadDetailSurface({
       openThread
     ]
   );
-  const terminalPanelEnabled = plugins.getThreadPanels().some((panel) => panel.kind === "terminal");
+  const terminalPanelEnabled = !chromeState.hideShell && plugins.getThreadPanels().some((panel) => panel.kind === "terminal");
   const threadUsageSummary = useMemo13(
     () => detail ? summarizeThreadUsage(detail) : null,
     [detail]
@@ -17619,7 +17787,7 @@ function ThreadDetailSurface({
     ) : 0,
     [detail]
   );
-  const resolvedWorkspaceContent = workspaceContent ?? (detail ? /* @__PURE__ */ jsx52(
+  const resolvedWorkspaceContent = chromeState.hideExplorer ? null : workspaceContent ?? (detail ? /* @__PURE__ */ jsx52(
     ThreadGraphWorkspacePanel,
     {
       detail,
@@ -17656,8 +17824,15 @@ function ThreadDetailSurface({
             useFloatingMobileComposer,
             floatingMobileComposerBottomOffset,
             ...beforeTimelineContent ? { beforeTimelineContent } : {},
-            ...composerProps ? { composerProps } : {},
-            ...timelineProps ? { timelineProps } : {},
+            ...composerProps ? {
+              composerProps: chromeState.hideShell ? { ...composerProps, shellAvailable: false } : composerProps
+            } : {},
+            ...timelineProps || chromeState.hidePermissionCards ? {
+              timelineProps: {
+                ...timelineProps,
+                ...chromeState.hidePermissionCards ? { hidePermissionCards: true } : {}
+              }
+            } : {},
             ...composerHostRef ? { composerHostRef } : {}
           }
         )
@@ -17725,14 +17900,16 @@ function ThreadDetailSurface({
       mobileHeaderAction,
       effectiveTheme: shellEffectiveTheme,
       themeMode: shellThemeMode,
-      appMenuButton,
-      appNavigationMenu,
-      workspaceReturnHref,
-      ...onWorkspaceReturn ? { onWorkspaceReturn } : {},
-      showMobileAppMenu: Boolean(appMenuButton),
-      showMobileThreadNavToggle: presentation !== "embedded-single-thread",
+      appMenuButton: chromeState.hideNav ? void 0 : appMenuButton,
+      appNavigationMenu: chromeState.hideNav ? void 0 : appNavigationMenu,
+      workspaceReturnHref: chromeState.hideNav ? void 0 : workspaceReturnHref,
+      ...!chromeState.hideNav && onWorkspaceReturn ? { onWorkspaceReturn } : {},
+      showMobileAppMenu: Boolean(
+        !chromeState.hideNav && appMenuButton
+      ),
+      showMobileThreadNavToggle: chromeState.presentation !== "embedded-single-thread",
       showMobileNewThreadShortcut: false,
-      hideRoomsRail: presentation === "embedded-single-thread",
+      hideRoomsRail: chromeState.presentation === "embedded-single-thread",
       onOpenThread: adapter.openThread,
       workspaceContent: resolvedWorkspaceContent,
       workspaceTitle: workspaceTitle ?? "Workspace",
@@ -17768,6 +17945,7 @@ var DEFAULT_BUILTIN_PLUGINS = [];
 function PluginProvider({
   adapter = DEFAULT_PLUGIN_PROVIDER_ADAPTER,
   builtinPlugins = DEFAULT_BUILTIN_PLUGINS,
+  hideTerminalPanels = false,
   children
 }) {
   const [plugins, setPlugins] = useState31(
@@ -17895,8 +18073,8 @@ function PluginProvider({
     [enabledModules]
   );
   const getThreadPanels = useCallback18(
-    () => enabledModules.flatMap((module) => module.threadPanels ?? []),
-    [enabledModules]
+    () => enabledModules.flatMap((module) => module.threadPanels ?? []).filter((panel) => !hideTerminalPanels || panel.kind !== "terminal"),
+    [enabledModules, hideTerminalPanels]
   );
   const value = useMemo14(
     () => ({
@@ -18339,6 +18517,7 @@ export {
   AppShellNavigationMenu,
   AppShellSettingsDialog,
   ConfirmDialog,
+  DEFAULT_THREAD_CHROME_FLAGS,
   ExportTranscriptDialog,
   LongTextDialog,
   MemoizedThreadGraphWorkspacePanel,
@@ -18359,6 +18538,11 @@ export {
   historyItemAccentClassName,
   historyItemLabel,
   mergePluginState,
+  parseHostThreadChromeFlags,
+  parseThreadChromeFlagOverrides,
+  readThreadChromeBootstrap,
+  resolveThreadChromeFlags,
+  resolveThreadDetailChrome,
   threadStatusClassName,
   threadStatusLabel,
   turnStatusLabel,

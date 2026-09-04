@@ -8,6 +8,11 @@ or app-local thread routes. Hosts provide navigation, asset URL,
 history-detail loading, prompt submission, and shell transport through props and
 adapters.
 
+Optional embed chrome flags (`presentation`, `explorer`, `shell`,
+`permissions`, `nav`) are parsed from a query string or bootstrap object and
+mapped onto `ThreadDetailSurface` hide props. See `docs/treer-embed.md`.
+
+
 ## Styling
 
 The first extraction keeps thread-specific CSS in

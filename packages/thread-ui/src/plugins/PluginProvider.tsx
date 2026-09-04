@@ -39,10 +39,12 @@ const DEFAULT_BUILTIN_PLUGINS: FrontendPluginModule[] = [];
 export function PluginProvider({
   adapter = DEFAULT_PLUGIN_PROVIDER_ADAPTER,
   builtinPlugins = DEFAULT_BUILTIN_PLUGINS,
+  hideTerminalPanels = false,
   children,
 }: {
   adapter?: PluginProviderAdapter;
   builtinPlugins?: FrontendPluginModule[];
+  hideTerminalPanels?: boolean;
   children: ReactNode;
 }) {
   const [plugins, setPlugins] = useState<PluginDto[]>(() =>
@@ -193,8 +195,11 @@ export function PluginProvider({
   );
 
   const getThreadPanels = useCallback(
-    () => enabledModules.flatMap((module) => module.threadPanels ?? []),
-    [enabledModules],
+    () =>
+      enabledModules
+        .flatMap((module) => module.threadPanels ?? [])
+        .filter((panel) => !hideTerminalPanels || panel.kind !== 'terminal'),
+    [enabledModules, hideTerminalPanels],
   );
 
   const value = useMemo<PluginContextValue>(

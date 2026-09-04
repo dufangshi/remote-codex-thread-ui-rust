@@ -15,7 +15,7 @@ The shared packages remain UI-only. Runtime integrations translate provider even
 ## Apps
 
 - `apps/playground`: Vite playground with mock thread data for visual iteration.
-- `apps/agent-ui-web`: Embedded single-thread surface used through Treer's AIS iframe tunnel.
+- `apps/agent-ui-web`: Embedded single-thread surface used through Treer's AIS iframe tunnel. Optional chrome flags are documented in `docs/treer-embed.md`.
 - `apps/agent-ui-server`: ACP client, authentication flow, normalized thread projection, and AIS HTTP/WebSocket server.
 
 ## Treer Recipe

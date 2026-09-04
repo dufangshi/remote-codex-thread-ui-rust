@@ -450,6 +450,7 @@ export function RequestEntrySection({
   entries,
   respondingRequestId,
   onRespondToRequest,
+  hidePermissionCards = false,
 }: {
   entries: RequestEntryAnchor[];
   respondingRequestId?: string | null | undefined;
@@ -459,14 +460,18 @@ export function RequestEntrySection({
         input: RespondThreadActionRequestInput,
       ) => Promise<void> | void)
     | undefined;
+  hidePermissionCards?: boolean;
 }) {
-  if (entries.length === 0) {
+  const visibleEntries = hidePermissionCards
+    ? entries.filter((entry) => entry.kind !== 'request')
+    : entries;
+  if (visibleEntries.length === 0) {
     return null;
   }
 
   return (
     <div className="thread-graph-message-section space-y-3 px-3 py-4 sm:px-5">
-      {entries.map((entry) =>
+      {visibleEntries.map((entry) =>
         entry.kind === 'note' ? (
           <AnsweredRequestNote key={entry.id} note={entry.note} />
         ) : (
@@ -487,6 +492,7 @@ export function RequestEntrySectionForTurn({
   requests,
   respondingRequestId,
   onRespondToRequest,
+  hidePermissionCards = false,
 }: {
   notes: ThreadAnsweredRequestNoteDto[];
   requests: ThreadActionRequestDto[];
@@ -497,6 +503,7 @@ export function RequestEntrySectionForTurn({
         input: RespondThreadActionRequestInput,
       ) => Promise<void> | void)
     | undefined;
+  hidePermissionCards?: boolean;
 }) {
   const entries: RequestEntryAnchor[] = [
     ...notes.map((note) => ({
@@ -518,6 +525,7 @@ export function RequestEntrySectionForTurn({
       entries={entries}
       respondingRequestId={respondingRequestId}
       onRespondToRequest={onRespondToRequest}
+      hidePermissionCards={hidePermissionCards}
     />
   );
 }
@@ -537,6 +545,7 @@ export function ActivityRequestEntrySection({
   onRespondToRequest,
   onOpenThread,
   onOpenLinkedThread,
+  hidePermissionCards = false,
 }: {
   entries: ActivityRequestEntry[];
   respondingRequestId?: string | null | undefined;
@@ -548,14 +557,18 @@ export function ActivityRequestEntrySection({
     | undefined;
   onOpenThread?: ((threadId: string) => void) | undefined;
   onOpenLinkedThread?: ((threadId: string) => void) | undefined;
+  hidePermissionCards?: boolean;
 }) {
-  if (entries.length === 0) {
+  const visibleEntries = hidePermissionCards
+    ? entries.filter((entry) => entry.kind !== 'request')
+    : entries;
+  if (visibleEntries.length === 0) {
     return null;
   }
 
   return (
     <div className="thread-graph-message-section space-y-3 px-3 py-4 sm:px-5">
-      {[...entries]
+      {[...visibleEntries]
         .sort((left, right) => left.createdAt.localeCompare(right.createdAt))
         .map((entry) =>
           entry.kind === 'activity' ? (
