@@ -13,6 +13,7 @@ import { Check, Copy } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
+import remarkCjkFriendly from 'remark-cjk-friendly';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 
@@ -195,6 +196,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   const [copyState, setCopyState] = useState<
     Record<string, 'copied' | 'failed'>
   >({});
+  const [touchCode, setTouchCode] = useState<string | null>(null);
   const [dark, setDark] = useState(false);
   const { processedContent, resultMap } = useMemo(
     () => preprocessGraphChatToolBlocks(content),
@@ -373,7 +375,15 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       }
 
       return (
-        <div className="thread-graph-code-block not-prose relative my-3 overflow-auto rounded-xl border p-3 text-sm shadow-sm">
+        <div className="thread-graph-code-block not-prose relative my-3 overflow-auto rounded-xl border p-3 text-sm shadow-sm"
+          data-touch-actions={touchCode === id ? 'true' : 'false'}
+          onPointerUp={(event) => {
+            if (event.pointerType !== 'mouse' && !(event.target instanceof Element && event.target.closest('button'))) {
+              event.stopPropagation();
+              setTouchCode((current) => current === id ? null : id);
+            }
+          }}
+        >
           <Button
             type="button"
             onClick={() => void copyCode(id, textContent)}
@@ -422,7 +432,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   return (
     <div ref={rootRef} className={`thread-graph-message-markdown ${className}`}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
+        remarkPlugins={[remarkGfm, remarkMath, remarkCjkFriendly]}
         rehypePlugins={[rehypeKatex]}
         components={{
           a({ href, children, ...props }) {

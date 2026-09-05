@@ -32,6 +32,13 @@ afterEach(() => {
 });
 
 describe('GraphChatMessageContent', () => {
+  it('parses CJK emphasis while preserving literal stars in code and escapes', () => {
+    const element = render(<GraphChatMessageContent content={'对，**原生 Mac 使用 `proxy-env`。**如果继续。\n\n核心是：**两种模式。**文件共享。\n\n`**literal**` 和 \\*\\*escaped\\*\\*'} />);
+    expect(Array.from(element.querySelectorAll('strong')).map(node => node.textContent)).toEqual(['原生 Mac 使用 proxy-env。', '两种模式。']);
+    expect(element.textContent).toContain('**literal**');
+    expect(element.textContent).toContain('**escaped**');
+  });
+
   it('renders inline and display LaTeX through KaTeX', () => {
     const element = render(
       <GraphChatMessageContent

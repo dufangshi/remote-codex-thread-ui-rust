@@ -105,7 +105,7 @@ describe("GraphChatCompactMessageItem", () => {
     expect(copyButton?.querySelector(".lucide-check")).toBeTruthy();
   });
 
-  it("provides desktop floating and mobile row prompt copy controls", async () => {
+  it("shares one floating copy control across desktop and mobile", async () => {
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
       value: { writeText: vi.fn().mockResolvedValue(undefined) },
@@ -138,12 +138,9 @@ describe("GraphChatCompactMessageItem", () => {
         '[aria-label="Copy prompt"]',
       ),
     );
-    expect(copyButtons).toHaveLength(2);
+    expect(copyButtons).toHaveLength(1);
     expect(
       copyButtons[0]?.closest(".thread-graph-message-copy-desktop"),
-    ).not.toBeNull();
-    expect(
-      copyButtons[1]?.closest(".thread-graph-message-user-meta"),
     ).not.toBeNull();
     expect(
       container.querySelector(".thread-graph-message-bubble.is-user")
@@ -151,14 +148,14 @@ describe("GraphChatCompactMessageItem", () => {
     ).toBe("line one\nline two");
 
     await act(async () => {
-      copyButtons[1]?.click();
+      copyButtons[0]?.click();
     });
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
       "line one\nline two",
     );
   });
 
-  it("reveals the precise agent timestamp after a touch interaction", async () => {
+  it("keeps timestamp visible and reveals actions after touch", async () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const root = createRoot(container);
@@ -182,7 +179,7 @@ describe("GraphChatCompactMessageItem", () => {
       ".thread-graph-message-bubble.is-assistant",
     );
     const timestamp = container.querySelector<HTMLElement>(
-      ".thread-graph-message-time-popover",
+      ".thread-graph-message-time-row",
     );
     const touchEvent = new Event("pointerup", { bubbles: true });
     Object.defineProperty(touchEvent, "pointerType", { value: "touch" });
@@ -192,6 +189,6 @@ describe("GraphChatCompactMessageItem", () => {
     });
 
     expect(timestamp?.textContent).toBe("11:28:07 AM");
-    expect(timestamp?.dataset.visible).toBe("true");
+    expect(bubble?.dataset.touchActions).toBe("true");
   });
 });

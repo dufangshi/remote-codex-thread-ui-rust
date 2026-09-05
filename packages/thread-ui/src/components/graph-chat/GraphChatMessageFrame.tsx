@@ -86,7 +86,7 @@ export function GraphChatMessageFrame({
   timeTitle?: string | null | undefined;
 }) {
   const isUser = kind === 'userMessage';
-  const [touchTimeVisible, setTouchTimeVisible] = useState(false);
+  const [touchActionsVisible, setTouchActionsVisible] = useState(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? '';
   const showStatus = Boolean(
     status &&
@@ -101,27 +101,17 @@ export function GraphChatMessageFrame({
       {timeLabel}
     </span>
   ) : null;
-  const assistantTimeNode = timeLabel ? (
-    <span
-      className="thread-graph-message-time-popover"
-      data-visible={touchTimeVisible ? 'true' : 'false'}
-      role="status"
-    >
-      <time title={timeTitle ?? undefined}>{timeLabel}</time>
-    </span>
-  ) : null;
-
   function handleAssistantPointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (isUser || event.pointerType === 'mouse') {
+    if (event.pointerType === 'mouse') {
       return;
     }
     if (
       event.target instanceof Element &&
-      event.target.closest('a, button, input, summary')
+      event.target.closest('a, button, input, summary, pre, .thread-graph-code-block')
     ) {
       return;
     }
-    setTouchTimeVisible((visible) => !visible);
+    setTouchActionsVisible((visible) => !visible);
   }
 
   return (
@@ -133,7 +123,9 @@ export function GraphChatMessageFrame({
       <div
         className={`thread-graph-message-stack min-w-0 ${isUser ? 'is-user' : 'is-assistant'}`}
       >
+        {timeNode ? <div className={`thread-graph-message-time-row ${isUser ? 'is-user' : ''}`}>{timeNode}</div> : null}
         <div
+          data-touch-actions={touchActionsVisible ? 'true' : 'false'}
           className={`thread-graph-message-bubble relative min-w-0 ${isUser ? 'is-user' : 'is-assistant'}`}
           onPointerUp={handleAssistantPointerUp}
         >
@@ -143,7 +135,6 @@ export function GraphChatMessageFrame({
             </div>
           ) : null}
           {reasoning}
-          {!isUser ? assistantTimeNode : null}
           <div
             className={`thread-graph-message-content min-w-0 ${isUser ? 'is-user' : 'is-assistant'}`}
           >
@@ -155,30 +146,21 @@ export function GraphChatMessageFrame({
             </div>
           ) : null}
         </div>
-        {isUser && (showStatus || timeNode || copyButton) ? (
+        {isUser && showStatus ? (
           <div
             className={`thread-graph-message-user-meta flex items-center justify-end gap-2 ${showStatus || timeNode ? 'has-persistent-meta' : ''}`}
           >
             {showStatus ? (
               <GraphChatMessageStatusBadge status={status} />
             ) : null}
-            {timeNode}
-            {copyButton ? (
-              <div className="thread-graph-message-copy-mobile">
-                {copyButton}
-              </div>
-            ) : null}
+
           </div>
         ) : null}
-        {!isUser && (showStatus || copyButton) ? (
+        {!isUser && showStatus ? (
           <div
             className={`thread-graph-message-assistant-actions flex items-center gap-1 ${showStatus ? 'has-status' : ''}`}
           >
-            {copyButton ? (
-              <div className="thread-graph-message-copy-mobile">
-                {copyButton}
-              </div>
-            ) : null}
+
             {showStatus ? (
               <GraphChatMessageStatusBadge status={status} />
             ) : null}

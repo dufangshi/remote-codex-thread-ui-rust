@@ -312,7 +312,7 @@ describe('ThreadTimeline', () => {
     );
   });
 
-  it('shows relative tool time and a precise agent hover timestamp', () => {
+  it('shows relative tool time and a permanent precise agent timestamp', () => {
     const startedAt = new Date(Date.UTC(2026, 6, 3, 20, 10, 0)).toISOString();
     const agentAt = new Date(Date.UTC(2026, 6, 3, 20, 11, 21)).toISOString();
     const element = render(
@@ -356,14 +356,12 @@ describe('ThreadTimeline', () => {
     );
 
     const agentTime = Array.from(
-      element.querySelectorAll('.thread-graph-message-time-popover'),
+      element.querySelectorAll('.thread-graph-message-time-row'),
     ).find(
       (node) => node.textContent === formatPreciseMessageTimestamp(agentAt),
     );
     expect(agentTime).toBeTruthy();
-    expect((agentTime as HTMLElement | undefined)?.dataset.visible).toBe(
-      'false',
-    );
+
   });
 
   it('shows the latest activity time and a second-precision running duration', () => {

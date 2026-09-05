@@ -1,11 +1,10 @@
 import { useState } from 'react';
+import { DollarSign, ArrowDownToLine, ArrowUpFromLine, Database, Brain, Save } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../graph-ui/Tooltip';
 import type { TimelineTurn } from './timelineItems';
 import {
-  buildTurnTokenDetails,
   formatCompactTokenCount,
   formatCompactUsd,
-  formatDetailedUsd,
 } from './tokenFormatting';
 
 export function formatTurnRuntimeSummary(turn: TimelineTurn) {
@@ -49,15 +48,14 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
           : []),
       ]
     : [];
-  const priceTitle = hasPrice
-    ? [
-        `Estimated API cost: ${formatDetailedUsd(price.totalUsd)} USD (${price.pricingTierKey})`,
-        ...buildTurnTokenDetails(turn).map(
-          (detail) =>
-            `${detail.label}: ${detail.tokenRawValue.toLocaleString('en-US')} tokens · ${detail.usdCompactValue}`,
-        ),
-      ].join('\n')
-    : 'API price unavailable for this model or usage report.';
+  const priceTitle = 'API price unavailable for this model or usage report.';
+  const details = usage ? [
+    { label: 'Input', icon: ArrowDownToLine, value: usage.inputTokens },
+    { label: 'Cached input', icon: Database, value: usage.cachedInputTokens },
+    { label: 'Output', icon: ArrowUpFromLine, value: usage.outputTokens },
+    ...(usage.reasoningOutputTokens > 0 ? [{ label: 'Reasoning', icon: Brain, value: usage.reasoningOutputTokens }] : []),
+    ...(usage.cacheWriteInputTokens ? [{ label: 'Cache write', icon: Save, value: usage.cacheWriteInputTokens }] : []),
+  ] : [];
 
   return (
     <span className="thread-turn-usage" data-testid="turn-usage">
@@ -103,8 +101,15 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
               {formatCompactUsd(price.totalUsd)}
             </button>
           </TooltipTrigger>
-          <TooltipContent side="top" sideOffset={6} className="max-w-[min(22rem,90vw)] whitespace-pre-line text-left">
-            {priceTitle}
+          <TooltipContent side="top" sideOffset={6} className="thread-usage-details"
+            style={{ background: '#252622', color: '#f2f1e9', border: '1px solid #484a41', borderRadius: 10, padding: '9px 12px', boxShadow: '0 6px 22px #0005', zIndex: 80 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '16px auto', gap: '6px 12px', alignItems: 'center', fontVariantNumeric: 'tabular-nums' }}>
+              <DollarSign size={14} aria-label="API cost" /><span>{formatCompactUsd(price.totalUsd)}</span>
+              {details.map(({label, icon: Icon, value}) => <span key={label} style={{display:'contents'}}>
+                <Icon size={14} aria-label={label} />
+                <span aria-label={`${label}: ${value.toLocaleString('en-US')} tokens`} title={`${label}: ${value.toLocaleString('en-US')}`}>{formatCompactTokenCount(value)}</span>
+              </span>)}
+            </div>
           </TooltipContent>
         </Tooltip>
       ) : usage ? (

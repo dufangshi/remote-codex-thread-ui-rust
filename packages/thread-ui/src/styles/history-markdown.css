@@ -2678,32 +2678,6 @@
 
 @media (min-width: 640px) {
   .thread-ui-shell:not([data-thread-layout="mobile"])
-    .thread-graph-message-copy-desktop {
-    position: absolute;
-    right: 0.35rem;
-    bottom: 0.3rem;
-    z-index: 10;
-    display: flex;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(0.15rem);
-    transition:
-      opacity 140ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .thread-ui-shell:not([data-thread-layout="mobile"])
-    .thread-graph-message-bubble:hover
-    .thread-graph-message-copy-desktop,
-  .thread-ui-shell:not([data-thread-layout="mobile"])
-    .thread-graph-message-bubble:focus-within
-    .thread-graph-message-copy-desktop {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-  }
-
-  .thread-ui-shell:not([data-thread-layout="mobile"])
     .thread-graph-message-copy-mobile {
     display: none;
   }
@@ -2997,4 +2971,24 @@
   .thread-ui-shell .thread-graph-message-time-popover {
     transition: none;
   }
+}
+
+/* Message metadata stays above content; copy affordances never reserve a row. */
+.thread-ui-shell .thread-graph-message-time-row { margin: 0 0 3px; line-height: 11px; }
+.thread-ui-shell .thread-graph-message-time-row.is-user { text-align: right; }
+.thread-ui-shell .thread-graph-message-time-row .thread-graph-message-time { font-size: 10px; line-height: 11px; color: var(--theme-fg-muted); opacity: .65; }
+.thread-ui-shell .thread-graph-message-bubble .thread-graph-message-copy-desktop {
+  display: flex; position: absolute; left: 0; right: auto; bottom: 0; z-index: 10;
+  opacity: 0; pointer-events: none; transition: opacity 140ms ease;
+}
+.thread-ui-shell .thread-graph-code-copy { opacity: 0; pointer-events: none; transition: opacity 140ms ease; }
+.thread-ui-shell .thread-graph-message-bubble[data-touch-actions="true"] .thread-graph-message-copy-desktop,
+.thread-ui-shell .thread-graph-code-block[data-touch-actions="true"] .thread-graph-code-copy {
+  opacity: .6; pointer-events: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  .thread-ui-shell .thread-graph-message-bubble:hover .thread-graph-message-copy-desktop,
+  .thread-ui-shell .thread-graph-message-bubble:focus-within .thread-graph-message-copy-desktop,
+  .thread-ui-shell .thread-graph-code-block:hover .thread-graph-code-copy,
+  .thread-ui-shell .thread-graph-code-block:focus-within .thread-graph-code-copy { opacity: .6; pointer-events: auto; }
 }
