@@ -1,3 +1,4 @@
+import { ComposerMenuSurface } from './ComposerMenuSurface';
 import { InputGroupButton } from '../graph-ui/InputGroup';
 import { PlusIcon } from './composerPresentation';
 
@@ -34,9 +35,9 @@ export function ComposerAttachmentMenu({
       </InputGroupButton>
 
       {open && (
-        <div
-          data-composer-menu-surface="true"
-          className={`${menuClassName} absolute bottom-full left-0 mb-2 w-32 overflow-hidden rounded-2xl border bg-stone-900/72 shadow-2xl shadow-stone-950/20`}
+        <ComposerMenuSurface
+          align="start"
+          className={`${menuClassName} w-32 rounded-2xl border bg-stone-900/72 shadow-2xl shadow-stone-950/20`}
         >
           <div className="p-2">
             <button
@@ -54,7 +55,7 @@ export function ComposerAttachmentMenu({
               File
             </button>
           </div>
-        </div>
+        </ComposerMenuSurface>
       )}
     </div>
   );

@@ -70,7 +70,7 @@ export function ComposerPromptEditor({
       className={`${composerPromptRegionClassName} relative w-full ${canInterrupt ? "z-[90]" : ""}`}
     >
       <div className={graphChatInputClassName}>
-        {prompt.length === 0 && (
+        {prompt.length === 0 && promptPlaceholder && (
           <span
             className={`pointer-events-none absolute left-3 top-3 truncate text-slate-500 sm:left-4 sm:top-4 dark:text-slate-400 ${
               canInterrupt ? 'right-12' : 'right-3 sm:right-4'

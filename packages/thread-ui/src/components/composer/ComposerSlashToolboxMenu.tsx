@@ -1,3 +1,4 @@
+import { ComposerMenuSurface } from './ComposerMenuSurface';
 import type {
   AgentBackendToolboxItemSchemaDto,
   AgentHookDto,
@@ -214,9 +215,9 @@ export function ComposerSlashToolboxMenu({
       </InputGroupButton>
 
       {open && (
-        <div
-          data-composer-menu-surface="true"
-          className={`${menuClassName} absolute bottom-full left-0 z-40 mb-2 w-72 overflow-hidden rounded-2xl border bg-stone-900/72 shadow-2xl shadow-stone-950/20 backdrop-blur-xl`}
+        <ComposerMenuSurface
+          align="start"
+          className={`${menuClassName} w-72 rounded-2xl border bg-stone-900/72 shadow-2xl shadow-stone-950/20 backdrop-blur-xl`}
           onClick={(event) => {
             event.stopPropagation();
           }}
@@ -407,7 +408,7 @@ export function ComposerSlashToolboxMenu({
               )}
             </div>
           )}
-        </div>
+        </ComposerMenuSurface>
       )}
     </div>
   );
