@@ -3,10 +3,13 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
   ZoomableImage,
   cn,
   getGraphChatHighlighter
-} from "./chunk-HKDTMKJC.js";
+} from "./chunk-CFX4I522.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect9, useMemo as useMemo9, useState as useState10 } from "react";
@@ -2306,56 +2309,8 @@ function ButtonGroupSeparator({
   );
 }
 
-// src/components/graph-ui/Tooltip.tsx
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
-function TooltipProvider({
-  delayDuration = 0,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx7(
-    TooltipPrimitive.Provider,
-    {
-      "data-slot": "tooltip-provider",
-      delayDuration,
-      ...props
-    }
-  );
-}
-function Tooltip({ ...props }) {
-  return /* @__PURE__ */ jsx7(TooltipProvider, { children: /* @__PURE__ */ jsx7(TooltipPrimitive.Root, { "data-slot": "tooltip", ...props }) });
-}
-function TooltipTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsx7(TooltipPrimitive.Trigger, { "data-slot": "tooltip-trigger", ...props });
-}
-function TooltipContent({
-  children,
-  className,
-  sideOffset = 0,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx7(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs4(
-    TooltipPrimitive.Content,
-    {
-      "data-slot": "tooltip-content",
-      sideOffset,
-      className: cn(
-        "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md bg-foreground px-3 py-1.5 text-balance text-xs text-background animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-        className
-      ),
-      ...props,
-      children: [
-        children,
-        /* @__PURE__ */ jsx7(TooltipPrimitive.Arrow, { className: "z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" })
-      ]
-    }
-  ) });
-}
-
 // src/components/graph-workspace/GraphMoleculeViewerControls.tsx
-import { jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
+import { jsx as jsx7, jsxs as jsxs4 } from "react/jsx-runtime";
 function moleculeSlug(value) {
   const normalized = value?.trim().replace(/[^a-zA-Z0-9_-]+/g, "-").replace(/^-+|-+$/g, "");
   return normalized || "molecule";
@@ -2375,8 +2330,8 @@ function GraphMoleculeIconButton({
   label,
   onClick
 }) {
-  return /* @__PURE__ */ jsxs5(Tooltip, { children: [
-    /* @__PURE__ */ jsx8(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx8(
+  return /* @__PURE__ */ jsxs4(Tooltip, { children: [
+    /* @__PURE__ */ jsx7(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx7(
       Button,
       {
         type: "button",
@@ -2390,18 +2345,18 @@ function GraphMoleculeIconButton({
         children
       }
     ) }),
-    /* @__PURE__ */ jsx8(TooltipContent, { children: /* @__PURE__ */ jsx8("p", { children: label }) })
+    /* @__PURE__ */ jsx7(TooltipContent, { children: /* @__PURE__ */ jsx7("p", { children: label }) })
   ] });
 }
 function GraphMoleculeButtonGroup({
   children,
   className = ""
 }) {
-  return /* @__PURE__ */ jsx8(ButtonGroup, { className: `thread-graph-molecule-button-group ${className}`, children });
+  return /* @__PURE__ */ jsx7(ButtonGroup, { className: `thread-graph-molecule-button-group ${className}`, children });
 }
 
 // src/components/graph-workspace/GraphMoleculeViewerLowerButtonGroup.tsx
-import { Fragment as Fragment2, jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
+import { Fragment as Fragment2, jsx as jsx8, jsxs as jsxs5 } from "react/jsx-runtime";
 function GraphMoleculeViewerLowerButtonGroup({
   cameraInfo,
   onClearSelection,
@@ -2419,85 +2374,85 @@ function GraphMoleculeViewerLowerButtonGroup({
 }) {
   const hasSelection = selectedSerials.length > 0;
   const hasStaged = stagedAtoms > 0;
-  return /* @__PURE__ */ jsxs6(Fragment2, { children: [
-    /* @__PURE__ */ jsxs6("div", { className: "flex w-full justify-between gap-2 overflow-x-auto", children: [
-      /* @__PURE__ */ jsxs6(GraphMoleculeButtonGroup, { children: [
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Distance", children: /* @__PURE__ */ jsx9(AlignVerticalDistributeCenter, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Connectivity", children: /* @__PURE__ */ jsx9(Share2, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Angle", children: /* @__PURE__ */ jsx9(Waypoints, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Dihedral", children: /* @__PURE__ */ jsx9(Spline, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Add dummy atoms", children: /* @__PURE__ */ jsx9(Bubbles, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Delete atoms", children: /* @__PURE__ */ jsx9(CircleX, { className: "size-4" }) }),
-        /* @__PURE__ */ jsx9(GraphMoleculeIconButton, { label: "Rotate", children: /* @__PURE__ */ jsx9(Rotate3d, { className: "size-4" }) })
+  return /* @__PURE__ */ jsxs5(Fragment2, { children: [
+    /* @__PURE__ */ jsxs5("div", { className: "flex w-full justify-between gap-2 overflow-x-auto", children: [
+      /* @__PURE__ */ jsxs5(GraphMoleculeButtonGroup, { children: [
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Distance", children: /* @__PURE__ */ jsx8(AlignVerticalDistributeCenter, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Connectivity", children: /* @__PURE__ */ jsx8(Share2, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Angle", children: /* @__PURE__ */ jsx8(Waypoints, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Dihedral", children: /* @__PURE__ */ jsx8(Spline, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Add dummy atoms", children: /* @__PURE__ */ jsx8(Bubbles, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Delete atoms", children: /* @__PURE__ */ jsx8(CircleX, { className: "size-4" }) }),
+        /* @__PURE__ */ jsx8(GraphMoleculeIconButton, { label: "Rotate", children: /* @__PURE__ */ jsx8(Rotate3d, { className: "size-4" }) })
       ] }),
-      /* @__PURE__ */ jsxs6(GraphMoleculeButtonGroup, { children: [
-        /* @__PURE__ */ jsx9(
+      /* @__PURE__ */ jsxs5(GraphMoleculeButtonGroup, { children: [
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: unitCellVisible ? "Hide unit cell" : "Show unit cell",
             disabled: !unitCellAvailable,
             onClick: onToggleUnitCell,
-            children: /* @__PURE__ */ jsx9(Boxes, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(Boxes, { className: "size-4" })
           }
         ),
-        /* @__PURE__ */ jsx9(
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: "Clear selection",
             disabled: !hasSelection,
             onClick: onClearSelection,
-            children: /* @__PURE__ */ jsx9(Trash22, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(Trash22, { className: "size-4" })
           }
         ),
-        /* @__PURE__ */ jsx9(
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: "Send selection",
             disabled: !hasSelection,
             onClick: onSendSelection,
-            children: /* @__PURE__ */ jsx9(Send, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(Send, { className: "size-4" })
           }
         ),
-        /* @__PURE__ */ jsx9(
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: "Stage current selection",
             disabled: !hasSelection,
             onClick: onStageSelection,
-            children: /* @__PURE__ */ jsx9(Box, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(Box, { className: "size-4" })
           }
         ),
-        /* @__PURE__ */ jsx9(
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: "Clear staged selections",
             disabled: !hasStaged,
             onClick: onClearStaged,
-            children: /* @__PURE__ */ jsx9(Eraser, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(Eraser, { className: "size-4" })
           }
         ),
-        /* @__PURE__ */ jsx9(
+        /* @__PURE__ */ jsx8(
           GraphMoleculeIconButton,
           {
             label: "Send staged selections",
             disabled: !hasStaged,
             onClick: onSendStaged,
-            children: /* @__PURE__ */ jsx9(ArrowUpRight, { className: "size-4" })
+            children: /* @__PURE__ */ jsx8(ArrowUpRight, { className: "size-4" })
           }
         )
       ] })
     ] }),
-    cameraInfo ? /* @__PURE__ */ jsxs6("div", { className: "thread-graph-molecule-camera", children: [
-      /* @__PURE__ */ jsxs6("div", { children: [
-        /* @__PURE__ */ jsx9("strong", { children: "XYZ: " }),
+    cameraInfo ? /* @__PURE__ */ jsxs5("div", { className: "thread-graph-molecule-camera", children: [
+      /* @__PURE__ */ jsxs5("div", { children: [
+        /* @__PURE__ */ jsx8("strong", { children: "XYZ: " }),
         "x=",
         cameraInfo.position.x.toFixed(1),
         " y=",
         cameraInfo.position.y.toFixed(1),
         " z=",
         cameraInfo.position.z.toFixed(1),
-        /* @__PURE__ */ jsx9("br", {}),
-        /* @__PURE__ */ jsx9("strong", { children: "Quat: " }),
+        /* @__PURE__ */ jsx8("br", {}),
+        /* @__PURE__ */ jsx8("strong", { children: "Quat: " }),
         "qx=",
         cameraInfo.position.qx.toFixed(2),
         " qy=",
@@ -2507,16 +2462,16 @@ function GraphMoleculeViewerLowerButtonGroup({
         " qw=",
         cameraInfo.position.qw.toFixed(2)
       ] }),
-      /* @__PURE__ */ jsx9("div", { className: "thread-graph-molecule-camera-divider" }),
-      /* @__PURE__ */ jsxs6("div", { className: "flex flex-col gap-1 text-[10px]", children: [
-        /* @__PURE__ */ jsxs6("div", { children: [
+      /* @__PURE__ */ jsx8("div", { className: "thread-graph-molecule-camera-divider" }),
+      /* @__PURE__ */ jsxs5("div", { className: "flex flex-col gap-1 text-[10px]", children: [
+        /* @__PURE__ */ jsxs5("div", { children: [
           "Selected atoms:",
           " ",
           selectedSerials.length > 0 ? selectedSerials.map(
             (serial) => `${selectedAtomLabels[serial] ?? "Atom"}(${serial})`
           ).join(", ") : "None"
         ] }),
-        /* @__PURE__ */ jsxs6("div", { children: [
+        /* @__PURE__ */ jsxs5("div", { children: [
           "Staged: ",
           stagedMolecules,
           " molecule(s), ",
@@ -2530,7 +2485,7 @@ function GraphMoleculeViewerLowerButtonGroup({
 
 // src/components/graph-workspace/GraphMoleculeViewerUpperButtonGroup.tsx
 import { Box as Box2, Camera, Copy as Copy2, Download as Download2, RotateCcw, ZoomIn, ZoomOut } from "lucide-react";
-import { jsx as jsx10, jsxs as jsxs7 } from "react/jsx-runtime";
+import { jsx as jsx9, jsxs as jsxs6 } from "react/jsx-runtime";
 function GraphMoleculeViewerUpperButtonGroup({
   currentIndex,
   exportContent,
@@ -2584,69 +2539,69 @@ function GraphMoleculeViewerUpperButtonGroup({
     viewerRef.current.setCameraParameters({});
     viewerRef.current.render();
   }
-  return /* @__PURE__ */ jsxs7(GraphMoleculeButtonGroup, { className: "ml-auto justify-end", children: [
-    /* @__PURE__ */ jsx10(
+  return /* @__PURE__ */ jsxs6(GraphMoleculeButtonGroup, { className: "ml-auto justify-end", children: [
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Copy current structure",
         onClick: () => void handleCopyXYZ(),
         disabled: !xyzContent,
-        children: /* @__PURE__ */ jsx10(Copy2, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(Copy2, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Download current structure",
         onClick: handleDownloadXYZ,
         disabled: !xyzContent,
-        children: /* @__PURE__ */ jsx10(Download2, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(Download2, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Download full trajectory",
         onClick: handleDownloadAllXYZ,
         disabled: !exportContent,
-        children: /* @__PURE__ */ jsx10(Box2, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(Box2, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Copy screenshot",
         onClick: onScreenshot,
         disabled: !viewerRef.current || !xyzContent,
-        children: /* @__PURE__ */ jsx10(Camera, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(Camera, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(ButtonGroupSeparator, { className: "thread-graph-molecule-button-divider" }),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(ButtonGroupSeparator, { className: "thread-graph-molecule-button-divider" }),
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Zoom in",
         onClick: handleZoomIn,
         disabled: !viewerRef.current || !xyzContent,
-        children: /* @__PURE__ */ jsx10(ZoomIn, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(ZoomIn, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Zoom out",
         onClick: handleZoomOut,
         disabled: !viewerRef.current || !xyzContent,
-        children: /* @__PURE__ */ jsx10(ZoomOut, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(ZoomOut, { className: "size-3.5" })
       }
     ),
-    /* @__PURE__ */ jsx10(
+    /* @__PURE__ */ jsx9(
       GraphMoleculeIconButton,
       {
         label: "Reset camera",
         onClick: handleReset,
         disabled: !viewerRef.current || !xyzContent,
-        children: /* @__PURE__ */ jsx10(RotateCcw, { className: "size-3.5" })
+        children: /* @__PURE__ */ jsx9(RotateCcw, { className: "size-3.5" })
       }
     )
   ] });
@@ -2701,7 +2656,7 @@ async function load3Dmol() {
 // src/components/graph-ui/Slider.tsx
 import * as SliderPrimitive from "@radix-ui/react-slider";
 import { useMemo as useMemo5 } from "react";
-import { jsx as jsx11, jsxs as jsxs8 } from "react/jsx-runtime";
+import { jsx as jsx10, jsxs as jsxs7 } from "react/jsx-runtime";
 function Slider({
   className,
   defaultValue,
@@ -2714,7 +2669,7 @@ function Slider({
     () => Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max],
     [defaultValue, max, min, value]
   );
-  return /* @__PURE__ */ jsxs8(
+  return /* @__PURE__ */ jsxs7(
     SliderPrimitive.Root,
     {
       "data-slot": "slider",
@@ -2728,12 +2683,12 @@ function Slider({
       ),
       ...props,
       children: [
-        /* @__PURE__ */ jsx11(
+        /* @__PURE__ */ jsx10(
           SliderPrimitive.Track,
           {
             "data-slot": "slider-track",
             className: "relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5",
-            children: /* @__PURE__ */ jsx11(
+            children: /* @__PURE__ */ jsx10(
               SliderPrimitive.Range,
               {
                 "data-slot": "slider-range",
@@ -2742,7 +2697,7 @@ function Slider({
             )
           }
         ),
-        Array.from({ length: values.length }, (_, index) => /* @__PURE__ */ jsx11(
+        Array.from({ length: values.length }, (_, index) => /* @__PURE__ */ jsx10(
           SliderPrimitive.Thumb,
           {
             "data-slot": "slider-thumb",
@@ -2825,7 +2780,7 @@ function readGraphMoleculeViewerData(source) {
 }
 
 // src/components/graph-workspace/GraphMoleculeViewer.tsx
-import { jsx as jsx12, jsxs as jsxs9 } from "react/jsx-runtime";
+import { jsx as jsx11, jsxs as jsxs8 } from "react/jsx-runtime";
 function GraphMoleculeViewer({
   className = "",
   moleculeId = null,
@@ -3132,27 +3087,27 @@ function GraphMoleculeViewer({
       };
     });
   }
-  return /* @__PURE__ */ jsxs9(
+  return /* @__PURE__ */ jsxs8(
     "div",
     {
       className: `thread-graph-molecule-viewer flex h-full min-h-0 flex-col bg-white ${className}`,
       children: [
-        /* @__PURE__ */ jsxs9("div", { className: "thread-graph-molecule-header flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 px-3 py-2 sm:px-4 sm:py-3", children: [
-          /* @__PURE__ */ jsxs9("div", { className: "min-w-0", children: [
-            /* @__PURE__ */ jsx12("h2", { className: "truncate text-sm font-semibold text-slate-900", children: title }),
-            /* @__PURE__ */ jsx12("p", { className: "mt-1 hidden text-[11px] text-slate-400 sm:block", children: "cartoon + surface" })
+        /* @__PURE__ */ jsxs8("div", { className: "thread-graph-molecule-header flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 px-3 py-2 sm:px-4 sm:py-3", children: [
+          /* @__PURE__ */ jsxs8("div", { className: "min-w-0", children: [
+            /* @__PURE__ */ jsx11("h2", { className: "truncate text-sm font-semibold text-slate-900", children: title }),
+            /* @__PURE__ */ jsx11("p", { className: "mt-1 hidden text-[11px] text-slate-400 sm:block", children: "cartoon + surface" })
           ] }),
-          /* @__PURE__ */ jsx12("span", { className: "shrink-0 text-[11px] text-slate-400", children: "workspace preview" })
+          /* @__PURE__ */ jsx11("span", { className: "shrink-0 text-[11px] text-slate-400", children: "workspace preview" })
         ] }),
-        /* @__PURE__ */ jsxs9("div", { className: "thread-graph-molecule-body min-h-0 flex-1", children: [
-          /* @__PURE__ */ jsxs9(
+        /* @__PURE__ */ jsxs8("div", { className: "thread-graph-molecule-body min-h-0 flex-1", children: [
+          /* @__PURE__ */ jsxs8(
             "div",
             {
               ref: viewerHostRef,
               "data-testid": "molecule-viewer",
               className: "thread-graph-molecule-stage relative min-h-0 flex-1 overflow-hidden",
               children: [
-                viewerInitError ? /* @__PURE__ */ jsx12(
+                viewerInitError ? /* @__PURE__ */ jsx11(
                   "div",
                   {
                     "data-testid": "molecule-viewer-error",
@@ -3160,24 +3115,24 @@ function GraphMoleculeViewer({
                     children: viewerInitError
                   }
                 ) : null,
-                !viewerInitError && !xyzContent ? /* @__PURE__ */ jsx12("div", { className: "thread-graph-molecule-empty absolute inset-0 flex items-center justify-center p-4 text-sm text-slate-400", children: "No molecule data available." }) : null,
-                hoveredAtom ? /* @__PURE__ */ jsxs9(
+                !viewerInitError && !xyzContent ? /* @__PURE__ */ jsx11("div", { className: "thread-graph-molecule-empty absolute inset-0 flex items-center justify-center p-4 text-sm text-slate-400", children: "No molecule data available." }) : null,
+                hoveredAtom ? /* @__PURE__ */ jsxs8(
                   "div",
                   {
                     className: "thread-graph-molecule-tooltip pointer-events-none fixed z-[1000] rounded-md border border-gray-300 bg-white/95 px-2 py-1.5 text-[10px] text-gray-800 shadow-md",
                     style: { left: hoveredAtom.x - 20, top: hoveredAtom.y - 50 },
                     children: [
-                      /* @__PURE__ */ jsx12("div", { className: "mb-0.5 font-semibold text-gray-900", children: hoveredAtom.label }),
-                      /* @__PURE__ */ jsxs9("div", { className: "space-x-2 text-gray-600", children: [
-                        /* @__PURE__ */ jsxs9("span", { children: [
+                      /* @__PURE__ */ jsx11("div", { className: "mb-0.5 font-semibold text-gray-900", children: hoveredAtom.label }),
+                      /* @__PURE__ */ jsxs8("div", { className: "space-x-2 text-gray-600", children: [
+                        /* @__PURE__ */ jsxs8("span", { children: [
                           "x: ",
                           hoveredAtom.coords.x
                         ] }),
-                        /* @__PURE__ */ jsxs9("span", { children: [
+                        /* @__PURE__ */ jsxs8("span", { children: [
                           "y: ",
                           hoveredAtom.coords.y
                         ] }),
-                        /* @__PURE__ */ jsxs9("span", { children: [
+                        /* @__PURE__ */ jsxs8("span", { children: [
                           "z: ",
                           hoveredAtom.coords.z
                         ] })
@@ -3188,13 +3143,13 @@ function GraphMoleculeViewer({
               ]
             }
           ),
-          /* @__PURE__ */ jsxs9("div", { className: "thread-graph-molecule-controls shrink-0", children: [
-            /* @__PURE__ */ jsxs9("div", { className: "thread-graph-molecule-control-row", children: [
-              /* @__PURE__ */ jsxs9("div", { className: "min-w-0", children: [
-                /* @__PURE__ */ jsx12("p", { className: "thread-graph-molecule-control-title", children: "Ball & Stick" }),
-                /* @__PURE__ */ jsx12("p", { className: "thread-graph-molecule-control-subtitle", children: "XYZ / PDB / CIF preview" })
+          /* @__PURE__ */ jsxs8("div", { className: "thread-graph-molecule-controls shrink-0", children: [
+            /* @__PURE__ */ jsxs8("div", { className: "thread-graph-molecule-control-row", children: [
+              /* @__PURE__ */ jsxs8("div", { className: "min-w-0", children: [
+                /* @__PURE__ */ jsx11("p", { className: "thread-graph-molecule-control-title", children: "Ball & Stick" }),
+                /* @__PURE__ */ jsx11("p", { className: "thread-graph-molecule-control-subtitle", children: "XYZ / PDB / CIF preview" })
               ] }),
-              /* @__PURE__ */ jsx12(
+              /* @__PURE__ */ jsx11(
                 GraphMoleculeViewerUpperButtonGroup,
                 {
                   currentIndex,
@@ -3207,14 +3162,14 @@ function GraphMoleculeViewer({
                 }
               )
             ] }),
-            xyzArray.length > 1 ? /* @__PURE__ */ jsxs9("div", { className: "thread-graph-molecule-trajectory", children: [
-              /* @__PURE__ */ jsxs9("div", { className: "mb-2 flex justify-between gap-3 text-xs", children: [
-                /* @__PURE__ */ jsxs9("span", { className: "flex min-w-0 items-center gap-2", children: [
+            xyzArray.length > 1 ? /* @__PURE__ */ jsxs8("div", { className: "thread-graph-molecule-trajectory", children: [
+              /* @__PURE__ */ jsxs8("div", { className: "mb-2 flex justify-between gap-3 text-xs", children: [
+                /* @__PURE__ */ jsxs8("span", { className: "flex min-w-0 items-center gap-2", children: [
                   "Trajectory ",
                   currentIndex + 1,
                   " / ",
                   xyzArray.length,
-                  /* @__PURE__ */ jsx12(
+                  /* @__PURE__ */ jsx11(
                     Button,
                     {
                       type: "button",
@@ -3232,11 +3187,11 @@ function GraphMoleculeViewer({
                       },
                       "aria-label": isPlaying ? "Pause trajectory" : "Play trajectory",
                       title: isPlaying ? "Pause trajectory" : "Play trajectory",
-                      children: isPlaying && currentIndex !== xyzArray.length - 1 ? /* @__PURE__ */ jsx12(Pause, { className: "h-3 w-3" }) : /* @__PURE__ */ jsx12(Play, { className: "h-3 w-3" })
+                      children: isPlaying && currentIndex !== xyzArray.length - 1 ? /* @__PURE__ */ jsx11(Pause, { className: "h-3 w-3" }) : /* @__PURE__ */ jsx11(Play, { className: "h-3 w-3" })
                     }
                   )
                 ] }),
-                /* @__PURE__ */ jsxs9(
+                /* @__PURE__ */ jsxs8(
                   Button,
                   {
                     type: "button",
@@ -3244,7 +3199,7 @@ function GraphMoleculeViewer({
                     onClick: () => setCurrentIndex(xyzArray.length - 1),
                     className: "thread-graph-molecule-live-button",
                     children: [
-                      /* @__PURE__ */ jsx12(
+                      /* @__PURE__ */ jsx11(
                         "span",
                         {
                           className: `h-2.5 w-2.5 rounded-full ${isLive ? "animate-pulse bg-red-600" : "bg-gray-300"}`
@@ -3255,7 +3210,7 @@ function GraphMoleculeViewer({
                   }
                 )
               ] }),
-              /* @__PURE__ */ jsx12(
+              /* @__PURE__ */ jsx11(
                 Slider,
                 {
                   value: [currentIndex],
@@ -3266,7 +3221,7 @@ function GraphMoleculeViewer({
                 }
               )
             ] }) : null,
-            /* @__PURE__ */ jsx12(
+            /* @__PURE__ */ jsx11(
               GraphMoleculeViewerLowerButtonGroup,
               {
                 cameraInfo,
@@ -3301,7 +3256,7 @@ function GraphMoleculeViewer({
 // src/components/graph-workspace/WorkspaceFileTabs.tsx
 import { Circle, FileCode2 as FileCode23, X as X2 } from "lucide-react";
 import { useState as useState7 } from "react";
-import { jsx as jsx13, jsxs as jsxs10 } from "react/jsx-runtime";
+import { jsx as jsx12, jsxs as jsxs9 } from "react/jsx-runtime";
 function WorkspaceFileTabs({
   activePath,
   dirtyPaths,
@@ -3322,9 +3277,9 @@ function WorkspaceFileTabs({
     }
     onClose(path);
   }
-  return /* @__PURE__ */ jsxs10("div", { className: "thread-graph-editor-tabs-shell shrink-0", children: [
-    /* @__PURE__ */ jsxs10("div", { className: "flex min-w-0 border-b border-[var(--theme-border)]", children: [
-      /* @__PURE__ */ jsx13(
+  return /* @__PURE__ */ jsxs9("div", { className: "thread-graph-editor-tabs-shell shrink-0", children: [
+    /* @__PURE__ */ jsxs9("div", { className: "flex min-w-0 border-b border-[var(--theme-border)]", children: [
+      /* @__PURE__ */ jsx12(
         "div",
         {
           className: "thread-graph-editor-tabs flex min-w-0 flex-1 overflow-x-auto",
@@ -3333,13 +3288,13 @@ function WorkspaceFileTabs({
           children: tabs.map((tab) => {
             const active = tab.path === activePath;
             const dirty = dirtyPaths.has(tab.path);
-            return /* @__PURE__ */ jsxs10(
+            return /* @__PURE__ */ jsxs9(
               "div",
               {
                 className: `thread-graph-editor-tab group/tab flex h-8 min-w-0 max-w-52 shrink-0 items-center border-r ${active ? "is-active" : ""} ${tab.pinned ? "is-pinned" : "is-preview"}`,
                 role: "presentation",
                 children: [
-                  /* @__PURE__ */ jsxs10(
+                  /* @__PURE__ */ jsxs9(
                     "button",
                     {
                       type: "button",
@@ -3349,12 +3304,12 @@ function WorkspaceFileTabs({
                       onClick: () => onSelect(tab.path),
                       className: `flex h-full min-w-0 flex-1 items-center gap-1.5 px-2.5 text-left text-xs ${tab.pinned ? "" : "italic"}`,
                       children: [
-                        /* @__PURE__ */ jsx13(FileCode23, { className: "h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" }),
-                        /* @__PURE__ */ jsx13("span", { className: "truncate", children: tab.name })
+                        /* @__PURE__ */ jsx12(FileCode23, { className: "h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" }),
+                        /* @__PURE__ */ jsx12("span", { className: "truncate", children: tab.name })
                       ]
                     }
                   ),
-                  /* @__PURE__ */ jsx13(
+                  /* @__PURE__ */ jsx12(
                     "button",
                     {
                       type: "button",
@@ -3362,7 +3317,7 @@ function WorkspaceFileTabs({
                       className: "thread-graph-editor-tab-close mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded",
                       title: `Close ${tab.name}`,
                       "aria-label": `Close ${tab.name}`,
-                      children: dirty ? /* @__PURE__ */ jsx13(Circle, { className: "h-2.5 w-2.5 fill-current" }) : /* @__PURE__ */ jsx13(X2, { className: "h-3.5 w-3.5" })
+                      children: dirty ? /* @__PURE__ */ jsx12(Circle, { className: "h-2.5 w-2.5 fill-current" }) : /* @__PURE__ */ jsx12(X2, { className: "h-3.5 w-3.5" })
                     }
                   )
                 ]
@@ -3372,21 +3327,21 @@ function WorkspaceFileTabs({
           })
         }
       ),
-      trailingAction ? /* @__PURE__ */ jsx13("div", { className: "thread-graph-editor-tabs-action flex h-8 shrink-0 items-center px-1", children: trailingAction }) : null
+      trailingAction ? /* @__PURE__ */ jsx12("div", { className: "thread-graph-editor-tabs-action flex h-8 shrink-0 items-center px-1", children: trailingAction }) : null
     ] }),
-    pendingTab ? /* @__PURE__ */ jsxs10(
+    pendingTab ? /* @__PURE__ */ jsxs9(
       "div",
       {
         className: "thread-graph-editor-close-confirm flex min-h-10 items-center justify-between gap-3 border-b px-3 py-1.5 text-xs",
         role: "alert",
         children: [
-          /* @__PURE__ */ jsxs10("span", { className: "min-w-0 truncate", children: [
+          /* @__PURE__ */ jsxs9("span", { className: "min-w-0 truncate", children: [
             "Discard unsaved changes in ",
             pendingTab.name,
             "?"
           ] }),
-          /* @__PURE__ */ jsxs10("div", { className: "flex shrink-0 items-center gap-1", children: [
-            /* @__PURE__ */ jsx13(
+          /* @__PURE__ */ jsxs9("div", { className: "flex shrink-0 items-center gap-1", children: [
+            /* @__PURE__ */ jsx12(
               "button",
               {
                 type: "button",
@@ -3395,7 +3350,7 @@ function WorkspaceFileTabs({
                 children: "Keep editing"
               }
             ),
-            /* @__PURE__ */ jsx13(
+            /* @__PURE__ */ jsx12(
               "button",
               {
                 type: "button",
@@ -3415,7 +3370,7 @@ function WorkspaceFileTabs({
 }
 
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
-import { Fragment as Fragment3, jsx as jsx14, jsxs as jsxs11 } from "react/jsx-runtime";
+import { Fragment as Fragment3, jsx as jsx13, jsxs as jsxs10 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
   () => import("./GraphWorkspaceMonacoEditor-7VVQCKOQ.js")
 );
@@ -3603,26 +3558,26 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
     target?.scrollIntoView?.({ block: "center" });
   }, [focusLine, highlightedHtml]);
   const lines = content.split("\n");
-  return /* @__PURE__ */ jsx14(
+  return /* @__PURE__ */ jsx13(
     "div",
     {
       ref: rootRef,
       className: "thread-graph-code-preview min-h-0 flex-1 overflow-auto",
       role: "region",
       "aria-label": "Source code",
-      children: highlightedHtml ? /* @__PURE__ */ jsx14(
+      children: highlightedHtml ? /* @__PURE__ */ jsx13(
         "div",
         {
           className: "thread-graph-highlighted-code-preview",
           dangerouslySetInnerHTML: { __html: highlightedHtml }
         }
-      ) : /* @__PURE__ */ jsx14("pre", { className: "thread-graph-plain-code-preview", children: /* @__PURE__ */ jsx14("code", { children: lines.map((line, index) => /* @__PURE__ */ jsxs11(
+      ) : /* @__PURE__ */ jsx13("pre", { className: "thread-graph-plain-code-preview", children: /* @__PURE__ */ jsx13("code", { children: lines.map((line, index) => /* @__PURE__ */ jsxs10(
         "span",
         {
           className: `thread-graph-code-line ${focusLine === index + 1 ? "is-focused-line" : ""}`,
           "data-line": index + 1,
           children: [
-            /* @__PURE__ */ jsx14(
+            /* @__PURE__ */ jsx13(
               "span",
               {
                 className: "thread-graph-code-line-number",
@@ -3630,7 +3585,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
                 children: index + 1
               }
             ),
-            /* @__PURE__ */ jsx14("span", { children: line || " " })
+            /* @__PURE__ */ jsx13("span", { children: line || " " })
           ]
         },
         index
@@ -3651,7 +3606,7 @@ var GraphWorkspaceMarkdownPreview = memo(
       resourceUrl,
       workspaceRootPath: workspaceRootPath ?? ""
     }) : null;
-    return /* @__PURE__ */ jsx14("div", { className: "thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6", children: /* @__PURE__ */ jsx14(
+    return /* @__PURE__ */ jsx13("div", { className: "thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6", children: /* @__PURE__ */ jsx13(
       ReactMarkdown,
       {
         remarkPlugins: [remarkGfm],
@@ -3659,7 +3614,7 @@ var GraphWorkspaceMarkdownPreview = memo(
           a({ href, children, ...props }) {
             const workspacePath = resolvePath(href);
             if (workspacePath && onOpenWorkspaceFile) {
-              return /* @__PURE__ */ jsx14(
+              return /* @__PURE__ */ jsx13(
                 "a",
                 {
                   ...props,
@@ -3672,7 +3627,7 @@ var GraphWorkspaceMarkdownPreview = memo(
                 }
               );
             }
-            return /* @__PURE__ */ jsx14("a", { ...props, href, children });
+            return /* @__PURE__ */ jsx13("a", { ...props, href, children });
           },
           img({ src, alt, ...props }) {
             const workspacePath = resolvePath(src);
@@ -3680,7 +3635,7 @@ var GraphWorkspaceMarkdownPreview = memo(
             if (!resolvedSrc) {
               return null;
             }
-            return /* @__PURE__ */ jsx14(
+            return /* @__PURE__ */ jsx13(
               ZoomableImage,
               {
                 src: resolvedSrc,
@@ -3809,15 +3764,15 @@ function GraphWorkspacePreviewPane({
     }
   }
   const breadcrumbSegments = previewFile ? previewFile.path.replace(workspaceRootPath ?? "", "").split("/").filter(Boolean) : [];
-  const fileToolbar = previewFile && (isMarkdownFile || canEditFile) ? /* @__PURE__ */ jsxs11("div", { className: "flex shrink-0 items-center gap-1", children: [
-    isMarkdownFile && !editing ? /* @__PURE__ */ jsxs11(
+  const fileToolbar = previewFile && (isMarkdownFile || canEditFile) ? /* @__PURE__ */ jsxs10("div", { className: "flex shrink-0 items-center gap-1", children: [
+    isMarkdownFile && !editing ? /* @__PURE__ */ jsxs10(
       "div",
       {
         className: "thread-graph-markdown-view-switch inline-flex items-center rounded border p-px",
         role: "group",
         "aria-label": "Markdown view",
         children: [
-          /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx13(
             "button",
             {
               type: "button",
@@ -3826,10 +3781,10 @@ function GraphWorkspacePreviewPane({
               "aria-pressed": markdownView === "preview",
               title: "Markdown preview",
               "aria-label": "Markdown preview",
-              children: /* @__PURE__ */ jsx14(BookOpen, { className: "h-3 w-3" })
+              children: /* @__PURE__ */ jsx13(BookOpen, { className: "h-3 w-3" })
             }
           ),
-          /* @__PURE__ */ jsx14(
+          /* @__PURE__ */ jsx13(
             "button",
             {
               type: "button",
@@ -3838,14 +3793,14 @@ function GraphWorkspacePreviewPane({
               "aria-pressed": markdownView === "source",
               title: "Markdown source",
               "aria-label": "Markdown source",
-              children: /* @__PURE__ */ jsx14(Code2, { className: "h-3 w-3" })
+              children: /* @__PURE__ */ jsx13(Code2, { className: "h-3 w-3" })
             }
           )
         ]
       }
     ) : null,
-    canEditFile ? /* @__PURE__ */ jsx14("div", { className: "flex shrink-0 items-center gap-0.5", children: editing ? /* @__PURE__ */ jsxs11(Fragment3, { children: [
-      /* @__PURE__ */ jsx14(
+    canEditFile ? /* @__PURE__ */ jsx13("div", { className: "flex shrink-0 items-center gap-0.5", children: editing ? /* @__PURE__ */ jsxs10(Fragment3, { children: [
+      /* @__PURE__ */ jsx13(
         "button",
         {
           type: "button",
@@ -3858,10 +3813,10 @@ function GraphWorkspacePreviewPane({
           className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40",
           title: "Cancel edits",
           "aria-label": "Cancel edits",
-          children: /* @__PURE__ */ jsx14(X3, { className: "h-3.5 w-3.5" })
+          children: /* @__PURE__ */ jsx13(X3, { className: "h-3.5 w-3.5" })
         }
       ),
-      /* @__PURE__ */ jsx14(
+      /* @__PURE__ */ jsx13(
         "button",
         {
           type: "button",
@@ -3870,10 +3825,10 @@ function GraphWorkspacePreviewPane({
           className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40",
           title: "Save file",
           "aria-label": "Save file",
-          children: /* @__PURE__ */ jsx14(Save, { className: "h-3.5 w-3.5" })
+          children: /* @__PURE__ */ jsx13(Save, { className: "h-3.5 w-3.5" })
         }
       )
-    ] }) : /* @__PURE__ */ jsx14(
+    ] }) : /* @__PURE__ */ jsx13(
       "button",
       {
         type: "button",
@@ -3886,11 +3841,11 @@ function GraphWorkspacePreviewPane({
         className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition",
         title: "Edit file",
         "aria-label": "Edit file",
-        children: /* @__PURE__ */ jsx14(Pencil, { className: "h-3.5 w-3.5" })
+        children: /* @__PURE__ */ jsx13(Pencil, { className: "h-3.5 w-3.5" })
       }
     ) }) : null
   ] }) : null;
-  const viewerPaneToggle = onExpandExplorer ? /* @__PURE__ */ jsx14(
+  const viewerPaneToggle = onExpandExplorer ? /* @__PURE__ */ jsx13(
     "button",
     {
       type: "button",
@@ -3899,9 +3854,9 @@ function GraphWorkspacePreviewPane({
       className: "flex h-6 w-6 shrink-0 items-center justify-center rounded text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]",
       title: "Show Explorer",
       "aria-label": "Show Explorer",
-      children: /* @__PURE__ */ jsx14(PanelLeftOpen, { className: "h-3.5 w-3.5" })
+      children: /* @__PURE__ */ jsx13(PanelLeftOpen, { className: "h-3.5 w-3.5" })
     }
-  ) : onCollapse ? /* @__PURE__ */ jsx14(
+  ) : onCollapse ? /* @__PURE__ */ jsx13(
     "button",
     {
       type: "button",
@@ -3910,21 +3865,21 @@ function GraphWorkspacePreviewPane({
       className: "flex h-6 w-6 shrink-0 items-center justify-center rounded text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]",
       title: "Hide Editor",
       "aria-label": "Hide Editor",
-      children: /* @__PURE__ */ jsx14(PanelRightClose, { className: "h-3.5 w-3.5" })
+      children: /* @__PURE__ */ jsx13(PanelRightClose, { className: "h-3.5 w-3.5" })
     }
   ) : null;
-  return /* @__PURE__ */ jsxs11(
+  return /* @__PURE__ */ jsxs10(
     "section",
     {
       ref: surfaceRef,
       className: "thread-graph-viewer flex h-full min-h-0 flex-col overflow-hidden rounded-md",
       "data-preview-target-kind": selectedTarget?.kind ?? "none",
       children: [
-        selectedTarget?.kind !== "workspace-file" ? /* @__PURE__ */ jsxs11("div", { className: "thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5", children: [
-          /* @__PURE__ */ jsx14("span", { className: "min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]", children: title ?? "Preview" }),
+        selectedTarget?.kind !== "workspace-file" ? /* @__PURE__ */ jsxs10("div", { className: "thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5", children: [
+          /* @__PURE__ */ jsx13("span", { className: "min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]", children: title ?? "Preview" }),
           viewerPaneToggle
         ] }) : null,
-        fileTabs.length > 0 && onCloseFileTab && onSelectFileTab ? /* @__PURE__ */ jsx14(
+        fileTabs.length > 0 && onCloseFileTab && onSelectFileTab ? /* @__PURE__ */ jsx13(
           WorkspaceFileTabs,
           {
             activePath: activeFilePath ?? null,
@@ -3932,50 +3887,50 @@ function GraphWorkspacePreviewPane({
             onClose: onCloseFileTab,
             onSelect: onSelectFileTab,
             tabs: fileTabs,
-            trailingAction: fileToolbar || viewerPaneToggle ? /* @__PURE__ */ jsxs11(Fragment3, { children: [
+            trailingAction: fileToolbar || viewerPaneToggle ? /* @__PURE__ */ jsxs10(Fragment3, { children: [
               fileToolbar,
               viewerPaneToggle
             ] }) : null
           }
         ) : null,
-        /* @__PURE__ */ jsxs11("div", { className: "flex min-h-0 flex-1 flex-col overflow-hidden", children: [
-          error ? /* @__PURE__ */ jsx14("div", { className: "border-b border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: error }) : null,
-          !selectedTarget ? /* @__PURE__ */ jsx14("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: "Pick a live molecule, workspace file, artifact, or thread event to preview it." }) : selectedTarget.kind === "workspace-file" && previewLoading ? /* @__PURE__ */ jsx14("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: "Loading file preview..." }) : selectedTarget.kind === "workspace-file" && moleculeSnapshot ? /* @__PURE__ */ jsx14("div", { className: "thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx14(
+        /* @__PURE__ */ jsxs10("div", { className: "flex min-h-0 flex-1 flex-col overflow-hidden", children: [
+          error ? /* @__PURE__ */ jsx13("div", { className: "border-b border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: error }) : null,
+          !selectedTarget ? /* @__PURE__ */ jsx13("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: "Pick a live molecule, workspace file, artifact, or thread event to preview it." }) : selectedTarget.kind === "workspace-file" && previewLoading ? /* @__PURE__ */ jsx13("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: "Loading file preview..." }) : selectedTarget.kind === "workspace-file" && moleculeSnapshot ? /* @__PURE__ */ jsx13("div", { className: "thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx13(
             GraphMoleculeViewer,
             {
               source: moleculeSnapshot,
               moleculeId: moleculeSnapshot.uuid ?? selectedTarget.node.path,
               title: "PyMOL-style (PDB/CIF)"
             }
-          ) }) : selectedTarget.kind === "workspace-file" && imageUrl ? /* @__PURE__ */ jsx14("div", { className: "flex min-h-0 flex-1 items-center justify-center overflow-auto p-5", children: /* @__PURE__ */ jsx14(
+          ) }) : selectedTarget.kind === "workspace-file" && imageUrl ? /* @__PURE__ */ jsx13("div", { className: "flex min-h-0 flex-1 items-center justify-center overflow-auto p-5", children: /* @__PURE__ */ jsx13(
             ZoomableImage,
             {
               src: imageUrl,
               alt: selectedTarget.node.path || selectedTarget.node.name,
               className: "max-h-full max-w-full object-contain"
             }
-          ) }) : selectedTarget.kind === "workspace-file" && pdfUrl ? /* @__PURE__ */ jsx14("div", { className: "thread-graph-file-preview-frame min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx14(
+          ) }) : selectedTarget.kind === "workspace-file" && pdfUrl ? /* @__PURE__ */ jsx13("div", { className: "thread-graph-file-preview-frame min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx13(
             "iframe",
             {
               src: pdfUrl,
               title: `PDF preview: ${selectedTarget.node.path || selectedTarget.node.name}`,
               className: "h-full w-full border-0"
             }
-          ) }) : selectedTarget.kind === "workspace-file" && previewFile ? /* @__PURE__ */ jsxs11("div", { className: "flex min-h-0 flex-1 flex-col", children: [
-            breadcrumbSegments.length > 1 || fileTabs.length === 0 && fileToolbar ? /* @__PURE__ */ jsxs11("div", { className: "thread-graph-editor-breadcrumbs flex h-7 shrink-0 items-center border-b px-2 text-[11px]", children: [
-              /* @__PURE__ */ jsx14("div", { className: "flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto", children: breadcrumbSegments.map((segment, index, segments) => /* @__PURE__ */ jsxs11(
+          ) }) : selectedTarget.kind === "workspace-file" && previewFile ? /* @__PURE__ */ jsxs10("div", { className: "flex min-h-0 flex-1 flex-col", children: [
+            breadcrumbSegments.length > 1 || fileTabs.length === 0 && fileToolbar ? /* @__PURE__ */ jsxs10("div", { className: "thread-graph-editor-breadcrumbs flex h-7 shrink-0 items-center border-b px-2 text-[11px]", children: [
+              /* @__PURE__ */ jsx13("div", { className: "flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto", children: breadcrumbSegments.map((segment, index, segments) => /* @__PURE__ */ jsxs10(
                 "span",
                 {
                   className: "flex shrink-0 items-center gap-0.5",
                   children: [
-                    /* @__PURE__ */ jsx14(
+                    /* @__PURE__ */ jsx13(
                       "span",
                       {
                         className: index === segments.length - 1 ? "text-[var(--theme-fg)]" : "",
                         children: segment
                       }
                     ),
-                    index < segments.length - 1 ? /* @__PURE__ */ jsx14(
+                    index < segments.length - 1 ? /* @__PURE__ */ jsx13(
                       ChevronRight2,
                       {
                         "aria-hidden": "true",
@@ -3988,8 +3943,8 @@ function GraphWorkspacePreviewPane({
               )) }),
               fileTabs.length === 0 ? fileToolbar : null
             ] }) : null,
-            saveError ? /* @__PURE__ */ jsx14("div", { className: "border-b border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: saveError }) : null,
-            editing && compactViewer ? /* @__PURE__ */ jsx14(
+            saveError ? /* @__PURE__ */ jsx13("div", { className: "border-b border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: saveError }) : null,
+            editing && compactViewer ? /* @__PURE__ */ jsx13(
               "textarea",
               {
                 value: draftContent,
@@ -3998,7 +3953,7 @@ function GraphWorkspacePreviewPane({
                 "aria-label": "Workspace file editor",
                 className: "thread-graph-file-editor min-h-0 flex-1 resize-none border-0 bg-transparent p-4 font-mono text-[12px] leading-5 text-slate-900 outline-none dark:text-slate-100"
               }
-            ) : isMarkdownFile && markdownView === "preview" && !editing ? /* @__PURE__ */ jsx14(
+            ) : isMarkdownFile && markdownView === "preview" && !editing ? /* @__PURE__ */ jsx13(
               GraphWorkspaceMarkdownPreview,
               {
                 content: previewFile.content,
@@ -4007,18 +3962,18 @@ function GraphWorkspacePreviewPane({
                 ...resolveWorkspaceFileUrl ? { resolveWorkspaceFileUrl } : {},
                 ...workspaceRootPath ? { workspaceRootPath } : {}
               }
-            ) : compactViewer ? /* @__PURE__ */ jsx14(
+            ) : compactViewer ? /* @__PURE__ */ jsx13(
               GraphWorkspaceCodePreview,
               {
                 content: previewFile.content,
                 focusLine,
                 language: fileLanguage
               }
-            ) : /* @__PURE__ */ jsx14(
+            ) : /* @__PURE__ */ jsx13(
               Suspense,
               {
-                fallback: /* @__PURE__ */ jsx14("div", { className: "flex min-h-0 flex-1 items-center justify-center text-sm text-[var(--theme-fg-muted)]", children: "Loading editor..." }),
-                children: /* @__PURE__ */ jsx14(
+                fallback: /* @__PURE__ */ jsx13("div", { className: "flex min-h-0 flex-1 items-center justify-center text-sm text-[var(--theme-fg-muted)]", children: "Loading editor..." }),
+                children: /* @__PURE__ */ jsx13(
                   GraphWorkspaceMonacoEditor,
                   {
                     content: editing ? draftContent : previewFile.content,
@@ -4034,7 +3989,7 @@ function GraphWorkspacePreviewPane({
                 )
               }
             ),
-            previewFile.truncated && onLoadMore ? /* @__PURE__ */ jsx14("div", { className: "thread-graph-file-preview-footer flex justify-center border-t px-4 py-3", children: /* @__PURE__ */ jsx14(
+            previewFile.truncated && onLoadMore ? /* @__PURE__ */ jsx13("div", { className: "thread-graph-file-preview-footer flex justify-center border-t px-4 py-3", children: /* @__PURE__ */ jsx13(
               "button",
               {
                 type: "button",
@@ -4046,20 +4001,20 @@ function GraphWorkspacePreviewPane({
                 children: loadingMore ? "Loading..." : `Load more (${(previewFile.size - previewFile.nextOffset).toLocaleString()} bytes remaining)`
               }
             ) }) : null
-          ] }) : (selectedTarget.kind === "live-molecule" || selectedTarget.kind === "artifact") && selectedTarget.node.artifact ? /* @__PURE__ */ jsx14(
+          ] }) : (selectedTarget.kind === "live-molecule" || selectedTarget.kind === "artifact") && selectedTarget.node.artifact ? /* @__PURE__ */ jsx13(
             "div",
             {
               className: isMoleculePreview || isLiveArtifactPreview ? "min-h-0 flex-1 overflow-hidden" : "min-h-0 flex-1 overflow-auto p-3",
               children: renderedArtifact
             }
-          ) : selectedTarget.kind === "meta" ? /* @__PURE__ */ jsx14("div", { className: "min-h-0 flex-1 overflow-auto p-3", children: /* @__PURE__ */ jsx14("div", { className: "grid gap-3", children: /* @__PURE__ */ jsx14(WorkspaceInfoCard, { label: "Workspace Data", children: /* @__PURE__ */ jsx14(
+          ) : selectedTarget.kind === "meta" ? /* @__PURE__ */ jsx13("div", { className: "min-h-0 flex-1 overflow-auto p-3", children: /* @__PURE__ */ jsx13("div", { className: "grid gap-3", children: /* @__PURE__ */ jsx13(WorkspaceInfoCard, { label: "Workspace Data", children: /* @__PURE__ */ jsx13(
             GraphWorkspaceCodePreview,
             {
               content: selectedTarget.node.detail ?? ""
             }
-          ) }) }) }) : /* @__PURE__ */ jsxs11("div", { className: "flex min-h-0 flex-1 flex-col", children: [
-            /* @__PURE__ */ jsx14("div", { className: "thread-graph-file-preview-header border-b px-4 py-3 text-xs uppercase tracking-[0.12em]", children: selectedTarget.node.kind }),
-            /* @__PURE__ */ jsx14(
+          ) }) }) }) : /* @__PURE__ */ jsxs10("div", { className: "flex min-h-0 flex-1 flex-col", children: [
+            /* @__PURE__ */ jsx13("div", { className: "thread-graph-file-preview-header border-b px-4 py-3 text-xs uppercase tracking-[0.12em]", children: selectedTarget.node.kind }),
+            /* @__PURE__ */ jsx13(
               GraphWorkspaceCodePreview,
               {
                 content: selectedTarget.node.detail ?? selectedTarget.node.preview ?? selectedTarget.node.name
@@ -4073,24 +4028,24 @@ function GraphWorkspacePreviewPane({
 }
 
 // src/components/graph-workspace/GraphEmptyGarbageDialog.tsx
-import { jsx as jsx15, jsxs as jsxs12 } from "react/jsx-runtime";
+import { jsx as jsx14, jsxs as jsxs11 } from "react/jsx-runtime";
 function GraphEmptyGarbageDialog({
   files,
   onCancel,
   onConfirm
 }) {
-  return /* @__PURE__ */ jsx15("div", { className: "thread-graph-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4", children: /* @__PURE__ */ jsxs12("div", { className: "thread-graph-dialog w-full max-w-sm rounded-xl border bg-[var(--theme-panel)] p-6 shadow-xl", children: [
-    /* @__PURE__ */ jsx15("h3", { className: "text-base font-semibold text-[var(--theme-fg)]", children: "Empty garbage?" }),
-    /* @__PURE__ */ jsxs12("p", { className: "mt-1 text-sm leading-5 text-[var(--theme-fg-muted)]", children: [
+  return /* @__PURE__ */ jsx14("div", { className: "thread-graph-dialog-backdrop fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4", children: /* @__PURE__ */ jsxs11("div", { className: "thread-graph-dialog w-full max-w-sm rounded-xl border bg-[var(--theme-panel)] p-6 shadow-xl", children: [
+    /* @__PURE__ */ jsx14("h3", { className: "text-base font-semibold text-[var(--theme-fg)]", children: "Empty garbage?" }),
+    /* @__PURE__ */ jsxs11("p", { className: "mt-1 text-sm leading-5 text-[var(--theme-fg-muted)]", children: [
       "Permanently delete all files in the",
       " ",
-      /* @__PURE__ */ jsx15("code", { className: "rounded bg-[var(--theme-muted)] px-1 text-xs text-[var(--theme-fg-soft)]", children: "garbage/" }),
+      /* @__PURE__ */ jsx14("code", { className: "rounded bg-[var(--theme-muted)] px-1 text-xs text-[var(--theme-fg-soft)]", children: "garbage/" }),
       " ",
       "folder."
     ] }),
-    files.length === 0 ? /* @__PURE__ */ jsx15("p", { className: "mt-3 text-sm text-[var(--theme-fg-muted)]", children: "Garbage is empty." }) : /* @__PURE__ */ jsx15("ul", { className: "mt-3 max-h-40 overflow-y-auto rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface)] p-2 text-xs text-[var(--theme-fg-soft)]", children: files.map((file) => /* @__PURE__ */ jsx15("li", { className: "truncate py-0.5", title: file, children: file }, file)) }),
-    /* @__PURE__ */ jsxs12("div", { className: "mt-4 flex justify-end gap-2", children: [
-      /* @__PURE__ */ jsx15(
+    files.length === 0 ? /* @__PURE__ */ jsx14("p", { className: "mt-3 text-sm text-[var(--theme-fg-muted)]", children: "Garbage is empty." }) : /* @__PURE__ */ jsx14("ul", { className: "mt-3 max-h-40 overflow-y-auto rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface)] p-2 text-xs text-[var(--theme-fg-soft)]", children: files.map((file) => /* @__PURE__ */ jsx14("li", { className: "truncate py-0.5", title: file, children: file }, file)) }),
+    /* @__PURE__ */ jsxs11("div", { className: "mt-4 flex justify-end gap-2", children: [
+      /* @__PURE__ */ jsx14(
         "button",
         {
           type: "button",
@@ -4099,7 +4054,7 @@ function GraphEmptyGarbageDialog({
           children: "Cancel"
         }
       ),
-      files.length > 0 ? /* @__PURE__ */ jsx15(
+      files.length > 0 ? /* @__PURE__ */ jsx14(
         "button",
         {
           type: "button",
@@ -4113,7 +4068,7 @@ function GraphEmptyGarbageDialog({
 }
 
 // src/components/graph-workspace/GraphWorkspaceExplorer.tsx
-import { jsx as jsx16, jsxs as jsxs13 } from "react/jsx-runtime";
+import { jsx as jsx15, jsxs as jsxs12 } from "react/jsx-runtime";
 function GraphWorkspaceExplorer({
   activeView,
   detail,
@@ -4339,7 +4294,7 @@ function GraphWorkspaceExplorer({
     ...workspaceAdapter ? { onRefresh: () => void refreshWorkspaceTree(activeNode?.path ?? null) } : {},
     ...workspaceAdapter?.uploadFile ? { onUpload: pickUploadFile } : {}
   };
-  const explorerPanel = /* @__PURE__ */ jsx16(
+  const explorerPanel = /* @__PURE__ */ jsx15(
     WorkspaceExplorerPanel,
     {
       canEmptyGarbage: Boolean(workspaceAdapter?.emptyGarbage),
@@ -4384,7 +4339,7 @@ function GraphWorkspaceExplorer({
       liveNodes
     }
   );
-  const viewerPanel = /* @__PURE__ */ jsx16(
+  const viewerPanel = /* @__PURE__ */ jsx15(
     GraphWorkspacePreviewPane,
     {
       activeFilePath: activeNode?.kind === "file" ? activeNode.path : null,
@@ -4445,7 +4400,7 @@ function GraphWorkspaceExplorer({
     }
   );
   if (collapsedPanel === "explorer") {
-    return /* @__PURE__ */ jsx16(
+    return /* @__PURE__ */ jsx15(
       "div",
       {
         "data-testid": "workspace-panel",
@@ -4455,7 +4410,7 @@ function GraphWorkspaceExplorer({
     );
   }
   if (collapsedPanel === "viewer") {
-    return /* @__PURE__ */ jsx16(
+    return /* @__PURE__ */ jsx15(
       "div",
       {
         "data-testid": "workspace-panel",
@@ -4464,13 +4419,13 @@ function GraphWorkspaceExplorer({
       }
     );
   }
-  return /* @__PURE__ */ jsxs13(
+  return /* @__PURE__ */ jsxs12(
     "div",
     {
       "data-testid": "workspace-panel",
       className: "flex h-full min-h-0 w-full overflow-hidden bg-transparent p-1",
       children: [
-        showGarbageDialog ? /* @__PURE__ */ jsx16(
+        showGarbageDialog ? /* @__PURE__ */ jsx15(
           GraphEmptyGarbageDialog,
           {
             files: garbageFiles,
@@ -4478,30 +4433,30 @@ function GraphWorkspaceExplorer({
             onConfirm: () => void handleConfirmEmptyGarbage()
           }
         ) : null,
-        isMobileViewport ? /* @__PURE__ */ jsxs13(
+        isMobileViewport ? /* @__PURE__ */ jsxs12(
           ResizablePanelGroup,
           {
             direction: "vertical",
             className: "thread-graph-workspace-mobile-stack",
             children: [
-              /* @__PURE__ */ jsx16(ResizablePanel, { defaultSize: 42, minSize: 18, children: /* @__PURE__ */ jsx16("div", { className: "thread-graph-workspace-mobile-explorer h-full min-h-0 overflow-hidden", children: explorerPanel }) }),
-              /* @__PURE__ */ jsx16(ResizableHandle, { className: "thread-graph-workspace-resize-handle h-1 bg-transparent after:h-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" }),
-              /* @__PURE__ */ jsx16(ResizablePanel, { defaultSize: 58, minSize: 18, children: /* @__PURE__ */ jsx16("div", { className: "thread-graph-workspace-mobile-viewer h-full min-h-0 overflow-hidden", children: viewerPanel }) })
+              /* @__PURE__ */ jsx15(ResizablePanel, { defaultSize: 42, minSize: 18, children: /* @__PURE__ */ jsx15("div", { className: "thread-graph-workspace-mobile-explorer h-full min-h-0 overflow-hidden", children: explorerPanel }) }),
+              /* @__PURE__ */ jsx15(ResizableHandle, { className: "thread-graph-workspace-resize-handle h-1 bg-transparent after:h-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" }),
+              /* @__PURE__ */ jsx15(ResizablePanel, { defaultSize: 58, minSize: 18, children: /* @__PURE__ */ jsx15("div", { className: "thread-graph-workspace-mobile-viewer h-full min-h-0 overflow-hidden", children: viewerPanel }) })
             ]
           }
-        ) : /* @__PURE__ */ jsxs13(
+        ) : /* @__PURE__ */ jsxs12(
           ResizablePanelGroup,
           {
             direction: "horizontal",
             className: "thread-graph-workspace-resizable",
             children: [
-              /* @__PURE__ */ jsx16(ResizablePanel, { defaultSize: 28, minSize: 18, children: /* @__PURE__ */ jsx16("div", { className: "thread-graph-workspace-explorer-pane h-full min-h-0 overflow-hidden", children: explorerPanel }) }),
-              /* @__PURE__ */ jsx16(ResizableHandle, { className: "thread-graph-workspace-resize-handle w-1 bg-transparent after:w-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" }),
-              /* @__PURE__ */ jsx16(ResizablePanel, { defaultSize: 72, minSize: 40, children: /* @__PURE__ */ jsx16("div", { className: "thread-graph-workspace-viewer-pane h-full min-h-0 overflow-hidden", children: viewerPanel }) })
+              /* @__PURE__ */ jsx15(ResizablePanel, { defaultSize: 28, minSize: 18, children: /* @__PURE__ */ jsx15("div", { className: "thread-graph-workspace-explorer-pane h-full min-h-0 overflow-hidden", children: explorerPanel }) }),
+              /* @__PURE__ */ jsx15(ResizableHandle, { className: "thread-graph-workspace-resize-handle w-1 bg-transparent after:w-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" }),
+              /* @__PURE__ */ jsx15(ResizablePanel, { defaultSize: 72, minSize: 40, children: /* @__PURE__ */ jsx15("div", { className: "thread-graph-workspace-viewer-pane h-full min-h-0 overflow-hidden", children: viewerPanel }) })
             ]
           }
         ),
-        /* @__PURE__ */ jsx16(
+        /* @__PURE__ */ jsx15(
           "input",
           {
             ref: fileInputRef,
@@ -4538,7 +4493,7 @@ import { getBezierPath } from "@xyflow/react";
 
 // src/components/graph-chat/FloatingHelper.tsx
 import { MarkerType, Position } from "@xyflow/react";
-import { jsx as jsx17, jsxs as jsxs14 } from "react/jsx-runtime";
+import { jsx as jsx16, jsxs as jsxs13 } from "react/jsx-runtime";
 function getNodeIntersection(intersectionNode, targetNode) {
   const intersectionNodeWidth = Math.max(intersectionNode.measured.width ?? 1, 1);
   const intersectionNodeHeight = Math.max(
@@ -4700,9 +4655,9 @@ function buildGraph(inputNodes, width = 900, height = 620) {
     type: "styledNode",
     position: positions.get(node.id) ?? { x: 100, y: 100 },
     data: {
-      label: /* @__PURE__ */ jsxs14("div", { className: "text-center", children: [
-        /* @__PURE__ */ jsx17("div", { className: "text-sm font-semibold", children: node.name }),
-        node.description ? /* @__PURE__ */ jsx17("div", { className: "mt-1 max-w-32 overflow-hidden text-ellipsis text-xs text-slate-500 dark:text-slate-400", children: node.description }) : null
+      label: /* @__PURE__ */ jsxs13("div", { className: "text-center", children: [
+        /* @__PURE__ */ jsx16("div", { className: "text-sm font-semibold", children: node.name }),
+        node.description ? /* @__PURE__ */ jsx16("div", { className: "mt-1 max-w-32 overflow-hidden text-ellipsis text-xs text-slate-500 dark:text-slate-400", children: node.description }) : null
       ] })
     }
   }));
@@ -4710,7 +4665,7 @@ function buildGraph(inputNodes, width = 900, height = 620) {
 }
 
 // src/components/graph-chat/FloatingConnectionLine.tsx
-import { jsx as jsx18, jsxs as jsxs15 } from "react/jsx-runtime";
+import { jsx as jsx17, jsxs as jsxs14 } from "react/jsx-runtime";
 function FloatingConnectionLine({
   toX,
   toY,
@@ -4743,8 +4698,8 @@ function FloatingConnectionLine({
     targetX: tx || toX,
     targetY: ty || toY
   });
-  return /* @__PURE__ */ jsxs15("g", { children: [
-    /* @__PURE__ */ jsx18(
+  return /* @__PURE__ */ jsxs14("g", { children: [
+    /* @__PURE__ */ jsx17(
       "path",
       {
         fill: "none",
@@ -4754,7 +4709,7 @@ function FloatingConnectionLine({
         d: edgePath
       }
     ),
-    /* @__PURE__ */ jsx18(
+    /* @__PURE__ */ jsx17(
       "circle",
       {
         cx: tx || toX,
@@ -4770,7 +4725,7 @@ function FloatingConnectionLine({
 
 // src/components/graph-chat/FloatingEdge.tsx
 import { getBezierPath as getBezierPath2, useInternalNode } from "@xyflow/react";
-import { jsx as jsx19 } from "react/jsx-runtime";
+import { jsx as jsx18 } from "react/jsx-runtime";
 function FloatingEdge({
   id,
   source,
@@ -4795,7 +4750,7 @@ function FloatingEdge({
     targetX: tx,
     targetY: ty
   });
-  return /* @__PURE__ */ jsx19(
+  return /* @__PURE__ */ jsx18(
     "path",
     {
       id,
@@ -4808,7 +4763,7 @@ function FloatingEdge({
 }
 
 // src/components/graph-chat/GraphVisualization.tsx
-import { jsx as jsx20, jsxs as jsxs16 } from "react/jsx-runtime";
+import { jsx as jsx19, jsxs as jsxs15 } from "react/jsx-runtime";
 function GraphVisualization({ nodes: inputNodes }) {
   const [flowNodes, setFlowNodes, onNodesChange] = useNodesState([]);
   const [flowEdges, setFlowEdges, onEdgesChange] = useEdgesState([]);
@@ -4816,9 +4771,9 @@ function GraphVisualization({ nodes: inputNodes }) {
   const edgeTypes = useMemo8(() => ({ floating: FloatingEdge }), []);
   const nodeTypes = useMemo8(
     () => ({
-      styledNode: ({ data, isConnectable }) => /* @__PURE__ */ jsxs16("div", { className: "thread-graph-flow-node", children: [
+      styledNode: ({ data, isConnectable }) => /* @__PURE__ */ jsxs15("div", { className: "thread-graph-flow-node", children: [
         data.label,
-        /* @__PURE__ */ jsx20(
+        /* @__PURE__ */ jsx19(
           Handle,
           {
             type: "target",
@@ -4827,7 +4782,7 @@ function GraphVisualization({ nodes: inputNodes }) {
             style: { opacity: 0, pointerEvents: "none" }
           }
         ),
-        /* @__PURE__ */ jsx20(
+        /* @__PURE__ */ jsx19(
           Handle,
           {
             type: "source",
@@ -4859,7 +4814,7 @@ function GraphVisualization({ nodes: inputNodes }) {
     ),
     [setFlowEdges]
   );
-  return /* @__PURE__ */ jsx20("div", { className: "thread-graph-flow h-full min-h-0", children: /* @__PURE__ */ jsx20(ReactFlowProvider, { children: /* @__PURE__ */ jsxs16(
+  return /* @__PURE__ */ jsx19("div", { className: "thread-graph-flow h-full min-h-0", children: /* @__PURE__ */ jsx19(ReactFlowProvider, { children: /* @__PURE__ */ jsxs15(
     ReactFlow,
     {
       nodes: flowNodes,
@@ -4872,15 +4827,15 @@ function GraphVisualization({ nodes: inputNodes }) {
       edgeTypes,
       connectionLineComponent: FloatingConnectionLine,
       children: [
-        /* @__PURE__ */ jsx20(Controls, {}),
-        /* @__PURE__ */ jsx20(Background, { gap: 16 })
+        /* @__PURE__ */ jsx19(Controls, {}),
+        /* @__PURE__ */ jsx19(Background, { gap: 16 })
       ]
     }
   ) }) });
 }
 
 // src/components/ThreadGraphWorkspacePanel.tsx
-import { jsx as jsx21, jsxs as jsxs17 } from "react/jsx-runtime";
+import { jsx as jsx20, jsxs as jsxs16 } from "react/jsx-runtime";
 var DEFAULT_WORKSPACE_FEATURES = {
   workspace: true,
   toolUsage: false,
@@ -5134,32 +5089,32 @@ function ThreadGraphWorkspacePanel({
   if (!activeTab) {
     return null;
   }
-  return /* @__PURE__ */ jsxs17("div", { className: "thread-graph-right-panel flex h-full min-h-0 flex-col overflow-hidden", children: [
-    /* @__PURE__ */ jsxs17("div", { className: "thread-graph-right-tabs flex h-9 shrink-0 items-center gap-0 overflow-hidden border-b px-1", children: [
+  return /* @__PURE__ */ jsxs16("div", { className: "thread-graph-right-panel flex h-full min-h-0 flex-col overflow-hidden", children: [
+    /* @__PURE__ */ jsxs16("div", { className: "thread-graph-right-tabs flex h-9 shrink-0 items-center gap-0 overflow-hidden border-b px-1", children: [
       primaryTabs.map((tab) => {
         const Icon = tab.icon;
-        return /* @__PURE__ */ jsxs17(
+        return /* @__PURE__ */ jsxs16(
           "button",
           {
             type: "button",
             onClick: () => setActiveTab(tab.id),
             className: `thread-graph-right-tab inline-flex h-9 shrink-0 items-center gap-1.5 px-2.5 text-xs font-medium transition ${activeTab === tab.id ? "is-active" : ""}`,
             children: [
-              Icon ? /* @__PURE__ */ jsx21(Icon, { className: "h-3.5 w-3.5" }) : null,
+              Icon ? /* @__PURE__ */ jsx20(Icon, { className: "h-3.5 w-3.5" }) : null,
               tab.label
             ]
           },
           tab.id
         );
       }),
-      secondaryTabs.length ? /* @__PURE__ */ jsx21(
+      secondaryTabs.length ? /* @__PURE__ */ jsx20(
         "div",
         {
           className: "thread-graph-right-tab-secondary ml-auto flex h-6 min-w-0 shrink items-center gap-0.5 border-l pl-1",
           "aria-label": "Remote Codex workspace extensions",
           children: secondaryTabs.map((tab) => {
             const Icon = tab.icon;
-            return /* @__PURE__ */ jsx21(
+            return /* @__PURE__ */ jsx20(
               "button",
               {
                 type: "button",
@@ -5167,7 +5122,7 @@ function ThreadGraphWorkspacePanel({
                 className: `thread-graph-right-tab inline-flex h-8 w-8 shrink-0 items-center justify-center text-xs font-medium transition ${activeTab === tab.id ? "is-active" : ""}`,
                 title: tab.label,
                 "aria-label": tab.label,
-                children: /* @__PURE__ */ jsx21(Icon, { className: "h-3.5 w-3.5" })
+                children: /* @__PURE__ */ jsx20(Icon, { className: "h-3.5 w-3.5" })
               },
               tab.id
             );
@@ -5175,8 +5130,8 @@ function ThreadGraphWorkspacePanel({
         }
       ) : null
     ] }),
-    /* @__PURE__ */ jsxs17("div", { className: "min-h-0 flex-1 overflow-hidden", children: [
-      activeTab === "workspace" ? /* @__PURE__ */ jsx21(
+    /* @__PURE__ */ jsxs16("div", { className: "min-h-0 flex-1 overflow-hidden", children: [
+      activeTab === "workspace" ? /* @__PURE__ */ jsx20(
         GraphWorkspaceExplorer,
         {
           activeView,
@@ -5188,17 +5143,17 @@ function ThreadGraphWorkspacePanel({
           workspaceAdapter: workspaceAdapter ?? null
         }
       ) : null,
-      activeTab === "graph" ? /* @__PURE__ */ jsx21("div", { className: "thread-graph-visualization-panel h-full min-h-0 p-3", children: /* @__PURE__ */ jsx21(GraphVisualization, { nodes: graphNodes }) }) : null,
-      activeTab === "extensions" ? /* @__PURE__ */ jsx21("div", { className: "h-full min-h-0 overflow-y-auto p-3", children: /* @__PURE__ */ jsxs17("div", { className: "grid gap-3", children: [
-        /* @__PURE__ */ jsx21(WorkspaceInfoCard, { label: "Plugin Panels", children: threadPanels.length ? /* @__PURE__ */ jsx21("div", { className: "flex flex-wrap gap-2", children: threadPanels.map((panel) => /* @__PURE__ */ jsx21(
+      activeTab === "graph" ? /* @__PURE__ */ jsx20("div", { className: "thread-graph-visualization-panel h-full min-h-0 p-3", children: /* @__PURE__ */ jsx20(GraphVisualization, { nodes: graphNodes }) }) : null,
+      activeTab === "extensions" ? /* @__PURE__ */ jsx20("div", { className: "h-full min-h-0 overflow-y-auto p-3", children: /* @__PURE__ */ jsxs16("div", { className: "grid gap-3", children: [
+        /* @__PURE__ */ jsx20(WorkspaceInfoCard, { label: "Plugin Panels", children: threadPanels.length ? /* @__PURE__ */ jsx20("div", { className: "flex flex-wrap gap-2", children: threadPanels.map((panel) => /* @__PURE__ */ jsx20(
           "span",
           {
             className: "rounded-full border border-[var(--theme-border)] px-2 py-1 text-xs text-[var(--theme-fg-soft)]",
             children: panel.label
           },
           panel.id
-        )) }) : /* @__PURE__ */ jsx21("p", { className: "text-[var(--theme-fg-muted)]", children: "No thread panels are enabled." }) }),
-        /* @__PURE__ */ jsx21(WorkspaceInfoCard, { label: "Enabled Renderers", children: /* @__PURE__ */ jsx21("div", { className: "flex flex-wrap gap-2", children: plugins.plugins.filter((plugin) => plugin.enabled).map((plugin) => /* @__PURE__ */ jsx21(
+        )) }) : /* @__PURE__ */ jsx20("p", { className: "text-[var(--theme-fg-muted)]", children: "No thread panels are enabled." }) }),
+        /* @__PURE__ */ jsx20(WorkspaceInfoCard, { label: "Enabled Renderers", children: /* @__PURE__ */ jsx20("div", { className: "flex flex-wrap gap-2", children: plugins.plugins.filter((plugin) => plugin.enabled).map((plugin) => /* @__PURE__ */ jsx20(
           "span",
           {
             className: "rounded-full border border-[var(--theme-border)] px-2 py-1 text-xs text-[var(--theme-fg-soft)]",
@@ -5206,22 +5161,22 @@ function ThreadGraphWorkspacePanel({
           },
           plugin.id
         )) }) }),
-        /* @__PURE__ */ jsx21(WorkspaceInfoCard, { label: "Remote Codex Tools", children: /* @__PURE__ */ jsxs17("div", { className: "grid gap-2 text-[var(--theme-fg-muted)]", children: [
-          /* @__PURE__ */ jsxs17("div", { className: "flex items-start gap-2", children: [
-            /* @__PURE__ */ jsx21(Terminal, { className: "mt-0.5 h-4 w-4 shrink-0" }),
-            /* @__PURE__ */ jsx21("p", { children: "Terminal stays available when the Terminal plugin and shell adapter are attached." })
+        /* @__PURE__ */ jsx20(WorkspaceInfoCard, { label: "Remote Codex Tools", children: /* @__PURE__ */ jsxs16("div", { className: "grid gap-2 text-[var(--theme-fg-muted)]", children: [
+          /* @__PURE__ */ jsxs16("div", { className: "flex items-start gap-2", children: [
+            /* @__PURE__ */ jsx20(Terminal, { className: "mt-0.5 h-4 w-4 shrink-0" }),
+            /* @__PURE__ */ jsx20("p", { children: "Terminal stays available when the Terminal plugin and shell adapter are attached." })
           ] }),
-          /* @__PURE__ */ jsxs17("div", { className: "flex items-start gap-2", children: [
-            /* @__PURE__ */ jsx21(Paperclip, { className: "mt-0.5 h-4 w-4 shrink-0" }),
-            /* @__PURE__ */ jsx21("p", { children: "Composer attachments, slash panels, hooks, MCP, goals, and fork controls remain part of the chat surface." })
+          /* @__PURE__ */ jsxs16("div", { className: "flex items-start gap-2", children: [
+            /* @__PURE__ */ jsx20(Paperclip, { className: "mt-0.5 h-4 w-4 shrink-0" }),
+            /* @__PURE__ */ jsx20("p", { children: "Composer attachments, slash panels, hooks, MCP, goals, and fork controls remain part of the chat surface." })
           ] }),
-          /* @__PURE__ */ jsxs17("div", { className: "flex items-start gap-2", children: [
-            /* @__PURE__ */ jsx21(Trash23, { className: "mt-0.5 h-4 w-4 shrink-0" }),
-            /* @__PURE__ */ jsx21("p", { children: "Destructive actions stay explicit: delete thread, interrupt, compact, and hook trust controls remain host governed." })
+          /* @__PURE__ */ jsxs16("div", { className: "flex items-start gap-2", children: [
+            /* @__PURE__ */ jsx20(Trash23, { className: "mt-0.5 h-4 w-4 shrink-0" }),
+            /* @__PURE__ */ jsx20("p", { children: "Destructive actions stay explicit: delete thread, interrupt, compact, and hook trust controls remain host governed." })
           ] })
         ] }) }),
-        metaContent ? /* @__PURE__ */ jsx21(WorkspaceInfoCard, { label: "Thread Meta", children: metaContent }) : null,
-        settingsContent ? /* @__PURE__ */ jsx21(WorkspaceInfoCard, { label: "Settings", children: settingsContent }) : null
+        metaContent ? /* @__PURE__ */ jsx20(WorkspaceInfoCard, { label: "Thread Meta", children: metaContent }) : null,
+        settingsContent ? /* @__PURE__ */ jsx20(WorkspaceInfoCard, { label: "Settings", children: settingsContent }) : null
       ] }) }) : null
     ] })
   ] });

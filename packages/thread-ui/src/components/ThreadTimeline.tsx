@@ -417,7 +417,9 @@ function ThreadTimelineComponent({
     [liveOutput],
   );
   const queuedSteers = [
-    ...pendingSteers.map((steer) => ({
+    ...pendingSteers.filter((steer) => !turns.some((turn) =>
+      turn.items.some((item) => item.id === `steer:${steer.id}`),
+    )).map((steer) => ({
       id: steer.id,
       prompt: steer.prompt,
       status: 'Accepted',

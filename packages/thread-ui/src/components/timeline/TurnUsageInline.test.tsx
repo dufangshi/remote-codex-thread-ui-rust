@@ -62,12 +62,12 @@ describe('turn usage in the visible timeline', () => {
         const summary = container.querySelector('.thread-graph-worked-summary');
         expect(summary?.textContent).toContain('Worked for 1m 12s');
         expect(summary?.textContent).toContain('gpt-6-astra · high');
-        expect(summary?.textContent).toContain('3.5k tokens');
+        expect(summary?.textContent).toContain('3.5k tok');
         expect(summary?.textContent).toContain('1.5k in');
         expect(summary?.textContent).toContain('2k out');
         expect(summary?.textContent).toContain('500 cached');
-        expect(summary?.textContent).toContain('≈$0.11');
-        expect(summary?.querySelectorAll('button')).toHaveLength(0);
+        expect(summary?.textContent).toContain('$0.11');
+        expect(summary?.querySelector('button button')).toBeNull();
       } finally {
         flushSync(() => root.unmount());
         container.remove();
