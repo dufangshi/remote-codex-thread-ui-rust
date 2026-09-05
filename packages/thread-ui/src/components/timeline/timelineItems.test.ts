@@ -195,6 +195,38 @@ describe("timeline item utilities", () => {
     }
   });
 
+  it.each([
+    "commandExecution", "fileChange", "webSearch", "fileRead", "toolCall",
+    "agentToolCall", "skillToolCall",
+  ] as const)("keeps %s group identity when more items arrive", (kind) => {
+    const first = item("first", kind);
+    const second = item("second", kind);
+    const initial = groupTimelineHistoryItems([first, second]);
+    const updated = groupTimelineHistoryItems([first, second, item("third", kind)]);
+
+    expect(updated[0]?.key).toBe(initial[0]?.key);
+  });
+
+  it("keeps activity identity when its first tool becomes a group and more reasoning arrives", () => {
+    const command = item("command-1", "commandExecution");
+    const reasoning = item("reason-1", "reasoning");
+    const initial = groupTimelineHistoryItems([command, reasoning]);
+    const updated = groupTimelineHistoryItems([
+      command,
+      item("command-2", "commandExecution"),
+      reasoning,
+      item("reason-2", "reasoning"),
+      item("narrative", "agentMessage", { status: "completed" }),
+      item("reason-3", "reasoning"),
+    ]);
+
+    expect(initial[0]?.kind).toBe("agentActivityGroup");
+    expect(updated[0]?.kind).toBe("agentActivityGroup");
+    expect(updated[0]?.key).toBe(initial[0]?.key);
+    expect(updated[2]?.kind).toBe("agentActivityGroup");
+    expect(updated[2]?.key).not.toBe(updated[0]?.key);
+  });
+
   it("does not wrap a single command batch in agent activity", () => {
     const entries = groupTimelineHistoryItems([
       item("cmd-1", "commandExecution"),

@@ -56,6 +56,7 @@ import {
 } from './timelineItems';
 import { TurnTokenSummary } from './tokenFormatting';
 import { deriveDisplayedLivePlan, TurnStatusBar } from './turnStatus';
+import { TurnUsageInline } from './TurnUsageInline';
 
 type LivePlan = {
   turnId: string;
@@ -779,19 +780,21 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         </span>
         {interruptedLabel}
         <ChevronDown className="h-4 w-4 shrink-0 transition group-hover:translate-y-0.5" />
+        <TurnUsageInline turn={turn} />
         <span
           className="thread-graph-worked-rule h-px min-w-0 flex-1"
           aria-hidden="true"
         />
       </button>
     ) : null;
-  const interruptedWorkedNode =
-    turn.status === 'interrupted' && !hasCollapsedHiddenItems ? (
+  const terminalWorkedNode =
+    isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? (
       <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
         <span className="thread-graph-worked-label shrink-0">
           {workedLabel}
         </span>
         {interruptedLabel}
+        <TurnUsageInline turn={turn} />
         <span
           className="thread-graph-worked-rule h-px min-w-0 flex-1"
           aria-hidden="true"
@@ -842,6 +845,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           </span>
           {interruptedLabel}
           <ChevronRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5" />
+          <TurnUsageInline turn={turn} />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
             aria-hidden="true"
@@ -887,7 +891,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         ) : (
           <>
             {historyNode}
-            {interruptedWorkedNode}
+            {terminalWorkedNode}
           </>
         )
       }

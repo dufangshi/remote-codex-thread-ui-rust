@@ -553,6 +553,64 @@ describe('ThreadTimeline', () => {
     );
   });
 
+  it('preserves activity and command expansion choices as live entries arrive', () => {
+    const activeTurn: ThreadTurnDto = {
+      ...completedTurn([]),
+      status: 'inProgress',
+    };
+    const initialItems: ThreadTurnDto['items'] = [
+      { id: 'reason-1', kind: 'reasoning', text: 'Inspecting the first issue.' },
+      { id: 'command-1', kind: 'commandExecution', text: 'pwd', status: 'completed' },
+      { id: 'command-2', kind: 'commandExecution', text: 'git status', status: 'running' },
+    ];
+    const timeline = (items: ThreadTurnDto['items']) => (
+      <ThreadTimeline
+        autoCollapseCompletedTurns={false}
+        activeTurnId={activeTurn.id}
+        threadRunning
+        liveOutput=""
+        liveItems={{ turnId: activeTurn.id, items, updatedAt: activeTurn.startedAt }}
+        turns={[activeTurn]}
+      />
+    );
+    const element = render(timeline(initialItems));
+    const activityToggle = () => element.querySelector<HTMLButtonElement>(
+      '.thread-graph-history-group-activity button[aria-expanded]',
+    );
+    const commandToggle = () => element.querySelector<HTMLButtonElement>(
+      '.thread-graph-history-group-command button[aria-expanded]',
+    );
+
+    flushSync(() => activityToggle()?.click());
+    flushSync(() => commandToggle()?.click());
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
+
+    const nextItems: ThreadTurnDto['items'] = [
+      ...initialItems,
+      { id: 'command-3', kind: 'commandExecution', text: 'pnpm test', status: 'running' },
+      { id: 'reason-2', kind: 'reasoning', text: 'Reviewing the new result.' },
+    ];
+    flushSync(() => root?.render(timeline(nextItems)));
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(element.textContent).toContain('Inspecting the first issue.');
+    expect(element.textContent).toContain('Reviewing the new result.');
+    expect(element.querySelector('[aria-label="Open grouped command 3"]')?.textContent)
+      .toContain('pnpm test');
+
+    flushSync(() => activityToggle()?.click());
+    flushSync(() => root?.render(timeline([
+      ...nextItems,
+      { id: 'reason-3', kind: 'reasoning', text: 'Preparing the next step.' },
+    ])));
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('false');
+    expect(element.textContent).not.toContain('Preparing the next step.');
+    flushSync(() => activityToggle()?.click());
+    expect(element.textContent).toContain('Preparing the next step.');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
+  });
+
   it('auto-collapses a single tool item after newer live history arrives', () => {
     const startedAt = new Date(Date.UTC(2026, 6, 3, 20, 10, 0)).toISOString();
     const fileReadAt = new Date(Date.UTC(2026, 6, 3, 20, 10, 5)).toISOString();

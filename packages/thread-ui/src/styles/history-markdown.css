@@ -2728,10 +2728,12 @@
   background: transparent;
   padding: 0.2rem 0;
   color: var(--theme-fg-muted);
+  flex-wrap: wrap;
 }
 
 .thread-ui-shell .thread-graph-turn-footer-runtime {
   color: var(--theme-fg-soft);
+  flex: 1 1 18rem;
 }
 
 .thread-ui-shell .thread-graph-turn-footer-meta {
@@ -2752,11 +2754,13 @@
   }
 
   .thread-ui-shell .thread-graph-turn-footer-runtime {
-    max-width: 45%;
+    max-width: 100%;
+    align-items: flex-start;
   }
 
   .thread-ui-shell .thread-graph-turn-footer-meta {
-    max-width: 55%;
+    max-width: 100%;
+    margin-left: auto;
     font-size: 0.625rem;
   }
 }

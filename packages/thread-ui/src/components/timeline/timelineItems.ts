@@ -535,7 +535,10 @@ function groupConsecutiveTimelineHistoryItems(items: ThreadHistoryItemDto[]) {
       continue;
     }
 
-    const groupKey = groupedItems.map((item) => item.id).join(":");
+    // Anchor to the first item so appending streamed items preserves expansion.
+    // Sharing the single item's key also keeps its enclosing activity stable
+    // when a second item turns it into a group.
+    const groupKey = current.id;
 
     if (current.kind === "commandExecution") {
       entries.push({
@@ -670,7 +673,7 @@ function groupAgentActivitySequences(entries: TimelineHistoryEntry[]) {
     ) {
       grouped.push({
         kind: "agentActivityGroup",
-        key: `agent-activity:${activityEntries.map((entry) => entry.key).join(":")}`,
+        key: `agent-activity:${activityEntries[0]!.key}`,
         entries: activityEntries,
         itemCount,
       });
