@@ -202,7 +202,7 @@ const capabilities: AgentProviderCapabilitiesDto = {
     hostConfigFiles: false,
     providerSettings: false,
   },
-  usage: { contextWindow: true, tokenUsage: true, costUsd: false },
+  usage: { contextWindow: true, tokenUsage: true, costUsd: true },
 };
 
 export function App() {
