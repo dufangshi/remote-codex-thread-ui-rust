@@ -3,9 +3,10 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
+  ZoomableImage,
   cn,
   getGraphChatHighlighter
-} from "./chunk-GYSSCOEU.js";
+} from "./chunk-HKDTMKJC.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -8329,7 +8330,7 @@ var GraphChatUserMessageBody = memo2(
             className: "mx-[0.14rem] inline-flex align-middle",
             children: /* @__PURE__ */ jsxs27("span", { className: "inline-flex max-w-full flex-col rounded-[1rem] border border-sky-300/28 bg-sky-300/[0.08] p-1.5 shadow-sm shadow-stone-950/20", children: [
               imageUrl ? /* @__PURE__ */ jsx32(
-                "img",
+                ZoomableImage,
                 {
                   src: imageUrl,
                   alt: label,

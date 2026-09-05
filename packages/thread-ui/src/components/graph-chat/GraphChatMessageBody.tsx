@@ -10,6 +10,7 @@ import {
   type RefObject,
 } from 'react';
 
+import { ZoomableImage } from '../ZoomableImage';
 import type { ThreadTimelineAdapter } from '../../adapters';
 import { hasLikelyMarkdownSyntax } from '../markdownHeuristics';
 import { GraphChatMessageContent } from './GraphChatMessageContent';
@@ -329,7 +330,7 @@ export const GraphChatUserMessageBody = memo(
               >
                 <span className="inline-flex max-w-full flex-col rounded-[1rem] border border-sky-300/28 bg-sky-300/[0.08] p-1.5 shadow-sm shadow-stone-950/20">
                   {imageUrl ? (
-                    <img
+                    <ZoomableImage
                       src={imageUrl}
                       alt={label}
                       className="h-[4.5rem] w-[6rem] rounded-[0.75rem] bg-stone-950 object-contain"
