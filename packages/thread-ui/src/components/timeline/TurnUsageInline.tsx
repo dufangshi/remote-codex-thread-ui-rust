@@ -17,6 +17,9 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
+  const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
+  const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
+  const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
   const hasPrice =
     price && Number.isFinite(price.totalUsd) && price.totalUsd >= 0;
   const counts = usage
@@ -24,8 +27,8 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
         { label: 'tok', value: usage.totalTokens, title: 'Total tokens' },
         {
           label: 'in',
-          value: usage.inputTokens,
-          title: 'Input tokens (including cached input)',
+          value: uncachedInput,
+          title: 'Input tokens (excluding cache)',
         },
         {
           label: 'out',
@@ -50,11 +53,11 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
     : [];
   const priceTitle = 'API price unavailable for this model or usage report.';
   const details = usage ? [
-    { label: 'Input', icon: ArrowDownToLine, value: usage.inputTokens },
-    { label: 'Cached input', icon: Database, value: usage.cachedInputTokens },
-    { label: 'Output', icon: ArrowUpFromLine, value: usage.outputTokens },
-    ...(usage.reasoningOutputTokens > 0 ? [{ label: 'Reasoning', icon: Brain, value: usage.reasoningOutputTokens }] : []),
-    ...(usage.cacheWriteInputTokens ? [{ label: 'Cache write', icon: Save, value: usage.cacheWriteInputTokens }] : []),
+    { label: 'Input', icon: ArrowDownToLine, value: uncachedInput, usd: price?.inputUsd },
+    { label: 'Cached input', icon: Database, value: usage.cachedInputTokens, usd: price?.cachedInputUsd },
+    { label: 'Output', icon: ArrowUpFromLine, value: usage.outputTokens - reasoning, usd: price ? price.outputUsd - reasoningUsd : undefined },
+    ...(usage.reasoningOutputTokens > 0 ? [{ label: 'Reasoning', icon: Brain, value: reasoning, usd: price ? reasoningUsd : undefined }] : []),
+    ...(usage.cacheWriteInputTokens ? [{ label: 'Cache write', icon: Save, value: usage.cacheWriteInputTokens, usd: price?.cacheWriteInputUsd }] : []),
   ] : [];
 
   return (
@@ -103,11 +106,12 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
           </TooltipTrigger>
           <TooltipContent side="top" sideOffset={6} className="thread-usage-details"
             style={{ background: '#252622', color: '#f2f1e9', border: '1px solid #484a41', borderRadius: 10, padding: '9px 12px', boxShadow: '0 6px 22px #0005', zIndex: 80 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '16px auto', gap: '6px 12px', alignItems: 'center', fontVariantNumeric: 'tabular-nums' }}>
-              <DollarSign size={14} aria-label="API cost" /><span>{formatCompactUsd(price.totalUsd)}</span>
-              {details.map(({label, icon: Icon, value}) => <span key={label} style={{display:'contents'}}>
+            <div style={{ display: 'grid', gridTemplateColumns: '16px auto auto', gap: '6px 12px', alignItems: 'center', fontVariantNumeric: 'tabular-nums' }}>
+              <DollarSign size={14} aria-label="API cost" /><span style={{gridColumn:"span 2", textAlign:"right"}}>{formatCompactUsd(price.totalUsd)}</span>
+              {details.map(({label, icon: Icon, value, usd}) => <span key={label} style={{display:'contents'}}>
                 <Icon size={14} aria-label={label} />
                 <span aria-label={`${label}: ${value.toLocaleString('en-US')} tokens`} title={`${label}: ${value.toLocaleString('en-US')}`}>{formatCompactTokenCount(value)}</span>
+                <span aria-label={`${label} cost`} title={label === "Reasoning" ? "Included in output charges; not an additional fee" : undefined} style={{textAlign:"right"}}>{usd == null ? "—" : formatCompactUsd(usd)}</span>
               </span>)}
             </div>
           </TooltipContent>

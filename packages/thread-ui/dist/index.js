@@ -36,7 +36,7 @@ styleInject(".thread-export-dialog-root {\n  --export-bg: rgb(248 250 252);\n  -
 import {
   useCallback as useCallback9,
   useMemo as useMemo2,
-  useRef as useRef4,
+  useRef as useRef5,
   useState as useState12
 } from "react";
 
@@ -1227,7 +1227,7 @@ function ComposerHiddenAttachmentInputs({
 }
 
 // src/components/composer/ComposerSubscriptionUsage.tsx
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 function resetLabel(value) {
   if (!value) return "reset time unavailable";
@@ -1238,10 +1238,27 @@ function ComposerSubscriptionUsage({
   usage
 }) {
   const [detailsVisible, setDetailsVisible] = useState(false);
-  if (!usage || usage.authKind !== "subscription" || usage.windows.length === 0) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (!detailsVisible) return;
+    const outside = (event) => {
+      if (!ref.current?.contains(event.target)) setDetailsVisible(false);
+    };
+    const escape = (event) => {
+      if (event.key === "Escape") setDetailsVisible(false);
+    };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("pointerdown", outside);
+      document.removeEventListener("keydown", escape);
+    };
+  }, [detailsVisible]);
+  if (!usage || usage.authKind !== "subscription" || usage.windows.length === 0 || usage.stale) {
     return null;
   }
-  const windows = usage.windows.slice(0, 2);
+  const windows = usage.windows.filter((window2) => Number.isFinite(window2.usedPercent) && window2.usedPercent >= 0 && (!window2.resetsAt || new Date(window2.resetsAt).getTime() > Date.now())).slice(0, 2);
+  if (!windows.length) return null;
   const description = windows.map((window2) => {
     const remaining = Math.max(0, 100 - window2.usedPercent);
     return `${window2.label}: ${remaining}% remaining, ${resetLabel(window2.resetsAt)}`;
@@ -1249,8 +1266,9 @@ function ComposerSubscriptionUsage({
   return /* @__PURE__ */ jsxs3(
     "button",
     {
+      ref,
       type: "button",
-      className: `thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-4 items-center gap-1 rounded-t-md border border-b-0 border-stone-500/50 bg-stone-950 px-1 text-[7px] font-normal leading-none text-stone-200 shadow-sm transition-[border-color,background-color,opacity] duration-200 hover:border-stone-400/75 hover:bg-stone-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:text-[7px] ${usage.stale ? "opacity-70" : "opacity-95"}`,
+      className: `thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-4 items-center gap-1 rounded-t-md border border-b-0 border-stone-500/50 bg-stone-950 px-1 text-[9px] font-normal leading-none text-stone-200 shadow-sm transition-[border-color,background-color,opacity] duration-200 hover:border-stone-400/75 hover:bg-stone-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:text-[9px] ${usage.stale ? "opacity-70" : "opacity-95"}`,
       "aria-label": `${usage.provider} subscription usage. ${description}`,
       "aria-expanded": detailsVisible,
       onClick: () => setDetailsVisible((current) => !current),
@@ -1282,15 +1300,16 @@ function ComposerSubscriptionUsage({
         /* @__PURE__ */ jsxs3(
           "span",
           {
+            role: "tooltip",
             "aria-hidden": !detailsVisible,
-            className: `pointer-events-none absolute right-0 bottom-full mb-1 whitespace-nowrap rounded-md border border-stone-600/65 bg-stone-950/95 px-1.5 py-1 text-[9px] font-normal leading-none text-stone-100 shadow-lg transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${detailsVisible ? "translate-y-0 opacity-100" : "translate-y-0.5 opacity-0"}`,
+            className: `pointer-events-none absolute right-0 bottom-full mb-1 max-w-[calc(100vw-2rem)] rounded-md border border-stone-600/65 bg-stone-950/95 px-1.5 py-1 text-[9px] font-normal leading-4 text-stone-100 shadow-lg transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${detailsVisible ? "translate-y-0 opacity-100" : "translate-y-0.5 opacity-0"}`,
             children: [
-              windows.map((window2, index) => /* @__PURE__ */ jsxs3("span", { children: [
-                index > 0 ? " \xB7 " : "",
+              windows.map((window2) => /* @__PURE__ */ jsxs3("span", { className: "block", children: [
                 window2.label,
-                " ",
-                Math.round(100 - window2.usedPercent),
-                "%"
+                " \xB7 ",
+                Math.max(0, Math.round(100 - window2.usedPercent)),
+                "% remaining \xB7 ",
+                resetLabel(window2.resetsAt)
               ] }, window2.id)),
               usage.stale ? " \xB7 last known" : ""
             ]
@@ -1568,7 +1587,7 @@ function ComposerPendingQueue({
 }
 
 // src/components/composer/ComposerMenuSurface.tsx
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef as useRef2 } from "react";
 import { jsx as jsx8 } from "react/jsx-runtime";
 function ComposerMenuSurface({
   align = "start",
@@ -1576,7 +1595,7 @@ function ComposerMenuSurface({
   className = "",
   ...props
 }) {
-  const menuRef = useRef(null);
+  const menuRef = useRef2(null);
   useLayoutEffect(() => {
     const menu = menuRef.current;
     const trigger = menu?.parentElement?.querySelector(
@@ -3236,7 +3255,7 @@ function useComposerAttachments({
 }
 
 // src/components/composer/useAttachmentPreviewUrls.ts
-import { useEffect, useRef as useRef2, useState as useState4 } from "react";
+import { useEffect as useEffect2, useRef as useRef3, useState as useState4 } from "react";
 function revokeCachedPreviewUrls(previewUrlCache) {
   for (const previewUrl of previewUrlCache.values()) {
     URL.revokeObjectURL(previewUrl);
@@ -3247,9 +3266,9 @@ function useAttachmentPreviewUrls({
   attachments,
   isShellView
 }) {
-  const previewUrlCacheRef = useRef2(/* @__PURE__ */ new Map());
+  const previewUrlCacheRef = useRef3(/* @__PURE__ */ new Map());
   const [attachmentPreviewUrls, setAttachmentPreviewUrls] = useState4({});
-  useEffect(() => {
+  useEffect2(() => {
     const previewUrlCache = previewUrlCacheRef.current;
     if (isShellView) {
       revokeCachedPreviewUrls(previewUrlCache);
@@ -3279,7 +3298,7 @@ function useAttachmentPreviewUrls({
     }
     setAttachmentPreviewUrls(nextPreviewUrls);
   }, [attachments, isShellView]);
-  useEffect(() => {
+  useEffect2(() => {
     const previewUrlCache = previewUrlCacheRef.current;
     return () => {
       revokeCachedPreviewUrls(previewUrlCache);
@@ -3291,9 +3310,9 @@ function useAttachmentPreviewUrls({
 // src/components/composer/useComposerDraft.ts
 import {
   useCallback as useCallback2,
-  useEffect as useEffect2,
+  useEffect as useEffect3,
   useLayoutEffect as useLayoutEffect2,
-  useRef as useRef3,
+  useRef as useRef4,
   useState as useState5
 } from "react";
 var DRAFT_SYNC_DELAY_MS = 180;
@@ -3314,12 +3333,12 @@ function useComposerDraft({
     attachments: []
   });
   const [localControlledDraft, setLocalControlledDraft] = useState5(() => toComposerDraft(draftPrompt, draftAttachments));
-  const draftSyncTimerRef = useRef3(null);
-  const latestLocalDraftRef = useRef3(localControlledDraft);
-  const lastSentDraftSignatureRef = useRef3(draftSignature(localControlledDraft));
+  const draftSyncTimerRef = useRef4(null);
+  const latestLocalDraftRef = useRef4(localControlledDraft);
+  const lastSentDraftSignatureRef = useRef4(draftSignature(localControlledDraft));
   const isDraftControlled = !isShellView && draftPrompt !== void 0 && draftAttachments !== void 0 && typeof onDraftChange === "function";
   const controlledPropsSignature = isDraftControlled ? draftSignature(toComposerDraft(draftPrompt, draftAttachments)) : "";
-  const lastRenderedControlledPropsSignatureRef = useRef3(
+  const lastRenderedControlledPropsSignatureRef = useRef4(
     controlledPropsSignature
   );
   useLayoutEffect2(() => {
@@ -3355,7 +3374,7 @@ function useComposerDraft({
       attachments: nextDraft.attachments
     }));
   }, [isDraftControlled, onDraftChange]);
-  useEffect2(() => {
+  useEffect3(() => {
     return () => {
       sendDraftToHost(latestLocalDraftRef.current);
       if (draftSyncTimerRef.current !== null) {
@@ -3407,7 +3426,7 @@ function useComposerDraft({
 }
 
 // src/components/composer/useComposerForkActions.ts
-import { useCallback as useCallback3, useEffect as useEffect3, useState as useState6 } from "react";
+import { useCallback as useCallback3, useEffect as useEffect4, useState as useState6 } from "react";
 function useComposerForkActions({
   slashPanelView,
   onForkLatest,
@@ -3415,7 +3434,7 @@ function useComposerForkActions({
   closeMenu
 }) {
   const [forkBusy, setForkBusy] = useState6(false);
-  useEffect3(() => {
+  useEffect4(() => {
     if (slashPanelView !== "forkTurns") {
       setForkBusy(false);
     }
@@ -3561,7 +3580,7 @@ function useComposerGoal({
 // src/components/composer/useComposerHookConfig.ts
 import {
   useCallback as useCallback5,
-  useEffect as useEffect4,
+  useEffect as useEffect5,
   useMemo,
   useState as useState8
 } from "react";
@@ -3610,13 +3629,13 @@ function useComposerHookConfig({
     setHookConfigError(null);
     setHookConfigSuccess(null);
   }, []);
-  useEffect4(() => {
+  useEffect5(() => {
     if (slashPanelView !== "hooks") {
       setHooksPanelMode("list");
       clearHookConfigStatus();
     }
   }, [clearHookConfigStatus, slashPanelView]);
-  useEffect4(() => {
+  useEffect5(() => {
     const selected = HOOK_EVENT_OPTIONS.find(
       (entry) => entry.value === hookEventName
     );
@@ -3970,7 +3989,7 @@ function useComposerMcpConfig({
 // src/components/composer/useComposerMenuLifecycle.ts
 import {
   useCallback as useCallback7,
-  useEffect as useEffect5,
+  useEffect as useEffect6,
   useState as useState10
 } from "react";
 function useComposerMenuLifecycle({
@@ -3983,7 +4002,7 @@ function useComposerMenuLifecycle({
   clearHookConfigStatus
 }) {
   const [copiedSkillName, setCopiedSkillName] = useState10(null);
-  useEffect5(() => {
+  useEffect6(() => {
     if (openMenu !== "slash") {
       setSlashPanelView("root");
       setMcpPanelMode("list");
@@ -3997,13 +4016,13 @@ function useComposerMenuLifecycle({
     setMcpPanelMode,
     setSlashPanelView
   ]);
-  useEffect5(() => {
+  useEffect6(() => {
     if (slashPanelView !== "mcp") {
       setMcpPanelMode("list");
       clearMcpConfigStatus();
     }
   }, [clearMcpConfigStatus, setMcpPanelMode, slashPanelView]);
-  useEffect5(() => {
+  useEffect6(() => {
     if (!copiedSkillName) {
       return;
     }
@@ -4016,7 +4035,7 @@ function useComposerMenuLifecycle({
       window.clearTimeout(timer);
     };
   }, [copiedSkillName]);
-  useEffect5(() => {
+  useEffect6(() => {
     function handleWindowPointerDown(event) {
       const eventPath = typeof event.composedPath === "function" ? event.composedPath() : [];
       const clickedInsideInteractiveMenu = eventPath.some(
@@ -4496,7 +4515,7 @@ function useComposerPromptSlots({
 }
 
 // src/components/composer/useComposerSettingsActions.ts
-import { useCallback as useCallback8, useEffect as useEffect6, useState as useState11 } from "react";
+import { useCallback as useCallback8, useEffect as useEffect7, useState as useState11 } from "react";
 function useComposerSettingsActions({
   collaborationMode,
   onUpdateSettings,
@@ -4504,7 +4523,7 @@ function useComposerSettingsActions({
 }) {
   const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState11(null);
   const displayedCollaborationMode = optimisticCollaborationMode ?? collaborationMode;
-  useEffect6(() => {
+  useEffect7(() => {
     setOptimisticCollaborationMode(null);
   }, [collaborationMode]);
   const updateSettings = useCallback8(
@@ -4901,7 +4920,7 @@ function ThreadComposer({
 }) {
   const [openMenu, setOpenMenu] = useState12(null);
   const [slashPanelView, setSlashPanelView] = useState12("root");
-  const submitInFlightRef = useRef4(false);
+  const submitInFlightRef = useRef5(false);
   const [mcpPanelMode, setMcpPanelMode] = useState12("list");
   const slashCapabilities = useMemo2(
     () => ({
@@ -4930,19 +4949,19 @@ function ThreadComposer({
     () => filterToolboxItemsForCapabilities(toolboxItems, slashCapabilities),
     [slashCapabilities, toolboxItems]
   );
-  const menuRef = useRef4(null);
-  const promptRef = useRef4(null);
-  const photoInputRef = useRef4(null);
-  const fileInputRef = useRef4(null);
-  const pendingSelectionRef = useRef4(
+  const menuRef = useRef5(null);
+  const promptRef = useRef5(null);
+  const photoInputRef = useRef5(null);
+  const fileInputRef = useRef5(null);
+  const pendingSelectionRef = useRef5(
     null
   );
-  const pendingInsertedAttachmentIdsRef = useRef4([]);
-  const selectionSnapshotRef = useRef4(
+  const pendingInsertedAttachmentIdsRef = useRef5([]);
+  const selectionSnapshotRef = useRef5(
     null
   );
-  const renderedPreviewSignatureRef = useRef4("");
-  const renderedSanitizeNonceRef = useRef4(0);
+  const renderedPreviewSignatureRef = useRef5("");
+  const renderedSanitizeNonceRef = useRef5(0);
   const isShellView = activeView === "shell";
   const canToggleShellView = shellAvailable || isShellView;
   const isMobileShell = Boolean(
@@ -5637,7 +5656,7 @@ function ThreadComposer({
 }
 
 // src/components/ThreadWorkspaceLayout.tsx
-import { useEffect as useEffect8, useMemo as useMemo3, useRef as useRef5, useState as useState13 } from "react";
+import { useEffect as useEffect9, useMemo as useMemo3, useRef as useRef6, useState as useState13 } from "react";
 import {
   ArrowLeft,
   ChevronsLeft,
@@ -5835,7 +5854,7 @@ function historyItemLabel(kind) {
 }
 
 // src/components/RenameDialog.tsx
-import { useEffect as useEffect7 } from "react";
+import { useEffect as useEffect8 } from "react";
 import { createPortal } from "react-dom";
 import { jsx as jsx24, jsxs as jsxs20 } from "react/jsx-runtime";
 function RenameDialog({
@@ -5848,7 +5867,7 @@ function RenameDialog({
   onCancel,
   onSubmit
 }) {
-  useEffect7(() => {
+  useEffect8(() => {
     if (!open) {
       return;
     }
@@ -6154,11 +6173,11 @@ function ThreadCard({
   const [copyState, setCopyState] = useState13(
     "idle"
   );
-  const resetTimerRef = useRef5(null);
+  const resetTimerRef = useRef6(null);
   const workspaceLabel = workspaceLabels[thread.workspaceId];
   const roomMetaLabel = workspaceLabel && !currentWorkspaceId ? workspaceLabel : null;
   const isCurrentThread = currentThreadId === thread.id;
-  useEffect8(() => {
+  useEffect9(() => {
     return () => {
       if (resetTimerRef.current !== null) {
         window.clearTimeout(resetTimerRef.current);
@@ -6448,14 +6467,14 @@ function ThreadWorkspaceLayout({
   const [settingsTab, setSettingsTab] = useState13(
     "session"
   );
-  useEffect8(() => {
+  useEffect9(() => {
     if (workspaceRevealRequestKey === void 0) {
       return;
     }
     setWorkspaceCollapsed(false);
     setMobileWorkspace("workspace");
   }, [workspaceRevealRequestKey]);
-  useEffect8(() => {
+  useEffect9(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -6469,7 +6488,7 @@ function ThreadWorkspaceLayout({
       mediaQuery.removeEventListener("change", handleViewportChange);
     };
   }, []);
-  useEffect8(() => {
+  useEffect9(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -6483,7 +6502,7 @@ function ThreadWorkspaceLayout({
       mediaQuery.removeEventListener("change", handleViewportChange);
     };
   }, []);
-  useEffect8(() => {
+  useEffect9(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -7203,10 +7222,10 @@ function ThreadWorkspaceLayout({
 }
 
 // src/components/ThreadTimeline.tsx
-import { memo as memo6, useCallback as useCallback14, useEffect as useEffect17, useMemo as useMemo8, useRef as useRef13, useState as useState27 } from "react";
+import { memo as memo6, useCallback as useCallback14, useEffect as useEffect18, useMemo as useMemo8, useRef as useRef14, useState as useState27 } from "react";
 
 // src/components/LongTextDialog.tsx
-import { useEffect as useEffect9 } from "react";
+import { useEffect as useEffect10 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
 import { jsx as jsx28, jsxs as jsxs23 } from "react/jsx-runtime";
 function LongTextDialog({
@@ -7215,7 +7234,7 @@ function LongTextDialog({
   text,
   onClose
 }) {
-  useEffect9(() => {
+  useEffect10(() => {
     if (!open) {
       return;
     }
@@ -7284,8 +7303,8 @@ function LongTextDialog({
 // src/components/graph-chat/GraphChatCompactMessageItem.tsx
 import {
   memo as memo3,
-  useEffect as useEffect13,
-  useRef as useRef8,
+  useEffect as useEffect14,
+  useRef as useRef9,
   useState as useState18
 } from "react";
 import { Brain, Check as Check4, Copy as Copy3 } from "lucide-react";
@@ -7294,10 +7313,10 @@ import { Brain, Check as Check4, Copy as Copy3 } from "lucide-react";
 import {
   memo as memo2,
   useCallback as useCallback10,
-  useEffect as useEffect12,
+  useEffect as useEffect13,
   useLayoutEffect as useLayoutEffect4,
   useMemo as useMemo6,
-  useRef as useRef7,
+  useRef as useRef8,
   useState as useState16
 } from "react";
 
@@ -7337,10 +7356,10 @@ function hasLikelyMarkdownSyntax(text) {
 // src/components/graph-chat/GraphChatMessageContent.tsx
 import {
   memo,
-  useEffect as useEffect11,
+  useEffect as useEffect12,
   isValidElement,
   useMemo as useMemo5,
-  useRef as useRef6,
+  useRef as useRef7,
   useState as useState15
 } from "react";
 import { Check as Check3, Copy as Copy2 } from "lucide-react";
@@ -7426,7 +7445,7 @@ function usePlugins() {
 }
 
 // src/components/graph-chat/GraphChatToolCall.tsx
-import { useEffect as useEffect10, useMemo as useMemo4, useState as useState14 } from "react";
+import { useEffect as useEffect11, useMemo as useMemo4, useState as useState14 } from "react";
 import { CheckCircle2, Loader2 as Loader22, Wrench, XCircle } from "lucide-react";
 
 // src/components/graph-workspace/GraphAccordion.tsx
@@ -7575,7 +7594,7 @@ function GraphChatToolCall({
   const [openItem, setOpenItem] = useState14(
     shouldAutoOpen ? "item-1" : void 0
   );
-  useEffect10(() => {
+  useEffect11(() => {
     if (shouldAutoOpen) {
       setOpenItem("item-1");
     }
@@ -7888,7 +7907,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
   onOpenWorkspaceFile,
   resolveHref
 }) {
-  const rootRef = useRef6(null);
+  const rootRef = useRef7(null);
   const plugins = usePlugins();
   const [highlighter, setHighlighter] = useState15(null);
   const [copyState, setCopyState] = useState15({});
@@ -7898,7 +7917,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
     () => preprocessGraphChatToolBlocks(content),
     [content]
   );
-  useEffect11(() => {
+  useEffect12(() => {
     let alive = true;
     getGraphChatHighlighter().then((loadedHighlighter) => {
       if (alive) {
@@ -7909,7 +7928,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
       alive = false;
     };
   }, []);
-  useEffect11(() => {
+  useEffect12(() => {
     const root = rootRef.current;
     const shell = root?.closest(".thread-ui-shell");
     const readDark = () => {
@@ -8227,8 +8246,8 @@ var GraphChatMarkdownAwareBody = memo2(
     onOpenWorkspaceFile,
     resolveHref
   }) {
-    const messageRef = useRef7(null);
-    const scrollAnchorRef = useRef7(null);
+    const messageRef = useRef8(null);
+    const scrollAnchorRef = useRef8(null);
     const [expanded, setExpanded] = useState16(false);
     const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text);
     const isLargeText = !streaming && text.length > LARGE_MESSAGE_PREVIEW_CHARS;
@@ -8263,7 +8282,7 @@ var GraphChatMarkdownAwareBody = memo2(
         window.cancelAnimationFrame(frame);
       };
     }, [expanded]);
-    useEffect12(() => {
+    useEffect13(() => {
       if (streaming || typeof IntersectionObserver === "undefined") {
         setIsActivated(true);
         return;
@@ -8561,11 +8580,11 @@ var GraphChatCompactMessageItem = memo3(
       "idle"
     );
     const [reasoningOpen, setReasoningOpen] = useState18(false);
-    const resetTimerRef = useRef8(null);
+    const resetTimerRef = useRef9(null);
     const reasoningItems = item.kind === "agentMessage" ? item.reasoningItems ?? [] : [];
     const reasoningText = reasoningItems.map((entry) => entry.text.trim()).filter(Boolean).join("\n\n");
     const queuedLikeStatus = item.kind === "userMessage" && (item.status === "Steering" || item.status === "Accepted" || item.status === "Awaiting response");
-    useEffect13(() => {
+    useEffect14(() => {
       return () => {
         if (resetTimerRef.current !== null) {
           window.clearTimeout(resetTimerRef.current);
@@ -9648,7 +9667,7 @@ function GraphChatHistoryEntries({
 import {
   memo as memo4,
   useLayoutEffect as useLayoutEffect5,
-  useRef as useRef9,
+  useRef as useRef10,
   useState as useState20
 } from "react";
 import {
@@ -10140,7 +10159,7 @@ function GraphChatHistoryToolFrame({
   const [openItem, setOpenItem] = useState20(
     autoOpen ? "item-1" : void 0
   );
-  const previousAutoOpenRef = useRef9(autoOpen);
+  const previousAutoOpenRef = useRef10(autoOpen);
   useLayoutEffect5(() => {
     if (autoOpen) {
       setOpenItem("item-1");
@@ -11136,9 +11155,9 @@ function GraphChatTurnFrame({
 
 // src/components/timeline/tokenFormatting.tsx
 import {
-  useEffect as useEffect14,
+  useEffect as useEffect15,
   useLayoutEffect as useLayoutEffect6,
-  useRef as useRef10,
+  useRef as useRef11,
   useState as useState21
 } from "react";
 import { Fragment as Fragment11, jsx as jsx42, jsxs as jsxs35 } from "react/jsx-runtime";
@@ -11373,9 +11392,9 @@ function TurnTokenSummary({ turn }) {
   const [isMobileOpen, setIsMobileOpen] = useState21(false);
   const [isDesktopOpen, setIsDesktopOpen] = useState21(false);
   const [mobilePopoverShift, setMobilePopoverShift] = useState21(0);
-  const containerRef = useRef10(null);
-  const desktopPriceRef = useRef10(null);
-  const mobilePopoverRef = useRef10(null);
+  const containerRef = useRef11(null);
+  const desktopPriceRef = useRef11(null);
+  const mobilePopoverRef = useRef11(null);
   useLayoutEffect6(() => {
     if (!isMobileOpen || details.length === 0) {
       setMobilePopoverShift(0);
@@ -11409,7 +11428,7 @@ function TurnTokenSummary({ turn }) {
       window.removeEventListener("resize", updatePopoverShift);
     };
   }, [details.length, isMobileOpen]);
-  useEffect14(() => {
+  useEffect15(() => {
     if (!isMobileOpen && !isDesktopOpen) {
       return;
     }
@@ -11516,7 +11535,7 @@ function TurnTokenSummary({ turn }) {
 }
 
 // src/components/timeline/turnStatus.tsx
-import { useEffect as useEffect15, useState as useState23 } from "react";
+import { useEffect as useEffect16, useState as useState23 } from "react";
 
 // src/components/timeline/TurnUsageInline.tsx
 import { useState as useState22 } from "react";
@@ -11531,13 +11550,16 @@ function TurnUsageInline({ turn }) {
   const [detailsOpen, setDetailsOpen] = useState22(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
+  const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
+  const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
+  const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
   const hasPrice = price && Number.isFinite(price.totalUsd) && price.totalUsd >= 0;
   const counts = usage ? [
     { label: "tok", value: usage.totalTokens, title: "Total tokens" },
     {
       label: "in",
-      value: usage.inputTokens,
-      title: "Input tokens (including cached input)"
+      value: uncachedInput,
+      title: "Input tokens (excluding cache)"
     },
     {
       label: "out",
@@ -11559,11 +11581,11 @@ function TurnUsageInline({ turn }) {
   ] : [];
   const priceTitle = "API price unavailable for this model or usage report.";
   const details = usage ? [
-    { label: "Input", icon: ArrowDownToLine, value: usage.inputTokens },
-    { label: "Cached input", icon: Database, value: usage.cachedInputTokens },
-    { label: "Output", icon: ArrowUpFromLine, value: usage.outputTokens },
-    ...usage.reasoningOutputTokens > 0 ? [{ label: "Reasoning", icon: Brain2, value: usage.reasoningOutputTokens }] : [],
-    ...usage.cacheWriteInputTokens ? [{ label: "Cache write", icon: Save, value: usage.cacheWriteInputTokens }] : []
+    { label: "Input", icon: ArrowDownToLine, value: uncachedInput, usd: price?.inputUsd },
+    { label: "Cached input", icon: Database, value: usage.cachedInputTokens, usd: price?.cachedInputUsd },
+    { label: "Output", icon: ArrowUpFromLine, value: usage.outputTokens - reasoning, usd: price ? price.outputUsd - reasoningUsd : void 0 },
+    ...usage.reasoningOutputTokens > 0 ? [{ label: "Reasoning", icon: Brain2, value: reasoning, usd: price ? reasoningUsd : void 0 }] : [],
+    ...usage.cacheWriteInputTokens ? [{ label: "Cache write", icon: Save, value: usage.cacheWriteInputTokens, usd: price?.cacheWriteInputUsd }] : []
   ] : [];
   return /* @__PURE__ */ jsxs36("span", { className: "thread-turn-usage", "data-testid": "turn-usage", children: [
     /* @__PURE__ */ jsxs36(
@@ -11622,12 +11644,13 @@ function TurnUsageInline({ turn }) {
           sideOffset: 6,
           className: "thread-usage-details",
           style: { background: "#252622", color: "#f2f1e9", border: "1px solid #484a41", borderRadius: 10, padding: "9px 12px", boxShadow: "0 6px 22px #0005", zIndex: 80 },
-          children: /* @__PURE__ */ jsxs36("div", { style: { display: "grid", gridTemplateColumns: "16px auto", gap: "6px 12px", alignItems: "center", fontVariantNumeric: "tabular-nums" }, children: [
+          children: /* @__PURE__ */ jsxs36("div", { style: { display: "grid", gridTemplateColumns: "16px auto auto", gap: "6px 12px", alignItems: "center", fontVariantNumeric: "tabular-nums" }, children: [
             /* @__PURE__ */ jsx43(DollarSign, { size: 14, "aria-label": "API cost" }),
-            /* @__PURE__ */ jsx43("span", { children: formatCompactUsd(price.totalUsd) }),
-            details.map(({ label, icon: Icon, value }) => /* @__PURE__ */ jsxs36("span", { style: { display: "contents" }, children: [
+            /* @__PURE__ */ jsx43("span", { style: { gridColumn: "span 2", textAlign: "right" }, children: formatCompactUsd(price.totalUsd) }),
+            details.map(({ label, icon: Icon, value, usd }) => /* @__PURE__ */ jsxs36("span", { style: { display: "contents" }, children: [
               /* @__PURE__ */ jsx43(Icon, { size: 14, "aria-label": label }),
-              /* @__PURE__ */ jsx43("span", { "aria-label": `${label}: ${value.toLocaleString("en-US")} tokens`, title: `${label}: ${value.toLocaleString("en-US")}`, children: formatCompactTokenCount(value) })
+              /* @__PURE__ */ jsx43("span", { "aria-label": `${label}: ${value.toLocaleString("en-US")} tokens`, title: `${label}: ${value.toLocaleString("en-US")}`, children: formatCompactTokenCount(value) }),
+              /* @__PURE__ */ jsx43("span", { "aria-label": `${label} cost`, title: label === "Reasoning" ? "Included in output charges; not an additional fee" : void 0, style: { textAlign: "right" }, children: usd == null ? "\u2014" : formatCompactUsd(usd) })
             ] }, label))
           ] })
         }
@@ -11719,7 +11742,7 @@ function deriveDisplayedLivePlan(livePlan, items, turnStatus) {
 }
 function useSecondClock(enabled) {
   const [now, setNow] = useState23(() => Date.now());
-  useEffect15(() => {
+  useEffect16(() => {
     if (!enabled) {
       return;
     }
@@ -12693,7 +12716,7 @@ function buildSyntheticLiveTurn(turnId, items) {
 }
 
 // src/components/timeline/useDeferredHistoryDetail.ts
-import { useCallback as useCallback12, useRef as useRef11, useState as useState25 } from "react";
+import { useCallback as useCallback12, useRef as useRef12, useState as useState25 } from "react";
 function inlineDetail(item, title, text) {
   return {
     id: item.id,
@@ -12706,8 +12729,8 @@ function useDeferredHistoryDetail({
   loadHistoryItemDetail,
   onSelectHistoryItemDetail
 }) {
-  const requestIdRef = useRef11(0);
-  const detailCacheRef = useRef11(
+  const requestIdRef = useRef12(0);
+  const detailCacheRef = useRef12(
     /* @__PURE__ */ new Map()
   );
   const [expandedText, setExpandedText] = useState25(
@@ -12837,14 +12860,14 @@ function useDeferredHistoryDetail({
 // src/components/timeline/useTimelineScroll.ts
 import {
   useCallback as useCallback13,
-  useEffect as useEffect16,
+  useEffect as useEffect17,
   useLayoutEffect as useLayoutEffect7,
-  useRef as useRef12,
+  useRef as useRef13,
   useState as useState26
 } from "react";
 function useChangeRevision(inputs) {
-  const previousInputsRef = useRef12(null);
-  const revisionRef = useRef12(0);
+  const previousInputsRef = useRef13(null);
+  const revisionRef = useRef13(0);
   const previousInputs = previousInputsRef.current;
   const changed = previousInputs === null || previousInputs.length !== inputs.length || inputs.some((input, index) => !Object.is(input, previousInputs[index]));
   if (changed) {
@@ -12864,24 +12887,24 @@ function useTimelineScroll({
   onTailVisibilityChange,
   contentRevisionInputs
 }) {
-  const scrollContainerRef = useRef12(null);
-  const scrollContentRef = useRef12(null);
-  const lastHandledScrollRequestKeyRef = useRef12(scrollRequestKey);
-  const previousContentRevisionRef = useRef12(null);
-  const previousBottomSpacerRef = useRef12(bottomSpacer);
-  const lastObservedScrollHeightRef = useRef12(0);
-  const lastScrollTopRef = useRef12(0);
-  const pendingPrependScrollRef = useRef12(null);
-  const tailSentinelRef = useRef12(null);
-  const topSentinelRef = useRef12(null);
-  const isTailVisibleRef = useRef12(true);
-  const shouldStickToBottomRef = useRef12(true);
-  const userScrolledAwayFromTailRef = useRef12(false);
-  const userScrolledHistoryRef = useRef12(false);
-  const autoLoadedEarlierRef = useRef12(false);
-  const topLoadArmedRef = useRef12(false);
-  const lastTouchYRef = useRef12(null);
-  const touchPullDistanceRef = useRef12(0);
+  const scrollContainerRef = useRef13(null);
+  const scrollContentRef = useRef13(null);
+  const lastHandledScrollRequestKeyRef = useRef13(scrollRequestKey);
+  const previousContentRevisionRef = useRef13(null);
+  const previousBottomSpacerRef = useRef13(bottomSpacer);
+  const lastObservedScrollHeightRef = useRef13(0);
+  const lastScrollTopRef = useRef13(0);
+  const pendingPrependScrollRef = useRef13(null);
+  const tailSentinelRef = useRef13(null);
+  const topSentinelRef = useRef13(null);
+  const isTailVisibleRef = useRef13(true);
+  const shouldStickToBottomRef = useRef13(true);
+  const userScrolledAwayFromTailRef = useRef13(false);
+  const userScrolledHistoryRef = useRef13(false);
+  const autoLoadedEarlierRef = useRef13(false);
+  const topLoadArmedRef = useRef13(false);
+  const lastTouchYRef = useRef13(null);
+  const touchPullDistanceRef = useRef13(0);
   const [visibleCount, setVisibleCount] = useState26(INITIAL_VISIBLE_TURNS);
   const [loadMoreClicks, setLoadMoreClicks] = useState26(0);
   const [isTailVisible, setIsTailVisible] = useState26(true);
@@ -13052,13 +13075,13 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [threadId, scrollToBottom]);
-  useEffect16(() => {
+  useEffect17(() => {
     autoLoadedEarlierRef.current = false;
     userScrolledHistoryRef.current = false;
     topLoadArmedRef.current = false;
     pendingPrependScrollRef.current = null;
   }, [threadId]);
-  useEffect16(() => {
+  useEffect17(() => {
     if (!loadingEarlier) {
       autoLoadedEarlierRef.current = false;
     }
@@ -13084,7 +13107,7 @@ function useTimelineScroll({
     shouldStickToBottomRef.current = false;
     topLoadArmedRef.current = false;
   }, [loadingEarlier, turnsLength]);
-  useEffect16(() => {
+  useEffect17(() => {
     setVisibleCount((current) => {
       if (current >= turnsLength - 1) {
         return turnsLength;
@@ -13092,7 +13115,7 @@ function useTimelineScroll({
       return Math.max(current, INITIAL_VISIBLE_TURNS);
     });
   }, [turnsLength]);
-  useEffect16(() => {
+  useEffect17(() => {
     const container = scrollContainerRef.current;
     if (container) {
       lastObservedScrollHeightRef.current = container.scrollHeight;
@@ -13106,7 +13129,7 @@ function useTimelineScroll({
     }
     recomputeTailVisibility();
   }, [contentRevision, recomputeTailVisibility, visibleCount]);
-  useEffect16(() => {
+  useEffect17(() => {
     const shouldForceScroll = scrollRequestKey !== lastHandledScrollRequestKeyRef.current;
     const contentChanged = previousContentRevisionRef.current !== contentRevision;
     previousContentRevisionRef.current = contentRevision;
@@ -13124,7 +13147,7 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [contentRevision, isTailVisible, scrollToBottom, scrollRequestKey]);
-  useEffect16(() => {
+  useEffect17(() => {
     const container = scrollContainerRef.current;
     const content = scrollContentRef.current;
     if (!container || !content || typeof ResizeObserver === "undefined") {
@@ -13151,7 +13174,7 @@ function useTimelineScroll({
       observer.disconnect();
     };
   }, [scrollToBottom]);
-  useEffect16(() => {
+  useEffect17(() => {
     if (!shouldStickToBottomRef.current || userScrolledAwayFromTailRef.current) {
       previousBottomSpacerRef.current = bottomSpacer;
       return;
@@ -13167,7 +13190,7 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [bottomSpacer, scrollToBottom]);
-  useEffect16(() => {
+  useEffect17(() => {
     onTailVisibilityChange?.(isTailVisible);
   }, [isTailVisible, onTailVisibilityChange]);
   return {
@@ -13273,8 +13296,8 @@ function ThreadTimelineComponent({
   const [cancelingSteerIds, setCancelingSteerIds] = useState27(
     () => /* @__PURE__ */ new Set()
   );
-  const lastPreviousTurnTargetIdRef = useRef13(null);
-  const lastNextTurnTargetIdRef = useRef13(null);
+  const lastPreviousTurnTargetIdRef = useRef14(null);
+  const lastNextTurnTargetIdRef = useRef14(null);
   const loadHistoryItemDetail = adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
   const [loadedTurnDetails, setLoadedTurnDetails] = useState27({});
@@ -13339,7 +13362,7 @@ function ThreadTimelineComponent({
       bottomSpacer
     ]
   });
-  useEffect17(() => {
+  useEffect18(() => {
     setCollapsedTurnOverrides({});
     setLoadedTurnDetails({});
     setLoadingTurnDetailIds(/* @__PURE__ */ new Set());
@@ -13483,11 +13506,11 @@ function ThreadTimelineComponent({
     updatePreviousTurnAvailability();
     updateNextTurnAvailability();
   }, [handleScroll, updateNextTurnAvailability, updatePreviousTurnAvailability]);
-  useEffect17(() => {
+  useEffect18(() => {
     updatePreviousTurnAvailability();
     updateNextTurnAvailability();
   }, [updateNextTurnAvailability, updatePreviousTurnAvailability, visibleTurns]);
-  useEffect17(() => {
+  useEffect18(() => {
     if (previousTurnScrollRequestKey === 0) return;
     const container = scrollContainerRef.current;
     const firstCandidate = findPreviousTurn();
@@ -13502,7 +13525,7 @@ function ThreadTimelineComponent({
       onPreviousTurnAvailabilityChange?.(false);
     }
   }, [findPreviousTurn, onPreviousTurnAvailabilityChange, previousTurnScrollRequestKey, scrollContainerRef]);
-  useEffect17(() => {
+  useEffect18(() => {
     if (nextTurnScrollRequestKey === 0) return;
     const container = scrollContainerRef.current;
     const firstCandidate = findNextTurn();
@@ -13873,10 +13896,10 @@ var ThreadTimeline = memo6(ThreadTimelineComponent);
 import {
   forwardRef as forwardRef2,
   useCallback as useCallback16,
-  useEffect as useEffect20,
+  useEffect as useEffect21,
   useImperativeHandle as useImperativeHandle2,
   useMemo as useMemo10,
-  useRef as useRef15,
+  useRef as useRef16,
   useState as useState29
 } from "react";
 
@@ -13884,10 +13907,10 @@ import {
 import {
   forwardRef,
   useCallback as useCallback15,
-  useEffect as useEffect19,
+  useEffect as useEffect20,
   useImperativeHandle,
   useMemo as useMemo9,
-  useRef as useRef14,
+  useRef as useRef15,
   useState as useState28
 } from "react";
 import "xterm/css/xterm.css";
@@ -14644,7 +14667,7 @@ function buildShellControlState({
 
 // src/components/shell/useShellSocketLifecycle.ts
 import {
-  useEffect as useEffect18
+  useEffect as useEffect19
 } from "react";
 
 // src/components/shell/shellSocketSideEffects.ts
@@ -14951,7 +14974,7 @@ function useShellSocketLifecycle({
 }) {
   const shellId = shell?.id;
   const shellCwd = shell?.cwd;
-  useEffect18(() => {
+  useEffect19(() => {
     const terminal = terminalRef.current;
     const baseAttachStartInput = {
       shellId: shellId ?? null,
@@ -15227,35 +15250,35 @@ var ShellPane = forwardRef(
     onRuntimeStateChange,
     onFeedback
   }, ref) {
-    const terminalRef = useRef14(null);
-    const fitAddonRef = useRef14(null);
-    const socketRef = useRef14(null);
-    const viewerIdRef = useRef14(null);
-    const shellIdRef = useRef14(null);
-    const reconnectTimerRef = useRef14(null);
-    const attachTimeoutRef = useRef14(null);
-    const attachRetryTimerRef = useRef14(null);
-    const intentionalDisconnectRef = useRef14(false);
-    const userDisconnectedShellIdRef = useRef14(null);
-    const shellSnapshotRef = useRef14("");
-    const pendingCommandRef = useRef14(null);
-    const lastCommandOutputRef = useRef14("");
-    const resizeObserverRef = useRef14(null);
-    const lastSentSizeRef = useRef14(null);
-    const snapshotCursorRef = useRef14({
+    const terminalRef = useRef15(null);
+    const fitAddonRef = useRef15(null);
+    const socketRef = useRef15(null);
+    const viewerIdRef = useRef15(null);
+    const shellIdRef = useRef15(null);
+    const reconnectTimerRef = useRef15(null);
+    const attachTimeoutRef = useRef15(null);
+    const attachRetryTimerRef = useRef15(null);
+    const intentionalDisconnectRef = useRef15(false);
+    const userDisconnectedShellIdRef = useRef15(null);
+    const shellSnapshotRef = useRef15("");
+    const pendingCommandRef = useRef15(null);
+    const lastCommandOutputRef = useRef15("");
+    const resizeObserverRef = useRef15(null);
+    const lastSentSizeRef = useRef15(null);
+    const snapshotCursorRef = useRef15({
       cursorX: void 0,
       cursorY: void 0,
       paneHeight: void 0
     });
-    const terminalInitializingRef = useRef14(false);
-    const terminalInputSubscriptionRef = useRef14(null);
-    const isVisibleRef = useRef14(isVisible);
-    const isMobileShellRef = useRef14(isMobileShell);
-    const sendShellInputRef = useRef14(() => false);
-    const syncTerminalSizeRef = useRef14(() => null);
-    const refreshTerminalLayoutRef = useRef14(() => {
+    const terminalInitializingRef = useRef15(false);
+    const terminalInputSubscriptionRef = useRef15(null);
+    const isVisibleRef = useRef15(isVisible);
+    const isMobileShellRef = useRef15(isMobileShell);
+    const sendShellInputRef = useRef15(() => false);
+    const syncTerminalSizeRef = useRef15(() => null);
+    const refreshTerminalLayoutRef = useRef15(() => {
     });
-    const attachPromiseControllerRef = useRef14(
+    const attachPromiseControllerRef = useRef15(
       createShellAttachPromiseController({
         clearTimeout: window.clearTimeout
       })
@@ -15284,13 +15307,13 @@ var ShellPane = forwardRef(
     const settleAttachPromise = useCallback15((connected) => {
       attachPromiseControllerRef.current.settle(connected);
     }, []);
-    useEffect19(() => {
+    useEffect20(() => {
       isVisibleRef.current = isVisible;
     }, [isVisible]);
-    useEffect19(() => {
+    useEffect20(() => {
       isMobileShellRef.current = isMobileShell;
     }, [isMobileShell]);
-    useEffect19(() => {
+    useEffect20(() => {
       shellIdRef.current = shell?.id ?? null;
     }, [shell?.id]);
     const sendShellInput = useCallback15((data) => {
@@ -15308,7 +15331,7 @@ var ShellPane = forwardRef(
       });
       return true;
     }, []);
-    useEffect19(() => {
+    useEffect20(() => {
       sendShellInputRef.current = sendShellInput;
     }, [sendShellInput]);
     const sendShellClear = useCallback15(() => {
@@ -15365,7 +15388,7 @@ var ShellPane = forwardRef(
       },
       [isTerminalVisible]
     );
-    useEffect19(() => {
+    useEffect20(() => {
       syncTerminalSizeRef.current = syncTerminalSize;
     }, [syncTerminalSize]);
     const refreshTerminalLayout = useCallback15(
@@ -15394,10 +15417,10 @@ var ShellPane = forwardRef(
       },
       [isMobileShell, isTerminalVisible, syncTerminalSize, terminalHostNode]
     );
-    useEffect19(() => {
+    useEffect20(() => {
       refreshTerminalLayoutRef.current = () => refreshTerminalLayout();
     }, [refreshTerminalLayout]);
-    useEffect19(() => {
+    useEffect20(() => {
       onRuntimeStateChange({
         status: viewerId ? "attached" : shellStatus,
         shellInputEnabled: Boolean(viewerId && shell),
@@ -15417,7 +15440,7 @@ var ShellPane = forwardRef(
       shellStatus,
       viewerId
     ]);
-    useEffect19(() => {
+    useEffect20(() => {
       if (!terminalHostNode || terminalRef.current || terminalInitializingRef.current) {
         return;
       }
@@ -15490,7 +15513,7 @@ var ShellPane = forwardRef(
         lastSentSizeRef.current = null;
       };
     }, [effectiveTheme, terminalHostNode]);
-    useEffect19(() => {
+    useEffect20(() => {
       const resetAction = deriveShellMissingSessionResetAction({
         hasShell: Boolean(shell)
       });
@@ -15510,21 +15533,21 @@ var ShellPane = forwardRef(
         terminalRef.current?.reset();
       }
     }, [setViewerId, settleAttachPromise, shell]);
-    useEffect19(() => {
+    useEffect20(() => {
       const terminal = terminalRef.current;
       if (!terminal) {
         return;
       }
       terminal.options.theme = terminalThemeFor(effectiveTheme);
     }, [effectiveTheme]);
-    useEffect19(() => {
+    useEffect20(() => {
       const terminal = terminalRef.current;
       if (!terminal) {
         return;
       }
       terminal.options.disableStdin = isMobileShell;
     }, [isMobileShell]);
-    useEffect19(() => {
+    useEffect20(() => {
       if (!isVisible || !terminalReady) {
         return;
       }
@@ -15568,7 +15591,7 @@ var ShellPane = forwardRef(
       settleAttachPromise,
       onShellUpdate
     });
-    useEffect19(() => {
+    useEffect20(() => {
       return () => {
         const reconnectTimer = refValue2(reconnectTimerRef);
         const attachTimeout = refValue2(attachTimeoutRef);
@@ -15773,12 +15796,12 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   saveSplitRatio,
   onStateChange
 }, ref) {
-  const primaryPaneRef = useRef15(null);
-  const secondaryPaneRef = useRef15(null);
-  const feedbackTimerRef = useRef15(null);
-  const terminalSplitHostRef = useRef15(null);
-  const dragFrameRef = useRef15(null);
-  const createShellInFlightRef = useRef15(false);
+  const primaryPaneRef = useRef16(null);
+  const secondaryPaneRef = useRef16(null);
+  const feedbackTimerRef = useRef16(null);
+  const terminalSplitHostRef = useRef16(null);
+  const dragFrameRef = useRef16(null);
+  const createShellInFlightRef = useRef16(false);
   const [shellState, setShellState] = useState29(null);
   const [loading, setLoading] = useState29(true);
   const [busy, setBusy] = useState29(false);
@@ -15873,10 +15896,10 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       setLoading(false);
     }
   }, [shellAdapter, threadId]);
-  useEffect20(() => {
+  useEffect21(() => {
     void loadShellState();
   }, [loadShellState]);
-  useEffect20(() => {
+  useEffect21(() => {
     const storedRatio = loadSplitRatio?.(threadId);
     if (storedRatio === null || storedRatio === void 0) {
       setSplitRatio(50);
@@ -15885,7 +15908,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     const parsed = typeof storedRatio === "number" ? storedRatio : Number.parseFloat(String(storedRatio));
     setSplitRatio(Number.isFinite(parsed) ? clampPaneRatio(parsed) : 50);
   }, [loadSplitRatio, threadId]);
-  useEffect20(() => {
+  useEffect21(() => {
     if (!shellState) {
       setPrimaryShellId(null);
       setSecondaryShellId(null);
@@ -15911,14 +15934,14 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       return fallback?.id ?? null;
     });
   }, [shellState, splitMode]);
-  useEffect20(() => {
+  useEffect21(() => {
     if (splitMode === "columns") {
       return;
     }
     setActivePaneId("primary");
     setSecondaryShellId(null);
   }, [splitMode]);
-  useEffect20(() => {
+  useEffect21(() => {
     if (splitMode !== "columns" || secondaryShellId || liveShells.length < 2) {
       return;
     }
@@ -15927,7 +15950,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       setSecondaryShellId(nextSecondary.id);
     }
   }, [liveShells, primaryShell?.id, secondaryShellId, splitMode]);
-  useEffect20(() => {
+  useEffect21(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
@@ -15945,7 +15968,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       mediaQuery.removeEventListener("change", update);
     };
   }, []);
-  useEffect20(() => {
+  useEffect21(() => {
     return () => {
       if (feedbackTimerRef.current !== null) {
         window.clearTimeout(feedbackTimerRef.current);
@@ -16093,7 +16116,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     },
     [activePaneId, setPaneShell, shellAdapter, splitMode, threadId]
   );
-  useEffect20(() => {
+  useEffect21(() => {
     if (!isVisible || !shellState || loading || busy || workspacePathMissing || status === "creating" || liveShells.length > 0) {
       return;
     }
@@ -16222,7 +16245,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     }
     return true;
   }, [activePaneRef, setTransientToolboxFeedback]);
-  useEffect20(() => {
+  useEffect21(() => {
     onStateChange?.(buildShellControlState({
       activeRuntime,
       activeShell,
@@ -16734,7 +16757,7 @@ var MemoizedThreadGraphWorkspacePanel = memo7(
 );
 
 // src/components/ConfirmDialog.tsx
-import { useEffect as useEffect21 } from "react";
+import { useEffect as useEffect22 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
 import { jsx as jsx51, jsxs as jsxs43 } from "react/jsx-runtime";
 function ConfirmDialog({
@@ -16747,7 +16770,7 @@ function ConfirmDialog({
   onCancel,
   onConfirm
 }) {
-  useEffect21(() => {
+  useEffect22(() => {
     if (!open) {
       return;
     }
@@ -16832,7 +16855,7 @@ function ConfirmDialog({
 }
 
 // src/components/ExportTranscriptDialog.tsx
-import { useEffect as useEffect22, useMemo as useMemo11, useState as useState30 } from "react";
+import { useEffect as useEffect23, useMemo as useMemo11, useState as useState30 } from "react";
 import { createPortal as createPortal4 } from "react-dom";
 import { Fragment as Fragment15, jsx as jsx52, jsxs as jsxs44 } from "react/jsx-runtime";
 function formatTurnTime(value) {
@@ -16929,7 +16952,7 @@ function ThreadActionsDialog({
   const [effectiveTheme, setEffectiveTheme] = useState30(
     () => typeof document !== "undefined" && !document.documentElement.classList.contains("dark") ? "light" : "dark"
   );
-  useEffect22(() => {
+  useEffect23(() => {
     if (!open) {
       return;
     }
@@ -16942,12 +16965,12 @@ function ThreadActionsDialog({
     setShareLabel("");
     void onLoadTurns();
   }, [initialMode, onLoadTurns, open]);
-  useEffect22(() => {
+  useEffect23(() => {
     if (open && turns.length > 0) {
       setSelectedTurnIds(new Set(turns.slice(0, 10).map((turn) => turn.turnId)));
     }
   }, [open, turns]);
-  useEffect22(() => {
+  useEffect23(() => {
     if (!open) {
       return;
     }
@@ -16959,7 +16982,7 @@ function ThreadActionsDialog({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [busy, onCancel, open]);
-  useEffect22(() => {
+  useEffect23(() => {
     if (!open) {
       return;
     }
@@ -17329,10 +17352,10 @@ import {
 // src/components/graph-chat/GraphChatThreadChatPanel.tsx
 import {
   useCallback as useCallback17,
-  useEffect as useEffect23,
+  useEffect as useEffect24,
   useLayoutEffect as useLayoutEffect8,
   useMemo as useMemo12,
-  useRef as useRef16,
+  useRef as useRef17,
   useState as useState31
 } from "react";
 import { jsx as jsx53, jsxs as jsxs45 } from "react/jsx-runtime";
@@ -17355,7 +17378,7 @@ function GraphChatThreadChatPanel({
   const [mobileComposerOverlap, setMobileComposerOverlap] = useState31(0);
   const [mobileKeyboardInset, setMobileKeyboardInset] = useState31(0);
   const [mobilePromptFocused, setMobilePromptFocused] = useState31(false);
-  const internalComposerHostRef = useRef16(null);
+  const internalComposerHostRef = useRef17(null);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
   const queuedPrompts = useMemo12(() => {
@@ -17415,7 +17438,7 @@ function GraphChatThreadChatPanel({
     },
     [timelineTailVisibilityChange]
   );
-  useEffect23(() => {
+  useEffect24(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
@@ -17427,7 +17450,7 @@ function GraphChatThreadChatPanel({
       mediaQuery.removeEventListener("change", updateViewport);
     };
   }, []);
-  useEffect23(() => {
+  useEffect24(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -17505,7 +17528,7 @@ function GraphChatThreadChatPanel({
     composerProps,
     hasPendingRequests
   ]);
-  useEffect23(() => {
+  useEffect24(() => {
     if (!isMobileViewport) {
       setMobilePromptFocused(false);
       return;
@@ -17966,7 +17989,7 @@ function ThreadDetailSurface({
 // src/plugins/PluginProvider.tsx
 import {
   useCallback as useCallback18,
-  useEffect as useEffect24,
+  useEffect as useEffect25,
   useMemo as useMemo14,
   useState as useState32
 } from "react";
@@ -17995,7 +18018,7 @@ function PluginProvider({
       setLoading(false);
     }
   }, [adapter, builtinPlugins]);
-  useEffect24(() => {
+  useEffect25(() => {
     void refresh();
   }, [refresh]);
   const setPluginEnabled = useCallback18(
@@ -18138,7 +18161,7 @@ function PluginProvider({
 }
 
 // src/app-shell/AppShellNavigation.tsx
-import { useEffect as useEffect25, useRef as useRef17, useState as useState33 } from "react";
+import { useEffect as useEffect26, useRef as useRef18, useState as useState33 } from "react";
 import { jsx as jsx56, jsxs as jsxs47 } from "react/jsx-runtime";
 function MenuIcon() {
   return /* @__PURE__ */ jsx56("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-4 w-4 fill-current", children: /* @__PURE__ */ jsx56("path", { d: "M2 3.25h12v1.5H2Zm0 4h12v1.5H2Zm0 4h12v1.5H2Z" }) });
@@ -18191,8 +18214,8 @@ function AppShellNavigationMenu({
   onNavigate
 }) {
   const shellNav = useAppShellNav();
-  const menuRef = useRef17(null);
-  useEffect25(() => {
+  const menuRef = useRef18(null);
+  useEffect26(() => {
     if (!shellNav?.navOpen) {
       return;
     }
@@ -18292,7 +18315,7 @@ function AppShellSettingsDialog({
   const selectedThemeMode = shellNav?.themeMode ?? "system";
   const effectiveTheme = shellNav?.effectiveTheme ?? "dark";
   const autoCollapseCompletedTurns = shellNav?.autoCollapseCompletedTurns ?? true;
-  useEffect25(() => {
+  useEffect26(() => {
     if (!shellNav?.settingsOpen) {
       return;
     }

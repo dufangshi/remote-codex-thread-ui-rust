@@ -44,7 +44,7 @@ interface AgentSubscriptionUsageWindowDto {
     resetsAt: string | null;
 }
 interface AgentSubscriptionUsageDto {
-    provider: 'codex' | 'claude';
+    provider: 'codex' | 'claude' | 'grok';
     authKind: 'subscription' | 'apiKey' | 'unknown';
     observedAt: string;
     stale: boolean;
