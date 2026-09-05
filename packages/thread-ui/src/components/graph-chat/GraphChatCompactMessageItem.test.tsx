@@ -181,7 +181,7 @@ describe("GraphChatCompactMessageItem", () => {
     const timestamp = container.querySelector<HTMLElement>(
       ".thread-graph-message-time-row",
     );
-    const touchEvent = new Event("pointerup", { bubbles: true });
+    const touchEvent = new MouseEvent("click", { bubbles: true });
     Object.defineProperty(touchEvent, "pointerType", { value: "touch" });
 
     await act(async () => {

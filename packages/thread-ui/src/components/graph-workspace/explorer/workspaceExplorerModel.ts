@@ -177,9 +177,13 @@ export function mergeWorkspaceExplorerSubtree(
   model: WorkspaceExplorerModel,
   subtree: WorkspaceTreeNode,
 ) {
-  if (!model.pathToId.has(subtree.path)) {
+  const existing = findWorkspaceExplorerNodeByPath(model, subtree.path);
+  if (!existing) {
     return model;
   }
+  // Loading children must not rename their parent. Older adapters returned the
+  // workspace label for every subtree root, despite retaining the correct path.
+  subtree = { ...subtree, id: existing.id, name: existing.name, path: existing.path };
   const root = workspaceExplorerModelToTree(model);
   return createWorkspaceExplorerModel(
     replaceTreeNodeByPath(root, subtree.path, subtree),

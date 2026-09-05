@@ -1,4 +1,4 @@
-import { useState, type PointerEvent, type ReactNode } from 'react';
+import { useState, type MouseEvent, type ReactNode } from 'react';
 import { CheckCircle2, Circle, Loader2, XCircle } from 'lucide-react';
 
 type GraphChatMessageKind = 'userMessage' | 'agentMessage';
@@ -101,10 +101,7 @@ export function GraphChatMessageFrame({
       {timeLabel}
     </span>
   ) : null;
-  function handleAssistantPointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (event.pointerType === 'mouse') {
-      return;
-    }
+  function handleMessageClick(event: MouseEvent<HTMLDivElement>) {
     if (
       event.target instanceof Element &&
       event.target.closest('a, button, input, summary, pre, .thread-graph-code-block')
@@ -127,7 +124,7 @@ export function GraphChatMessageFrame({
         <div
           data-touch-actions={touchActionsVisible ? 'true' : 'false'}
           className={`thread-graph-message-bubble relative min-w-0 ${isUser ? 'is-user' : 'is-assistant'}`}
-          onPointerUp={handleAssistantPointerUp}
+          onClick={handleMessageClick}
         >
           {!isUser && metaControl ? (
             <div className="thread-graph-message-leading-actions">

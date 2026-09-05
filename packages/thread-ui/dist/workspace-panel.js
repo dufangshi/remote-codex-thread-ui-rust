@@ -439,9 +439,11 @@ function replaceTreeNodeByPath(node, path, replacement) {
   return changed ? { ...node, children } : node;
 }
 function mergeWorkspaceExplorerSubtree(model, subtree) {
-  if (!model.pathToId.has(subtree.path)) {
+  const existing = findWorkspaceExplorerNodeByPath(model, subtree.path);
+  if (!existing) {
     return model;
   }
+  subtree = { ...subtree, id: existing.id, name: existing.name, path: existing.path };
   const root = workspaceExplorerModelToTree(model);
   return createWorkspaceExplorerModel(
     replaceTreeNodeByPath(root, subtree.path, subtree),

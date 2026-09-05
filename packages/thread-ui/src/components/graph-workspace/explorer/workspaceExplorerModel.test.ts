@@ -40,6 +40,15 @@ function file(path: string): WorkspaceTreeNode {
 }
 
 describe('workspaceExplorerModel', () => {
+  it('retains parent identity when an old adapter labels a subtree as the workspace', () => {
+    const model = createWorkspaceExplorerModel(directory('', [directory('.cargo', [], false), directory('src', [], false)]));
+    const loaded = {...directory('.cargo', [file('.cargo/config.toml')]), name:'remoteCodex'};
+    const next = mergeWorkspaceExplorerSubtree(model, loaded);
+    expect(findWorkspaceExplorerNodeByPath(next,'.cargo')?.name).toBe('.cargo');
+    expect(findWorkspaceExplorerNodeByPath(next,'.cargo/config.toml')?.parentId).toBe('workspace:.cargo');
+    expect(findWorkspaceExplorerNodeByPath(next,'src')?.childrenState).toBe('unresolved');
+  });
+
   it('normalizes and reconstructs resolved and unresolved directories', () => {
     const root = directory('', [
       directory('empty'),
