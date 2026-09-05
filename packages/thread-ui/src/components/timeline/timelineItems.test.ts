@@ -97,7 +97,7 @@ describe("timeline item utilities", () => {
     expect(merged[1]?.id).toBe("new-live");
   });
 
-  it("moves active steer messages after their generated tail and marks awaiting steers", () => {
+  it("preserves steer messages between operations and marks awaiting steers", () => {
     const primary = item("primary-user", "userMessage");
     const steer = item("steer", "userMessage");
     const command = item("command", "commandExecution");
@@ -110,8 +110,8 @@ describe("timeline item utilities", () => {
 
     expect(prepared.map((entry) => entry.id)).toEqual([
       "primary-user",
-      "command",
       "steer",
+      "command",
       "trailing-steer",
     ]);
     expect(prepared.at(-1)).toMatchObject({

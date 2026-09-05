@@ -769,9 +769,10 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     isTerminalTurnStatus(turn.status) && hasCollapsedHiddenItems;
   const expandedWorkedToggleNode =
     canToggleWorkedSummary && !effectiveCollapsed ? (
-      <button
-        type="button"
-        className="thread-graph-worked-summary group flex w-full items-center gap-2 py-2 text-left text-sm transition"
+      <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
+        <button
+          type="button"
+          className="group flex shrink-0 items-center gap-2 text-left transition"
         onClick={() => onToggleCollapse(turn, false)}
         aria-label={`${workedLabel}. Collapse turn ${absoluteIndex}`}
       >
@@ -780,12 +781,13 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         </span>
         {interruptedLabel}
         <ChevronDown className="h-4 w-4 shrink-0 transition group-hover:translate-y-0.5" />
+        </button>
         <TurnUsageInline turn={turn} />
         <span
           className="thread-graph-worked-rule h-px min-w-0 flex-1"
           aria-hidden="true"
         />
-      </button>
+      </div>
     ) : null;
   const terminalWorkedNode =
     isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? (
@@ -829,9 +831,10 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
             {...(adapter ? { adapter } : {})}
           />
         ))}
-        <button
-          type="button"
-          className="thread-graph-worked-summary group flex w-full items-center gap-2 py-2 text-left text-sm transition"
+        <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
+          <button
+            type="button"
+            className="group flex shrink-0 items-center gap-2 text-left transition"
           onClick={() => onToggleCollapse(turn, true)}
           disabled={deferredItemsLoading}
           aria-label={`${workedLabel}. Expand turn ${absoluteIndex}`}
@@ -845,12 +848,13 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           </span>
           {interruptedLabel}
           <ChevronRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5" />
+          </button>
           <TurnUsageInline turn={turn} />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
             aria-hidden="true"
           />
-        </button>
+        </div>
         {collapsedSummary.finalAgent ? (
           <CompactMessageItem
             threadId={threadId}

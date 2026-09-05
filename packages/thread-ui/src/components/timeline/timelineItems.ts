@@ -151,17 +151,6 @@ export function isCompactChatItem(kind: ThreadHistoryItemDto["kind"]) {
   return kind === "userMessage" || kind === "agentMessage";
 }
 
-function isSteerTailHistoryItem(kind: ThreadHistoryItemDto["kind"]) {
-  return (
-    kind === "commandExecution" ||
-    kind === "webSearch" ||
-    kind === "fileRead" ||
-    kind === "fileChange" ||
-    kind === "image" ||
-    kind === "contextCompaction"
-  );
-}
-
 function isSteerConsumptionHistoryItem(kind: ThreadHistoryItemDto["kind"]) {
   return (
     kind === "agentMessage" ||
@@ -188,29 +177,6 @@ export function prepareTurnItemsForRendering(
   );
   if (firstUserIndex < 0) {
     return prepared;
-  }
-
-  for (let index = firstUserIndex + 1; index < prepared.length; index += 1) {
-    const item = prepared[index];
-    if (!item || item.kind !== "userMessage") {
-      continue;
-    }
-
-    let tailEnd = index + 1;
-    while (
-      tailEnd < prepared.length &&
-      isSteerTailHistoryItem(prepared[tailEnd]!.kind)
-    ) {
-      tailEnd += 1;
-    }
-
-    if (tailEnd === index + 1) {
-      continue;
-    }
-
-    const [steerItem] = prepared.splice(index, 1);
-    prepared.splice(tailEnd - 1, 0, steerItem!);
-    index = tailEnd - 1;
   }
 
   let seenPrimaryUserMessage = false;

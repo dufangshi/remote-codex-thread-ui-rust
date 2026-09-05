@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '../graph-ui/Tooltip';
 import type { TimelineTurn } from './timelineItems';
 import {
   buildTurnTokenDetails,
@@ -12,15 +14,15 @@ export function formatTurnRuntimeSummary(turn: TimelineTurn) {
   return effort ? `${model} · ${effort}` : model;
 }
 
-/** Non-interactive so it can also live inside the worked-duration toggle. */
 export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
   const hasPrice =
     price && Number.isFinite(price.totalUsd) && price.totalUsd >= 0;
   const counts = usage
     ? [
-        { label: 'tokens', value: usage.totalTokens, title: 'Total tokens' },
+        { label: 'tok', value: usage.totalTokens, title: 'Total tokens' },
         {
           label: 'in',
           value: usage.inputTokens,
@@ -63,7 +65,8 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
         className="thread-turn-usage-model"
         title={formatTurnRuntimeSummary(turn)}
       >
-        {formatTurnRuntimeSummary(turn)}
+        {turn.model?.trim() || 'Model unavailable'}
+        {turn.reasoningEffort?.trim() ? <span className="thread-turn-usage-effort"> · {turn.reasoningEffort.trim()}</span> : null}
       </span>
       {counts.length > 0 ? (
         <span
@@ -84,9 +87,26 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
         </span>
       ) : null}
       {hasPrice ? (
-        <span className="thread-turn-usage-price" title={priceTitle}>
-          ≈{formatCompactUsd(price.totalUsd)}
-        </span>
+        <Tooltip open={detailsOpen} onOpenChange={setDetailsOpen}>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="thread-turn-usage-price"
+              aria-label={`API cost ${formatCompactUsd(price.totalUsd)}. Show token details`}
+              aria-expanded={detailsOpen}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setDetailsOpen((open) => !open);
+              }}
+            >
+              {formatCompactUsd(price.totalUsd)}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top" sideOffset={6} className="max-w-[min(22rem,90vw)] whitespace-pre-line text-left">
+            {priceTitle}
+          </TooltipContent>
+        </Tooltip>
       ) : usage ? (
         <span className="thread-turn-usage-unavailable" title={priceTitle}>
           Price unavailable
