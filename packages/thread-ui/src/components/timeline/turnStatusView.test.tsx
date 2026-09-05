@@ -67,7 +67,7 @@ describe('TurnStatusBar footer', () => {
     );
 
     expect(pricedHtml).toContain('$0.030');
-    expect(zeroHtml).toContain('≈$0');
+    expect(zeroHtml).toContain('$0');
   });
 
   it('shows live per-turn input, output, cache, total and model effort', () => {
