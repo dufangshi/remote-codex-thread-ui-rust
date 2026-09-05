@@ -200,6 +200,7 @@ describe("ThreadDetailSurface chrome flags", () => {
       shell: true,
       permissions: true,
       nav: true,
+      theme: "system",
     });
     expect(chrome).toEqual({
       presentation: "workspace",

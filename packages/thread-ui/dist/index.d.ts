@@ -402,12 +402,14 @@ declare function historyItemLabel(kind: ThreadHistoryItemDto['kind']): "User" | 
 declare function hasLikelyMarkdownSyntax(text: string): boolean;
 
 type ThreadPresentationMode = "workspace" | "embedded-single-thread";
+type ThreadThemeMode = "system" | "light" | "dark";
 interface ThreadChromeFlags {
     presentation: ThreadPresentationMode;
     explorer: boolean;
     shell: boolean;
     permissions: boolean;
     nav: boolean;
+    theme: ThreadThemeMode;
 }
 type ThreadChromeFlagOverrides = Partial<ThreadChromeFlags>;
 type ThreadChromeFlagSource = string | URLSearchParams | URL | Record<string, unknown> | null | undefined;
@@ -548,4 +550,4 @@ interface AppShellSettingsDialogProps {
 }
 declare function AppShellSettingsDialog({ extraContent, importPluginInput, }?: AppShellSettingsDialogProps): react.JSX.Element | null;
 
-export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, DEFAULT_THREAD_CHROME_FLAGS, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, type ThreadChromeFlagOverrides, type ThreadChromeFlagSource, type ThreadChromeFlags, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadPresentationMode, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, parseHostThreadChromeFlags, parseThreadChromeFlagOverrides, readThreadChromeBootstrap, resolveThreadChromeFlags, resolveThreadDetailChrome, threadStatusClassName, threadStatusLabel, turnStatusLabel, useAppShellNav, usePlugins };
+export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, DEFAULT_THREAD_CHROME_FLAGS, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, type ThreadChromeFlagOverrides, type ThreadChromeFlagSource, type ThreadChromeFlags, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadPresentationMode, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, type ThreadThemeMode, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, parseHostThreadChromeFlags, parseThreadChromeFlagOverrides, readThreadChromeBootstrap, resolveThreadChromeFlags, resolveThreadDetailChrome, threadStatusClassName, threadStatusLabel, turnStatusLabel, useAppShellNav, usePlugins };

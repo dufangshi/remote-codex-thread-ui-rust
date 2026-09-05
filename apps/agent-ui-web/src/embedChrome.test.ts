@@ -25,6 +25,7 @@ describe("agent-ui-web embed chrome flags", () => {
       shell: false,
       permissions: true,
       nav: false,
+      theme: "system",
     });
     expect(AGENT_UI_WEB_CHROME_DEFAULTS.presentation).toBe(
       "embedded-single-thread",
@@ -47,6 +48,7 @@ describe("agent-ui-web embed chrome flags", () => {
       shell: false,
       permissions: false,
       nav: false,
+      theme: "system",
     });
   });
 
@@ -66,6 +68,7 @@ describe("agent-ui-web embed chrome flags", () => {
       shell: false,
       permissions: true,
       nav: false,
+      theme: "system",
     });
   });
 
@@ -84,6 +87,21 @@ describe("agent-ui-web embed chrome flags", () => {
       shell: false,
       permissions: false,
       nav: false,
+      theme: "system",
+    });
+  });
+
+  it("applies an explicit Treer theme query", () => {
+    expect(readAgentUiChromeOverrides("?theme=light")).toEqual({
+      theme: "light",
+    });
+    expect(readAgentUiChromeFlags("?theme=dark")).toEqual({
+      presentation: "embedded-single-thread",
+      explorer: false,
+      shell: false,
+      permissions: true,
+      nav: false,
+      theme: "dark",
     });
   });
 });

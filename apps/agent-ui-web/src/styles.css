@@ -10,6 +10,11 @@ body,
 
 body {
   overflow: hidden;
+  background: #f6f8fb;
+  color: #0f172a;
+}
+
+html[data-theme-effective="dark"] body {
   background: #101722;
   color: #e8edf2;
 }

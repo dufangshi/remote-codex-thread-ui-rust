@@ -25,6 +25,7 @@ import {
   AGENT_UI_WEB_CHROME_DEFAULTS,
   readAgentUiChromeOverrides,
 } from "./embedChrome";
+import { useEmbedTheme } from "./embedTheme";
 import { createAisWorkspaceAdapter } from "./workspaceFiles";
 
 interface StatePayload {
@@ -219,6 +220,7 @@ export function App() {
     () => ({ ...AGENT_UI_WEB_CHROME_DEFAULTS, ...chromeOverrides }),
     [chromeOverrides],
   );
+  const { themeMode, setThemeMode, effectiveTheme } = useEmbedTheme(chrome.theme);
 
   const applyState = useCallback((payload: StatePayload) => {
     const displayName = payload.auth?.displayName ?? "ACP agent";
@@ -379,15 +381,15 @@ export function App() {
       settingsOpen: false,
       openSettings: () => {},
       closeSettings: () => {},
-      themeMode: "dark",
-      setThemeMode: () => {},
-      effectiveTheme: "dark",
+      themeMode,
+      setThemeMode,
+      effectiveTheme,
       defaultBackend: "codex",
       setDefaultBackend: () => {},
       autoCollapseCompletedTurns: true,
       setAutoCollapseCompletedTurns: () => {},
     }),
-    [chrome.nav, navOpen],
+    [chrome.nav, effectiveTheme, navOpen, setThemeMode, themeMode],
   );
 
   const detail = state?.detail ?? null;
@@ -430,8 +432,9 @@ export function App() {
             hidePermissionCards={chromeOverrides.permissions === false}
             hideNav={!chrome.nav}
             chrome={chromeOverrides}
-            shellEffectiveTheme="dark"
-            shellThemeMode="dark"
+            shellEffectiveTheme={effectiveTheme}
+            shellThemeMode={themeMode}
+            onShellThemeModeChange={setThemeMode}
             threads={state?.threads ?? []}
             detail={detail}
             loading={!state}

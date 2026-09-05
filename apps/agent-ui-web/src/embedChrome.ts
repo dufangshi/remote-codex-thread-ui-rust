@@ -17,6 +17,7 @@ export const AGENT_UI_WEB_CHROME_DEFAULTS: ThreadChromeFlags = {
   shell: false,
   permissions: true,
   nav: false,
+  theme: "system",
 };
 
 export function readAgentUiChromeOverrides(

@@ -1,4 +1,5 @@
 export type ThreadPresentationMode = "workspace" | "embedded-single-thread";
+export type ThreadThemeMode = "system" | "light" | "dark";
 
 export interface ThreadChromeFlags {
   presentation: ThreadPresentationMode;
@@ -6,6 +7,7 @@ export interface ThreadChromeFlags {
   shell: boolean;
   permissions: boolean;
   nav: boolean;
+  theme: ThreadThemeMode;
 }
 
 export type ThreadChromeFlagOverrides = Partial<ThreadChromeFlags>;
@@ -24,6 +26,7 @@ export const DEFAULT_THREAD_CHROME_FLAGS: ThreadChromeFlags = {
   shell: true,
   permissions: true,
   nav: true,
+  theme: "system",
 };
 
 const BOOTSTRAP_GLOBAL_KEYS = [
@@ -59,6 +62,13 @@ function parseBooleanFlag(value: unknown): boolean | undefined {
 
 function parsePresentationFlag(value: unknown): ThreadPresentationMode | undefined {
   if (value === "workspace" || value === "embedded-single-thread") {
+    return value;
+  }
+  return undefined;
+}
+
+function parseThemeFlag(value: unknown): ThreadThemeMode | undefined {
+  if (value === "system" || value === "light" || value === "dark") {
     return value;
   }
   return undefined;
@@ -108,12 +118,14 @@ export function parseThreadChromeFlagOverrides(
   const shell = parseBooleanFlag(record.shell);
   const permissions = parseBooleanFlag(record.permissions);
   const nav = parseBooleanFlag(record.nav);
+  const theme = parseThemeFlag(record.theme);
   return {
     ...(presentation ? { presentation } : {}),
     ...(explorer !== undefined ? { explorer } : {}),
     ...(shell !== undefined ? { shell } : {}),
     ...(permissions !== undefined ? { permissions } : {}),
     ...(nav !== undefined ? { nav } : {}),
+    ...(theme ? { theme } : {}),
   };
 }
 

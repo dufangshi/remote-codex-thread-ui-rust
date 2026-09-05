@@ -14,7 +14,7 @@ themselves.
 Pass flags on the iframe URL, for example:
 
 ```text
-...?presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0
+...?presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0&theme=light
 ```
 
 | Query | Treer default | Effect |
@@ -24,14 +24,20 @@ Pass flags on the iframe URL, for example:
 | `shell=0` or `1` | Treer wants `0` | Hide/show the RC thread shell / terminal plugin |
 | `permissions=0` or `1` | Treer wants `0` | Hide/show permission and request cards |
 | `nav=0` or `1` | Treer wants `0` | Hide/show the RC app/workspace switcher / app menu |
+| `theme=light`, `dark`, or `system` | `system` | Color scheme. Treer passes its Light/Dark setting so the iframe matches the control plane. `system` follows `prefers-color-scheme`, including an embedding iframe's `color-scheme`. |
 
 Boolean values accept `1` / `0`, `true` / `false`, `on` / `off`, and `yes` / `no`.
 
 Recommended Treer iframe query (hides rooms, New Chat, and account chrome):
 
 ```text
-presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0
+presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0&theme=light
 ```
+
+Treer also sets the iframe element's CSS `color-scheme` and posts
+`{ type: "treer:embed-theme", theme: "light" | "dark" }` from the parent window
+when the operator toggles appearance, so the thread UI can follow without a
+reload.
 
 ## Bootstrap
 
@@ -44,6 +50,7 @@ window.__REMOTE_CODEX_THREAD_UI__ = {
   shell: 0,
   permissions: 0,
   nav: 0,
+  theme: "light",
 };
 ```
 

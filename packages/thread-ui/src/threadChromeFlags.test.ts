@@ -15,6 +15,7 @@ const AGENT_UI_WEB_CHROME_DEFAULTS = {
   shell: false,
   permissions: true,
   nav: false,
+  theme: "system",
 } as const;
 
 describe("thread chrome flags", () => {
@@ -28,6 +29,7 @@ describe("thread chrome flags", () => {
       shell: true,
       permissions: true,
       nav: true,
+      theme: "system",
     });
   });
 
@@ -40,13 +42,14 @@ describe("thread chrome flags", () => {
       shell: false,
       permissions: true,
       nav: false,
+      theme: "system",
     });
   });
 
   it("parses Treer embed query flags", () => {
     expect(
       parseThreadChromeFlagOverrides(
-        "presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0",
+        "presentation=embedded-single-thread&explorer=1&shell=0&permissions=0&nav=0&theme=light",
       ),
     ).toEqual({
       presentation: "embedded-single-thread",
@@ -54,7 +57,21 @@ describe("thread chrome flags", () => {
       shell: false,
       permissions: false,
       nav: false,
+      theme: "light",
     });
+  });
+
+  it("parses theme=light|dark|system and ignores unknown values", () => {
+    expect(parseThreadChromeFlagOverrides("theme=light")).toEqual({
+      theme: "light",
+    });
+    expect(parseThreadChromeFlagOverrides("theme=dark")).toEqual({
+      theme: "dark",
+    });
+    expect(parseThreadChromeFlagOverrides("theme=system")).toEqual({
+      theme: "system",
+    });
+    expect(parseThreadChromeFlagOverrides("theme=auto")).toEqual({});
   });
 
   it("parses boolean 1/0 aliases from search params and bootstrap records", () => {

@@ -1620,7 +1620,7 @@ function ComposerAttachmentMenu({
 }
 
 // src/components/composer/ComposerSettingsToolbar.tsx
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronRight, Loader2 as Loader22 } from "lucide-react";
 import { useState as useState3 } from "react";
 import { Fragment as Fragment3, jsx as jsx9, jsxs as jsxs8 } from "react/jsx-runtime";
 var sandboxOptions = [
@@ -1674,6 +1674,7 @@ function ComposerSettingsToolbar({
 }) {
   const [settingsSection, setSettingsSection] = useState3(null);
   const selectedModelLabel = (modelOptions.find((entry) => entry.model === model)?.displayName || model || "Select model").replace(/\s+\([^)]+\)\s*$/, "");
+  const sendBusy = sendButtonLabel === "Sending..." || sendButtonLabel === "Connecting..." || sendButtonLabel === "Setting...";
   return /* @__PURE__ */ jsxs8(Fragment3, { children: [
     /* @__PURE__ */ jsxs8("div", { className: "relative min-w-0", children: [
       /* @__PURE__ */ jsx9(
@@ -1848,7 +1849,7 @@ function ComposerSettingsToolbar({
         title: sendButtonLabel,
         disabled: goalBusy || (activeView === "chat" ? disabled : false),
         className: `${sendButtonBaseClassName} h-9 w-9 rounded-full text-sm font-medium disabled:cursor-not-allowed sm:h-8 sm:w-8 ${sendButtonClassName}`,
-        children: /* @__PURE__ */ jsxs8(
+        children: sendBusy ? /* @__PURE__ */ jsx9(Loader22, { className: "h-4 w-4 animate-spin" }) : /* @__PURE__ */ jsxs8(
           "svg",
           {
             "aria-hidden": "true",
@@ -7335,7 +7336,7 @@ function usePlugins() {
 
 // src/components/graph-chat/GraphChatToolCall.tsx
 import { useEffect as useEffect10, useMemo as useMemo4, useState as useState14 } from "react";
-import { CheckCircle2, Loader2 as Loader22, Wrench, XCircle } from "lucide-react";
+import { CheckCircle2, Loader2 as Loader23, Wrench, XCircle } from "lucide-react";
 
 // src/components/graph-workspace/GraphAccordion.tsx
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
@@ -7468,7 +7469,7 @@ function GraphChatToolCall({
       default:
         return {
           className: "is-pending",
-          icon: /* @__PURE__ */ jsx29(Loader22, { className: "h-3.5 w-3.5 animate-spin" }),
+          icon: /* @__PURE__ */ jsx29(Loader23, { className: "h-3.5 w-3.5 animate-spin" }),
           label: "Running"
         };
     }
@@ -8297,7 +8298,7 @@ var GraphChatUserMessageBody = memo2(
 
 // src/components/graph-chat/GraphChatMessageFrame.tsx
 import { useState as useState17 } from "react";
-import { CheckCircle2 as CheckCircle22, Circle, Loader2 as Loader23, XCircle as XCircle2 } from "lucide-react";
+import { CheckCircle2 as CheckCircle22, Circle, Loader2 as Loader24, XCircle as XCircle2 } from "lucide-react";
 import { jsx as jsx32, jsxs as jsxs28 } from "react/jsx-runtime";
 function GraphChatRunningDots() {
   return /* @__PURE__ */ jsx32("span", { className: "ml-1.5 inline-flex items-center gap-1", "aria-hidden": "true", children: [0, 1, 2].map((index) => /* @__PURE__ */ jsx32(
@@ -8320,7 +8321,7 @@ function GraphChatMessageStatusBadge({
   const isFailed = normalized.includes("failed") || normalized.includes("error");
   const isCompleted = normalized.includes("accepted") || normalized.includes("complete");
   const className = isRunning ? "ui-status-warning" : isFailed ? "ui-status-danger" : isCompleted ? "ui-status-success" : "ui-status-neutral";
-  const icon = isRunning ? /* @__PURE__ */ jsx32(Loader23, { className: "h-3.5 w-3.5 animate-spin" }) : isFailed ? /* @__PURE__ */ jsx32(XCircle2, { className: "h-3.5 w-3.5" }) : isCompleted ? /* @__PURE__ */ jsx32(CheckCircle22, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx32(Circle, { className: "h-3.5 w-3.5" });
+  const icon = isRunning ? /* @__PURE__ */ jsx32(Loader24, { className: "h-3.5 w-3.5 animate-spin" }) : isFailed ? /* @__PURE__ */ jsx32(XCircle2, { className: "h-3.5 w-3.5" }) : isCompleted ? /* @__PURE__ */ jsx32(CheckCircle22, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx32(Circle, { className: "h-3.5 w-3.5" });
   return /* @__PURE__ */ jsxs28(
     "span",
     {
@@ -9597,7 +9598,7 @@ import {
   FileText,
   Image as ImageIconLucide,
   Info,
-  Loader2 as Loader24,
+  Loader2 as Loader25,
   PackageOpen,
   Search,
   Sparkles,
@@ -9956,7 +9957,7 @@ function graphHistoryStatusConfig(status) {
   if (isRunningHistoryStatus2(status)) {
     return {
       className: "is-pending",
-      icon: /* @__PURE__ */ jsx38(Loader24, { className: "h-3.5 w-3.5 animate-spin" }),
+      icon: /* @__PURE__ */ jsx38(Loader25, { className: "h-3.5 w-3.5 animate-spin" }),
       label: status?.trim() || "Running"
     };
   }
@@ -10946,7 +10947,7 @@ var GraphChatFileChangeGroupItem = memo4(
 );
 
 // src/components/graph-chat/GraphChatTurnBody.tsx
-import { CheckCircle2 as CheckCircle24, Clock3, Loader2 as Loader25, XCircle as XCircle4 } from "lucide-react";
+import { CheckCircle2 as CheckCircle24, Clock3, Loader2 as Loader26, XCircle as XCircle4 } from "lucide-react";
 import { Fragment as Fragment10, jsx as jsx39, jsxs as jsxs33 } from "react/jsx-runtime";
 function normalizeGraphChatPlanStepStatus(status) {
   const normalized = status.trim().toLowerCase();
@@ -10974,7 +10975,7 @@ function GraphChatPlanStepStatusIcon({ status }) {
       "aria-label": label,
       title: label.replace("Plan step status: ", ""),
       className: badgeClassName,
-      children: normalized === "completed" ? /* @__PURE__ */ jsx39(CheckCircle24, { className: "h-3.5 w-3.5" }) : normalized === "in_progress" ? /* @__PURE__ */ jsx39(Loader25, { className: "h-3.5 w-3.5 animate-spin" }) : normalized === "pending" ? /* @__PURE__ */ jsx39(Clock3, { className: "h-3.5 w-3.5" }) : normalized === "failed" ? /* @__PURE__ */ jsx39(XCircle4, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx39("span", { className: "text-[10px] font-semibold uppercase tracking-[0.14em]", children: "?" })
+      children: normalized === "completed" ? /* @__PURE__ */ jsx39(CheckCircle24, { className: "h-3.5 w-3.5" }) : normalized === "in_progress" ? /* @__PURE__ */ jsx39(Loader26, { className: "h-3.5 w-3.5 animate-spin" }) : normalized === "pending" ? /* @__PURE__ */ jsx39(Clock3, { className: "h-3.5 w-3.5" }) : normalized === "failed" ? /* @__PURE__ */ jsx39(XCircle4, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx39("span", { className: "text-[10px] font-semibold uppercase tracking-[0.14em]", children: "?" })
     }
   );
 }
@@ -17154,7 +17155,8 @@ var DEFAULT_THREAD_CHROME_FLAGS = {
   explorer: true,
   shell: true,
   permissions: true,
-  nav: true
+  nav: true,
+  theme: "system"
 };
 var BOOTSTRAP_GLOBAL_KEYS = [
   "__REMOTE_CODEX_THREAD_UI__",
@@ -17187,6 +17189,12 @@ function parseBooleanFlag(value) {
 }
 function parsePresentationFlag(value) {
   if (value === "workspace" || value === "embedded-single-thread") {
+    return value;
+  }
+  return void 0;
+}
+function parseThemeFlag(value) {
+  if (value === "system" || value === "light" || value === "dark") {
     return value;
   }
   return void 0;
@@ -17231,12 +17239,14 @@ function parseThreadChromeFlagOverrides(source) {
   const shell = parseBooleanFlag(record.shell);
   const permissions = parseBooleanFlag(record.permissions);
   const nav = parseBooleanFlag(record.nav);
+  const theme = parseThemeFlag(record.theme);
   return {
     ...presentation ? { presentation } : {},
     ...explorer !== void 0 ? { explorer } : {},
     ...shell !== void 0 ? { shell } : {},
     ...permissions !== void 0 ? { permissions } : {},
-    ...nav !== void 0 ? { nav } : {}
+    ...nav !== void 0 ? { nav } : {},
+    ...theme ? { theme } : {}
   };
 }
 function parseHostThreadChromeFlags(input = {}) {

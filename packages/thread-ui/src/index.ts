@@ -76,6 +76,7 @@ export {
   type ThreadChromeFlagSource,
   type ThreadChromeFlags,
   type ThreadPresentationMode,
+  type ThreadThemeMode,
 } from './threadChromeFlags';
 
 export {
