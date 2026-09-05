@@ -26,27 +26,38 @@ export function formatLongTimestamp(value: string | null) {
   return new Date(value).toLocaleString();
 }
 
-export function formatMessageTimestamp(value: string | null) {
+function formatMessageTime(value: string | null, precise: boolean) {
   if (!value) {
     return 'Time unavailable';
   }
 
-  return new Date(value).toLocaleTimeString([], {
+  const date = new Date(value);
+  const now = new Date();
+  const isToday = date.getFullYear() === now.getFullYear()
+    && date.getMonth() === now.getMonth()
+    && date.getDate() === now.getDate();
+  const options: Intl.DateTimeFormatOptions = {
     hour: 'numeric',
     minute: '2-digit',
+    ...(precise ? { second: '2-digit' } : {}),
+  };
+  if (isToday) {
+    return date.toLocaleTimeString([], options);
+  }
+  return date.toLocaleString([], {
+    ...options,
+    month: 'short',
+    day: 'numeric',
+    ...(date.getFullYear() !== now.getFullYear() ? { year: 'numeric' } : {}),
   });
 }
 
-export function formatPreciseMessageTimestamp(value: string | null) {
-  if (!value) {
-    return 'Time unavailable';
-  }
+export function formatMessageTimestamp(value: string | null) {
+  return formatMessageTime(value, false);
+}
 
-  return new Date(value).toLocaleTimeString([], {
-    hour: 'numeric',
-    minute: '2-digit',
-    second: '2-digit',
-  });
+export function formatPreciseMessageTimestamp(value: string | null) {
+  return formatMessageTime(value, true);
 }
 
 export function threadStatusLabel(status: ThreadDto['status']) {

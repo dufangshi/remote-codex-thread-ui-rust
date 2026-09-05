@@ -5688,24 +5688,33 @@ function formatLongTimestamp(value) {
   }
   return new Date(value).toLocaleString();
 }
-function formatMessageTimestamp(value) {
+function formatMessageTime(value, precise) {
   if (!value) {
     return "Time unavailable";
   }
-  return new Date(value).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit"
-  });
-}
-function formatPreciseMessageTimestamp(value) {
-  if (!value) {
-    return "Time unavailable";
-  }
-  return new Date(value).toLocaleTimeString([], {
+  const date = new Date(value);
+  const now = /* @__PURE__ */ new Date();
+  const isToday = date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() === now.getDate();
+  const options = {
     hour: "numeric",
     minute: "2-digit",
-    second: "2-digit"
+    ...precise ? { second: "2-digit" } : {}
+  };
+  if (isToday) {
+    return date.toLocaleTimeString([], options);
+  }
+  return date.toLocaleString([], {
+    ...options,
+    month: "short",
+    day: "numeric",
+    ...date.getFullYear() !== now.getFullYear() ? { year: "numeric" } : {}
   });
+}
+function formatMessageTimestamp(value) {
+  return formatMessageTime(value, false);
+}
+function formatPreciseMessageTimestamp(value) {
+  return formatMessageTime(value, true);
 }
 function threadStatusLabel(status) {
   switch (status) {
