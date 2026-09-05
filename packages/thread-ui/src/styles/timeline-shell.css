@@ -83,6 +83,10 @@
   color: var(--theme-fg);
 }
 
+.thread-ui-shell .thread-graph-worked-interrupted {
+  color: color-mix(in srgb, var(--theme-fg-muted) 82%, #f59e0b 18%);
+}
+
 .thread-ui-shell .thread-graph-worked-rule {
   background: var(--theme-border);
 }
@@ -95,6 +99,53 @@
   min-height: 2.25rem;
   padding: 0.3rem 0;
   font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.thread-ui-shell .thread-turn-usage {
+  display: inline-flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  color: var(--theme-fg-muted);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+
+.thread-ui-shell .thread-turn-usage-model {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--theme-fg-soft);
+}
+
+.thread-ui-shell .thread-turn-usage-tokens {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.6rem;
+}
+
+.thread-ui-shell .thread-turn-usage-tokens > span {
+  white-space: nowrap;
+}
+
+.thread-ui-shell .thread-turn-usage-value {
+  color: var(--theme-fg-soft);
+}
+
+.thread-ui-shell .thread-turn-usage-price {
+  white-space: nowrap;
+  border: 1px solid var(--theme-border);
+  border-radius: 0.4rem;
+  padding: 0 0.35rem;
+  color: var(--theme-fg-soft);
+  background: var(--theme-panel);
+}
+
+.thread-ui-shell .thread-turn-usage-unavailable {
+  color: var(--theme-fg-muted);
 }
 
 .thread-ui-shell .thread-graph-turn-body > :not([hidden]) ~ :not([hidden]),

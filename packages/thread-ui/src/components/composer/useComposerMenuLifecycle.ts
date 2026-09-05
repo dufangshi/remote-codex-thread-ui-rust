@@ -91,9 +91,17 @@ export function useComposerMenuLifecycle({
       }
     }
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpenMenu(null);
+      }
+    }
+
     if (openMenu) {
+      window.addEventListener('keydown', handleKeyDown);
       window.addEventListener('pointerdown', handleWindowPointerDown);
       return () => {
+        window.removeEventListener('keydown', handleKeyDown);
         window.removeEventListener('pointerdown', handleWindowPointerDown);
       };
     }

@@ -61,7 +61,7 @@ export function buildComposerControlState({
     : (disabledPlaceholder ??
       (isShellView
         ? 'Send shell input to the attached terminal...'
-        : 'Ask the backend to inspect, modify, or explain code...'));
+        : ''));
   const sendButtonLabel = goalComposeMode
     ? goalBusy
       ? 'Setting...'

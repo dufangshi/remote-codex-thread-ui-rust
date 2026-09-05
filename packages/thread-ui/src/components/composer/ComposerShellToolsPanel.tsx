@@ -1,3 +1,4 @@
+import { ComposerMenuSurface } from './ComposerMenuSurface';
 import type { ThreadShellControlState } from '../../types';
 import { ClipboardIcon, ToolPill } from './composerPresentation';
 
@@ -22,9 +23,9 @@ export function ComposerShellToolsPanel({
   const commandRunning = Boolean(shellControlState?.isCommandRunning);
 
   return (
-    <div
-      data-composer-menu-surface="true"
-      className="absolute right-0 top-full z-40 mt-2 w-[11.5rem] max-w-[calc(100vw-1.5rem)] rounded-[1rem] border border-stone-700/90 bg-stone-950/96 p-2 shadow-2xl shadow-stone-950/40 sm:w-48"
+    <ComposerMenuSurface
+      align="end"
+      className="w-[11.5rem] rounded-[1rem] border border-stone-700/90 bg-stone-950/96 p-2 shadow-2xl shadow-stone-950/40 sm:w-48"
       onMouseDown={(event) => {
         event.stopPropagation();
       }}
@@ -117,6 +118,6 @@ export function ComposerShellToolsPanel({
           <ToolPill label="DOWN" />
         </button>
       </div>
-    </div>
+    </ComposerMenuSurface>
   );
 }

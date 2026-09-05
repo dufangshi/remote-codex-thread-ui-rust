@@ -67,7 +67,7 @@ export function ComposerToolbar({
   return (
     <InputGroupAddon
       align="block-end"
-      className={`${toolbarClassName} relative z-30 mb-0 flex items-center gap-2 text-xs`}
+      className={`${toolbarClassName} relative z-[100] mb-0 flex items-center gap-2 text-xs`}
     >
       <div className="flex shrink-0 items-center gap-1.5">
         {!isShellView && slashToolboxProps ? (

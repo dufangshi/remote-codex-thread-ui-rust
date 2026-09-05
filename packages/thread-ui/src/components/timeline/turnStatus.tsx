@@ -7,9 +7,7 @@ import {
   isRunningHistoryStatus,
   type TimelineTurn,
 } from './timelineItems';
-import {
-  buildTurnPriceBadge,
-} from './tokenFormatting';
+import { formatTurnRuntimeSummary, TurnUsageInline } from './TurnUsageInline';
 import {
   formatLongTimestamp,
   formatShortTimestamp,
@@ -146,24 +144,6 @@ export function deriveDisplayedLivePlan(
   };
 }
 
-function formatTurnRuntimeSummary(turn: TimelineTurn) {
-  const modelLabel = turn.model?.trim() ? turn.model.trim() : '--';
-  let reasoningLabel = '--';
-
-  if (
-    turn.reasoningEffortAvailable === null ||
-    turn.reasoningEffortAvailable === undefined
-  ) {
-    reasoningLabel = '--';
-  } else if (turn.reasoningEffortAvailable === false) {
-    reasoningLabel = '-';
-  } else {
-    reasoningLabel = turn.reasoningEffort ?? '--';
-  }
-
-  return [modelLabel, reasoningLabel].join(' · ');
-}
-
 function useSecondClock(enabled: boolean) {
   const [now, setNow] = useState(() => Date.now());
 
@@ -295,12 +275,6 @@ export function TurnStatusBar({
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
-  const priceBadge =
-    turn.priceEstimate &&
-    Number.isFinite(turn.priceEstimate.totalUsd) &&
-    turn.priceEstimate.totalUsd > 0
-      ? buildTurnPriceBadge(turn)
-      : null;
   const active = isActiveTurnStatus(turn.status);
   const now = useSecondClock(active && variant === 'footer');
   const elapsedLabel = active ? formatElapsedDuration(turn.startedAt, now) : null;
@@ -317,9 +291,7 @@ export function TurnStatusBar({
       <div className="thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs">
         <div className="thread-graph-turn-footer-runtime flex min-w-0 items-center gap-2">
           <TurnStatusIndicator status={turn.status} />
-          <span className="timeline-soft-text min-w-0 truncate">
-            {runtimeSummary}
-          </span>
+          <TurnUsageInline turn={turn} />
         </div>
         <div className="thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap">
           {effectiveLastActivityAt ? (
@@ -332,14 +304,6 @@ export function TurnStatusBar({
           ) : null}
           {elapsedLabel ? (
             <span aria-label={`Running for ${elapsedLabel}`}>· {elapsedLabel}</span>
-          ) : null}
-          {priceBadge ? (
-            <span
-              className="thread-graph-turn-footer-price"
-              title={priceBadge.title}
-            >
-              · {priceBadge.label}
-            </span>
           ) : null}
         </div>
       </div>

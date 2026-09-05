@@ -414,6 +414,39 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain('11s');
   });
 
+  it('uses the completion time and labels an interrupted turn', () => {
+    const startedAt = new Date(Date.UTC(2026, 6, 3, 20, 10, 0)).toISOString();
+    const completedAt = new Date(
+      Date.UTC(2026, 6, 3, 20, 22, 30),
+    ).toISOString();
+    const element = render(
+      <ThreadTimeline
+        autoCollapseCompletedTurns
+        liveOutput=""
+        turns={[
+          {
+            id: 'turn-1',
+            startedAt,
+            completedAt,
+            status: 'interrupted',
+            error: null,
+            items: [
+              {
+                id: 'user-1',
+                kind: 'userMessage',
+                text: 'Run the long task.',
+                createdAt: startedAt,
+              },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    expect(element.textContent).toContain('Worked for 12m 30s');
+    expect(element.textContent).toContain('Interrupted by user');
+  });
+
   it('renders a command batch without redundant activity or batch labels', () => {
     const element = render(
       <ThreadTimeline
@@ -518,6 +551,64 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain(
       'Checking item timestamps, statuses, and duplicates',
     );
+  });
+
+  it('preserves activity and command expansion choices as live entries arrive', () => {
+    const activeTurn: ThreadTurnDto = {
+      ...completedTurn([]),
+      status: 'inProgress',
+    };
+    const initialItems: ThreadTurnDto['items'] = [
+      { id: 'reason-1', kind: 'reasoning', text: 'Inspecting the first issue.' },
+      { id: 'command-1', kind: 'commandExecution', text: 'pwd', status: 'completed' },
+      { id: 'command-2', kind: 'commandExecution', text: 'git status', status: 'running' },
+    ];
+    const timeline = (items: ThreadTurnDto['items']) => (
+      <ThreadTimeline
+        autoCollapseCompletedTurns={false}
+        activeTurnId={activeTurn.id}
+        threadRunning
+        liveOutput=""
+        liveItems={{ turnId: activeTurn.id, items, updatedAt: activeTurn.startedAt }}
+        turns={[activeTurn]}
+      />
+    );
+    const element = render(timeline(initialItems));
+    const activityToggle = () => element.querySelector<HTMLButtonElement>(
+      '.thread-graph-history-group-activity button[aria-expanded]',
+    );
+    const commandToggle = () => element.querySelector<HTMLButtonElement>(
+      '.thread-graph-history-group-command button[aria-expanded]',
+    );
+
+    flushSync(() => activityToggle()?.click());
+    flushSync(() => commandToggle()?.click());
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
+
+    const nextItems: ThreadTurnDto['items'] = [
+      ...initialItems,
+      { id: 'command-3', kind: 'commandExecution', text: 'pnpm test', status: 'running' },
+      { id: 'reason-2', kind: 'reasoning', text: 'Reviewing the new result.' },
+    ];
+    flushSync(() => root?.render(timeline(nextItems)));
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
+    expect(element.textContent).toContain('Inspecting the first issue.');
+    expect(element.textContent).toContain('Reviewing the new result.');
+    expect(element.querySelector('[aria-label="Open grouped command 3"]')?.textContent)
+      .toContain('pnpm test');
+
+    flushSync(() => activityToggle()?.click());
+    flushSync(() => root?.render(timeline([
+      ...nextItems,
+      { id: 'reason-3', kind: 'reasoning', text: 'Preparing the next step.' },
+    ])));
+    expect(activityToggle()?.getAttribute('aria-expanded')).toBe('false');
+    expect(element.textContent).not.toContain('Preparing the next step.');
+    flushSync(() => activityToggle()?.click());
+    expect(element.textContent).toContain('Preparing the next step.');
+    expect(commandToggle()?.getAttribute('aria-expanded')).toBe('true');
   });
 
   it('auto-collapses a single tool item after newer live history arrives', () => {

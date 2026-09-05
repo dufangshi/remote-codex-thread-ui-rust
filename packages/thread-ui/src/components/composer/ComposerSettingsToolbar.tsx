@@ -1,3 +1,4 @@
+import { ComposerMenuSurface } from './ComposerMenuSurface';
 import type {
   ModelOptionDto,
   ReasoningEffortDto,
@@ -140,9 +141,9 @@ export function ComposerSettingsToolbar({
         </InputGroupButton>
         {model ? <ContextProgressBar contextUsage={contextUsage} /> : null}
         {openMenu === 'model' && (
-          <div
-            data-composer-menu-surface="true"
-            className="absolute bottom-full right-0 mb-2 w-[13.5rem] rounded-xl border border-stone-700 bg-stone-900 p-1.5 shadow-2xl shadow-stone-950/40"
+          <ComposerMenuSurface
+            align="end"
+            className="w-[13.5rem] rounded-xl border border-stone-700 bg-stone-900 p-1.5 shadow-2xl shadow-stone-950/40"
           >
             <button
               type="button"
@@ -172,7 +173,7 @@ export function ComposerSettingsToolbar({
             </button>
 
             {settingsSection === 'model' ? (
-              <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5 sm:absolute sm:bottom-0 sm:left-[calc(100%+0.5rem)] sm:mt-0 sm:w-[13rem] sm:rounded-xl sm:border sm:shadow-2xl sm:shadow-stone-950/40">
+              <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5">
                 <p className="px-3 py-1.5 text-xs text-stone-500">Model</p>
                 <div className="max-h-72 overflow-auto">
                   {modelOptions.map((entry) => {
@@ -214,7 +215,7 @@ export function ComposerSettingsToolbar({
             ) : null}
 
             {settingsSection === 'effort' ? (
-              <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5 sm:absolute sm:bottom-0 sm:left-[calc(100%+0.5rem)] sm:mt-0 sm:w-[11rem] sm:rounded-xl sm:border sm:shadow-2xl sm:shadow-stone-950/40">
+              <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5">
                 <p className="px-3 py-1.5 text-xs text-stone-500">Effort</p>
                 {supportedEfforts.map((entry) => {
                   const selected = entry.reasoningEffort === reasoningEffort;
@@ -248,7 +249,7 @@ export function ComposerSettingsToolbar({
                 ) : null}
               </div>
             ) : null}
-          </div>
+          </ComposerMenuSurface>
         )}
       </div>
 
@@ -274,9 +275,9 @@ export function ComposerSettingsToolbar({
             {formatSandboxModeCompactLabel(sandboxMode)}
           </InputGroupButton>
           {openMenu === 'sandbox' && (
-            <div
-              data-composer-menu-surface="true"
-              className="absolute bottom-full left-0 mb-2 w-max min-w-[9rem] max-w-[13rem] overflow-hidden rounded-2xl border border-stone-700 bg-stone-900 shadow-2xl shadow-stone-950/40"
+            <ComposerMenuSurface
+              align="end"
+              className="w-max min-w-[9rem] rounded-2xl border border-stone-700 bg-stone-900 shadow-2xl shadow-stone-950/40"
             >
               <div className="max-h-72 overflow-auto p-2">
                 {sandboxOptions.map((entry) => (
@@ -298,7 +299,7 @@ export function ComposerSettingsToolbar({
                   </button>
                 ))}
               </div>
-            </div>
+            </ComposerMenuSurface>
           )}
         </div>
       )}

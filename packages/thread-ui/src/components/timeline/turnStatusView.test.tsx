@@ -41,7 +41,7 @@ describe('TurnStatusBar footer', () => {
     expect(html).not.toContain('--');
   });
 
-  it('shows cost only when the estimate is greater than zero', () => {
+  it('shows reported cost, including a real zero estimate', () => {
     const priceEstimate: NonNullable<TimelineTurn['priceEstimate']> = {
       pricingModelKey: 'gpt-5.4',
       pricingTierKey: 'standard',
@@ -67,6 +67,26 @@ describe('TurnStatusBar footer', () => {
     );
 
     expect(pricedHtml).toContain('$0.030');
-    expect(zeroHtml).not.toContain('$0');
+    expect(zeroHtml).toContain('≈$0');
+  });
+
+  it('shows live per-turn input, output, cache, total and model effort', () => {
+    const total = { totalTokens: 3500, inputTokens: 1500, outputTokens: 2000, cachedInputTokens: 500, reasoningOutputTokens: 800 };
+    const html = renderToStaticMarkup(
+      <TurnStatusBar
+        turn={activeTurn({
+          reasoningEffortAvailable: null,
+          tokenUsage: { total, last: total, modelContextWindow: 128000 },
+        })}
+        variant="footer"
+      />,
+    );
+    expect(html).toContain('gpt-5.4 · medium');
+    expect(html).toContain('Total tokens: 3,500');
+    expect(html).toContain('Input tokens (including cached input): 1,500');
+    expect(html).toContain('Output tokens (including reasoning): 2,000');
+    expect(html).toContain('Cached input tokens: 500');
+    expect(html).toContain('Price unavailable');
+    expect(html).not.toContain('$0');
   });
 });
