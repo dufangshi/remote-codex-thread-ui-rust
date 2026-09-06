@@ -298,8 +298,8 @@ export function ThreadComposer({
       fast: capabilities?.controls.performanceMode ?? false,
       compact: capabilities?.turns.compact ?? false,
       goal: capabilities?.controls.goals ?? false,
-      fork: capabilities?.branching.fork ?? false,
-      forkFromTurn: capabilities?.branching.forkAt ?? capabilities?.branching.resumeAt ?? false,
+      fork: Boolean(capabilities?.branching.fork && onForkLatest),
+      forkFromTurn: Boolean((capabilities?.branching.forkAt ?? capabilities?.branching.resumeAt) && onForkTurn && onOpenForkTurns),
       skills: capabilities?.management.skills ?? false,
       mcp: capabilities?.management.mcpStatus ?? false,
       hooks: capabilities?.management.hooks ?? false,
@@ -315,6 +315,9 @@ export function ThreadComposer({
     }),
     [
       capabilities,
+      onForkLatest,
+      onForkTurn,
+      onOpenForkTurns,
       mcpConfigFormat,
       onReadProviderConfig,
       onWriteProviderConfig,
@@ -369,7 +372,7 @@ export function ThreadComposer({
     onUpdateSettings,
     closeMenu: () => setOpenMenu(null),
   });
-  const { forkBusy, forkLatest, forkTurn } = useComposerForkActions({
+  const { forkBusy, forkError, forkLatest, forkTurn } = useComposerForkActions({
     slashPanelView,
     onForkLatest,
     onForkTurn,
@@ -917,6 +920,7 @@ export function ThreadComposer({
     settingsBusy,
     compactBusy,
     forkBusy,
+    forkError,
     fastMode,
     goalComposeMode,
     goalBusy,

@@ -43,6 +43,7 @@ export function ComposerSlashToolboxMenu({
   settingsBusy,
   busy,
   forkBusy,
+  forkError,
   forkTurnOptionsState,
   skillsState,
   goalState,
@@ -123,6 +124,7 @@ export function ComposerSlashToolboxMenu({
   settingsBusy: boolean;
   busy: boolean;
   forkBusy: boolean;
+  forkError?: string | null;
   forkTurnOptionsState: SlashPanelState<ThreadForkTurnOptionDto[]>;
   skillsState: SlashPanelState<ThreadSkillsDto>;
   goalState: SlashPanelState<ThreadGoalDto | null | undefined>;
@@ -316,6 +318,11 @@ export function ComposerSlashToolboxMenu({
             </div>
           ) : (
             <div className="max-h-80 overflow-auto">
+              {forkError && (slashPanelView === 'fork' || slashPanelView === 'forkTurns') ? (
+                <p role="alert" className="m-2 rounded-xl border border-rose-500/35 bg-rose-500/10 px-3 py-3 text-sm text-rose-100/90">
+                  {forkError}
+                </p>
+              ) : null}
               {slashPanelView === 'goals' ? (
                 <ComposerGoalsPanel
                   goalState={goalState}

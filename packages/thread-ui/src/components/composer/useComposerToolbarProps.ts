@@ -64,6 +64,7 @@ export interface UseComposerToolbarPropsInput {
   settingsBusy: boolean;
   compactBusy: boolean;
   forkBusy: boolean;
+  forkError?: string | null;
   fastMode: boolean;
   goalComposeMode: boolean;
   goalBusy: boolean;
@@ -173,6 +174,7 @@ export function useComposerToolbarProps({
   settingsBusy,
   compactBusy,
   forkBusy,
+  forkError,
   fastMode,
   goalComposeMode,
   goalBusy,
@@ -273,6 +275,7 @@ export function useComposerToolbarProps({
         settingsBusy,
         busy,
         forkBusy,
+        forkError,
         forkTurnOptionsState,
         skillsState,
         goalState,

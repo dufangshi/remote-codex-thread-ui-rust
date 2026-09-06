@@ -84,13 +84,15 @@ describe('useComposerForkActions', () => {
     vi.restoreAllMocks();
   });
 
-  it('ignores fork latest when no handler is available', async () => {
+  it('explains when no fork handler is available', async () => {
     const harness = renderHookHarness();
 
     await latestResult?.forkLatest();
+    await flushEffects();
 
     expect(latestResult?.forkBusy).toBe(false);
     expect(harness.closeMenu).not.toHaveBeenCalled();
+    expect(latestResult?.forkError).toContain('Fork is unavailable');
     harness.unmount();
   });
 
@@ -124,18 +126,17 @@ describe('useComposerForkActions', () => {
     });
     const harness = renderHookHarness({ onForkLatest });
 
-    await expect(
-      runForkAction(() => latestResult?.forkLatest()),
-    ).rejects.toThrow('fork failed');
+    await runForkAction(() => latestResult?.forkLatest());
     await new Promise((resolve) => window.setTimeout(resolve, 0));
     flushSync(() => {});
 
     expect(harness.closeMenu).not.toHaveBeenCalled();
     expect(latestResult?.forkBusy).toBe(false);
+    expect(latestResult?.forkError).toBe('fork failed');
     harness.unmount();
   });
 
-  it('clears busy when leaving the fork-turns panel', async () => {
+  it('keeps the operation busy across panel navigation and prevents duplicate forks', async () => {
     let resolveFork: undefined | (() => void);
     const onForkTurn = vi.fn(
       () =>
@@ -156,7 +157,9 @@ describe('useComposerForkActions', () => {
 
     harness.rerender({ slashPanelView: 'root' });
     await flushEffects();
-    expect(latestResult?.forkBusy).toBe(false);
+    expect(latestResult?.forkBusy).toBe(true);
+    await latestResult?.forkTurn('turn-1');
+    expect(onForkTurn).toHaveBeenCalledTimes(1);
 
     if (resolveFork) {
       resolveFork();

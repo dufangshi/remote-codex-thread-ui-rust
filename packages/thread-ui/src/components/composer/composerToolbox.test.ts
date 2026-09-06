@@ -35,6 +35,8 @@ describe('composerToolbox', () => {
         command: '/btw',
         label: '/btw',
       },
+      { action: 'prompt', command: '/$release-runtime', label: 'Release skill' },
+      { action: 'prompt', command: ' /$plugin:skill', label: 'Plugin skill' },
       item('unsupported'),
     ];
 

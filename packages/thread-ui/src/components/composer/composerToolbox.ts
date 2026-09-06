@@ -30,6 +30,9 @@ export function filterToolboxItemsForCapabilities(
   capabilities: ToolboxItemCapabilities,
 ) {
   return (toolboxItems ?? []).filter((item) => {
+    // Skill invocations are still valid prompts, but are not toolbox actions.
+    // Also filter older supervisors which advertise each /$skill separately.
+    if (item.command.trim().replace(/^\/+/, '').startsWith('$')) return false;
     switch (item.action) {
       case 'fast':
         return capabilities.fast;
