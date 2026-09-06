@@ -2974,9 +2974,9 @@
 }
 
 /* Message metadata stays above content; copy affordances never reserve a row. */
-.thread-ui-shell .thread-graph-message-time-row { margin: 0 0 3px; line-height: 11px; }
+.thread-ui-shell .thread-graph-message-time-row { margin: 0; line-height: 10px; }
 .thread-ui-shell .thread-graph-message-time-row.is-user { text-align: right; }
-.thread-ui-shell .thread-graph-message-time-row .thread-graph-message-time { font-size: 10px; line-height: 11px; color: var(--theme-fg-muted); opacity: .65; }
+.thread-ui-shell .thread-graph-message-time-row .thread-graph-message-time { font-size: 10px; line-height: 10px; color: var(--theme-fg-muted); opacity: .65; }
 .thread-ui-shell .thread-graph-message-bubble .thread-graph-message-copy-desktop {
   display: flex; position: absolute; left: auto; right: 0; bottom: 0; z-index: 10;
   opacity: 0; pointer-events: none; transition: opacity 140ms ease;
@@ -2992,3 +2992,5 @@
   .thread-ui-shell .thread-graph-code-block:hover .thread-graph-code-copy,
   .thread-ui-shell .thread-graph-code-block:focus-within .thread-graph-code-copy { opacity: .6; pointer-events: auto; }
 }
+
+.thread-ui-shell .thread-graph-message-time-row + .thread-graph-message-bubble.is-assistant { padding-top: 0; }

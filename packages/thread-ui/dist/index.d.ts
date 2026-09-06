@@ -301,6 +301,7 @@ interface ThreadShellPanelProps {
     shellAdapter: ThreadShellAdapter;
     isVisible?: boolean;
     showHeader?: boolean;
+    onBackToChat?: (() => void) | undefined;
     showFloatingToolbox?: boolean;
     effectiveTheme?: 'light' | 'dark';
     loadSplitRatio?: (threadId: string) => number | null | undefined;
@@ -465,6 +466,7 @@ interface ThreadDetailSurfaceProps {
         isVisible?: boolean;
         showHeader?: boolean;
         showFloatingToolbox?: boolean;
+        onBackToChat?: (() => void) | undefined;
         effectiveTheme?: "light" | "dark";
         onStateChange?: (state: ThreadShellControlState) => void;
     } & RefAttributes<ThreadShellPanelHandle>>;

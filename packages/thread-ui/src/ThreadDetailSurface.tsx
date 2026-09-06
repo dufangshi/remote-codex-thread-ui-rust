@@ -216,6 +216,7 @@ export interface ThreadDetailSurfaceProps {
       isVisible?: boolean;
       showHeader?: boolean;
       showFloatingToolbox?: boolean;
+      onBackToChat?: (() => void) | undefined;
       effectiveTheme?: "light" | "dark";
       onStateChange?: (state: ThreadShellControlState) => void;
     } & RefAttributes<ThreadShellPanelHandle>
@@ -425,6 +426,7 @@ export function ThreadDetailSurface({
               effectiveTheme={shellEffectiveTheme}
               isVisible={activeView === "shell"}
               showHeader={false}
+              onBackToChat={shellComposerProps?.onToggleView}
               showFloatingToolbox={false}
               {...(onShellStateChange
                 ? { onStateChange: onShellStateChange }
@@ -458,13 +460,6 @@ export function ThreadDetailSurface({
               </div>
             ))
           ))}
-        {activeView === "shell" && shellComposerProps && !shellContent ? (
-          <ThreadComposer
-            {...shellComposerProps}
-            activeView="shell"
-            onSubmit={adapter.sendPrompt}
-          />
-        ) : null}
       </div>
       {dialogs}
     </div>

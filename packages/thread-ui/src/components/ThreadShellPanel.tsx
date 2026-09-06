@@ -41,6 +41,9 @@ import {
   type ThreadShellControlState,
 } from './shell/shellState';
 
+import { ShellTouchControls, useShellKeyboardLayout } from './shell/ShellTouchControls';
+import { controlSequenceForLetter } from './shell/shellSnapshot';
+
 export type { ThreadShellControlState } from './shell/shellState';
 
 interface ThreadShellPanelProps {
@@ -48,6 +51,7 @@ interface ThreadShellPanelProps {
   shellAdapter: ThreadShellAdapter;
   isVisible?: boolean;
   showHeader?: boolean;
+  onBackToChat?: (() => void) | undefined;
   showFloatingToolbox?: boolean;
   effectiveTheme?: 'light' | 'dark';
   loadSplitRatio?: (threadId: string) => number | null | undefined;
@@ -78,6 +82,7 @@ export const ThreadShellPanel = forwardRef<
     shellAdapter,
     isVisible = true,
     showHeader = true,
+    onBackToChat,
     showFloatingToolbox = true,
     effectiveTheme = 'dark',
     loadSplitRatio,
@@ -104,7 +109,15 @@ export const ThreadShellPanel = forwardRef<
   const [renamingShellId, setRenamingShellId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
   const [isMobileShell, setIsMobileShell] = useState(false);
-  const [mobileProcessListOpen, setMobileProcessListOpen] = useState(false);
+  const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(isVisible, isMobileShell);
+  const [ctrlPressed, setCtrlPressed] = useState(false);
+  const ctrlRef = useRef(false);
+  const transformInput = useCallback((data: string) => {
+    if (!ctrlRef.current) return data;
+    ctrlRef.current = false;
+    setCtrlPressed(false);
+    return data.length === 1 ? controlSequenceForLetter(data) ?? data : data;
+  }, []);
   const [toolboxOpen, setToolboxOpen] = useState(false);
   const [paneRuntime, setPaneRuntime] = useState<Record<ShellPaneId, ShellPaneRuntimeState>>({
     primary: EMPTY_SHELL_PANE_RUNTIME_STATE,
@@ -281,7 +294,6 @@ export const ThreadShellPanel = forwardRef<
       setIsMobileShell(mediaQuery.matches);
       if (!mediaQuery.matches) {
         setToolboxOpen(false);
-        setMobileProcessListOpen(false);
       }
     };
 
@@ -430,7 +442,13 @@ export const ThreadShellPanel = forwardRef<
       setBusy(true);
       try {
         const response = await shellAdapter.createShell(threadId);
-        setShellState(response);
+        setShellState(current => ({
+          ...response,
+          shells: [...new Map([
+            ...(current?.shells ?? []).map(shell => [shell.id, shell] as const),
+            ...(response.shells ?? (response.shell ? [response.shell] : [])).map(shell => [shell.id, shell] as const),
+          ]).values()],
+        }));
         const shellId = response.activeShellId ?? response.shell?.id ?? null;
         if (shellId) {
           const targetPaneId = splitMode === 'columns' ? paneId : 'primary';
@@ -771,7 +789,8 @@ export const ThreadShellPanel = forwardRef<
   );
 
   return (
-    <div className="shell-panel flex min-h-0 flex-1 flex-col">
+    <div ref={panelRef} className="shell-panel shell-direct-input relative flex min-h-0 flex-1 flex-col"
+      style={keyboardLayout.height ? { height: keyboardLayout.height, flex: '0 0 auto' } : undefined}>
       {showHeader && (
         <div className="shell-header shrink-0 border-b px-3 py-3 sm:px-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -837,48 +856,8 @@ export const ThreadShellPanel = forwardRef<
               <span className="hidden text-xs text-[var(--theme-fg-muted)] sm:inline">
                 Live {liveShells.length}
               </span>
-              <button
-                type="button"
-                aria-expanded={mobileProcessListOpen}
-                aria-label={mobileProcessListOpen ? 'Hide shell processes' : 'Show shell processes'}
-                onClick={() => setMobileProcessListOpen((current) => !current)}
-                className="rounded-md border border-stone-700/80 bg-stone-900/50 px-2.5 py-1.5 text-xs text-stone-200 sm:hidden"
-              >
-                Processes
-              </button>
             </div>
           </div>
-          {mobileProcessListOpen && (
-            <div className="shrink-0 border-b border-stone-800/80 bg-stone-950/55 p-2 sm:hidden">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <p className="text-xs uppercase tracking-[0.16em] text-[var(--theme-fg-muted)]">
-                  Processes
-                </p>
-                <span className="text-[10px] text-[var(--theme-fg-muted)]">
-                  {liveShells.length} live
-                </span>
-              </div>
-              <div className="max-h-52 space-y-1 overflow-y-auto">
-                {liveShells.map(renderProcessRow)}
-                {liveShells.length === 0 && (
-                  <p className="px-2 py-3 text-xs text-[var(--theme-fg-muted)]">No live shell processes</p>
-                )}
-              </div>
-              <div className="mt-2 flex justify-end border-t border-stone-800/80 pt-2">
-                <button
-                  type="button"
-                  aria-label="New shell"
-                  title="New shell"
-                  disabled={busy || loading || workspacePathMissing}
-                  onClick={() => void handleCreateShell(activePaneId)}
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-sky-300/35 bg-sky-300/12 text-base leading-none text-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          )}
-
           {status === 'not_created' || workspacePathMissing ? (
             <div className="flex h-full items-center justify-center px-6 text-center">
               <div className="shell-empty-state max-w-md rounded-[1.6rem] border px-6 py-8">
@@ -936,6 +915,7 @@ export const ThreadShellPanel = forwardRef<
                     shell={primaryShell}
                     isActive={activePaneId === 'primary'}
                     isVisible={isVisible}
+                    inputTransform={transformInput}
                     isMobileShell={isMobileShell}
                     effectiveTheme={effectiveTheme}
                     workspacePathMissing={workspacePathMissing}
@@ -972,7 +952,8 @@ export const ThreadShellPanel = forwardRef<
                         shell={secondaryShell}
                         isActive={activePaneId === 'secondary'}
                         isVisible={isVisible}
-                        isMobileShell={isMobileShell}
+                        inputTransform={transformInput}
+                      isMobileShell={isMobileShell}
                         effectiveTheme={effectiveTheme}
                         workspacePathMissing={workspacePathMissing}
                         shellAdapter={shellAdapter}
@@ -1117,6 +1098,15 @@ export const ThreadShellPanel = forwardRef<
           )}
         </div>
       </div>
+      <ShellTouchControls
+        inset={keyboardLayout.inset} enabled={activeRuntime.shellInputEnabled}
+        ctrl={ctrlPressed} onCtrl={() => { ctrlRef.current = !ctrlRef.current; setCtrlPressed(ctrlRef.current); }}
+        onInput={data => { activePaneRef.current?.sendInput(transformInput(data)); }}
+        onFocus={() => activePaneRef.current?.focus()} onChat={onBackToChat}
+        onConnect={() => void handleConnectionToggle()} connectionLabel={connectionButtonLabel}
+        sessions={liveShells} activeId={activeShell?.id} onSelect={handleSelectShell}
+        onCreate={() => void handleCreateShell(activePaneId)} busy={busy || loading || workspacePathMissing}
+      />
     </div>
   );
 });

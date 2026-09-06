@@ -767,28 +767,6 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const canToggleWorkedSummary =
     isTerminalTurnStatus(turn.status) && hasCollapsedHiddenItems;
-  const expandedWorkedToggleNode =
-    canToggleWorkedSummary && !effectiveCollapsed ? (
-      <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
-        <button
-          type="button"
-          className="group flex shrink-0 items-center gap-2 text-left transition"
-        onClick={() => onToggleCollapse(turn, false)}
-        aria-label={`${workedLabel}. Collapse turn ${absoluteIndex}`}
-      >
-        <span className="thread-graph-worked-label shrink-0">
-          {workedLabel}
-        </span>
-        {interruptedLabel}
-        <ChevronDown className="h-4 w-4 shrink-0 transition group-hover:translate-y-0.5" />
-        </button>
-        <TurnUsageInline turn={turn} />
-        <span
-          className="thread-graph-worked-rule h-px min-w-0 flex-1"
-          aria-hidden="true"
-        />
-      </div>
-    ) : null;
   const terminalWorkedNode =
     isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? (
       <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
@@ -803,11 +781,6 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         />
       </div>
     ) : null;
-  const firstUserEntryIndex = groupedItems.findIndex(
-    (entry) =>
-      entry.kind === 'item' && entry.item.kind === 'userMessage',
-  );
-  const expandedLeadEntryCount = Math.max(0, firstUserEntryIndex + 1);
   const collapsedSummaryNode =
     isTerminalTurnStatus(turn.status) && hasCollapsedHiddenItems ? (
       <div className="thread-graph-turn-collapsed-summary space-y-2">
@@ -835,9 +808,10 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           <button
             type="button"
             className="group flex shrink-0 items-center gap-2 text-left transition"
-          onClick={() => onToggleCollapse(turn, true)}
+          onClick={() => onToggleCollapse(turn, effectiveCollapsed)}
           disabled={deferredItemsLoading}
-          aria-label={`${workedLabel}. Expand turn ${absoluteIndex}`}
+          aria-label={`${workedLabel}. ${effectiveCollapsed ? 'Expand' : 'Collapse'} turn ${absoluteIndex}`}
+          aria-expanded={!effectiveCollapsed}
         >
           <span className="thread-graph-worked-label shrink-0">
             {deferredItemsLoading
@@ -847,7 +821,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
                 : workedLabel}
           </span>
           {interruptedLabel}
-          <ChevronRight className="h-4 w-4 shrink-0 transition group-hover:translate-x-0.5" />
+          <ChevronRight className={`h-4 w-4 shrink-0 transition ${effectiveCollapsed ? '' : 'rotate-90'}`} />
           </button>
           <TurnUsageInline turn={turn} />
           <span
@@ -855,6 +829,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
             aria-hidden="true"
           />
         </div>
+        {!effectiveCollapsed ? renderHistoryEntries(collapsedSummary.hiddenEntries) : null}
         {collapsedSummary.finalAgent ? (
           <CompactMessageItem
             threadId={threadId}
@@ -881,24 +856,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const turnBody = (
     <GraphChatTurnBody
       footer={footerNode}
-      history={
-        expandedWorkedToggleNode ? (
-          <>
-            {renderHistoryEntries(
-              groupedItems.slice(0, expandedLeadEntryCount),
-            )}
-            {expandedWorkedToggleNode}
-            {renderHistoryEntries(
-              groupedItems.slice(expandedLeadEntryCount),
-            )}
-          </>
-        ) : (
-          <>
-            {historyNode}
-            {terminalWorkedNode}
-          </>
-        )
-      }
+      history={<>{historyNode}{terminalWorkedNode}</>}
       liveHookPrompt={liveHookPromptNode}
       liveOutput={liveOutputNode}
       livePlan={displayedLivePlan}
@@ -908,7 +866,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   return (
     <GraphChatTurnFrame
       absoluteIndex={absoluteIndex}
-      body={turnBody}
+      body={canToggleWorkedSummary ? collapsedSummaryNode : turnBody}
       collapsed={effectiveCollapsed}
       collapsedBody={collapsedSummaryNode}
       error={turn.error}

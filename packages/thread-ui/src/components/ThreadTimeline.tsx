@@ -276,6 +276,7 @@ function ThreadTimelineComponent({
     turn: TimelineTurn,
     currentCollapsed: boolean,
   ) => {
+    preserveScrollPositionForResize();
     if (
       !currentCollapsed ||
       !turn.hasDeferredItems ||
@@ -325,7 +326,7 @@ function ThreadTimelineComponent({
           return next;
         });
       });
-  }, [loadTurnDetail, loadedTurnDetails, loadingTurnDetailIds]);
+  }, [loadTurnDetail, loadedTurnDetails, loadingTurnDetailIds, preserveScrollPositionForResize]);
 
   const collapsedStateForTurn = useCallback((
     turn: TimelineTurn,

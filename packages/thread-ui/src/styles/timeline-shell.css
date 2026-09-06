@@ -96,8 +96,8 @@
 }
 
 .thread-ui-shell .thread-graph-worked-summary {
-  min-height: 2.25rem;
-  padding: 0.3rem 0;
+  min-height: 1.65rem;
+  padding: 0.1rem 0;
   font-size: 0.875rem;
   flex-wrap: wrap;
 }
@@ -461,3 +461,26 @@
   .thread-ui-shell .thread-turn-usage-price { flex-shrink: 0; }
   .thread-ui-shell .thread-graph-worked-summary { flex-wrap: nowrap; gap: 0.35rem; }
 }
+
+/* Keep the last reply close to its work summary, on both pointer layouts. */
+.thread-ui-shell .thread-graph-worked-summary + .thread-graph-message { margin-top: 2px; }
+.thread-ui-shell .shell-direct-input { padding-bottom: 48px; }
+.thread-ui-shell .shell-touch-controls {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 30;
+  display: flex; align-items: center; justify-content: space-around; gap: 2px;
+  min-height: 48px; padding: 4px 6px; border-top: 1px solid var(--theme-border);
+  background: var(--theme-bg); color: var(--theme-fg); touch-action: manipulation;
+}
+.thread-ui-shell .shell-touch-controls > button {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 28px;
+  height: 38px; border-radius: 6px; font-size: 12px;
+}
+.thread-ui-shell .shell-touch-controls button:disabled { opacity: .35; }
+.thread-ui-shell .shell-touch-controls button[aria-pressed="true"] { background: var(--theme-border); color: var(--theme-accent, #e6ba63); }
+.thread-ui-shell .shell-session-popover {
+  position: absolute; right: 8px; bottom: calc(100% + 6px); width: min(280px, 85vw);
+  max-height: 40vh; overflow-y: auto; padding: 6px; border-radius: 12px;
+  border: 1px solid var(--theme-border); background: var(--theme-bg); box-shadow: 0 8px 30px #0005;
+}
+.thread-ui-shell .shell-session-popover button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px; text-align: left; border-radius: 6px; }
+.thread-ui-shell .mobile-shell-direct .xterm-helper-textarea { font-size: 16px !important; }

@@ -49,6 +49,8 @@ class FakeTerminal {
     };
   }
 
+  input(value: string) { this.dataHandler?.(value); }
+
   write(value: string) {
     this.writes.push(value);
   }
@@ -153,10 +155,14 @@ let container: HTMLDivElement | null = null;
 
 function renderShellPane({
   adapter,
+  mobile = false,
+  inputTransform,
   onShellUpdate = vi.fn(),
   onRuntimeStateChange = vi.fn(),
 }: {
   adapter: ThreadShellAdapter;
+  mobile?: boolean;
+  inputTransform?: (data: string) => string;
   onShellUpdate?: Parameters<typeof ShellPane>[0]['onShellUpdate'];
   onRuntimeStateChange?: Parameters<
     typeof ShellPane
@@ -175,7 +181,8 @@ function renderShellPane({
         shell={shell()}
         isActive
         isVisible
-        isMobileShell={false}
+        isMobileShell={mobile}
+        {...(inputTransform ? {inputTransform} : {})}
         effectiveTheme="dark"
         workspacePathMissing={false}
         shellAdapter={adapter}
@@ -263,6 +270,17 @@ describe('ShellPane', () => {
     root = null;
     container = null;
     vi.restoreAllMocks();
+  });
+
+  it('accepts mobile IME text and applies touch control modifiers to direct input', async () => {
+    const { adapter, sockets } = makeShellAdapter();
+    renderShellPane({ adapter, mobile: true, inputTransform: data => data === 'c' ? '\x03' : data });
+    const socket = await attachShell(adapter, sockets);
+    expect(terminalInstances[0]!.options.disableStdin).toBe(false);
+    terminalInstances[0]!.input('中文');
+    terminalInstances[0]!.input('c');
+    expect(socket.sentMessages).toContainEqual({type:'shell.input',shellId:'shell-1',viewerId:'viewer-1',data:'中文'});
+    expect(socket.sentMessages).toContainEqual({type:'shell.input',shellId:'shell-1',viewerId:'viewer-1',data:'\x03'});
   });
 
   it('attaches with the measured terminal size and handles connected events', async () => {

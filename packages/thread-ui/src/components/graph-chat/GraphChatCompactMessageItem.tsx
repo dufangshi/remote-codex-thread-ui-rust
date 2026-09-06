@@ -218,7 +218,7 @@ export const GraphChatCompactMessageItem = memo(
         status={
           queuedLikeStatus
             ? item.status
-            : item.kind === 'agentMessage'
+            : item.kind === 'agentMessage' && !isGraphChatRunningStatus(item.status)
               ? item.status
               : null
         }

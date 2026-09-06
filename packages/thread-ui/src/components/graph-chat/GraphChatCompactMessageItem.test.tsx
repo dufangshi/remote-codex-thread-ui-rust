@@ -20,6 +20,16 @@ afterEach(() => {
 });
 
 describe("GraphChatCompactMessageItem", () => {
+  it("does not put running dots on already emitted agent messages", async () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    cleanup = () => { root.unmount(); container.remove(); };
+    await act(async () => root.render(<GraphChatCompactMessageItem item={{id:'old',kind:'agentMessage',text:'Previous checkpoint',status:'running'}} scrollRootRef={{current:null}} />));
+    expect(container.textContent).toContain('Previous checkpoint');
+    expect(container.querySelector('.thread-graph-message-status')).toBeNull();
+  });
+
   it("does not mount chain-of-thought content until its toggle is opened", async () => {
     const container = document.createElement("div");
     document.body.appendChild(container);

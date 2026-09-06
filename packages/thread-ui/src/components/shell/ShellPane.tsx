@@ -68,6 +68,7 @@ export interface ShellPaneHandle {
 }
 
 interface ShellPaneProps {
+  inputTransform?: (data: string) => string;
   paneId: ShellPaneId;
   shell: ShellSessionDto | null;
   isActive: boolean;
@@ -93,6 +94,7 @@ function refValue<T>(ref: { current: T }) {
 export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
   function ShellPane(
     {
+      inputTransform,
       paneId,
       shell,
       isActive,
@@ -108,6 +110,8 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
     },
     ref,
   ) {
+    const transformRef = useRef(inputTransform);
+    transformRef.current = inputTransform;
     const terminalRef = useRef<Terminal | null>(null);
     const fitAddonRef = useRef<FitAddon | null>(null);
     const socketRef = useRef<ShellSocketConnection | null>(null);
@@ -350,7 +354,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       terminalInitializingRef.current = true;
 
       void (async () => {
-        const [{ Terminal }, { FitAddon }] = await Promise.all([
+        const [terminalModule, fitModule] = await Promise.all([
           import('xterm'),
           import('@xterm/addon-fit'),
         ]);
@@ -360,23 +364,29 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
           return;
         }
 
-        const terminal = new Terminal({
+        // xterm 5 is CommonJS: Vite dev exposes it under default, while
+        // production Rollup and tests can expose named exports.
+        const TerminalConstructor = terminalModule.Terminal ??
+          (terminalModule as unknown as {default: typeof terminalModule}).default.Terminal;
+        const FitConstructor = fitModule.FitAddon ??
+          (fitModule as unknown as {default: typeof fitModule}).default.FitAddon;
+        const terminal = new TerminalConstructor({
           cursorBlink: true,
-          disableStdin: isMobileShellRef.current,
+          disableStdin: false,
           fontFamily: 'IBM Plex Mono, SFMono-Regular, Menlo, monospace',
           fontSize: 13,
           lineHeight: 1.25,
           scrollback: 3000,
           theme: terminalThemeFor(effectiveTheme),
         });
-        const fitAddon = new FitAddon();
+        const fitAddon = new FitConstructor();
         terminal.loadAddon(fitAddon);
         terminal.open(terminalHostNode);
         terminalRef.current = terminal;
         fitAddonRef.current = fitAddon;
         syncTerminalSizeRef.current();
         terminal.attachCustomKeyEventHandler((event) => {
-          if (isMobileShellRef.current || event.type !== 'keydown') {
+          if (event.type !== 'keydown') {
             return true;
           }
 
@@ -408,12 +418,13 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
         resizeObserverRef.current.observe(terminalHostNode);
 
         terminalInputSubscriptionRef.current = terminal.onData((data) => {
-          if (isMobileShellRef.current) {
-            return;
-          }
-          sendShellInputRef.current(data);
+          sendShellInputRef.current(transformRef.current?.(data) ?? data);
         });
-      })();
+      })().catch((error: unknown) => {
+        if (cancelled) return;
+        terminalInitializingRef.current = false;
+        setConnectionError(error instanceof Error ? error.message : 'Unable to initialize terminal.');
+      });
 
       return () => {
         cancelled = true;
@@ -466,7 +477,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
         return;
       }
 
-      terminal.options.disableStdin = isMobileShell;
+      terminal.options.disableStdin = false;
     }, [isMobileShell]);
 
     useEffect(() => {
@@ -712,9 +723,9 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
         <div
           ref={setTerminalHostNode}
           className={`h-full w-full px-2 py-2 sm:px-3 sm:py-3 ${
-            isMobileShell ? 'mobile-shell-selectable' : ''
+            isMobileShell ? 'mobile-shell-direct' : ''
           }`}
-          onMouseDown={() => {
+          onClick={() => {
             onActivate();
             terminalRef.current?.focus();
           }}
