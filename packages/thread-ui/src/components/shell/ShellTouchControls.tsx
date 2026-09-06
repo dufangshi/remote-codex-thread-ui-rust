@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, MessageSquare, PanelsTopLeft, PlugZap, Plus } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, MessageSquare, PanelsTopLeft, Pencil, Trash2, Plus } from 'lucide-react';
 import type { ShellSessionDto } from '@remote-codex/shared';
 
 // Retain the PTY canvas dimensions while the IME overlays it. Only the key bar
@@ -18,7 +18,7 @@ export function useShellKeyboardLayout(visible: boolean, mobile: boolean) {
       frame = requestAnimationFrame(() => {
         const viewport = window.visualViewport;
         const visibleBottom = (viewport?.height ?? window.innerHeight) + (viewport?.offsetTop ?? 0);
-        const focused = panel.contains(document.activeElement) && document.activeElement?.classList.contains('xterm-helper-textarea');
+        const focused = panel.contains(document.activeElement) && document.activeElement?.matches('input, textarea');
         const inset = Math.max(0, restingBottom - visibleBottom);
         if (focused && inset > 80 && (viewport?.scale ?? 1) === 1) {
           setLayout({ height: restingHeight, inset });
@@ -50,14 +50,25 @@ export function useShellKeyboardLayout(visible: boolean, mobile: boolean) {
   return { panelRef, layout };
 }
 
-export function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, onChat, onConnect, connectionLabel, sessions, activeId, onSelect, onCreate, busy }: {
+export function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, onChat, onRename, onKill, sessions, activeId, onSelect, onCreate, busy }: {
   inset: number; enabled: boolean; ctrl: boolean; onCtrl: () => void;
   onInput: (data: string) => void; onFocus: () => void; onChat?: (() => void) | undefined;
-  onConnect: () => void; connectionLabel: string; sessions: ShellSessionDto[];
+  onRename: (shell: ShellSessionDto, label: string) => Promise<void>;
+  onKill: (id: string) => Promise<void>; sessions: ShellSessionDto[];
   activeId: string | undefined; onSelect: (shell: ShellSessionDto) => void;
   onCreate: () => void; busy: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  async function rename(shell: ShellSessionDto) {
+    setSaving(true); setError(null);
+    try { await onRename(shell, name.trim()); setEditing(null); }
+    catch (error) { setError(error instanceof Error ? error.message : 'Unable to rename shell.'); }
+    finally { setSaving(false); }
+  }
   const host = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -79,10 +90,23 @@ export function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFo
       const Icon = icons[label as keyof typeof icons];
       return <button key={label} type="button" aria-label={`Terminal ${label}`} disabled={!enabled} onPointerDown={e => e.preventDefault()} onClick={() => { onInput(data); onFocus(); }}>{Icon ? <Icon size={17} /> : label}</button>;
     })}
-    <button type="button" aria-label={connectionLabel} onPointerDown={e => e.preventDefault()} onClick={onConnect}><PlugZap size={17} /></button>
     <button type="button" aria-label="Switch terminal session" aria-expanded={open} onPointerDown={e => e.preventDefault()} onClick={() => setOpen(v => !v)}><PanelsTopLeft size={18} /></button>
     {open && <div className="shell-session-popover" role="dialog" aria-label="Terminal sessions">
-      {sessions.map(shell => <button key={shell.id} type="button" aria-pressed={shell.id === activeId} onPointerDown={e => e.preventDefault()} onClick={() => { onSelect(shell); setOpen(false); onFocus(); }}>{shell.label || `Shell ${sessions.indexOf(shell) + 1}`}{shell.id === activeId ? ' •' : ''}</button>)}
+      {error && <p role="alert" className="px-2 text-xs text-red-500">{error}</p>}
+      {sessions.map((shell, index) => {
+        const label = shell.label || `Shell ${index + 1}`;
+        return <div key={shell.id} className="shell-session-row" data-shell-id={shell.id}>
+          {editing === shell.id ? <form onSubmit={event => { event.preventDefault(); void rename(shell); }}>
+            <input aria-label="Shell name" autoFocus value={name} onChange={event => setName(event.target.value)} />
+            <button type="submit" disabled={saving}>Save</button>
+            <button type="button" onClick={() => setEditing(null)}>Cancel</button>
+          </form> : <>
+            <button className="shell-session-select" type="button" aria-pressed={shell.id === activeId} onPointerDown={e => e.preventDefault()} onClick={() => { onSelect(shell); setOpen(false); onFocus(); }}>{label}{shell.id === activeId ? ' •' : ''}</button>
+            <button type="button" aria-label={`Rename ${label}`} title="Rename shell" disabled={busy} onClick={() => { setEditing(shell.id); setName(label); setError(null); }}><Pencil size={16} /></button>
+            <button type="button" aria-label={`Kill ${label}`} title="Kill shell process" disabled={busy} onPointerDown={e => e.preventDefault()} onClick={() => void onKill(shell.id)}><Trash2 size={16} /></button>
+          </>}
+        </div>;
+      })}
       <button type="button" disabled={busy} onPointerDown={e => e.preventDefault()} onClick={() => { onCreate(); setOpen(false); }}><Plus size={16} /> New shell</button>
     </div>}
   </div>;

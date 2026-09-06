@@ -789,7 +789,7 @@ export const ThreadShellPanel = forwardRef<
   );
 
   return (
-    <div ref={panelRef} className="shell-panel shell-direct-input relative flex min-h-0 flex-1 flex-col"
+    <div ref={panelRef} className={`shell-panel shell-direct-input relative flex min-h-0 flex-1 flex-col ${isMobileShell ? 'shell-is-mobile' : ''}`}
       style={keyboardLayout.height ? { height: keyboardLayout.height, flex: '0 0 auto' } : undefined}>
       {showHeader && (
         <div className="shell-header shrink-0 border-b px-3 py-3 sm:px-5">
@@ -856,6 +856,7 @@ export const ThreadShellPanel = forwardRef<
               <span className="hidden text-xs text-[var(--theme-fg-muted)] sm:inline">
                 Live {liveShells.length}
               </span>
+              {!isMobileShell && onBackToChat && <button type="button" onClick={onBackToChat} className="rounded-md border px-3 py-1.5 text-xs" aria-label="Back to chat">Back to chat</button>}
             </div>
           </div>
           {status === 'not_created' || workspacePathMissing ? (
@@ -1098,15 +1099,19 @@ export const ThreadShellPanel = forwardRef<
           )}
         </div>
       </div>
-      <ShellTouchControls
+      {isMobileShell && <ShellTouchControls
         inset={keyboardLayout.inset} enabled={activeRuntime.shellInputEnabled}
         ctrl={ctrlPressed} onCtrl={() => { ctrlRef.current = !ctrlRef.current; setCtrlPressed(ctrlRef.current); }}
         onInput={data => { activePaneRef.current?.sendInput(transformInput(data)); }}
         onFocus={() => activePaneRef.current?.focus()} onChat={onBackToChat}
-        onConnect={() => void handleConnectionToggle()} connectionLabel={connectionButtonLabel}
+        onRename={async (shell, label) => {
+          const updated = await shellAdapter.updateShell(shell.id, {label: label || null});
+          updateShellEntry(shell.id, () => updated);
+        }}
+        onKill={handleTerminateShell}
         sessions={liveShells} activeId={activeShell?.id} onSelect={handleSelectShell}
         onCreate={() => void handleCreateShell(activePaneId)} busy={busy || loading || workspacePathMissing}
-      />
+      />}
     </div>
   );
 });

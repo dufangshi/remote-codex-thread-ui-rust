@@ -464,7 +464,7 @@
 
 /* Keep the last reply close to its work summary, on both pointer layouts. */
 .thread-ui-shell .thread-graph-worked-summary + .thread-graph-message { margin-top: 2px; }
-.thread-ui-shell .shell-direct-input { padding-bottom: 48px; }
+.thread-ui-shell .shell-direct-input.shell-is-mobile { padding-bottom: 48px; }
 .thread-ui-shell .shell-touch-controls {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 30;
   display: flex; align-items: center; justify-content: space-around; gap: 2px;
@@ -484,3 +484,14 @@
 }
 .thread-ui-shell .shell-session-popover button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px; text-align: left; border-radius: 6px; }
 .thread-ui-shell .mobile-shell-direct .xterm-helper-textarea { font-size: 16px !important; }
+
+.thread-ui-shell .shell-session-row { display: flex; align-items: center; min-width: 0; }
+.thread-ui-shell .shell-session-row > button { width: 36px; flex: 0 0 36px; }
+.thread-ui-shell .shell-session-row > .shell-session-select { width: auto; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-ui-shell .shell-session-row form { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; width: 100%; }
+.thread-ui-shell .shell-session-row input { width: 100%; padding: 8px; background: var(--theme-bg); border: 1px solid var(--theme-border); border-radius: 6px; font-size: 16px; }
+.thread-ui-shell .shell-session-row form button { width: auto; }
+.thread-ui-shell .mobile-shell-direct .xterm-viewport {
+  z-index: 3; background: transparent !important; overflow-y: auto !important;
+  touch-action: pan-y; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch;
+}

@@ -501,6 +501,24 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       };
     }, [isActive, isVisible, refreshTerminalLayout, shell?.id, terminalReady]);
 
+    useEffect(() => {
+      if (!isMobileShell || !terminalReady || !terminalHostNode) return;
+      const viewport = terminalHostNode.querySelector('.xterm-viewport');
+      if (!viewport) return;
+      // xterm 5's ancestor touchmove handler prevents the browser's default
+      // scroll and only moves one delta at a time. Let the native viewport own
+      // gestures (including momentum); its scroll event still updates xterm.
+      const nativeScroll = (event: Event) => {
+        if (terminalRef.current?.buffer.active.type === 'normal') event.stopPropagation();
+      };
+      viewport.addEventListener('touchstart', nativeScroll, {passive: true});
+      viewport.addEventListener('touchmove', nativeScroll, {passive: true});
+      return () => {
+        viewport.removeEventListener('touchstart', nativeScroll);
+        viewport.removeEventListener('touchmove', nativeScroll);
+      };
+    }, [isMobileShell, terminalReady, terminalHostNode]);
+
     useShellSocketLifecycle({
       shell,
       shellAdapter,
