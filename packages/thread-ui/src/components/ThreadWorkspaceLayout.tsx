@@ -904,7 +904,7 @@ export function ThreadWorkspaceLayout({
               </button>
             </div>
           ) : null}
-          <div className="thread-graph-settings-body mt-4 min-h-0 overflow-y-auto pr-1 text-sm">
+          <div className="thread-graph-settings-body mt-2 min-h-0 pr-1 text-sm">
             {activeSettingsTab === "session" ? (
               <div className="grid gap-4">
                 {settingsContent ? (
@@ -1145,29 +1145,6 @@ export function ThreadWorkspaceLayout({
                       <PanelLeftClose className="h-4 w-4" />
                     )}
                   </button>
-                  <div
-                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--theme-accent-solid)] text-sm font-semibold text-[var(--theme-accent-solid-fg)] ${
-                      roomsRailCollapsed
-                        ? "thread-desktop-collapsed-hidden"
-                        : ""
-                    }`}
-                  >
-                    {(currentWorkspaceLabel ?? "R").charAt(0).toUpperCase()}
-                  </div>
-                  <div
-                    className={`min-w-0 ${
-                      roomsRailCollapsed
-                        ? "thread-desktop-collapsed-hidden"
-                        : ""
-                    }`}
-                  >
-                    <p className="truncate text-sm font-semibold text-[var(--theme-fg)]">
-                      {currentWorkspaceLabel ?? "Remote Codex"}
-                    </p>
-                    <p className="truncate text-xs text-[var(--theme-fg-muted)]">
-                      {currentWorkspaceId ?? "Thread workspace"}
-                    </p>
-                  </div>
                 </div>
                 <div
                   className={`flex shrink-0 items-center gap-1 ${
@@ -1280,7 +1257,7 @@ export function ThreadWorkspaceLayout({
                               title="Copy session ID"
                             >
                               <span className="w-14 shrink-0">Session</span>
-                              <span className="truncate font-mono">
+                              <span className="min-w-0 break-all font-mono">
                                 {topbarSessionLabel}
                               </span>
                             </button>

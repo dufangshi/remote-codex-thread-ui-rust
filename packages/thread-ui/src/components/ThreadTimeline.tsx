@@ -580,9 +580,11 @@ function ThreadTimelineComponent({
                     type="button"
                     onClick={handleLoadEarlierClick}
                     disabled={loadingEarlier}
-                    className="thread-graph-history-button rounded-full border px-2.5 py-1.5 transition"
+                    aria-busy={loadingEarlier}
+                    className="thread-history-earlier flex items-center gap-2 px-2 py-2 text-xs transition"
                   >
-                    {loadingEarlier ? 'Loading earlier...' : 'Load 3 earlier'}
+                    <span className="thread-history-arrow" aria-hidden="true">↑</span>
+                    {loadingEarlier ? 'Loading earlier…' : 'Earlier messages'}
                   </button>
                 )}
                 {showLoadAll && (

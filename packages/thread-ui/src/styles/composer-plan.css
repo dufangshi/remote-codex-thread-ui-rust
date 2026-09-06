@@ -687,7 +687,7 @@
 .thread-ui-shell .thread-graph-composer-menu {
   border-radius: 12px;
   border-color: var(--theme-border) !important;
-  background: var(--theme-panel) !important;
+  background: color-mix(in srgb, var(--theme-panel) 88%, transparent) !important;
   color: var(--theme-fg) !important;
   box-shadow: 0 16px 38px oklch(0.22 0.024 255 / 0.16);
   z-index: 80;
@@ -695,7 +695,7 @@
 
 .thread-ui-shell [data-composer-menu-surface="true"] {
   border-color: var(--theme-border) !important;
-  background: var(--theme-panel) !important;
+  background: color-mix(in srgb, var(--theme-panel) 88%, transparent) !important;
   color: var(--theme-fg) !important;
   box-shadow: 0 16px 38px oklch(0.22 0.024 255 / 0.16) !important;
 }
@@ -791,8 +791,8 @@
   .thread-ui-shell
   [data-composer-menu-surface="true"],
 .thread-ui-shell.dark [data-composer-menu-surface="true"] {
-  border-color: #303642 !important;
-  background: rgb(23 26 34) !important;
+  border-color: color-mix(in srgb, var(--theme-border) 80%, transparent) !important;
+  background: color-mix(in srgb, var(--theme-panel) 88%, transparent) !important;
   color: rgb(241 245 249) !important;
   box-shadow: 0 18px 48px rgb(0 0 0 / 0.28) !important;
 }
@@ -1063,4 +1063,10 @@
 .thread-ui-shell[data-theme-effective="light"] .thread-graph-plan-step,
 .thread-ui-shell[data-theme-effective="light"] .thread-graph-plan-step-text {
   color: rgb(15 23 42) !important;
+}
+
+/* The native popover surface retains the composer's theme while gently blurring content beneath. */
+.thread-ui-shell :is(.thread-composer-menu, .thread-graph-composer-menu, [data-composer-menu-surface="true"]) {
+  backdrop-filter: blur(18px) saturate(125%);
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
 }

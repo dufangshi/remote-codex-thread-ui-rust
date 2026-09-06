@@ -777,3 +777,36 @@
   border-color: #465164;
   background: #2b313d;
 }
+
+/* Keep settings inside the visible viewport with one touch scroll owner. */
+.thread-graph-settings-dialog {
+  display: block;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+.thread-graph-settings-dialog > * + * { margin-top: 1rem; }
+.thread-graph-settings-dialog .thread-graph-settings-body { max-height: none; overflow: visible; }
+.thread-graph-settings-dialog .thread-graph-settings-global-content { overflow: visible; }
+.thread-ui-shell .thread-topbar-details-popover { overflow-wrap: anywhere; }
+@media (max-width: 639px) {
+  .thread-ui-shell .thread-topbar-details-popover {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    top: calc(3rem + env(safe-area-inset-top) + 0.5rem);
+    width: auto;
+    max-height: calc(100dvh - 5rem);
+    overflow-y: auto;
+  }
+}
+
+.thread-history-earlier { margin-inline: auto; border: 0; background: none; color: var(--theme-fg-muted); }
+.thread-history-earlier:hover { color: var(--theme-fg); }
+.thread-history-earlier:active .thread-history-arrow { transform: translateY(-3px); }
+.thread-history-arrow { display: inline-block; transition: transform 220ms cubic-bezier(.2,1.6,.4,1); }
+.thread-history-earlier[aria-busy="true"] .thread-history-arrow { animation: history-lift 900ms ease-in-out infinite; }
+@keyframes history-lift { 50% { transform: translateY(-4px); opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .thread-history-arrow { animation: none !important; transition: none; } }

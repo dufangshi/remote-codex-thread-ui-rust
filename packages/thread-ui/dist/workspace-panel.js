@@ -11,7 +11,7 @@ import {
   cn,
   getGraphChatHighlighter,
   workspaceDisplayPath
-} from "./chunk-NBECIKKF.js";
+} from "./chunk-55KNPCNE.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect8, useMemo as useMemo9, useState as useState10 } from "react";

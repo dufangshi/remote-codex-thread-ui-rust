@@ -245,6 +245,9 @@ export function ComposerSettingsToolbar({
                 ) : null}
               </div>
             ) : null}
+            <div className="mt-1 border-t border-[var(--theme-border)] px-3 py-2 text-xs leading-5 text-[var(--theme-fg-muted)]" aria-label="Context usage">
+              {modelContextTitle}
+            </div>
           </ComposerMenuSurface>
         )}
       </div>

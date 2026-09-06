@@ -169,12 +169,16 @@ describe('ThreadWorkspaceLayout', () => {
     expect(element.querySelector('[data-testid="chat-content"]')).toBeTruthy();
     expect(
       element.querySelector('[data-testid="workspace-content"]'),
-    ).toBeTruthy();
+    ).toBeNull();
     expect(element.querySelector('.thread-mobile-chat-hidden')).toBeNull();
     expect(
       element.querySelector('.thread-mobile-workspace-hidden'),
     ).toBeTruthy();
-    expect(element.querySelector('[aria-label="Show workspace"]')).toBeTruthy();
+    const showWorkspace = element.querySelector<HTMLButtonElement>('[aria-label="Show workspace"]');
+    expect(showWorkspace).toBeTruthy();
+    flushSync(() => showWorkspace!.click());
+    expect(element.querySelector('[data-testid="workspace-content"]')).toBeTruthy();
+    expect(element.querySelector('.thread-mobile-chat-hidden')).toBeTruthy();
   });
 
   it('renders thread actions in the mobile topbar', () => {
@@ -189,14 +193,8 @@ describe('ThreadWorkspaceLayout', () => {
     const element = renderLayout();
 
     expect(element.querySelector('[data-testid="chat-content"]')).toBeTruthy();
-    expect(
-      element.querySelector('[data-testid="workspace-content"]'),
-    ).toBeTruthy();
-    expect(
-      element
-        .querySelector('[data-testid="workspace-content"]')
-        ?.closest('.hidden'),
-    ).toBeTruthy();
+    // The workspace is lazy-mounted on first use, on mobile and tablet alike.
+    expect(element.querySelector('[data-testid="workspace-content"]')).toBeNull();
 
     flushSync(() => {
       element

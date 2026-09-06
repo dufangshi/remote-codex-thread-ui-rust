@@ -96,3 +96,5 @@ export {
   type AppShellSettingsDialogProps,
 } from './app-shell/AppShellNavigation';
 export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } from './components/PublicTranscript';
+
+export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./components/graph-ui/Dialog";
