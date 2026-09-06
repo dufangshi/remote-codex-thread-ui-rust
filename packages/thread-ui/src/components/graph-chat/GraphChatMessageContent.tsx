@@ -180,11 +180,13 @@ function isToolCodeElement(value: ReactNode) {
 export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   className = 'thread-graph-markdown',
   content,
+  readOnly = false,
   onOpenWorkspaceFile,
   resolveHref,
 }: {
   className?: string;
   content: string;
+  readOnly?: boolean;
   onOpenWorkspaceFile?: OpenWorkspaceFileHandler | undefined;
   resolveHref?: ((href: string) => string) | undefined;
 }) {
@@ -199,8 +201,8 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   const [touchCode, setTouchCode] = useState<string | null>(null);
   const [dark, setDark] = useState(false);
   const { processedContent, resultMap } = useMemo(
-    () => preprocessGraphChatToolBlocks(content),
-    [content],
+    () => readOnly ? { processedContent: content, resultMap: new Map() } : preprocessGraphChatToolBlocks(content),
+    [content, readOnly],
   );
 
   useEffect(() => {
@@ -279,7 +281,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       textContent.includes('\n') ||
       startLine !== endLine;
 
-    if (language === 'tool-merged') {
+    if (!readOnly && language === 'tool-merged') {
       let data: GraphChatToolMergedPayload = {
         call: { tool: 'Unknown', args: {}, call_id: undefined },
         result: null,
@@ -308,7 +310,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       );
     }
 
-    if (language === 'tool-call') {
+    if (!readOnly && language === 'tool-call') {
       let data: { tool?: unknown; args?: unknown; call_id?: unknown } = {
         tool: 'Unknown',
         args: {},
@@ -340,11 +342,11 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       );
     }
 
-    if (language === 'tool-result') {
+    if (!readOnly && language === 'tool-result') {
       return null;
     }
 
-    if (['xyz', 'extxyz', 'cif', 'pdb'].includes(language)) {
+    if (!readOnly && ['xyz', 'extxyz', 'cif', 'pdb'].includes(language)) {
       const rendered = plugins.renderInlineCode({
         code: textContent,
         isIncomplete: false,
@@ -384,7 +386,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
             }
           }}
         >
-          <Button
+          {!readOnly && <Button
             type="button"
             onClick={() => void copyCode(id, textContent)}
             variant="ghost"
@@ -404,7 +406,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
             ) : (
               <Copy className="h-3.5 w-3.5" />
             )}
-          </Button>
+          </Button>}
           {html ? (
             <div dangerouslySetInnerHTML={{ __html: html }} />
           ) : (
@@ -430,12 +432,13 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   };
 
   return (
-    <div ref={rootRef} className={`thread-graph-message-markdown ${className}`}>
+    <div ref={rootRef} data-markdown-ready={highlighter ? 'true' : 'false'} className={`thread-graph-message-markdown ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath, remarkCjkFriendly]}
         rehypePlugins={[rehypeKatex]}
         components={{
           a({ href, children, ...props }) {
+            if (readOnly && (!href || !/^https?:\/\//i.test(href))) return <span>{children}</span>;
             const workspaceTarget = parseWorkspaceFileHref(href);
             if (workspaceTarget && onOpenWorkspaceFile) {
               return (
@@ -461,6 +464,11 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
                 {children}
               </a>
             );
+          },
+          img({src, alt}) {
+            const resolved = src ? (resolveHref?.(src) ?? src) : undefined;
+            if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || 'Image unavailable'}</span>;
+            return <img src={resolved} alt={alt ?? ''} />;
           },
           code: CodeBlockRenderer,
           pre: PreRenderer,

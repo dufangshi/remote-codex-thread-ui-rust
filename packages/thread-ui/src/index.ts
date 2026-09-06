@@ -95,4 +95,4 @@ export {
   type AppShellNavigationMenuProps,
   type AppShellSettingsDialogProps,
 } from './app-shell/AppShellNavigation';
-export { PublicTranscript, type PublicTranscriptSnapshot } from './components/PublicTranscript';
+export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } from './components/PublicTranscript';

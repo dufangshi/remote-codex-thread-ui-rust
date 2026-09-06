@@ -512,20 +512,31 @@ interface AppShellSettingsDialogProps {
 }
 declare function AppShellSettingsDialog({ extraContent, importPluginInput, }?: AppShellSettingsDialogProps): react.JSX.Element | null;
 
+interface PublicTranscriptMessage {
+    role: 'user' | 'assistant';
+    text: string;
+    createdAt?: string | null;
+}
+interface PublicTranscriptTurn {
+    messages: PublicTranscriptMessage[];
+    startedAt?: string | null;
+    completedAt?: string | null;
+    model?: ThreadTurnDto['model'];
+    reasoningEffort?: ThreadTurnDto['reasoningEffort'];
+    tokenUsage?: ThreadTurnDto['tokenUsage'];
+    priceEstimate?: ThreadTurnDto['priceEstimate'];
+}
 interface PublicTranscriptSnapshot {
     title: string;
     createdAt: string;
     turnCount: number;
-    turns: Array<{
-        messages: Array<{
-            role: 'user' | 'assistant';
-            text: string;
-            createdAt?: string | null;
-        }>;
-    }>;
+    turns: PublicTranscriptTurn[];
+    theme?: 'light' | 'dark';
+    images?: Record<string, string>;
 }
+declare function transcriptSnapshot(title: string, turns: ThreadTurnDto[], theme: 'light' | 'dark'): PublicTranscriptSnapshot;
 declare function PublicTranscript({ snapshot }: {
     snapshot: PublicTranscriptSnapshot;
 }): react.JSX.Element;
 
-export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, turnStatusLabel, useAppShellNav, usePlugins };
+export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, transcriptSnapshot, turnStatusLabel, useAppShellNav, usePlugins };

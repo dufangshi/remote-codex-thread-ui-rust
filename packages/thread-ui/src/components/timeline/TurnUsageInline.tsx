@@ -13,7 +13,7 @@ export function formatTurnRuntimeSummary(turn: TimelineTurn) {
   return effort ? `${model} · ${effort}` : model;
 }
 
-export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
+export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn; readOnly?: boolean }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
@@ -87,7 +87,7 @@ export function TurnUsageInline({ turn }: { turn: TimelineTurn }) {
           ))}
         </span>
       ) : null}
-      {hasPrice ? (
+      {hasPrice && readOnly ? <span className="thread-turn-usage-price">{formatCompactUsd(price.totalUsd)}</span> : hasPrice ? (
         <Tooltip open={detailsOpen} onOpenChange={setDetailsOpen}>
           <TooltipTrigger asChild>
             <button

@@ -592,7 +592,7 @@ export function ThreadActionsDialog({
                 <p className="thread-export-dialog-box thread-export-dialog-subtitle flex items-center rounded-xl border px-3 py-2 text-xs">
                   {actionMode === 'html'
                     ? 'HTML keeps the chat timeline styling and omits raw command output.'
-                    : 'Review exports keep message text readable and omit tool activity.'}
+                    : 'Opens your browser’s Save as PDF dialog with the same chat styling.'}
                 </p>
               </div>
             </>

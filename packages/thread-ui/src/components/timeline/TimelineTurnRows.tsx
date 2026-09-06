@@ -442,7 +442,7 @@ function latestActivityTimestamp(
     : null;
 }
 
-function formatWorkedDuration(
+export function formatWorkedDuration(
   startedAt: string | null | undefined,
   completedAt: string | null | undefined,
   items: ThreadHistoryItemDto[],

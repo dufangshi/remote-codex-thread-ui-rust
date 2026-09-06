@@ -159,3 +159,27 @@
 .thread-export-dialog-segment { display: flex; flex-wrap: wrap; border: 0; gap: 4px; border-radius: 8px; }
 .thread-export-dialog-panel { border-radius: 16px; }
 .thread-export-dialog-box, .thread-export-dialog-box-header { border-radius: 8px; }
+
+.public-transcript { min-height:100vh; background:var(--theme-bg); color:var(--theme-fg); font-family:var(--font-sans,ui-sans-serif,system-ui,sans-serif); }
+.public-transcript-content { max-width: 56rem; margin:0 auto; padding:24px 20px 48px; }
+.public-transcript-header { padding-bottom:20px; margin-bottom:20px; border-bottom:1px solid var(--theme-border); }
+.public-transcript-header h1 { font-size:20px; font-weight:600; line-height:1.4; overflow-wrap:anywhere; }
+.public-transcript-header p { margin-top:6px; color:var(--theme-fg-muted); font-size:11px; }
+.public-transcript-turn { padding:8px 0 20px; }
+.public-transcript-turn > .thread-graph-message + .thread-graph-message { margin-top:12px; }
+.public-transcript .thread-graph-message-stack.is-assistant { width:100%; }
+.public-transcript img { max-width:100%; object-fit:contain; }
+.public-transcript .thread-graph-code-block { overflow-wrap:anywhere; }
+.public-transcript .thread-graph-code-block pre { white-space:pre-wrap; }
+@media(max-width:639px) { .public-transcript-content { padding:16px 12px 32px; } }
+@media print {
+  @page { size:A4; margin:12mm 10mm; }
+  html, body { height:auto!important; overflow:visible!important; }
+  .public-transcript { min-height:0; print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+  .public-transcript-content { max-width:none; padding:0; }
+  .public-transcript-turn, .public-transcript .thread-graph-message, .public-transcript .thread-graph-message-bubble { break-inside:auto; }
+  .public-transcript .thread-graph-worked-summary, .public-transcript .thread-graph-message-time-row, .public-transcript h1, .public-transcript h2, .public-transcript h3 { break-after:avoid; }
+  .public-transcript p, .public-transcript li { orphans:3; widows:3; }
+  .public-transcript img, .public-transcript tr { break-inside:avoid; }
+  .public-transcript .thread-graph-code-block { box-decoration-break:clone; }
+}
