@@ -615,3 +615,15 @@
   z-index: 30;
   display: inline-flex;
   transform: translateY(-50%);
+}
+
+/* Navigation stays above the rooms/workspace split at every breakpoint. */
+.thread-ui-shell { display: flex; flex-direction: column; padding: 0 !important; }
+.thread-ui-shell .thread-shell-frame { flex: 1; height: auto; min-height: 0; }
+.thread-ui-shell .thread-topbar-surface { border-radius: 0; flex-shrink: 0; padding-top: env(safe-area-inset-top); }
+.thread-ui-shell[data-thread-layout] .thread-topbar-row {
+  height: 63px; min-height: 63px; padding: 0 12px;
+}
+.thread-ui-shell .thread-topbar-row > div { gap: 8px; }
+.thread-ui-shell .thread-topbar-row > div > div:first-child { gap: 8px; }
+.thread-ui-shell .thread-topbar-row button[aria-label="Open rooms"] { width: 44px; height: 44px; }

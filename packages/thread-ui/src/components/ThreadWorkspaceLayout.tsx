@@ -1071,8 +1071,7 @@ export function ThreadWorkspaceLayout({
     layoutMode === "mobile" ||
     (layoutMode === "responsive" && isWorkspaceFocusViewport);
   const renderMobileTopbarControls = renderMobileWorkspaceSplit;
-  const shouldShowMobileRoomsButton =
-    renderMobileTopbarControls && !mobileRoomsOpen;
+  const shouldShowMobileRoomsButton = !mobileRoomsOpen;
   const canReturnToWorkspace = Boolean(
     workspaceReturnHref || onWorkspaceReturn,
   );
@@ -1101,99 +1100,6 @@ export function ThreadWorkspaceLayout({
         themeMode={themeMode}
         viewportConstrained={viewportConstrained}
       >
-        <GraphChatShellFrame
-          roomsRailCollapsed={roomsRailCollapsed}
-          hideRoomsRail={hideRoomsRail}
-        >
-          {!hideRoomsRail ? (
-            <GraphChatMobileScrim
-              open={mobileRoomsOpen}
-              onClose={() => setMobileRoomsOpen(false)}
-            />
-          ) : null}
-
-          {!hideRoomsRail ? (
-            <GraphChatRoomsRailShell
-              collapsed={roomsRailCollapsed}
-              mobileOpen={mobileRoomsOpen}
-            >
-            <div
-              className={`thread-rooms-rail-header flex h-[calc(3rem+env(safe-area-inset-top))] shrink-0 items-end border-b border-[var(--theme-border)] px-4 pb-2 sm:h-16 sm:items-center sm:pb-0 ${
-                roomsRailCollapsed ? "sm:w-full sm:justify-center sm:px-2" : ""
-              }`}
-            >
-              <div
-                className={`flex w-full items-center gap-3 ${
-                  roomsRailCollapsed ? "sm:justify-center" : "justify-between"
-                }`}
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setRoomsRailCollapsed((current) => !current)}
-                    className="thread-icon-button thread-desktop-only-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-                    title={
-                      roomsRailCollapsed ? "Expand rooms" : "Collapse rooms"
-                    }
-                    aria-label={
-                      roomsRailCollapsed ? "Expand rooms" : "Collapse rooms"
-                    }
-                  >
-                    {roomsRailCollapsed ? (
-                      <PanelLeftOpen className="h-4 w-4" />
-                    ) : (
-                      <PanelLeftClose className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-                <div
-                  className={`flex shrink-0 items-center gap-1 ${
-                    roomsRailCollapsed ? "thread-desktop-collapsed-hidden" : ""
-                  }`}
-                >
-                  {renderSettingsDialog()}
-                  {workspaceReturnControl}
-                  <button
-                    type="button"
-                    onClick={() => setMobileRoomsOpen(false)}
-                    aria-label="Close rooms"
-                    title="Close rooms"
-                    className="thread-icon-button thread-mobile-only-inline-flex h-10 w-10 items-center justify-center rounded-full"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={`thread-graph-new-room-strip flex shrink-0 items-center border-b ${
-                roomsRailCollapsed
-                  ? "h-12 w-full justify-center px-2 sm:h-12"
-                  : "h-[68px] px-4"
-              }`}
-            >
-              {renderNewThreadDialogButton(
-                `thread-graph-new-room-button inline-flex items-center justify-center rounded-xl font-medium transition ${
-                  roomsRailCollapsed
-                    ? "h-9 w-9 p-0"
-                    : "h-11 w-full gap-2 px-3 text-sm sm:h-9"
-                }`,
-                roomsRailCollapsed,
-              )}
-            </div>
-
-            <div
-              className={`flex min-h-0 flex-1 flex-col ${
-                roomsRailCollapsed ? "w-full px-2 py-2" : "px-3 py-3"
-              }`}
-            >
-              {renderRoomsRailContent(roomsRailCollapsed)}
-            </div>
-            </GraphChatRoomsRailShell>
-          ) : null}
-
-          <GraphChatMainShell>
             <GraphChatTopbarShell>
               <div className="thread-topbar-row flex min-h-12 items-center px-3 py-1.5 sm:min-h-12 sm:px-4">
                 <div className="flex w-full items-center justify-between gap-3 sm:gap-4">
@@ -1201,10 +1107,10 @@ export function ThreadWorkspaceLayout({
                     {shouldShowMobileRoomsButton && !hideRoomsRail ? (
                       <button
                         type="button"
-                        onClick={() => setMobileRoomsOpen(true)}
+                        onClick={() => renderMobileTopbarControls ? setMobileRoomsOpen(true) : setRoomsRailCollapsed((value) => !value)}
                         aria-label="Open rooms"
                         title="Open rooms"
-                        className="thread-icon-button thread-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                        className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
                       >
                         <Menu className="h-4 w-4" />
                       </button>
@@ -1328,6 +1234,100 @@ export function ThreadWorkspaceLayout({
                 </div>
               </div>
             </GraphChatTopbarShell>
+        <GraphChatShellFrame
+          roomsRailCollapsed={roomsRailCollapsed}
+          hideRoomsRail={hideRoomsRail}
+        >
+          {!hideRoomsRail ? (
+            <GraphChatMobileScrim
+              open={mobileRoomsOpen}
+              onClose={() => setMobileRoomsOpen(false)}
+            />
+          ) : null}
+
+          {!hideRoomsRail ? (
+            <GraphChatRoomsRailShell
+              collapsed={roomsRailCollapsed}
+              mobileOpen={mobileRoomsOpen}
+            >
+            <div
+              className={`thread-rooms-rail-header flex h-[calc(3rem+env(safe-area-inset-top))] shrink-0 items-end border-b border-[var(--theme-border)] px-4 pb-2 sm:h-16 sm:items-center sm:pb-0 ${
+                roomsRailCollapsed ? "sm:w-full sm:justify-center sm:px-2" : ""
+              }`}
+            >
+              <div
+                className={`flex w-full items-center gap-3 ${
+                  roomsRailCollapsed ? "sm:justify-center" : "justify-between"
+                }`}
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setRoomsRailCollapsed((current) => !current)}
+                    className="thread-icon-button thread-desktop-only-flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+                    title={
+                      roomsRailCollapsed ? "Expand rooms" : "Collapse rooms"
+                    }
+                    aria-label={
+                      roomsRailCollapsed ? "Expand rooms" : "Collapse rooms"
+                    }
+                  >
+                    {roomsRailCollapsed ? (
+                      <PanelLeftOpen className="h-4 w-4" />
+                    ) : (
+                      <PanelLeftClose className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                <div
+                  className={`flex shrink-0 items-center gap-1 ${
+                    roomsRailCollapsed ? "thread-desktop-collapsed-hidden" : ""
+                  }`}
+                >
+                  {renderSettingsDialog()}
+                  {workspaceReturnControl}
+                  <button
+                    type="button"
+                    onClick={() => setMobileRoomsOpen(false)}
+                    aria-label="Close rooms"
+                    title="Close rooms"
+                    className="thread-icon-button thread-mobile-only-inline-flex h-10 w-10 items-center justify-center rounded-full"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`thread-graph-new-room-strip flex shrink-0 items-center border-b ${
+                roomsRailCollapsed
+                  ? "h-12 w-full justify-center px-2 sm:h-12"
+                  : "h-[68px] px-4"
+              }`}
+            >
+              {renderNewThreadDialogButton(
+                `thread-graph-new-room-button inline-flex items-center justify-center rounded-xl font-medium transition ${
+                  roomsRailCollapsed
+                    ? "h-9 w-9 p-0"
+                    : "h-11 w-full gap-2 px-3 text-sm sm:h-9"
+                }`,
+                roomsRailCollapsed,
+              )}
+            </div>
+
+            <div
+              className={`flex min-h-0 flex-1 flex-col ${
+                roomsRailCollapsed ? "w-full px-2 py-2" : "px-3 py-3"
+              }`}
+            >
+              {renderRoomsRailContent(roomsRailCollapsed)}
+            </div>
+            </GraphChatRoomsRailShell>
+          ) : null}
+
+          <GraphChatMainShell>
+
 
             <GraphChatSplitRegion>
               {hasWorkspace && !workspaceCollapsed ? (
