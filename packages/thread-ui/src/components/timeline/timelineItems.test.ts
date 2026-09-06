@@ -367,3 +367,10 @@ describe("timeline item utilities", () => {
     expect(isRunningHistoryStatus(null)).toBe(false);
   });
 });
+
+
+it('does not revive a persisted completed command from a stale live overlay', () => {
+  const completed = item('cmd', 'commandExecution', {status: 'completed', text: 'grep source'});
+  const stale = {...completed, status: 'running', detailText: 'older longer output'};
+  expect(mergeLiveTurnItems([completed], [stale])[0]).toMatchObject({status:'completed',detailText:stale.detailText});
+});

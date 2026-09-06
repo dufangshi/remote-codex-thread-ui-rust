@@ -58,6 +58,7 @@ export function WorkspaceExplorerPanel({
   explorerScrollTopRef,
   explorerScrollerRef,
   selectedNodeId,
+  revealRequestKey,
   tree,
   rootError,
 }: {
@@ -91,6 +92,7 @@ export function WorkspaceExplorerPanel({
   explorerScrollTopRef: MutableRefObject<number>;
   explorerScrollerRef: MutableRefObject<HTMLDivElement | null>;
   selectedNodeId: string | null;
+  revealRequestKey?: number | undefined;
   tree: WorkspaceTreeNode;
   rootError?: string | null;
 }) {
@@ -352,6 +354,7 @@ export function WorkspaceExplorerPanel({
           directoryErrors={directoryErrors}
           loadingPaths={loadingPaths}
           selectedNodeId={selectedNodeId}
+          revealRequestKey={revealRequestKey}
           scrollerRef={explorerScrollerRef}
           scrollTopRef={explorerScrollTopRef}
           {...(onCopyPath ? { onCopyPath } : {})}

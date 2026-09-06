@@ -5,7 +5,7 @@ import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ExportThreadPdfInput } from '@remote-codex/shared';
+import type { ExportThreadTranscriptInput } from '@remote-codex/shared';
 import { ThreadActionsDialog } from './ExportTranscriptDialog';
 
 let root: Root | null = null;
@@ -131,7 +131,7 @@ describe('ThreadActionsDialog', () => {
     expect(document.body.querySelector('[role="dialog"]')?.getAttribute('aria-label')).toBe(
       'Thread actions',
     );
-    expect(text('PDF')).toBe(true);
+    expect(text('PDF')).toBe(false);
     expect(text('HTML')).toBe(true);
     expect(text('Share')).toBe(true);
     expect(text('Turns')).toBe(true);
@@ -155,7 +155,7 @@ describe('ThreadActionsDialog', () => {
       options: {
         includeTokenAndPrice: true,
       },
-    } satisfies ExportThreadPdfInput);
+    } satisfies ExportThreadTranscriptInput);
   });
 
   it.each([
@@ -167,17 +167,17 @@ describe('ThreadActionsDialog', () => {
 
     changeSelect(document.body.querySelector('select')!, mode);
     expect(text(selectedLabel)).toBe(true);
-    click(exportButton('Export PDF'));
+    click(exportButton('Export HTML'));
 
     expect(onExport).toHaveBeenCalledWith({
-      format: 'pdf',
+      format: 'html',
       mode: 'latest',
       limit,
       profile: 'review',
       options: {
         includeTokenAndPrice: true,
       },
-    } satisfies ExportThreadPdfInput);
+    } satisfies ExportThreadTranscriptInput);
   });
 
   it('exports all loaded turns as an explicit selection', () => {
@@ -186,17 +186,17 @@ describe('ThreadActionsDialog', () => {
 
     changeSelect(document.body.querySelector('select')!, 'all-loaded');
     expect(text('3 turns selected.')).toBe(true);
-    click(exportButton('Export PDF'));
+    click(exportButton('Export HTML'));
 
     expect(onExport).toHaveBeenCalledWith({
-      format: 'pdf',
+      format: 'html',
       mode: 'selected',
       turnIds: ['turn-3', 'turn-2', 'turn-1'],
       profile: 'review',
       options: {
         includeTokenAndPrice: true,
       },
-    } satisfies ExportThreadPdfInput);
+    } satisfies ExportThreadTranscriptInput);
   });
 
   it('exports a custom turn selection', () => {
@@ -206,17 +206,17 @@ describe('ThreadActionsDialog', () => {
     changeSelect(document.body.querySelector('select')!, 'custom');
     click(exportButton('Clear'));
     click(checkedInput('Second prompt'));
-    click(exportButton('Export PDF'));
+    click(exportButton('Export HTML'));
 
     expect(onExport).toHaveBeenCalledWith({
-      format: 'pdf',
+      format: 'html',
       mode: 'selected',
       turnIds: ['turn-2'],
       profile: 'review',
       options: {
         includeTokenAndPrice: true,
       },
-    } satisfies ExportThreadPdfInput);
+    } satisfies ExportThreadTranscriptInput);
   });
 
   it('creates and revokes relay shares from share mode', () => {
@@ -297,6 +297,6 @@ describe('ThreadActionsDialog', () => {
     expect(panel?.className).toContain('rounded-t-');
     expect(panel?.className).toContain('max-h-[min(48rem,calc(100vh-1rem))]');
     expect(footer?.textContent).toContain('3 turns selected.');
-    expect(exportButton('Export PDF')).toBeTruthy();
+    expect(exportButton('Export HTML')).toBeTruthy();
   });
 });

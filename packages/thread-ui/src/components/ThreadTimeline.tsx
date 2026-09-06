@@ -1,3 +1,4 @@
+import { mergeThreadHistoryItem } from '@remote-codex/shared';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type {
@@ -646,7 +647,7 @@ function ThreadTimelineComponent({
                     // A summary refresh must update messages/usage without dropping the
                     // operations explicitly loaded earlier or restoring stale text.
                     const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
-                    for (const item of turn.items) mergedItems.set(item.id, item);
+                    for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem(mergedItems.get(item.id), item));
                     const hydratedTurn = loadedTurn
                       ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] }
                       : turn;

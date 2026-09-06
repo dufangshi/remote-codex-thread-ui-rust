@@ -503,6 +503,10 @@ export function ThreadWorkspaceLayout({
   const [mobileWorkspace, setMobileWorkspace] = useState<"chat" | "workspace">(
     "chat",
   );
+  const [workspaceVisited, setWorkspaceVisited] = useState(false);
+  useEffect(() => {
+    if (mobileWorkspace === "workspace") setWorkspaceVisited(true);
+  }, [mobileWorkspace]);
   const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
   const [draftTitle, setDraftTitle] = useState("");
   const [renamingThreadId, setRenamingThreadId] = useState<string | null>(null);
@@ -1372,7 +1376,7 @@ export function ThreadWorkspaceLayout({
                             : "hidden"
                       }`}
                     >
-                      {renderWorkspacePanel()}
+                      {(mobileWorkspace === "workspace" || workspaceVisited) ? renderWorkspacePanel() : null}
                     </div>
                   </div>
                 ) : (

@@ -89,6 +89,12 @@ export function GraphWorkspaceExplorer({
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const explorerScrollerRef = useRef<HTMLDivElement | null>(null);
   const explorerScrollTopRef = useRef(0);
+  const restoredRevealRef = useRef<number | null>(null);
+  const scrollRestoreGenerationRef = useRef(0);
+  useLayoutEffect(() => {
+    ++scrollRestoreGenerationRef.current;
+    return () => { ++scrollRestoreGenerationRef.current; };
+  }, [focusPathRequest]);
   const pendingExplorerScrollRestoreRef = useRef<number | null>(null);
   const {
     imageUrl,
@@ -171,6 +177,7 @@ export function GraphWorkspaceExplorer({
   }
 
   function restoreExplorerScroll() {
+    const generation = ++scrollRestoreGenerationRef.current;
     const target =
       pendingExplorerScrollRestoreRef.current ?? explorerScrollTopRef.current;
     const scroller = explorerScrollerRef.current;
@@ -181,7 +188,7 @@ export function GraphWorkspaceExplorer({
     let frame = 0;
     const restore = () => {
       const current = explorerScrollerRef.current;
-      if (!current) {
+      if (!current || generation !== scrollRestoreGenerationRef.current) {
         return;
       }
       current.scrollTop = Math.min(
@@ -200,13 +207,18 @@ export function GraphWorkspaceExplorer({
   }
 
   useLayoutEffect(() => {
-    if (collapsedPanel === 'explorer') {
+    if (collapsedPanel === 'explorer' || (focusPathRequest && restoredRevealRef.current !== focusPathRequest.requestId)) {
       return;
     }
     restoreExplorerScroll();
-    // Restore after panel changes and tree mutations. These transitions can
+    // Restore after panel changes. These transitions can
     // remount the scroller or let WebView apply delayed scroll anchoring.
-  }, [collapsedPanel, tree]);
+  }, [collapsedPanel]);
+  useLayoutEffect(() => {
+    if (focusPathRequest && !loadingTree && activeNode) {
+      restoredRevealRef.current = focusPathRequest.requestId;
+    }
+  }, [focusPathRequest, loadingTree, activeNode]);
 
   useEffect(() => {
     if (
@@ -330,6 +342,7 @@ export function GraphWorkspaceExplorer({
       }}
       onToggle={toggleDirectory}
       selectedNodeId={activeNode?.id ?? null}
+      revealRequestKey={focusPathRequest?.requestId}
       tree={tree}
       liveNodes={liveNodes}
     />

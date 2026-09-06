@@ -347,6 +347,95 @@ function ZoomableImage({
   ] });
 }
 
+// src/components/workspacePaths.ts
+function relativeWorkspacePath(value, workspaceRoot) {
+  let path = value.trim().replace(/\\/g, "/");
+  const root = workspaceRoot.trim().replace(/\\/g, "/").replace(/\/+$/, "");
+  const absolute = path.startsWith("/") || /^[a-z]:\//i.test(path);
+  if (absolute) {
+    const windows = /^[a-z]:\//i.test(root);
+    const comparePath = windows ? path.toLowerCase() : path;
+    const compareRoot = windows ? root.toLowerCase() : root;
+    if (comparePath === compareRoot) return "";
+    if (!comparePath.startsWith(`${compareRoot}/`)) return null;
+    path = path.slice(root.length + 1);
+  }
+  const segments = [];
+  for (const part of path.split("/")) {
+    if (!part || part === ".") continue;
+    if (part === "..") {
+      if (!segments.length) return null;
+      segments.pop();
+    } else segments.push(part);
+  }
+  return segments.join("/");
+}
+function workspaceDisplayPath(path, root) {
+  const relative = relativeWorkspacePath(path, root);
+  return relative === null ? null : `./${relative}`;
+}
+
+// src/components/WorkspaceFileLink.tsx
+import { useEffect as useEffect2, useRef as useRef2, useState as useState2 } from "react";
+import { createPortal as createPortal2 } from "react-dom";
+import { Fragment as Fragment2, jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
+function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-inline-link" }) {
+  const [menu, setMenu] = useState2(null);
+  const [copyError, setCopyError] = useState2(false);
+  const menuRef = useRef2(null);
+  const displayPath = path.startsWith("/") || /^[a-z]:/i.test(path) ? path : `./${path.replace(/^\.\//, "")}`;
+  const address = displayPath + (line ? `#L${line}` : "");
+  useEffect2(() => {
+    if (!menu) return;
+    const dismiss = (event) => {
+      if (!menuRef.current?.contains(event.target)) setMenu(null);
+    };
+    const key = (event) => {
+      if (event.key === "Escape") setMenu(null);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    document.addEventListener("keydown", key);
+    window.addEventListener("scroll", dismiss, true);
+    menuRef.current?.querySelector("button")?.focus();
+    return () => {
+      document.removeEventListener("pointerdown", dismiss);
+      document.removeEventListener("keydown", key);
+      window.removeEventListener("scroll", dismiss, true);
+    };
+  }, [menu]);
+  const open = () => {
+    setMenu(null);
+    onOpen({ path, ...line ? { line } : {} });
+  };
+  return /* @__PURE__ */ jsxs2(Fragment2, { children: [
+    /* @__PURE__ */ jsx4(
+      "a",
+      {
+        href: displayPath.split("/").map(encodeURIComponent).join("/") + (line ? `#L${line}` : ""),
+        title: address,
+        className,
+        onClick: (event) => {
+          event.preventDefault();
+          open();
+        },
+        onContextMenu: (event) => {
+          event.preventDefault();
+          setCopyError(false);
+          setMenu({ x: Math.min(event.clientX, window.innerWidth - 190), y: Math.min(event.clientY, window.innerHeight - 100) });
+        },
+        children
+      }
+    ),
+    menu && createPortal2(/* @__PURE__ */ jsxs2("div", { ref: menuRef, role: "menu", "aria-label": "File link", className: "thread-workspace-link-menu", style: { left: Math.max(8, menu.x), top: Math.max(8, menu.y) }, children: [
+      /* @__PURE__ */ jsx4("button", { role: "menuitem", onClick: open, children: "Open file" }),
+      /* @__PURE__ */ jsx4("button", { role: "menuitem", onClick: () => {
+        void navigator.clipboard.writeText(address).then(() => setMenu(null)).catch(() => setCopyError(true));
+      }, children: "Copy link address" }),
+      copyError && /* @__PURE__ */ jsx4("span", { role: "alert", children: "Could not copy path" })
+    ] }), document.body)
+  ] });
+}
+
 // src/components/graph-chat/graphChatShiki.ts
 var graphChatHighlighterPromise = null;
 function getGraphChatHighlighter() {
@@ -387,7 +476,7 @@ function getGraphChatHighlighter() {
       javascript,
       typescript,
       tsx,
-      jsx5,
+      jsx6,
       python,
       json,
       bash,
@@ -414,7 +503,7 @@ function getGraphChatHighlighter() {
         javascript.default,
         typescript.default,
         tsx.default,
-        jsx5.default,
+        jsx6.default,
         python.default,
         json.default,
         bash.default,
@@ -442,12 +531,12 @@ function getGraphChatHighlighter() {
 
 // src/components/graph-ui/Tooltip.tsx
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { jsx as jsx4, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx5, jsxs as jsxs3 } from "react/jsx-runtime";
 function TooltipProvider({
   delayDuration = 0,
   ...props
 }) {
-  return /* @__PURE__ */ jsx4(
+  return /* @__PURE__ */ jsx5(
     TooltipPrimitive.Provider,
     {
       "data-slot": "tooltip-provider",
@@ -457,12 +546,12 @@ function TooltipProvider({
   );
 }
 function Tooltip({ ...props }) {
-  return /* @__PURE__ */ jsx4(TooltipProvider, { children: /* @__PURE__ */ jsx4(TooltipPrimitive.Root, { "data-slot": "tooltip", ...props }) });
+  return /* @__PURE__ */ jsx5(TooltipProvider, { children: /* @__PURE__ */ jsx5(TooltipPrimitive.Root, { "data-slot": "tooltip", ...props }) });
 }
 function TooltipTrigger({
   ...props
 }) {
-  return /* @__PURE__ */ jsx4(TooltipPrimitive.Trigger, { "data-slot": "tooltip-trigger", ...props });
+  return /* @__PURE__ */ jsx5(TooltipPrimitive.Trigger, { "data-slot": "tooltip-trigger", ...props });
 }
 function TooltipContent({
   children,
@@ -470,7 +559,7 @@ function TooltipContent({
   sideOffset = 0,
   ...props
 }) {
-  return /* @__PURE__ */ jsx4(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs2(
+  return /* @__PURE__ */ jsx5(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs3(
     TooltipPrimitive.Content,
     {
       "data-slot": "tooltip-content",
@@ -482,7 +571,7 @@ function TooltipContent({
       ...props,
       children: [
         children,
-        /* @__PURE__ */ jsx4(TooltipPrimitive.Arrow, { className: "z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" })
+        /* @__PURE__ */ jsx5(TooltipPrimitive.Arrow, { className: "z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" })
       ]
     }
   ) });
@@ -495,6 +584,9 @@ export {
   ResizablePanel,
   ResizableHandle,
   ZoomableImage,
+  relativeWorkspacePath,
+  workspaceDisplayPath,
+  WorkspaceFileLink,
   getGraphChatHighlighter,
   Tooltip,
   TooltipTrigger,

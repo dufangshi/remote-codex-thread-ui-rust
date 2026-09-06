@@ -1,5 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 
+import { workspaceDisplayPath } from '../../workspacePaths';
 import type { ThreadWorkspaceAdapter } from '../../../adapters';
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerIdentity } from './useWorkspaceExplorerPersistence';
@@ -89,12 +90,8 @@ export function useWorkspaceExplorerActions({
     ) {
       return;
     }
-    const workspaceRoot = workspaceRootPath.replace(/\/+$/, '');
-    const path = node.path.startsWith('/')
-      ? node.path
-      : workspaceRoot
-        ? `${workspaceRoot}/${node.path.replace(/^\/+/, '')}`
-        : node.path;
+    const path = workspaceDisplayPath(node.path, workspaceRootPath);
+    if (path === null) return;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(
         error instanceof Error ? error.message : 'Failed to copy file path',

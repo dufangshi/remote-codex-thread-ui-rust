@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import type {
-  ExportThreadPdfInput,
+  ExportThreadTranscriptInput,
   ShellEventEnvelope,
   ThreadShellStateDto,
 } from '@remote-codex/shared';
@@ -394,7 +394,7 @@ export function PlaygroundApp() {
           }}
           onCancel={() => setThreadActionsOpen(false)}
           onLoadTurns={() => {}}
-          onExport={(_input: ExportThreadPdfInput) => {
+          onExport={(_input: ExportThreadTranscriptInput) => {
             setThreadActionsOpen(false);
           }}
           onCreateShare={() => {}}

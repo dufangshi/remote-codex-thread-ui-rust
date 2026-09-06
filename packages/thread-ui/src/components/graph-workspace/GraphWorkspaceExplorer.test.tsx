@@ -256,6 +256,37 @@ describe('GraphWorkspaceExplorer', () => {
     ).toBe('README.md');
   });
 
+  it('does not preview a fallback file while opening a deep link and ignores stale root refreshes', async () => {
+    const staleRoot = deferred<ThreadWorkspaceTreeNode>();
+    const targetRoot = directory('', [directory('src', [], false), file('WRONG.md')]);
+    let rootReads = 0;
+    const readFile = vi.fn<ThreadWorkspaceAdapter['readFile']>(async ({path})=>filePreview(path));
+    const adapter: ThreadWorkspaceAdapter = {
+      listTree: vi.fn(async ({path}) => path === 'src' ? directory('src', [file('src/index.ts')]) : ++rootReads === 1 ? staleRoot.promise : targetRoot),
+      readFile,
+    };
+    await renderExplorer(adapter);
+    await renderExplorer(adapter, {path:'/workspace/demo/src/index.ts', requestId:1});
+    await vi.waitFor(()=>expect(host?.querySelector('[data-testid="preview-file"]')?.textContent).toBe('src/index.ts'));
+    await act(async()=>staleRoot.resolve(directory('', [file('OLDER.md')])));
+    expect(host?.querySelector('[data-testid="preview-file"]')?.textContent).toBe('src/index.ts');
+    expect(readFile.mock.calls.map(([input])=>input.path)).toEqual(['src/index.ts']);
+  });
+
+  it('the newest link wins when ancestor loads finish out of order', async () => {
+    const slow = deferred<ThreadWorkspaceTreeNode>();
+    const readFile = vi.fn<ThreadWorkspaceAdapter['readFile']>(async ({path})=>filePreview(path));
+    const adapter: ThreadWorkspaceAdapter = {
+      listTree: vi.fn(async ({path}) => path === 'src' ? slow.promise : path === 'docs' ? directory('docs',[file('docs/new.md')]) : directory('',[directory('src',[],false),directory('docs',[],false)])), readFile,
+    };
+    await renderExplorer(adapter, {path:'src/old.md',requestId:1});
+    await renderExplorer(adapter, {path:'docs/new.md',requestId:2});
+    await vi.waitFor(()=>expect(host?.querySelector('[data-testid="preview-file"]')?.textContent).toBe('docs/new.md'));
+    await act(async()=>slow.resolve(directory('src',[file('src/old.md')])));
+    expect(host?.querySelector('[data-testid="preview-file"]')?.textContent).toBe('docs/new.md');
+    expect(readFile.mock.calls.map(([input])=>input.path)).toEqual(['docs/new.md']);
+  });
+
   it('loads missing ancestors and selects a deep focus request', async () => {
     const { adapter, listTree, readFile } = createAdapter();
     await renderExplorer(adapter);

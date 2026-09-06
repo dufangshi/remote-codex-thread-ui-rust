@@ -307,6 +307,7 @@ export function ThreadDetailSurface({
               getImageAssetUrl(input.path),
           }
         : {}),
+      workspaceRootPath: detail?.workspace.absPath,
       onOpenLinkedThread: openThread,
       ...(openWorkspaceFile ? { onOpenWorkspaceFile: openWorkspaceFile } : {}),
       ...(loadHistoryItemDetail
@@ -316,6 +317,7 @@ export function ThreadDetailSurface({
       ...(cancelPendingSteer ? { cancelPendingSteer } : {}),
     }),
     [
+      detail?.workspace.absPath,
       cancelPendingSteer,
       getImageAssetUrl,
       loadHistoryItemDetail,

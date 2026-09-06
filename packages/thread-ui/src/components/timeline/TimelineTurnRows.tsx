@@ -508,9 +508,11 @@ function TimelineTimeToggle({
   absoluteLabel,
   className = '',
   timestamp,
+  endTimestamp,
   turnStartedAt,
 }: {
   absoluteLabel: string;
+  endTimestamp?: string | null | undefined;
   className?: string;
   timestamp: string | null | undefined;
   turnStartedAt: string | null | undefined;
@@ -522,7 +524,10 @@ function TimelineTimeToggle({
 
   const absoluteTitle = formatLongTimestamp(timestamp);
   const relativeLabel = formatRelativeTurnTime(turnStartedAt, timestamp);
-  const label = showAbsolute ? absoluteLabel : relativeLabel;
+  const hasRange = endTimestamp && endTimestamp !== timestamp;
+  const label = showAbsolute
+    ? absoluteLabel + (hasRange ? ` – ${formatShortTimestamp(endTimestamp)}` : '')
+    : relativeLabel + (hasRange ? ` – ${formatRelativeTurnTime(turnStartedAt, endTimestamp)}` : '');
 
   return (
     <span
@@ -563,7 +568,16 @@ function firstHistoryEntryTimestamp(
   return entry.items.find((item) => item.createdAt)?.createdAt ?? null;
 }
 
-function collapsedSummaryMessages(entries: TimelineHistoryEntry[]) {
+function lastHistoryEntryTimestamp(entry: TimelineHistoryEntry): string | null {
+  if (entry.kind === 'item') return entry.item.updatedAt ?? entry.item.createdAt ?? null;
+  if (entry.kind === 'agentActivityGroup') {
+    const timestamps = entry.entries.map(lastHistoryEntryTimestamp).filter((value): value is string => Boolean(value));
+    return timestamps.sort((a,b)=>Date.parse(a)-Date.parse(b)).at(-1) ?? null;
+  }
+  return entry.items.map(item=>item.updatedAt ?? item.createdAt).filter((value): value is string => Boolean(value)).sort((a,b)=>Date.parse(a)-Date.parse(b)).at(-1) ?? null;
+}
+
+function collapsedSummaryMessages(entries: TimelineHistoryEntry[], active: boolean) {
   const itemEntries = entries.filter(
     (entry): entry is TimelineHistoryEntry & { kind: 'item' } =>
       entry.kind === 'item',
@@ -574,13 +588,15 @@ function collapsedSummaryMessages(entries: TimelineHistoryEntry[]) {
       (item): item is ThreadHistoryItemDto & { kind: 'userMessage' } =>
         item.kind === 'userMessage',
     );
-  const finalAgent = itemEntries
+  const last = entries.at(-1);
+  const latestAgent = itemEntries
     .map((entry) => entry.item)
     .reverse()
     .find(
       (item): item is ThreadHistoryItemDto & { kind: 'agentMessage' } =>
         item.kind === 'agentMessage' && item.text.trim().length > 0,
     );
+  const finalAgent = active && !(last?.kind === 'item' && last.item.kind === 'agentMessage') ? undefined : latestAgent;
   const hiddenEntries = entries.filter((entry) => {
     if (entry.kind !== 'item') {
       return true;
@@ -593,6 +609,7 @@ function collapsedSummaryMessages(entries: TimelineHistoryEntry[]) {
 
   return {
     users,
+    latestAgent,
     finalAgent,
     hiddenEntries,
   };
@@ -739,6 +756,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
         }
         timeTitle={turnTimeTitle}
         streaming
+        {...(adapter ? { adapter } : {})}
         {...(onBeforeMessageResize ? { onBeforeMessageResize } : {})}
       />
     ) : null;
@@ -750,8 +768,8 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     />
   ) : null;
   const collapsedSummary = useMemo(
-    () => collapsedSummaryMessages(groupedItems),
-    [groupedItems],
+    () => collapsedSummaryMessages(groupedItems, activeForRendering),
+    [groupedItems, activeForRendering],
   );
   const workedLabel = useMemo(
     () => activeForRendering ? 'Working' : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
@@ -766,6 +784,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const hasCollapsedHiddenItems =
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
+  const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
   const canToggleWorkedSummary =
     hasCollapsedHiddenItems;
   const terminalWorkedNode =
@@ -831,21 +850,21 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           />
         </div>
         {!effectiveCollapsed ? renderHistoryEntries(collapsedSummary.hiddenEntries) : null}
-        {collapsedSummary.finalAgent ? (
+        {visibleSummaryAgent ? (
           <CompactMessageItem
             threadId={threadId}
-            item={collapsedSummary.finalAgent}
+            item={visibleSummaryAgent}
             scrollRootRef={scrollRootRef}
             timeLabel={
-              collapsedSummary.finalAgent.createdAt
+              visibleSummaryAgent.createdAt
                 ? formatPreciseMessageTimestamp(
-                    collapsedSummary.finalAgent.createdAt,
+                    visibleSummaryAgent.createdAt,
                   )
                 : formatPreciseMessageTimestamp(turn.startedAt)
             }
             timeTitle={
-              collapsedSummary.finalAgent.createdAt
-                ? formatLongTimestamp(collapsedSummary.finalAgent.createdAt)
+              visibleSummaryAgent.createdAt
+                ? formatLongTimestamp(visibleSummaryAgent.createdAt)
                 : turnTimeTitle
             }
             {...(onBeforeMessageResize ? { onBeforeMessageResize } : {})}
@@ -932,11 +951,12 @@ function TimelineHistoryEntries({
 }: TimelineHistoryEntriesProps) {
   const latestEntryKey = entries.at(-1)?.key ?? null;
   const relativeTimeMeta = useCallback(
-    (timestamp: string | null | undefined) =>
+    (timestamp: string | null | undefined, endTimestamp?: string | null) =>
       timestamp ? (
         <TimelineTimeToggle
           absoluteLabel={formatShortTimestamp(timestamp)}
           timestamp={timestamp}
+          endTimestamp={endTimestamp}
           turnStartedAt={turnStartedAt ?? fallbackTimestamp}
         />
       ) : null,
@@ -955,7 +975,7 @@ function TimelineHistoryEntries({
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           onOpen={onOpenCommandDetail}
-          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry))}
+          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />
       )}
       renderFileChangeGroup={(entry, expanded, onToggleExpanded) => (
@@ -965,7 +985,7 @@ function TimelineHistoryEntries({
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           onOpen={onOpenExpandedText}
-          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry))}
+          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />
       )}
       renderSearchGroup={(entry, expanded, onToggleExpanded) => (
@@ -975,7 +995,7 @@ function TimelineHistoryEntries({
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           onOpen={onOpenExpandedText}
-          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry))}
+          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />
       )}
       renderFileReadGroup={(entry, expanded, onToggleExpanded) => (
@@ -985,7 +1005,7 @@ function TimelineHistoryEntries({
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           onOpen={onOpenExpandedText}
-          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry))}
+          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />
       )}
       renderToolCallGroup={(entry, expanded, onToggleExpanded) => (
@@ -995,17 +1015,18 @@ function TimelineHistoryEntries({
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           onOpen={onOpenToolCallDetail}
-          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry))}
+          timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />
       )}
       renderAgentActivityGroup={(entry, expanded, onToggleExpanded) => (
         <AgentActivityGroupItem
           key={entry.key}
           itemCount={entry.itemCount}
+          running={autoOpenLatestToolDetails && entry.key === latestEntryKey}
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           timeMeta={relativeTimeMeta(
-            firstHistoryEntryTimestamp(entry.entries[0]!),
+            firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry),
           )}
         >
           <TimelineHistoryEntries

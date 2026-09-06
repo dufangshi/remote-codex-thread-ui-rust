@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 import type {
   ThreadWorkspaceAdapter,
@@ -34,12 +34,13 @@ export function useWorkspaceFilePreview({
   const [previewLoading, setPreviewLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const selectedPath = activeNode?.kind === 'file' ? activeNode.path : null;
     if (!adapter || !selectedPath) {
       setPreviewFile(null);
       setImageUrl(null);
       setPdfUrl(null);
+      setPreviewLoading(false);
       return;
     }
     const currentAdapter = adapter;

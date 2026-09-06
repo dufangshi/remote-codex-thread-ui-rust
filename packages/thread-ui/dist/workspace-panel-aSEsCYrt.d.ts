@@ -27,6 +27,7 @@ interface ThreadShellControlState {
 }
 
 interface ThreadTimelineAdapter {
+    workspaceRootPath?: string | undefined;
     getImageAssetUrl?: (input: {
         threadId: string;
         path: string;

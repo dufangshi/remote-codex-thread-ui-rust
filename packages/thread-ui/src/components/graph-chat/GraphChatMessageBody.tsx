@@ -146,6 +146,7 @@ export const GraphChatMarkdownAwareBody = memo(
     markdownClassName = 'thread-graph-markdown',
     onBeforeResize,
     onOpenWorkspaceFile,
+    workspaceRootPath,
     resolveHref,
   }: {
     messageId?: string | undefined;
@@ -157,6 +158,7 @@ export const GraphChatMarkdownAwareBody = memo(
     markdownClassName?: string;
     onBeforeResize?: () => void;
     onOpenWorkspaceFile?: ThreadTimelineAdapter['onOpenWorkspaceFile'] | undefined;
+    workspaceRootPath?: string | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
     const messageRef = useRef<HTMLDivElement | null>(null);
@@ -244,6 +246,7 @@ export const GraphChatMarkdownAwareBody = memo(
           <GraphChatMessageContent
             content={displayText}
             className={markdownClassName}
+            workspaceRootPath={workspaceRootPath}
             onOpenWorkspaceFile={onOpenWorkspaceFile}
             resolveHref={resolveHref}
           />
@@ -276,6 +279,7 @@ export const GraphChatAgentMessageBody = memo(
     streaming = false,
     onBeforeResize,
     onOpenWorkspaceFile,
+    workspaceRootPath,
     resolveHref,
   }: {
     messageId?: string | undefined;
@@ -284,6 +288,7 @@ export const GraphChatAgentMessageBody = memo(
     streaming?: boolean;
     onBeforeResize?: () => void;
     onOpenWorkspaceFile?: ThreadTimelineAdapter['onOpenWorkspaceFile'] | undefined;
+    workspaceRootPath?: string | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
     return (
@@ -294,6 +299,7 @@ export const GraphChatAgentMessageBody = memo(
         streaming={streaming}
         containerClassName="thread-graph-message-prose"
         {...(onBeforeResize ? { onBeforeResize } : {})}
+        workspaceRootPath={workspaceRootPath}
         {...(onOpenWorkspaceFile ? { onOpenWorkspaceFile } : {})}
         {...(resolveHref ? { resolveHref } : {})}
       />

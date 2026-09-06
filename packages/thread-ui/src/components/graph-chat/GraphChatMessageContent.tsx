@@ -17,6 +17,8 @@ import remarkCjkFriendly from 'remark-cjk-friendly';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 
+import { relativeWorkspacePath } from '../workspacePaths';
+import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { Button } from '../graph-ui/Button';
 import { usePlugins } from '../../plugins/usePlugins';
 import { GraphChatToolCall } from './GraphChatToolCall';
@@ -94,13 +96,13 @@ function readMarkdownNodeLineRange(node: unknown) {
   };
 }
 
-function parseWorkspaceFileHref(href: string | undefined) {
+function parseWorkspaceFileHref(href: string | undefined, workspaceRootPath?: string) {
   if (!href) {
     return null;
   }
 
   let candidate = href.trim();
-  if (!candidate) {
+  if (!candidate || candidate.startsWith('#')) {
     return null;
   }
 
@@ -108,14 +110,14 @@ function parseWorkspaceFileHref(href: string | undefined) {
     if (typeof window === 'undefined') {
       return null;
     }
-    const parsed = new URL(candidate, window.location.origin);
+    const parsed = /^(?:https?:|file:)/i.test(candidate) ? new URL(candidate, window.location.origin) : null;
     if (
-      parsed.origin !== window.location.origin &&
+      parsed && parsed.origin !== window.location.origin &&
       parsed.protocol !== 'file:'
     ) {
       return null;
     }
-    candidate = parsed.protocol === 'file:' ? parsed.pathname : parsed.pathname;
+    if (parsed) candidate = parsed.pathname + parsed.hash;
   } catch {
     // Fall back to raw href parsing.
   }
@@ -126,9 +128,7 @@ function parseWorkspaceFileHref(href: string | undefined) {
     // Keep the raw candidate when decoding fails.
   }
 
-  if (!candidate.startsWith('/')) {
-    return null;
-  }
+  if (/^[a-z][a-z+.-]*:/i.test(candidate) && !/^[a-z]:[\\/]/i.test(candidate)) return null;
 
   if (
     APP_LOCAL_PATH_PREFIXES.some(
@@ -138,9 +138,10 @@ function parseWorkspaceFileHref(href: string | undefined) {
     return null;
   }
 
-  const lineMatch = candidate.match(/:(\d+)(?::\d+)?$/);
+  const lineMatch = candidate.match(/(?:#L|:)(\d+)(?::\d+)?$/);
   const line = lineMatch ? Number.parseInt(lineMatch[1] ?? '', 10) : undefined;
-  const path = lineMatch ? candidate.slice(0, -lineMatch[0].length) : candidate;
+  const rawPath = lineMatch ? candidate.slice(0, -lineMatch[0].length) : candidate;
+  const path = workspaceRootPath ? relativeWorkspacePath(rawPath, workspaceRootPath) : rawPath;
   if (!path || path === '/') {
     return null;
   }
@@ -182,12 +183,14 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   content,
   readOnly = false,
   onOpenWorkspaceFile,
+  workspaceRootPath,
   resolveHref,
 }: {
   className?: string;
   content: string;
   readOnly?: boolean;
   onOpenWorkspaceFile?: OpenWorkspaceFileHandler | undefined;
+  workspaceRootPath?: string | undefined;
   resolveHref?: ((href: string) => string) | undefined;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -439,20 +442,10 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
         components={{
           a({ href, children, ...props }) {
             if (readOnly && (!href || !/^https?:\/\//i.test(href))) return <span>{children}</span>;
-            const workspaceTarget = parseWorkspaceFileHref(href);
+            const workspaceTarget = parseWorkspaceFileHref(href, workspaceRootPath);
             if (workspaceTarget && onOpenWorkspaceFile) {
               return (
-                <a
-                  {...props}
-                  href={href}
-                  className="thread-inline-link"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    onOpenWorkspaceFile(workspaceTarget);
-                  }}
-                >
-                  {children}
-                </a>
+                <WorkspaceFileLink {...workspaceTarget} onOpen={onOpenWorkspaceFile}>{children}</WorkspaceFileLink>
               );
             }
             return (

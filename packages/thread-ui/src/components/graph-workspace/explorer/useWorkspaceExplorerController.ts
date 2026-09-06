@@ -83,9 +83,8 @@ export function useWorkspaceExplorerController({
   );
   const tree = adapterTree ?? fallbackTree;
   const nodeMap = useMemo(() => flattenWorkspaceNodes(tree), [tree]);
-  const firstSelectableNode = findFirstPreviewNode(tree);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(() => {
-    const selectedPath = initialPersistedState.current.selectedPath;
+    const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;
     return selectedPath
       ? `workspace:${selectedPath}`
       : (fallbackFirstSelectableNode?.id ?? null);
@@ -117,7 +116,7 @@ export function useWorkspaceExplorerController({
   const activeNode =
     selectedNodeId === null
       ? null
-      : (nodeMap.get(selectedNodeId) ?? firstSelectableNode ?? null);
+      : (nodeMap.get(selectedNodeId) ?? null);
   const liveNodes = useMemo(
     () => tree.children.find((node) => node.path === 'live')?.children ?? [],
     [tree],
@@ -139,6 +138,9 @@ export function useWorkspaceExplorerController({
   fallbackFirstSelectableNodeRef.current = fallbackFirstSelectableNode;
 
   const refreshGenerationRef = useRef(0);
+  const focusGenerationRef = useRef(0);
+  const focusPendingRef = useRef(false);
+  const handledFocusRequestRef = useRef<string | null>(null);
   const workspaceGenerationRef = useRef(0);
   const directoryRequestGenerationsRef = useRef(new Map<string, number>());
   const skipPersistenceWriteRef = useRef(true);
@@ -200,6 +202,7 @@ export function useWorkspaceExplorerController({
           }
         }
         const nextTree = workspaceExplorerModelToTree(nextModel);
+        adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
         const firstFile = findFirstWorkspaceFile(nextTree);
         setSelectedNodeId((current) => {
@@ -326,6 +329,12 @@ export function useWorkspaceExplorerController({
         return;
       }
       const workspaceGeneration = workspaceGenerationRef.current;
+      const generation = ++focusGenerationRef.current;
+      ++refreshGenerationRef.current;
+      focusPendingRef.current = true;
+      const isCurrent = () => workspaceGenerationRef.current === workspaceGeneration && focusGenerationRef.current === generation;
+      setSelectedNodeId(`workspace:${targetPath}`);
+      setFilterQuery('');
       const ancestors = ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
@@ -356,7 +365,7 @@ export function useWorkspaceExplorerController({
               }),
             ),
           );
-        if (workspaceGenerationRef.current !== workspaceGeneration) {
+        if (!isCurrent()) {
           return;
         }
         for (const ancestor of ancestors) {
@@ -373,15 +382,19 @@ export function useWorkspaceExplorerController({
               path: ancestor,
             }),
           );
-          if (workspaceGenerationRef.current !== workspaceGeneration) {
+          if (!isCurrent()) {
             return;
           }
           nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
         }
+        adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
+        if (!hasWorkspaceExplorerPath(nextModel, targetPath)) {
+          throw new Error(`File not found: ./${targetPath}`);
+        }
         setSelectedNodeId(`workspace:${targetPath}`);
       } catch (error) {
-        if (workspaceGenerationRef.current !== workspaceGeneration) {
+        if (!isCurrent()) {
           return;
         }
         setWorkspaceError(
@@ -390,7 +403,8 @@ export function useWorkspaceExplorerController({
             : `Failed to open ${targetPath}`,
         );
       } finally {
-        if (workspaceGenerationRef.current === workspaceGeneration) {
+        if (isCurrent()) {
+          focusPendingRef.current = false;
           setLoadingTree(false);
         }
       }
@@ -434,8 +448,9 @@ export function useWorkspaceExplorerController({
     skipPersistenceWriteRef.current = true;
     const persisted = persistence.read();
     const fallbackNode = fallbackFirstSelectableNodeRef.current;
-    const nextSelectedId = persisted.selectedPath
-      ? `workspace:${persisted.selectedPath}`
+    const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : persisted.selectedPath;
+    const nextSelectedId = selectedPath
+      ? `workspace:${selectedPath}`
       : (fallbackNode?.id ?? null);
     setExpandedPaths(
       new Set([
@@ -467,7 +482,7 @@ export function useWorkspaceExplorerController({
   }, [expandedPaths, filterMode, nodeMap, persistence, selectedNodeId]);
 
   useEffect(() => {
-    if (!workspaceAdapter || !adapterModel) {
+    if (!workspaceAdapter || !adapterModel || focusPendingRef.current) {
       return;
     }
     for (const node of nodeMap.values()) {
@@ -497,15 +512,24 @@ export function useWorkspaceExplorerController({
     workspaceGenerationRef.current += 1;
     refreshGenerationRef.current += 1;
     directoryRequestGenerationsRef.current.clear();
+    adapterModelRef.current = null;
     setAdapterModel(null);
     setLoadingDirectoryPaths(new Set());
     setDirectoryErrors(new Map());
     setWorkspaceError(null);
-    void refreshWorkspaceTree();
+    handledFocusRequestRef.current = null;
+    if (!focusPathRequest) {
+      const persistedPath = persistence.read().selectedPath;
+      if (persistedPath) void focusWorkspacePath(persistedPath);
+      else void refreshWorkspaceTree();
+    }
   }, [refreshWorkspaceTree]);
 
   useEffect(() => {
     if (focusPathRequest) {
+      const key = `${workspaceIdentity.threadId}:${focusPathRequest.requestId}`;
+      if (handledFocusRequestRef.current === key) return;
+      handledFocusRequestRef.current = key;
       void focusWorkspacePath(focusPathRequest.path);
     }
   }, [focusPathRequest, focusWorkspacePath]);
@@ -554,7 +578,13 @@ export function useWorkspaceExplorerController({
     setFilterMode,
     setFilterQuery,
     setLoadingTree,
-    setSelectedNodeId,
+    setSelectedNodeId: (id: string | null) => {
+      ++focusGenerationRef.current;
+      ++refreshGenerationRef.current;
+      focusPendingRef.current = false;
+      setLoadingTree(false);
+      setSelectedNodeId(id);
+    },
     setWorkspaceError,
     toggleDirectory,
     tree,

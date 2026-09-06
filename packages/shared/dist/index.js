@@ -53,11 +53,26 @@ function truncateAutoThreadTitle(value) {
   }
   return `${characters.slice(0, AUTO_THREAD_TITLE_MAX_CHARS).join("")}...`;
 }
+function mergeThreadHistoryItem(current, incoming) {
+  if (!current || current.kind !== incoming.kind) return incoming;
+  const terminal = (status) => ["completed", "failed", "interrupted", "cancelled", "canceled"].includes(status?.toLowerCase() ?? "");
+  const richer = (previous, next) => (previous?.length ?? 0) > (next?.length ?? 0) ? previous : next ?? previous;
+  return {
+    ...current,
+    ...incoming,
+    text: richer(current.text, incoming.text) ?? "",
+    ...current.detailText != null || incoming.detailText != null ? { detailText: richer(current.detailText, incoming.detailText) ?? "" } : {},
+    ...current.previewText != null || incoming.previewText != null ? { previewText: richer(current.previewText, incoming.previewText) ?? "" } : {},
+    ...current.status != null || incoming.status != null ? { status: terminal(current.status) && !terminal(incoming.status) ? current.status : incoming.status ?? current.status } : {},
+    ...current.sequence != null || incoming.sequence != null ? { sequence: incoming.sequence ?? current.sequence } : {}
+  };
+}
 export {
   agentBackendIds,
   agentBackendMetadata,
   defaultAgentBackendId,
   isAgentBackendId,
+  mergeThreadHistoryItem,
   normalizeAgentBackendId,
   truncateAutoThreadTitle
 };

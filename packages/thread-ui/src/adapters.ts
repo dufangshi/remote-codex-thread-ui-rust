@@ -12,6 +12,7 @@ import type { ReactNode } from 'react';
 import type { SendPromptInput } from './types';
 
 export interface ThreadTimelineAdapter {
+  workspaceRootPath?: string | undefined;
   getImageAssetUrl?: (input: { threadId: string; path: string }) => string;
   resolveHref?: (href: string) => string;
   onOpenLinkedThread?: (threadId: string) => void;

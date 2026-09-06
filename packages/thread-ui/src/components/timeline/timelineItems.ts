@@ -1,3 +1,4 @@
+import { mergeThreadHistoryItem } from '@remote-codex/shared';
 import type { ThreadHistoryItemDto, ThreadTurnDto } from "@remote-codex/shared";
 
 export interface CommandHistoryItem extends ThreadHistoryItemDto {
@@ -333,27 +334,7 @@ export function mergeLiveTurnItems(
     }
 
     liveItemsById.delete(item.id);
-    const mergedItem: ThreadHistoryItemDto = {
-      ...item,
-      ...liveItem,
-      text: liveItem.text || item.text,
-    };
-    const detailText = liveItem.detailText ?? item.detailText;
-    const previewText = liveItem.previewText ?? item.previewText;
-    const status = liveItem.status ?? item.status;
-    const sequence = liveItem.sequence ?? item.sequence;
-    if (detailText !== undefined) {
-      mergedItem.detailText = detailText;
-    }
-    if (previewText !== undefined) {
-      mergedItem.previewText = previewText;
-    }
-    if (status !== undefined) {
-      mergedItem.status = status;
-    }
-    if (sequence !== undefined) {
-      mergedItem.sequence = sequence;
-    }
+    const mergedItem = mergeThreadHistoryItem(item, liveItem);
     return mergedItem;
   });
   const uniqueLiveItems = [...liveItemsById.values()];

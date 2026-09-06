@@ -2998,3 +2998,12 @@
 }
 
 .thread-ui-shell .thread-graph-message-time-row + .thread-graph-message-bubble.is-assistant { padding-top: 0; }
+
+.thread-workspace-link-menu { position:fixed; z-index:120; min-width:180px; padding:4px; border:1px solid #49473e; border-radius:9px; background:#25241e; color:#e9e7df; box-shadow:0 8px 24px #0005; font-size:13px; }
+.thread-workspace-link-menu button { display:block; width:100%; border-radius:5px; padding:7px 10px; text-align:left; }
+.thread-workspace-link-menu button:hover,.thread-workspace-link-menu button:focus-visible { background:#3b392e; outline:none; }
+html[data-theme-effective="light"] .thread-workspace-link-menu { background:#f3f5f5; color:#24292c; border-color:#c8cecd; }
+html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html[data-theme-effective="light"] .thread-workspace-link-menu button:focus-visible { background:#e0e6e5; }
+@keyframes thread-operation-sheen { from { background-position:150% 0; } to { background-position:-150% 0; } }
+.is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { background-image:linear-gradient(105deg,var(--theme-fg-muted) 35%,var(--theme-fg) 50%,var(--theme-fg-muted) 65%); background-size:250% 100%; background-clip:text; -webkit-background-clip:text; color:transparent; animation:thread-operation-sheen 2.4s linear infinite; }
+@media(prefers-reduced-motion:reduce) { .is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { animation:none; color:var(--theme-fg); background:none; } }

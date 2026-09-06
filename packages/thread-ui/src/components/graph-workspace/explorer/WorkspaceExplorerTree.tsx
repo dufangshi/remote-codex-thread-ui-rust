@@ -24,6 +24,7 @@ export function WorkspaceExplorerTree({
   directoryErrors,
   loadingPaths,
   selectedNodeId,
+  revealRequestKey,
   scrollerRef,
   scrollTopRef,
   onCopyPath,
@@ -45,6 +46,7 @@ export function WorkspaceExplorerTree({
   directoryErrors?: ReadonlyMap<string, string>;
   loadingPaths: ReadonlySet<string>;
   selectedNodeId: string | null;
+  revealRequestKey?: number | undefined;
   scrollerRef: MutableRefObject<HTMLDivElement | null>;
   scrollTopRef?: MutableRefObject<number>;
   onCopyPath?: (node: WorkspaceTreeNode) => void;
@@ -127,6 +129,18 @@ export function WorkspaceExplorerTree({
     },
     [canVirtualize, projection.indexById, virtualizer],
   );
+
+  const revealedSelectionRef = useRef<string | null>(null);
+  useEffect(() => {
+    const key = `${selectedNodeId}:${revealRequestKey ?? 0}`;
+    if (!selectedNodeId || revealedSelectionRef.current === key) return;
+    const index = projection.indexById.get(selectedNodeId);
+    if (index === undefined) return;
+    revealedSelectionRef.current = key;
+    setFocusedId(selectedNodeId);
+    if (canVirtualize) virtualizer.scrollToIndex(index, {align: 'auto'});
+    else rowElementsRef.current.get(selectedNodeId)?.scrollIntoView?.({block: 'nearest'});
+  }, [selectedNodeId, revealRequestKey, projection.indexById, canVirtualize, virtualizer]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {

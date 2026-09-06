@@ -1,9 +1,9 @@
-import { Users, Link2, FileText, FileCode, Pencil } from 'lucide-react';
+import { Users, Link2, FileCode, Pencil } from 'lucide-react';
 import { useEffect, useMemo, useState, type ReactNode, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 
 import type {
-  ExportThreadPdfInput,
+  ExportThreadTranscriptInput,
   ThreadExportFormatDto,
   ThreadExportTurnOptionDto,
   ThreadExportTurnOptionsDto,
@@ -52,7 +52,7 @@ export interface ThreadActionsDialogProps {
   initialMode?: ThreadActionMode;
   onCancel: () => void;
   onLoadTurns: () => void | Promise<void>;
-  onExport: (input: ExportThreadPdfInput) => void | Promise<void>;
+  onExport: (input: ExportThreadTranscriptInput) => void | Promise<void>;
   onCreateShare?: (input: CreateThreadShareInput) => void | Promise<void>;
   onRevokeShare?: (shareId: string) => void | Promise<void>;
   onOpenDeviceSharing?: () => void;
@@ -140,7 +140,7 @@ export function ThreadActionsDialog({
   shareAvailable = false,
   shareUnavailableMessage = 'Relay sharing will be enabled after the relay permission model is connected.',
   shareState,
-  initialMode = 'pdf',
+  initialMode = 'html',
   onCancel,
   onLoadTurns,
   onExport,
@@ -276,7 +276,7 @@ export function ThreadActionsDialog({
       return;
     }
 
-    const input: ExportThreadPdfInput = {
+    const input: ExportThreadTranscriptInput = {
       format: actionMode,
       ...(latestSelectedLimit !== null
         ? { mode: 'latest', limit: latestSelectedLimit }
@@ -308,7 +308,6 @@ export function ThreadActionsDialog({
   const actionTabs: Array<{ mode: ThreadActionMode; label: string }> = [
     { mode: 'share', label: 'People' },
     ...(linkContent ? [{mode: 'link' as const, label: 'Share as link'}] : []),
-    { mode: 'pdf', label: 'PDF' },
     { mode: 'html', label: 'HTML' },
   ];
 
@@ -363,7 +362,7 @@ export function ThreadActionsDialog({
                     : 'thread-export-dialog-muted-action'
                 }`}
               >
-                {tab.mode === 'share' ? <Users size={16}/> : tab.mode === 'link' ? <Link2 size={16}/> : tab.mode === 'pdf' ? <FileText size={16}/> : <FileCode size={16}/>}<span>{tab.label}</span>
+                {tab.mode === 'share' ? <Users size={16}/> : tab.mode === 'link' ? <Link2 size={16}/> : <FileCode size={16}/>}<span>{tab.label}</span>
               </button>
             ))}
           </div>
@@ -590,9 +589,7 @@ export function ThreadActionsDialog({
                   Token and price
                 </label>
                 <p className="thread-export-dialog-box thread-export-dialog-subtitle flex items-center rounded-xl border px-3 py-2 text-xs">
-                  {actionMode === 'html'
-                    ? 'HTML keeps the chat timeline styling and omits raw command output.'
-                    : 'Opens your browser’s Save as PDF dialog with the same chat styling.'}
+                  HTML keeps the chat styling and omits tool activity.
                 </p>
               </div>
             </>

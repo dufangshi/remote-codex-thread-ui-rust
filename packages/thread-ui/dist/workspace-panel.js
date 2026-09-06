@@ -6,13 +6,15 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  WorkspaceFileLink,
   ZoomableImage,
   cn,
-  getGraphChatHighlighter
-} from "./chunk-CFX4I522.js";
+  getGraphChatHighlighter,
+  workspaceDisplayPath
+} from "./chunk-NBECIKKF.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
-import { memo as memo2, useEffect as useEffect9, useMemo as useMemo9, useState as useState10 } from "react";
+import { memo as memo2, useEffect as useEffect8, useMemo as useMemo9, useState as useState10 } from "react";
 import {
   GitBranch,
   Paperclip,
@@ -22,7 +24,7 @@ import {
 } from "lucide-react";
 
 // src/components/graph-workspace/GraphWorkspaceExplorer.tsx
-import { useEffect as useEffect7, useLayoutEffect, useRef as useRef7, useState as useState9 } from "react";
+import { useEffect as useEffect6, useLayoutEffect as useLayoutEffect2, useRef as useRef7, useState as useState9 } from "react";
 
 // src/components/graph-workspace/explorer/useWorkspaceExplorerController.ts
 import { useCallback, useEffect, useMemo as useMemo2, useRef, useState } from "react";
@@ -564,9 +566,8 @@ function useWorkspaceExplorerController({
   );
   const tree = adapterTree ?? fallbackTree;
   const nodeMap = useMemo2(() => flattenWorkspaceNodes(tree), [tree]);
-  const firstSelectableNode = findFirstPreviewNode(tree);
   const [selectedNodeId, setSelectedNodeId] = useState(() => {
-    const selectedPath = initialPersistedState.current.selectedPath;
+    const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;
     return selectedPath ? `workspace:${selectedPath}` : fallbackFirstSelectableNode?.id ?? null;
   });
   const [expandedPaths, setExpandedPaths] = useState(
@@ -589,7 +590,7 @@ function useWorkspaceExplorerController({
     () => /* @__PURE__ */ new Map()
   );
   const [workspaceError, setWorkspaceError] = useState(null);
-  const activeNode = selectedNodeId === null ? null : nodeMap.get(selectedNodeId) ?? firstSelectableNode ?? null;
+  const activeNode = selectedNodeId === null ? null : nodeMap.get(selectedNodeId) ?? null;
   const liveNodes = useMemo2(
     () => tree.children.find((node) => node.path === "live")?.children ?? [],
     [tree]
@@ -609,6 +610,9 @@ function useWorkspaceExplorerController({
   loadingDirectoryPathsRef.current = loadingDirectoryPaths;
   fallbackFirstSelectableNodeRef.current = fallbackFirstSelectableNode;
   const refreshGenerationRef = useRef(0);
+  const focusGenerationRef = useRef(0);
+  const focusPendingRef = useRef(false);
+  const handledFocusRequestRef = useRef(null);
   const workspaceGenerationRef = useRef(0);
   const directoryRequestGenerationsRef = useRef(/* @__PURE__ */ new Map());
   const skipPersistenceWriteRef = useRef(true);
@@ -657,6 +661,7 @@ function useWorkspaceExplorerController({
           }
         }
         const nextTree = workspaceExplorerModelToTree(nextModel);
+        adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
         const firstFile = findFirstWorkspaceFile(nextTree);
         setSelectedNodeId((current) => {
@@ -757,6 +762,12 @@ function useWorkspaceExplorerController({
         return;
       }
       const workspaceGeneration = workspaceGenerationRef.current;
+      const generation = ++focusGenerationRef.current;
+      ++refreshGenerationRef.current;
+      focusPendingRef.current = true;
+      const isCurrent = () => workspaceGenerationRef.current === workspaceGeneration && focusGenerationRef.current === generation;
+      setSelectedNodeId(`workspace:${targetPath}`);
+      setFilterQuery("");
       const ancestors = ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
@@ -783,7 +794,7 @@ function useWorkspaceExplorerController({
             })
           )
         );
-        if (workspaceGenerationRef.current !== workspaceGeneration) {
+        if (!isCurrent()) {
           return;
         }
         for (const ancestor of ancestors) {
@@ -797,22 +808,27 @@ function useWorkspaceExplorerController({
               path: ancestor
             })
           );
-          if (workspaceGenerationRef.current !== workspaceGeneration) {
+          if (!isCurrent()) {
             return;
           }
           nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
         }
+        adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
+        if (!hasWorkspaceExplorerPath(nextModel, targetPath)) {
+          throw new Error(`File not found: ./${targetPath}`);
+        }
         setSelectedNodeId(`workspace:${targetPath}`);
       } catch (error) {
-        if (workspaceGenerationRef.current !== workspaceGeneration) {
+        if (!isCurrent()) {
           return;
         }
         setWorkspaceError(
           error instanceof Error ? error.message : `Failed to open ${targetPath}`
         );
       } finally {
-        if (workspaceGenerationRef.current === workspaceGeneration) {
+        if (isCurrent()) {
+          focusPendingRef.current = false;
           setLoadingTree(false);
         }
       }
@@ -849,7 +865,8 @@ function useWorkspaceExplorerController({
     skipPersistenceWriteRef.current = true;
     const persisted = persistence.read();
     const fallbackNode = fallbackFirstSelectableNodeRef.current;
-    const nextSelectedId = persisted.selectedPath ? `workspace:${persisted.selectedPath}` : fallbackNode?.id ?? null;
+    const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : persisted.selectedPath;
+    const nextSelectedId = selectedPath ? `workspace:${selectedPath}` : fallbackNode?.id ?? null;
     setExpandedPaths(
       /* @__PURE__ */ new Set([
         "",
@@ -876,7 +893,7 @@ function useWorkspaceExplorerController({
     });
   }, [expandedPaths, filterMode, nodeMap, persistence, selectedNodeId]);
   useEffect(() => {
-    if (!workspaceAdapter || !adapterModel) {
+    if (!workspaceAdapter || !adapterModel || focusPendingRef.current) {
       return;
     }
     for (const node of nodeMap.values()) {
@@ -897,14 +914,23 @@ function useWorkspaceExplorerController({
     workspaceGenerationRef.current += 1;
     refreshGenerationRef.current += 1;
     directoryRequestGenerationsRef.current.clear();
+    adapterModelRef.current = null;
     setAdapterModel(null);
     setLoadingDirectoryPaths(/* @__PURE__ */ new Set());
     setDirectoryErrors(/* @__PURE__ */ new Map());
     setWorkspaceError(null);
-    void refreshWorkspaceTree();
+    handledFocusRequestRef.current = null;
+    if (!focusPathRequest) {
+      const persistedPath = persistence.read().selectedPath;
+      if (persistedPath) void focusWorkspacePath(persistedPath);
+      else void refreshWorkspaceTree();
+    }
   }, [refreshWorkspaceTree]);
   useEffect(() => {
     if (focusPathRequest) {
+      const key = `${workspaceIdentity.threadId}:${focusPathRequest.requestId}`;
+      if (handledFocusRequestRef.current === key) return;
+      handledFocusRequestRef.current = key;
       void focusWorkspacePath(focusPathRequest.path);
     }
   }, [focusPathRequest, focusWorkspacePath]);
@@ -951,7 +977,13 @@ function useWorkspaceExplorerController({
     setFilterMode,
     setFilterQuery,
     setLoadingTree,
-    setSelectedNodeId,
+    setSelectedNodeId: (id) => {
+      ++focusGenerationRef.current;
+      ++refreshGenerationRef.current;
+      focusPendingRef.current = false;
+      setLoadingTree(false);
+      setSelectedNodeId(id);
+    },
     setWorkspaceError,
     toggleDirectory,
     tree,
@@ -1027,8 +1059,8 @@ function useWorkspaceExplorerActions({
     if (!node.path || typeof navigator === "undefined" || !navigator.clipboard) {
       return;
     }
-    const workspaceRoot = workspaceRootPath.replace(/\/+$/, "");
-    const path = node.path.startsWith("/") ? node.path : workspaceRoot ? `${workspaceRoot}/${node.path.replace(/^\/+/, "")}` : node.path;
+    const path = workspaceDisplayPath(node.path, workspaceRootPath);
+    if (path === null) return;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(
         error instanceof Error ? error.message : "Failed to copy file path"
@@ -1087,7 +1119,7 @@ function useWorkspaceExplorerActions({
 }
 
 // src/components/graph-workspace/explorer/useWorkspaceFilePreview.ts
-import { useEffect as useEffect2, useState as useState3 } from "react";
+import { useLayoutEffect, useState as useState3 } from "react";
 var PREVIEW_CHUNK_BYTES = 24e3;
 function useWorkspaceFilePreview({
   activeNode,
@@ -1101,12 +1133,13 @@ function useWorkspaceFilePreview({
   const [pdfUrl, setPdfUrl] = useState3(null);
   const [previewLoading, setPreviewLoading] = useState3(false);
   const [loadingMore, setLoadingMore] = useState3(false);
-  useEffect2(() => {
+  useLayoutEffect(() => {
     const selectedPath = activeNode?.kind === "file" ? activeNode.path : null;
     if (!adapter || !selectedPath) {
       setPreviewFile(null);
       setImageUrl(null);
       setPdfUrl(null);
+      setPreviewLoading(false);
       return;
     }
     const currentAdapter = adapter;
@@ -1234,7 +1267,7 @@ import {
 } from "lucide-react";
 import {
   useCallback as useCallback3,
-  useEffect as useEffect4,
+  useEffect as useEffect3,
   useMemo as useMemo4,
   useRef as useRef4,
   useState as useState5
@@ -1244,7 +1277,7 @@ import {
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   useCallback as useCallback2,
-  useEffect as useEffect3,
+  useEffect as useEffect2,
   useMemo as useMemo3,
   useRef as useRef3,
   useState as useState4
@@ -1662,6 +1695,7 @@ function WorkspaceExplorerTree({
   directoryErrors,
   loadingPaths,
   selectedNodeId,
+  revealRequestKey,
   scrollerRef,
   scrollTopRef,
   onCopyPath,
@@ -1699,7 +1733,7 @@ function WorkspaceExplorerTree({
     enabled: canVirtualize,
     useFlushSync: false
   });
-  useEffect3(() => {
+  useEffect2(() => {
     onFilterResultsChange?.({
       matchCount: projection.matchCount,
       hasUnresolvedDirectories: projection.hasUnresolvedDirectories
@@ -1709,7 +1743,7 @@ function WorkspaceExplorerTree({
     projection.hasUnresolvedDirectories,
     projection.matchCount
   ]);
-  useEffect3(() => {
+  useEffect2(() => {
     if (focusedId && projection.indexById.has(focusedId)) {
       return;
     }
@@ -1730,6 +1764,17 @@ function WorkspaceExplorerTree({
     },
     [canVirtualize, projection.indexById, virtualizer]
   );
+  const revealedSelectionRef = useRef3(null);
+  useEffect2(() => {
+    const key = `${selectedNodeId}:${revealRequestKey ?? 0}`;
+    if (!selectedNodeId || revealedSelectionRef.current === key) return;
+    const index = projection.indexById.get(selectedNodeId);
+    if (index === void 0) return;
+    revealedSelectionRef.current = key;
+    setFocusedId(selectedNodeId);
+    if (canVirtualize) virtualizer.scrollToIndex(index, { align: "auto" });
+    else rowElementsRef.current.get(selectedNodeId)?.scrollIntoView?.({ block: "nearest" });
+  }, [selectedNodeId, revealRequestKey, projection.indexById, canVirtualize, virtualizer]);
   const handleKeyDown = useCallback2(
     (event) => {
       const command = workspaceExplorerCommandForKey({
@@ -1892,6 +1937,7 @@ function WorkspaceExplorerPanel({
   explorerScrollTopRef,
   explorerScrollerRef,
   selectedNodeId,
+  revealRequestKey,
   tree,
   rootError
 }) {
@@ -1913,7 +1959,7 @@ function WorkspaceExplorerPanel({
     (result) => setFilterResult(result),
     []
   );
-  useEffect4(() => {
+  useEffect3(() => {
     if (filterOpen) {
       window.requestAnimationFrame(() => filterInputRef.current?.focus());
     }
@@ -2156,6 +2202,7 @@ function WorkspaceExplorerPanel({
         directoryErrors,
         loadingPaths,
         selectedNodeId,
+        revealRequestKey,
         scrollerRef: explorerScrollerRef,
         scrollTopRef: explorerScrollTopRef,
         ...onCopyPath ? { onCopyPath } : {},
@@ -2181,7 +2228,7 @@ import {
   lazy,
   memo,
   Suspense,
-  useEffect as useEffect6,
+  useEffect as useEffect5,
   useMemo as useMemo7,
   useRef as useRef6,
   useState as useState8
@@ -2213,7 +2260,7 @@ function WorkspaceInfoCard({
 
 // src/components/graph-workspace/GraphMoleculeViewer.tsx
 import { Pause, Play } from "lucide-react";
-import { useCallback as useCallback4, useEffect as useEffect5, useMemo as useMemo6, useRef as useRef5, useState as useState6 } from "react";
+import { useCallback as useCallback4, useEffect as useEffect4, useMemo as useMemo6, useRef as useRef5, useState as useState6 } from "react";
 
 // src/components/graph-workspace/GraphMoleculeViewerLowerButtonGroup.tsx
 import {
@@ -2819,14 +2866,14 @@ function GraphMoleculeViewer({
     0
   );
   const stagedMolecules = Object.keys(stagedSelections).length;
-  useEffect5(() => {
+  useEffect4(() => {
     if (xyzArray.length === 0) {
       setCurrentIndex(0);
       return;
     }
     setCurrentIndex(xyzArray.length - 1);
   }, [xyzArray.length]);
-  useEffect5(() => {
+  useEffect4(() => {
     if (!isPlaying || xyzArray.length <= 1) {
       return;
     }
@@ -2842,7 +2889,7 @@ function GraphMoleculeViewer({
     }, 200);
     return () => window.clearInterval(interval);
   }, [isPlaying, xyzArray.length]);
-  useEffect5(() => {
+  useEffect4(() => {
     const host = viewerHostRef.current;
     if (!host || viewerRef.current) {
       return;
@@ -2896,7 +2943,7 @@ function GraphMoleculeViewer({
       modelRef.current = null;
     };
   }, []);
-  useEffect5(() => {
+  useEffect4(() => {
     const viewer = viewerRef.current;
     if (!viewer || !xyzContent) {
       return;
@@ -2975,7 +3022,7 @@ function GraphMoleculeViewer({
       setViewerInitError("Unable to render this molecular structure.");
     }
   }, [xyzContent, xyzFormat]);
-  useEffect5(() => {
+  useEffect4(() => {
     const viewer = viewerRef.current;
     const model = modelRef.current;
     if (!viewer || !model) {
@@ -3003,7 +3050,7 @@ function GraphMoleculeViewer({
     }
     viewer.render();
   }, [unitCellAvailable, unitCellVisible, xyzContent, xyzFormat]);
-  useEffect5(() => {
+  useEffect4(() => {
     const viewer = viewerRef.current;
     const model = modelRef.current;
     if (!viewer || !model || !xyzContent) {
@@ -3022,7 +3069,7 @@ function GraphMoleculeViewer({
     viewer.render();
     onSelectionChange?.({ moleculeId, atoms: selectedSerials });
   }, [moleculeId, onSelectionChange, selectedSerials, xyzContent]);
-  useEffect5(() => {
+  useEffect4(() => {
     if (!xyzContent) {
       return;
     }
@@ -3501,7 +3548,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
   const rootRef = useRef6(null);
   const [highlighter, setHighlighter] = useState8(null);
   const [dark, setDark] = useState8(false);
-  useEffect6(() => {
+  useEffect5(() => {
     let alive = true;
     getGraphChatHighlighter().then((loadedHighlighter) => {
       if (alive) {
@@ -3512,7 +3559,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
       alive = false;
     };
   }, []);
-  useEffect6(() => {
+  useEffect5(() => {
     const shell = rootRef.current?.closest(".thread-ui-shell");
     const readDark = () => shell ? shell.getAttribute("data-theme-effective") === "dark" || shell.classList.contains("dark") || shell.classList.contains("thread-ui-theme-dark") : document.documentElement.classList.contains("dark");
     setDark(readDark());
@@ -3549,7 +3596,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
       );
     }
   }, [content, dark, highlighter, language]);
-  useEffect6(() => {
+  useEffect5(() => {
     const root = rootRef.current;
     root?.querySelectorAll(".is-focused-line").forEach((element) => element.classList.remove("is-focused-line"));
     if (!root || !focusLine || focusLine < 1) {
@@ -3616,18 +3663,7 @@ var GraphWorkspaceMarkdownPreview = memo(
           a({ href, children, ...props }) {
             const workspacePath = resolvePath(href);
             if (workspacePath && onOpenWorkspaceFile) {
-              return /* @__PURE__ */ jsx13(
-                "a",
-                {
-                  ...props,
-                  href: resolveWorkspaceFileUrl?.(workspacePath) ?? href,
-                  onClick: (event) => {
-                    event.preventDefault();
-                    onOpenWorkspaceFile(workspacePath);
-                  },
-                  children
-                }
-              );
+              return /* @__PURE__ */ jsx13(WorkspaceFileLink, { path: workspacePath, onOpen: ({ path }) => onOpenWorkspaceFile(path), children });
             }
             return /* @__PURE__ */ jsx13("a", { ...props, href, children });
           },
@@ -3704,7 +3740,7 @@ function GraphWorkspacePreviewPane({
   const isLiveArtifactPreview = selectedTarget?.kind === "live-molecule";
   const isArtifactPreview = Boolean(activeNode?.artifact && renderedArtifact);
   const isMoleculePreview = Boolean(moleculeSnapshot) || isArtifactPreview;
-  useEffect6(() => {
+  useEffect5(() => {
     if (typeof window.matchMedia !== "function") {
       return;
     }
@@ -3714,7 +3750,7 @@ function GraphWorkspacePreviewPane({
     mediaQuery.addEventListener?.("change", update);
     return () => mediaQuery.removeEventListener?.("change", update);
   }, []);
-  useEffect6(() => {
+  useEffect5(() => {
     const shell = surfaceRef.current?.closest(".thread-ui-shell");
     const update = () => setDark(
       shell?.getAttribute("data-theme-effective") === "dark" || shell?.classList.contains("dark") || shell?.classList.contains("thread-ui-theme-dark") || false
@@ -3730,13 +3766,13 @@ function GraphWorkspacePreviewPane({
     });
     return () => observer.disconnect();
   }, []);
-  useEffect6(() => {
+  useEffect5(() => {
     setEditing(false);
     setDraftContent(previewFile?.content ?? "");
     setSaveError(null);
     setMarkdownView("preview");
   }, [previewFile?.path, previewFile?.content]);
-  useEffect6(() => {
+  useEffect5(() => {
     if (!previewFile) {
       return;
     }
@@ -4122,6 +4158,14 @@ function GraphWorkspaceExplorer({
   const [isMobileViewport, setIsMobileViewport] = useState9(false);
   const explorerScrollerRef = useRef7(null);
   const explorerScrollTopRef = useRef7(0);
+  const restoredRevealRef = useRef7(null);
+  const scrollRestoreGenerationRef = useRef7(0);
+  useLayoutEffect2(() => {
+    ++scrollRestoreGenerationRef.current;
+    return () => {
+      ++scrollRestoreGenerationRef.current;
+    };
+  }, [focusPathRequest]);
   const pendingExplorerScrollRestoreRef = useRef7(null);
   const {
     imageUrl,
@@ -4158,13 +4202,13 @@ function GraphWorkspaceExplorer({
     refreshTree: refreshWorkspaceTree,
     workspaceRootPath: detail.workspace.absPath
   });
-  useEffect7(() => {
+  useEffect6(() => {
     explorerScrollTopRef.current = 0;
     pendingExplorerScrollRestoreRef.current = null;
     setFileTabs([]);
     setDirtyFilePaths(/* @__PURE__ */ new Set());
   }, [workspaceIdentity.threadId, workspaceIdentity.workspaceId]);
-  useEffect7(() => {
+  useEffect6(() => {
     if (activeNode?.kind !== "file" || !activeNode.path) {
       return;
     }
@@ -4186,7 +4230,7 @@ function GraphWorkspaceExplorer({
       );
     });
   }, [activeNode]);
-  useEffect7(() => {
+  useEffect6(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
       setCollapsedPanel(null);
@@ -4198,6 +4242,7 @@ function GraphWorkspaceExplorer({
     pendingExplorerScrollRestoreRef.current = currentScrollTop;
   }
   function restoreExplorerScroll() {
+    const generation = ++scrollRestoreGenerationRef.current;
     const target = pendingExplorerScrollRestoreRef.current ?? explorerScrollTopRef.current;
     const scroller = explorerScrollerRef.current;
     if (!scroller) {
@@ -4206,7 +4251,7 @@ function GraphWorkspaceExplorer({
     let frame = 0;
     const restore = () => {
       const current = explorerScrollerRef.current;
-      if (!current) {
+      if (!current || generation !== scrollRestoreGenerationRef.current) {
         return;
       }
       current.scrollTop = Math.min(
@@ -4223,13 +4268,18 @@ function GraphWorkspaceExplorer({
     };
     window.requestAnimationFrame(restore);
   }
-  useLayoutEffect(() => {
-    if (collapsedPanel === "explorer") {
+  useLayoutEffect2(() => {
+    if (collapsedPanel === "explorer" || focusPathRequest && restoredRevealRef.current !== focusPathRequest.requestId) {
       return;
     }
     restoreExplorerScroll();
-  }, [collapsedPanel, tree]);
-  useEffect7(() => {
+  }, [collapsedPanel]);
+  useLayoutEffect2(() => {
+    if (focusPathRequest && !loadingTree && activeNode) {
+      restoredRevealRef.current = focusPathRequest.requestId;
+    }
+  }, [focusPathRequest, loadingTree, activeNode]);
+  useEffect6(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
@@ -4337,6 +4387,7 @@ function GraphWorkspaceExplorer({
       },
       onToggle: toggleDirectory,
       selectedNodeId: activeNode?.id ?? null,
+      revealRequestKey: focusPathRequest?.requestId,
       tree,
       liveNodes
     }
@@ -4475,7 +4526,7 @@ function GraphWorkspaceExplorer({
 }
 
 // src/components/graph-chat/GraphVisualization.tsx
-import { useCallback as useCallback5, useEffect as useEffect8, useMemo as useMemo8 } from "react";
+import { useCallback as useCallback5, useEffect as useEffect7, useMemo as useMemo8 } from "react";
 import {
   addEdge,
   Background,
@@ -4797,7 +4848,7 @@ function GraphVisualization({ nodes: inputNodes }) {
     }),
     []
   );
-  useEffect8(() => {
+  useEffect7(() => {
     setFlowNodes(graph.nodes);
     setFlowEdges(graph.edges);
   }, [graph.edges, graph.nodes, setFlowEdges, setFlowNodes]);
@@ -5078,12 +5129,12 @@ function ThreadGraphWorkspacePanel({
     }
     return tabs;
   }, [features.extensions, features.threadGraph]);
-  useEffect9(() => {
+  useEffect8(() => {
     if (!activeTab || !isWorkspaceTabEnabled(features, activeTab)) {
       setActiveTab(firstEnabledWorkspaceTab(features, featureConfig?.defaultTab));
     }
   }, [activeTab, featureConfig?.defaultTab, features]);
-  useEffect9(() => {
+  useEffect8(() => {
     if (focusPathRequest && features.workspace) {
       setActiveTab("workspace");
     }

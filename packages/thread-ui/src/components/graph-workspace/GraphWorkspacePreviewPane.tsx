@@ -1,3 +1,4 @@
+import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
 import {
   lazy,
@@ -382,16 +383,7 @@ const GraphWorkspaceMarkdownPreview = memo(
               const workspacePath = resolvePath(href);
               if (workspacePath && onOpenWorkspaceFile) {
                 return (
-                  <a
-                    {...props}
-                    href={resolveWorkspaceFileUrl?.(workspacePath) ?? href}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      onOpenWorkspaceFile(workspacePath);
-                    }}
-                  >
-                    {children}
-                  </a>
+                  <WorkspaceFileLink path={workspacePath} onOpen={({path})=>onOpenWorkspaceFile(path)}>{children}</WorkspaceFileLink>
                 );
               }
               return (

@@ -1388,12 +1388,14 @@ export const GraphChatToolCallGroupItem = memo(
 export const GraphChatAgentActivityGroupItem = memo(
   function GraphChatAgentActivityGroupItem({
     itemCount,
+    running = false,
     expanded,
     onToggleExpanded,
     timeMeta,
     children,
   }: {
     itemCount: number;
+    running?: boolean;
     expanded: boolean;
     onToggleExpanded: () => void;
     timeMeta?: ReactNode;
@@ -1403,7 +1405,7 @@ export const GraphChatAgentActivityGroupItem = memo(
       itemCount === 1 ? '1 operation' : `${itemCount} operations`;
     return (
       <GraphChatHistoryGroupFrame
-        className="thread-graph-history-group-activity"
+        className={`thread-graph-history-group-activity ${running ? 'is-running-batch' : ''}`}
         count={itemCount}
         countBadgeClassName="border-slate-200/35 text-slate-100"
         desktopIconClassName="border-slate-300/30 bg-slate-300/[0.14] text-slate-100"
