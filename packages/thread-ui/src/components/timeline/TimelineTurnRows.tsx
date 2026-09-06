@@ -41,6 +41,7 @@ import {
   GraphChatWebSearchItem as WebSearchItem,
 } from '../graph-chat/GraphChatHistoryItems';
 import { GraphChatCompactMessageItem as CompactMessageItem } from '../graph-chat/GraphChatCompactMessageItem';
+import { MessageExpansionScope } from '../graph-chat/MessageExpansionScope';
 import { GraphChatTurnBody } from '../graph-chat/GraphChatTurnBody';
 import { GraphChatTurnFrame } from '../graph-chat/GraphChatTurnFrame';
 import {
@@ -871,6 +872,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   );
 
   return (
+    <MessageExpansionScope key={`${threadId ?? ''}:${turn.id}`}>
     <GraphChatTurnFrame
       absoluteIndex={absoluteIndex}
       body={canToggleWorkedSummary ? collapsedSummaryNode : turnBody}
@@ -885,6 +887,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       timeTitle={turnTimeTitle}
       tokenSummary={<TurnTokenSummary turn={turn} />}
     />
+    </MessageExpansionScope>
   );
 });
 

@@ -11,6 +11,7 @@ import {
   type RefObject,
 } from 'react';
 
+import { useMessageExpansion } from './MessageExpansionScope';
 import { ZoomableImage } from '../ZoomableImage';
 import type { ThreadTimelineAdapter } from '../../adapters';
 import { hasLikelyMarkdownSyntax } from '../markdownHeuristics';
@@ -136,6 +137,7 @@ export function GraphChatLinkifiedPlainText({ text }: { text: string }) {
 
 export const GraphChatMarkdownAwareBody = memo(
   function GraphChatMarkdownAwareBody({
+    messageId,
     text,
     scrollRootRef,
     streaming = false,
@@ -146,6 +148,7 @@ export const GraphChatMarkdownAwareBody = memo(
     onOpenWorkspaceFile,
     resolveHref,
   }: {
+    messageId?: string | undefined;
     text: string;
     scrollRootRef: RefObject<HTMLDivElement | null>;
     streaming?: boolean;
@@ -161,7 +164,7 @@ export const GraphChatMarkdownAwareBody = memo(
       root: HTMLDivElement;
       top: number;
     } | null>(null);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useMessageExpansion(messageId, text, streaming);
     const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text);
     const isLargeText = !streaming && text.length > LARGE_MESSAGE_PREVIEW_CHARS;
     const displayText =
@@ -180,8 +183,8 @@ export const GraphChatMarkdownAwareBody = memo(
       onBeforeResize?.();
       scrollAnchorRef.current =
         root && previousTop !== null ? { root, top: previousTop } : null;
-      setExpanded((current) => !current);
-    }, [onBeforeResize, scrollRootRef]);
+      setExpanded(!expanded);
+    }, [expanded, setExpanded, onBeforeResize, scrollRootRef]);
 
     useLayoutEffect(() => {
       const anchor = scrollAnchorRef.current;
@@ -267,6 +270,7 @@ export const GraphChatMarkdownAwareBody = memo(
 
 export const GraphChatAgentMessageBody = memo(
   function GraphChatAgentMessageBody({
+    messageId,
     text,
     scrollRootRef,
     streaming = false,
@@ -274,6 +278,7 @@ export const GraphChatAgentMessageBody = memo(
     onOpenWorkspaceFile,
     resolveHref,
   }: {
+    messageId?: string | undefined;
     text: string;
     scrollRootRef: RefObject<HTMLDivElement | null>;
     streaming?: boolean;
@@ -283,6 +288,7 @@ export const GraphChatAgentMessageBody = memo(
   }) {
     return (
       <GraphChatMarkdownAwareBody
+        messageId={messageId}
         text={text}
         scrollRootRef={scrollRootRef}
         streaming={streaming}
