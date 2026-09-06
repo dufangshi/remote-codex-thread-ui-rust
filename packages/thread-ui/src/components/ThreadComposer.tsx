@@ -299,7 +299,7 @@ export function ThreadComposer({
       compact: capabilities?.turns.compact ?? false,
       goal: capabilities?.controls.goals ?? false,
       fork: capabilities?.branching.fork ?? false,
-      forkFromTurn: capabilities?.branching.resumeAt ?? false,
+      forkFromTurn: capabilities?.branching.forkAt ?? capabilities?.branching.resumeAt ?? false,
       skills: capabilities?.management.skills ?? false,
       mcp: capabilities?.management.mcpStatus ?? false,
       hooks: capabilities?.management.hooks ?? false,
