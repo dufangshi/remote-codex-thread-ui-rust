@@ -153,6 +153,33 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain('Intermediate checkpoint.');
   });
 
+  it('defers running operations until expansion and merges later summary messages', async () => {
+    const summary: ThreadTurnDto = {
+      ...completedTurn([{ id: 'prompt', kind: 'userMessage', text: 'Live prompt' },
+        { id: 'answer', kind: 'agentMessage', text: 'First checkpoint' }]),
+      status: 'inProgress', hasDeferredItems: true, deferredItemCount: 1,
+    };
+    const full = {...summary, hasDeferredItems:false, items:[summary.items[0]!,
+      {id:'operation',kind:'commandExecution',text:'unique-hidden-command',status:'completed'}, summary.items[1]!]};
+    const onLoadTurnDetail = vi.fn().mockResolvedValue(full);
+    const props = {onLoadTurnDetail, liveOutput:'', threadRunning:true, activeTurnId:'turn-1'};
+    const element = render(<ThreadTimeline {...props} turns={[summary]} />);
+    expect(onLoadTurnDetail).not.toHaveBeenCalled();
+    expect(element.textContent).toContain('First checkpoint');
+    const toggle = () => Array.from(element.querySelectorAll('button')).find(button => /Expand turn 1/.test(button.getAttribute('aria-label') ?? ''))!;
+    expect(toggle()).toBeTruthy();
+    flushSync(() => toggle().click());
+    await vi.waitFor(() => expect(element.querySelector('[aria-label*="Collapse turn 1"]')).not.toBeNull());
+    expect(onLoadTurnDetail).toHaveBeenCalledTimes(1);
+    flushSync(() => root?.render(<ThreadTimeline {...props} turns={[{...summary, items:[summary.items[0]!, {...summary.items[1]!, text:'Later checkpoint'}]}]} />));
+    expect(element.textContent).toContain('Later checkpoint');
+    expect(element.textContent).not.toContain('First checkpoint');
+    onLoadTurnDetail.mockResolvedValue({...full, status:'completed', items:[...full.items.slice(0,-1), {...summary.items[1]!,text:'Final checkpoint'}]});
+    flushSync(() => root?.render(<ThreadTimeline {...props} threadRunning={false} activeTurnId={null} turns={[{...summary,status:'completed',items:[summary.items[0]!, {...summary.items[1]!,text:'Final checkpoint'}]}]} />));
+    await vi.waitFor(() => expect(onLoadTurnDetail).toHaveBeenCalledTimes(2));
+    expect(element.textContent).toContain('Final checkpoint');
+  });
+
   it('shows Worked when reasoning is the collapsed middle agent bubble', () => {
     const element = render(
       <ThreadTimeline

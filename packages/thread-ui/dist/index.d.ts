@@ -338,7 +338,7 @@ interface ConfirmDialogProps {
 }
 declare function ConfirmDialog({ open, title, description, confirmLabel, busyLabel, busy, onCancel, onConfirm, }: ConfirmDialogProps): react.ReactPortal | null;
 
-type ThreadActionMode = ThreadExportFormatDto | 'share';
+type ThreadActionMode = ThreadExportFormatDto | 'share' | 'link';
 type RelayThreadAccess = 'read' | 'control';
 type RelayWorkspaceAccess = 'none' | 'read' | 'write';
 interface ExportTurnsState {
@@ -379,8 +379,10 @@ interface ThreadActionsDialogProps {
     onCreateShare?: (input: CreateThreadShareInput) => void | Promise<void>;
     onRevokeShare?: (shareId: string) => void | Promise<void>;
     onOpenDeviceSharing?: () => void;
+    linkContent?: ReactNode;
+    onUpdateShare?: (id: string, input: CreateThreadShareInput) => void | Promise<void>;
 }
-declare function ThreadActionsDialog({ open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, onOpenDeviceSharing, }: ThreadActionsDialogProps): react.ReactPortal | null;
+declare function ThreadActionsDialog({ open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, onOpenDeviceSharing, linkContent, onUpdateShare, }: ThreadActionsDialogProps): react.ReactPortal | null;
 declare const ExportTranscriptDialog: typeof ThreadActionsDialog;
 
 interface LongTextDialogProps {
@@ -510,4 +512,20 @@ interface AppShellSettingsDialogProps {
 }
 declare function AppShellSettingsDialog({ extraContent, importPluginInput, }?: AppShellSettingsDialogProps): react.JSX.Element | null;
 
-export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, turnStatusLabel, useAppShellNav, usePlugins };
+interface PublicTranscriptSnapshot {
+    title: string;
+    createdAt: string;
+    turnCount: number;
+    turns: Array<{
+        messages: Array<{
+            role: 'user' | 'assistant';
+            text: string;
+            createdAt?: string | null;
+        }>;
+    }>;
+}
+declare function PublicTranscript({ snapshot }: {
+    snapshot: PublicTranscriptSnapshot;
+}): react.JSX.Element;
+
+export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, ConfirmDialog, type CreateThreadShareInput, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, turnStatusLabel, useAppShellNav, usePlugins };

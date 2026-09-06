@@ -40,6 +40,8 @@ class FakeTerminal {
 
   attachCustomKeyEventHandler() {}
 
+  onRender() { return {dispose() {}}; }
+
   onData(handler: (data: string) => void) {
     this.dataHandler = handler;
     return {

@@ -502,6 +502,27 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
     }, [isActive, isVisible, refreshTerminalLayout, shell?.id, terminalReady]);
 
     useEffect(() => {
+      const terminal = terminalRef.current;
+      if (!terminalReady || !terminal || !isVisible) return;
+      // The first fit can run before xterm has measured its font. Host size
+      // does not change when those metrics arrive, so ResizeObserver alone
+      // leaves the default 24 rows until another navigation/resize.
+      let frame = 0;
+      let disposed = false;
+      const fit = () => {
+        if (disposed || frame) return;
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          syncTerminalSizeRef.current();
+        });
+      };
+      const rendered = terminal.onRender(fit);
+      void document.fonts?.ready.then(fit);
+      fit();
+      return () => { disposed = true; cancelAnimationFrame(frame); rendered.dispose(); };
+    }, [terminalReady, isVisible]);
+
+    useEffect(() => {
       if (!isMobileShell || !terminalReady || !terminalHostNode) return;
       const viewport = terminalHostNode.querySelector('.xterm-viewport');
       if (!viewport) return;

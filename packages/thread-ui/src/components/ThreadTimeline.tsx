@@ -281,7 +281,8 @@ function ThreadTimelineComponent({
       !currentCollapsed ||
       !turn.hasDeferredItems ||
       !loadTurnDetail ||
-      loadedTurnDetails[turn.id]
+      (loadedTurnDetails[turn.id] && isTerminalTurnStatus(loadedTurnDetails[turn.id]!.status)
+        && loadedTurnDetails[turn.id]!.status === turn.status)
     ) {
       setCollapsedTurnOverrides((current) => ({
         ...current,
@@ -328,6 +329,27 @@ function ThreadTimelineComponent({
       });
   }, [loadTurnDetail, loadedTurnDetails, loadingTurnDetailIds, preserveScrollPositionForResize]);
 
+  useEffect(() => {
+    if (!loadTurnDetail) return;
+    // Finish an expanded live history with the authoritative final operation
+    // states. Collapsed turns never trigger this additional request.
+    for (const turn of turns) {
+      const loaded = loadedTurnDetails[turn.id];
+      if (collapsedTurnOverrides[turn.id] !== false || !loaded ||
+          loaded.status !== 'inProgress' || !isTerminalTurnStatus(turn.status) ||
+          loadingTurnDetailIds.has(turn.id) || turnDetailErrors[turn.id]) continue;
+      setLoadingTurnDetailIds((current) => new Set(current).add(turn.id));
+      void Promise.resolve().then(() => loadTurnDetail(turn.id)).then((detail) => {
+        if (detail.id !== turn.id) throw new Error('Loaded turn detail did not match the requested turn.');
+        setLoadedTurnDetails((current) => ({ ...current, [turn.id]: detail }));
+      }).catch((error: unknown) => {
+        setTurnDetailErrors((current) => ({ ...current, [turn.id]: error instanceof Error ? error.message : 'Unable to load complete turn history.' }));
+      }).finally(() => {
+        setLoadingTurnDetailIds((current) => { const next = new Set(current); next.delete(turn.id); return next; });
+      });
+    }
+  }, [turns, loadTurnDetail, loadedTurnDetails, collapsedTurnOverrides, loadingTurnDetailIds, turnDetailErrors]);
+
   const collapsedStateForTurn = useCallback((
     turn: TimelineTurn,
     input: {
@@ -341,13 +363,13 @@ function ThreadTimelineComponent({
     }
 
     return Boolean(
-      turn.hasDeferredItems ||
+      (loadTurnDetail && turn.status === 'inProgress') || turn.hasDeferredItems ||
         (effectiveAutoCollapseCompletedTurns &&
           isTerminalTurnStatus(turn.status) &&
           !input.forceActive &&
           !input.hasLiveActivity),
     );
-  }, [collapsedTurnOverrides, effectiveAutoCollapseCompletedTurns]);
+  }, [collapsedTurnOverrides, effectiveAutoCollapseCompletedTurns, loadTurnDetail]);
 
   const visibleTurns = serverManagedHistory ? turns : turns.slice(startIndex);
   const optimisticAbsoluteIndex = effectiveTotalTurnCount + 1;
@@ -621,13 +643,12 @@ function ThreadTimelineComponent({
                   ) : null}
                   {(() => {
                     const loadedTurn = loadedTurnDetails[turn.id];
+                    // A summary refresh must update messages/usage without dropping the
+                    // operations explicitly loaded earlier or restoring stale text.
+                    const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
+                    for (const item of turn.items) mergedItems.set(item.id, item);
                     const hydratedTurn = loadedTurn
-                      ? {
-                          ...turn,
-                          ...loadedTurn,
-                          status: turn.status,
-                          tokenUsage: turn.tokenUsage ?? loadedTurn.tokenUsage,
-                        }
+                      ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] }
                       : turn;
                     const displayTurn = mergeOptimisticTurnItems(
                       hydratedTurn,

@@ -495,3 +495,6 @@
   z-index: 3; background: transparent !important; overflow-y: auto !important;
   touch-action: pan-y; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch;
 }
+
+.thread-ui-shell .shell-chat-return { position: absolute; right: 20px; bottom: 20px; z-index: 30; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--theme-border); color: var(--theme-fg); background: var(--theme-panel); box-shadow: 0 3px 12px #0002; }
+.thread-ui-shell .shell-chat-return:hover { background: var(--theme-hover); }

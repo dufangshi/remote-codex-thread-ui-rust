@@ -1,3 +1,4 @@
+import { MessageSquare } from 'lucide-react';
 import {
   forwardRef,
   useCallback,
@@ -856,7 +857,7 @@ export const ThreadShellPanel = forwardRef<
               <span className="hidden text-xs text-[var(--theme-fg-muted)] sm:inline">
                 Live {liveShells.length}
               </span>
-              {!isMobileShell && onBackToChat && <button type="button" onClick={onBackToChat} className="rounded-md border px-3 py-1.5 text-xs" aria-label="Back to chat">Back to chat</button>}
+
             </div>
           </div>
           {status === 'not_created' || workspacePathMissing ? (
@@ -882,6 +883,7 @@ export const ThreadShellPanel = forwardRef<
           ) : (
             <div className="grid h-full min-h-0 grid-cols-1 gap-2 p-2 sm:grid-cols-[minmax(0,1fr)_16rem] sm:p-3">
               <div className="shell-terminal-frame relative min-h-0 overflow-hidden rounded-[1.4rem] border shadow-inner">
+      {!isMobileShell && onBackToChat && <button type="button" onClick={onBackToChat} className="shell-chat-return" aria-label="Back to chat" title="Back to chat"><MessageSquare size={19} /></button>}
                 {!showHeader && (error || loading || workspacePathMissing) && (
                   <div className="shell-banner absolute left-2 right-2 top-2 z-10 rounded-2xl border px-3 py-3 text-sm backdrop-blur sm:left-3 sm:right-3 sm:top-3">
                     {loading && <p className="text-[var(--theme-fg-muted)]">Loading shell state...</p>}
@@ -1099,6 +1101,7 @@ export const ThreadShellPanel = forwardRef<
           )}
         </div>
       </div>
+
       {isMobileShell && <ShellTouchControls
         inset={keyboardLayout.inset} enabled={activeRuntime.shellInputEnabled}
         ctrl={ctrlPressed} onCtrl={() => { ctrlRef.current = !ctrlRef.current; setCtrlPressed(ctrlRef.current); }}

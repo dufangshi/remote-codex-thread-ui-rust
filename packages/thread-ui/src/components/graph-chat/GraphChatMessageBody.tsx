@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import {
   memo,
   useCallback,
@@ -251,12 +252,12 @@ export const GraphChatMarkdownAwareBody = memo(
         {isLargeText ? (
           <button
             type="button"
-            onClick={toggleExpanded}
-            className="thread-graph-show-more timeline-meta-text mt-1.5 flex w-full items-center justify-center rounded-md border border-[var(--theme-border)] px-2 py-0.5 text-[10px] leading-4 transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]"
+            onClick={event => { event.stopPropagation(); toggleExpanded(); }}
+            aria-expanded={expanded}
+            className="thread-graph-show-more timeline-meta-text mt-1 inline-flex w-fit items-center gap-1 rounded px-1 text-xs transition"
           >
-            {expanded
-              ? 'Show less'
-              : `Show more (${text.length.toLocaleString()} chars)`}
+            {expanded ? <ChevronUp size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
+            <span>{expanded ? 'Show less' : 'Show more'}</span>
           </button>
         ) : null}
       </div>

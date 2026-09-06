@@ -2089,15 +2089,19 @@
 }
 
 .thread-ui-shell .thread-graph-show-more {
-  min-height: 1.25rem;
-  border-color: var(--theme-border);
-  background: color-mix(in oklch, var(--theme-panel) 72%, transparent);
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.8;
   color: var(--theme-fg-muted);
 }
 
 .thread-ui-shell .thread-graph-show-more:hover,
 .thread-ui-shell .thread-graph-show-more:focus-visible {
-  background: var(--theme-hover);
+  opacity: 1;
+  background: transparent;
   color: var(--theme-fg);
 }
 

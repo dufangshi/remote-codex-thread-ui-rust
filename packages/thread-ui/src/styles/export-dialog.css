@@ -153,3 +153,9 @@
     padding: 1.5rem;
   }
 }
+
+/* Follow the host palette instead of a separate blue-gray modal theme. */
+.thread-export-dialog-root.thread-ui-theme-dark, .thread-export-dialog-root[data-theme-effective="dark"] { --export-bg: #12110c; --export-panel: #1e1d17; --export-surface: #25241e; --export-surface-strong: #302f27; --export-border: #3c3a30; --export-fg: #e9e7df; --export-fg-soft: #ccc9bc; --export-fg-muted: #999587; }
+.thread-export-dialog-segment { display: flex; flex-wrap: wrap; border: 0; gap: 4px; border-radius: 8px; }
+.thread-export-dialog-panel { border-radius: 16px; }
+.thread-export-dialog-box, .thread-export-dialog-box-header { border-radius: 8px; }

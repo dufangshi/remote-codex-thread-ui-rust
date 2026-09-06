@@ -696,7 +696,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       fallbackTimeLabel={turnTimeLabel}
       fallbackTimeTitle={turnTimeTitle}
       turnStartedAt={turn.startedAt}
-      autoOpenLatestToolDetails={autoOpenLatestToolDetails}
+      autoOpenLatestToolDetails={autoOpenLatestToolDetails && entries.at(-1)?.key === groupedItems.at(-1)?.key}
       {...(onSelectArtifact ? { onSelectArtifact } : {})}
       {...(adapter ? { adapter } : {})}
     />
@@ -753,8 +753,8 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [groupedItems],
   );
   const workedLabel = useMemo(
-    () => formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
-    [mergedItems, turn.completedAt, turn.startedAt],
+    () => activeForRendering ? 'Working' : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
+    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt],
   );
   const interruptedLabel =
     turn.status === 'interrupted' ? (
@@ -766,7 +766,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const canToggleWorkedSummary =
-    isTerminalTurnStatus(turn.status) && hasCollapsedHiddenItems;
+    hasCollapsedHiddenItems;
   const terminalWorkedNode =
     isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? (
       <div className="thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm">
@@ -782,7 +782,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       </div>
     ) : null;
   const collapsedSummaryNode =
-    isTerminalTurnStatus(turn.status) && hasCollapsedHiddenItems ? (
+    hasCollapsedHiddenItems ? (
       <div className="thread-graph-turn-collapsed-summary space-y-2">
         {collapsedSummary.users.map((item) => (
           <CompactMessageItem
@@ -851,6 +851,13 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
             {...(adapter ? { adapter } : {})}
           />
         ) : null}
+        {activeForRendering ? <GraphChatTurnBody
+          footer={footerNode}
+          history={null}
+          liveHookPrompt={liveHookPromptNode}
+          liveOutput={liveOutputNode}
+          livePlan={displayedLivePlan}
+        /> : null}
       </div>
     ) : null;
   const turnBody = (
