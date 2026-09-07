@@ -50,6 +50,17 @@ describe('GraphChatMessageContent', () => {
     expect(element.querySelector('.katex-display')).not.toBeNull();
   });
 
+  it('keeps out-of-workspace local and same-origin image links inside Explorer', () => {
+    const open = vi.fn();
+    const path = '/Users/mac/.codex/generated_images/test image.png';
+    const element = render(<GraphChatMessageContent workspaceRootPath="/Users/mac/dev/treer" onOpenWorkspaceFile={open}
+      content={`[Local](<${path}>) [Origin](${window.location.origin}${path.replace(' ', '%20')}) [Remote](https://example.com/image.png)`} />);
+    const links = element.querySelectorAll('a');
+    for (const link of [links[0], links[1]]) act(() => {link!.dispatchEvent(new MouseEvent('click', {bubbles:true,cancelable:true}));});
+    expect(open.mock.calls).toEqual([[{path}], [{path}]]);
+    expect(links[2]!.getAttribute('href')).toBe('https://example.com/image.png');
+  });
+
   it('opens root-relative file links through the workspace callback', () => {
     const onOpenWorkspaceFile = vi.fn();
     const element = render(

@@ -1,3 +1,4 @@
+import { relativeWorkspacePath } from '../workspacePaths';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type {
@@ -386,7 +387,7 @@ export function GraphWorkspaceExplorer({
         });
       }}
       onSelectFileTab={(path) => void focusWorkspacePath(path)}
-      {...(workspaceAdapter?.writeFile ? { onSaveFile: handleSaveFile } : {})}
+      {...(workspaceAdapter?.writeFile && activeNode && relativeWorkspacePath(activeNode.path, detail.workspace.absPath) !== null ? { onSaveFile: handleSaveFile } : {})}
       {...(collapsedPanel === 'explorer'
         ? { onExpandExplorer: () => setCollapsedPanel(null) }
         : {

@@ -7892,7 +7892,7 @@ function parseWorkspaceFileHref(href, workspaceRootPath) {
   const lineMatch = candidate.match(/(?:#L|:)(\d+)(?::\d+)?$/);
   const line = lineMatch ? Number.parseInt(lineMatch[1] ?? "", 10) : void 0;
   const rawPath = lineMatch ? candidate.slice(0, -lineMatch[0].length) : candidate;
-  const path = workspaceRootPath ? relativeWorkspacePath(rawPath, workspaceRootPath) : rawPath;
+  const path = workspaceRootPath ? relativeWorkspacePath(rawPath, workspaceRootPath) ?? rawPath : rawPath;
   if (!path || path === "/") {
     return null;
   }

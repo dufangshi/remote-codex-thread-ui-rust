@@ -1,3 +1,4 @@
+import { relativeWorkspacePath } from '../workspacePaths';
 import type {
   AgentRuntimeStatusDto,
   ThreadArtifactDto,
@@ -197,14 +198,7 @@ export function normalizeWorkspacePath(path: string) {
 }
 
 export function workspaceRelativeFocusPath(path: string, workspaceRootPath: string) {
-  const normalizedPath = normalizeWorkspacePath(path);
-  const normalizedRoot = normalizeWorkspacePath(workspaceRootPath).replace(/\/+$/, '');
-  if (!normalizedRoot || normalizedPath === normalizedRoot) {
-    return normalizedPath === normalizedRoot ? '' : normalizedPath;
-  }
-  return normalizedPath.startsWith(`${normalizedRoot}/`)
-    ? normalizedPath.slice(normalizedRoot.length + 1)
-    : normalizedPath;
+  return relativeWorkspacePath(path, workspaceRootPath) ?? path.replace(/\\/g, '/');
 }
 
 export function ancestorDirectoryPaths(path: string) {

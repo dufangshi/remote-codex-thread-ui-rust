@@ -1,3 +1,4 @@
+import { relativeWorkspacePath } from '../../workspacePaths';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type {
@@ -81,7 +82,14 @@ export function useWorkspaceExplorerController({
     () => (adapterModel ? workspaceExplorerModelToTree(adapterModel) : null),
     [adapterModel],
   );
-  const tree = adapterTree ?? fallbackTree;
+  const [linkedFiles, setLinkedFiles] = useState<WorkspaceTreeNode[]>([]);
+  const tree = useMemo(() => {
+    const root = adapterTree ?? fallbackTree;
+    return linkedFiles.length ? {...root, children: [...root.children, {
+      id: 'linked-files', path: 'linked-files:', name: 'Linked files', kind: 'directory' as const,
+      children: linkedFiles, childrenLoaded: true, hasChildren: true,
+    }]} : root;
+  }, [adapterTree, fallbackTree, linkedFiles]);
   const nodeMap = useMemo(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(() => {
     const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;
@@ -335,7 +343,8 @@ export function useWorkspaceExplorerController({
       const isCurrent = () => workspaceGenerationRef.current === workspaceGeneration && focusGenerationRef.current === generation;
       setSelectedNodeId(`workspace:${targetPath}`);
       setFilterQuery('');
-      const ancestors = ancestorDirectoryPaths(targetPath);
+      const external = relativeWorkspacePath(path, detail.workspace.absPath) === null;
+      const ancestors = external ? ['linked-files:'] : ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
         next.add('');
@@ -366,6 +375,16 @@ export function useWorkspaceExplorerController({
             ),
           );
         if (!isCurrent()) {
+          return;
+        }
+        if (external) {
+          if (!workspaceAdapter.statLinkedFile) throw new Error('Only the device owner can preview files outside this workspace.');
+          const node = await workspaceAdapter.statLinkedFile({...workspaceIdentity, path: targetPath});
+          if (!isCurrent()) return;
+          const linked = workspaceTreeNodeToGraphNode({...node, path: targetPath});
+          setLinkedFiles(current => [...current.filter(item => item.path !== targetPath), linked]);
+          adapterModelRef.current = nextModel;
+          setAdapterModel(nextModel);
           return;
         }
         for (const ancestor of ancestors) {
@@ -445,6 +464,7 @@ export function useWorkspaceExplorerController({
   }, []);
 
   useEffect(() => {
+    setLinkedFiles([]);
     skipPersistenceWriteRef.current = true;
     const persisted = persistence.read();
     const fallbackNode = fallbackFirstSelectableNodeRef.current;

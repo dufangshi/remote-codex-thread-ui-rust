@@ -10,6 +10,7 @@ import {
   ZoomableImage,
   cn,
   getGraphChatHighlighter,
+  relativeWorkspacePath,
   workspaceDisplayPath
 } from "./chunk-ZRHKJEE3.js";
 
@@ -97,12 +98,7 @@ function normalizeWorkspacePath(path) {
   return path.trim().replace(/\\/g, "/").replace(/^\.\/+/, "").replace(/^\/+/, "");
 }
 function workspaceRelativeFocusPath(path, workspaceRootPath) {
-  const normalizedPath = normalizeWorkspacePath(path);
-  const normalizedRoot = normalizeWorkspacePath(workspaceRootPath).replace(/\/+$/, "");
-  if (!normalizedRoot || normalizedPath === normalizedRoot) {
-    return normalizedPath === normalizedRoot ? "" : normalizedPath;
-  }
-  return normalizedPath.startsWith(`${normalizedRoot}/`) ? normalizedPath.slice(normalizedRoot.length + 1) : normalizedPath;
+  return relativeWorkspacePath(path, workspaceRootPath) ?? path.replace(/\\/g, "/");
 }
 function ancestorDirectoryPaths(path) {
   const normalized = normalizeWorkspacePath(path);
@@ -564,7 +560,19 @@ function useWorkspaceExplorerController({
     () => adapterModel ? workspaceExplorerModelToTree(adapterModel) : null,
     [adapterModel]
   );
-  const tree = adapterTree ?? fallbackTree;
+  const [linkedFiles, setLinkedFiles] = useState([]);
+  const tree = useMemo2(() => {
+    const root = adapterTree ?? fallbackTree;
+    return linkedFiles.length ? { ...root, children: [...root.children, {
+      id: "linked-files",
+      path: "linked-files:",
+      name: "Linked files",
+      kind: "directory",
+      children: linkedFiles,
+      childrenLoaded: true,
+      hasChildren: true
+    }] } : root;
+  }, [adapterTree, fallbackTree, linkedFiles]);
   const nodeMap = useMemo2(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState(() => {
     const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;
@@ -768,7 +776,8 @@ function useWorkspaceExplorerController({
       const isCurrent = () => workspaceGenerationRef.current === workspaceGeneration && focusGenerationRef.current === generation;
       setSelectedNodeId(`workspace:${targetPath}`);
       setFilterQuery("");
-      const ancestors = ancestorDirectoryPaths(targetPath);
+      const external = relativeWorkspacePath(path, detail.workspace.absPath) === null;
+      const ancestors = external ? ["linked-files:"] : ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
         next.add("");
@@ -795,6 +804,16 @@ function useWorkspaceExplorerController({
           )
         );
         if (!isCurrent()) {
+          return;
+        }
+        if (external) {
+          if (!workspaceAdapter.statLinkedFile) throw new Error("Only the device owner can preview files outside this workspace.");
+          const node = await workspaceAdapter.statLinkedFile({ ...workspaceIdentity, path: targetPath });
+          if (!isCurrent()) return;
+          const linked = workspaceTreeNodeToGraphNode({ ...node, path: targetPath });
+          setLinkedFiles((current) => [...current.filter((item) => item.path !== targetPath), linked]);
+          adapterModelRef.current = nextModel;
+          setAdapterModel(nextModel);
           return;
         }
         for (const ancestor of ancestors) {
@@ -862,6 +881,7 @@ function useWorkspaceExplorerController({
     setExpandedPaths(/* @__PURE__ */ new Set([""]));
   }, []);
   useEffect(() => {
+    setLinkedFiles([]);
     skipPersistenceWriteRef.current = true;
     const persisted = persistence.read();
     const fallbackNode = fallbackFirstSelectableNodeRef.current;
@@ -1059,7 +1079,7 @@ function useWorkspaceExplorerActions({
     if (!node.path || typeof navigator === "undefined" || !navigator.clipboard) {
       return;
     }
-    const path = workspaceDisplayPath(node.path, workspaceRootPath);
+    const path = workspaceDisplayPath(node.path, workspaceRootPath) ?? node.path;
     if (path === null) return;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(
@@ -1641,7 +1661,7 @@ function WorkspaceExplorerRow({
             children: /* @__PURE__ */ jsx(CircleAlert, { className: "h-3.5 w-3.5" })
           }
         ) : null,
-        onDownload || onCopyPath && node.path || !isDirectory && onPreview ? /* @__PURE__ */ jsxs("div", { className: "thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1", children: [
+        node.id !== "linked-files" && (onDownload || onCopyPath && node.path || !isDirectory && onPreview) ? /* @__PURE__ */ jsxs("div", { className: "thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1", children: [
           !isDirectory && onPreview ? /* @__PURE__ */ jsx(
             "button",
             {
@@ -1654,7 +1674,7 @@ function WorkspaceExplorerRow({
               children: /* @__PURE__ */ jsx(Eye, { className: "h-3.5 w-3.5" })
             }
           ) : null,
-          onDownload ? /* @__PURE__ */ jsx(
+          onDownload && !node.path.startsWith("/") && !/^[a-z]:[\\/]/i.test(node.path) ? /* @__PURE__ */ jsx(
             "button",
             {
               type: "button",
@@ -4431,7 +4451,7 @@ function GraphWorkspaceExplorer({
         });
       },
       onSelectFileTab: (path) => void focusWorkspacePath(path),
-      ...workspaceAdapter?.writeFile ? { onSaveFile: handleSaveFile } : {},
+      ...workspaceAdapter?.writeFile && activeNode && relativeWorkspacePath(activeNode.path, detail.workspace.absPath) !== null ? { onSaveFile: handleSaveFile } : {},
       ...collapsedPanel === "explorer" ? { onExpandExplorer: () => setCollapsedPanel(null) } : {
         onCollapse: () => {
           rememberExplorerScroll();

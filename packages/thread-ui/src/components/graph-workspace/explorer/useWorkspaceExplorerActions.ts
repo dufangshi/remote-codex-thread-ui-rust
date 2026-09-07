@@ -90,7 +90,7 @@ export function useWorkspaceExplorerActions({
     ) {
       return;
     }
-    const path = workspaceDisplayPath(node.path, workspaceRootPath);
+    const path = workspaceDisplayPath(node.path, workspaceRootPath) ?? node.path;
     if (path === null) return;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(

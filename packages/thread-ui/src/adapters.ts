@@ -78,6 +78,8 @@ export type ThreadWorkspaceUploadResult =
     };
 
 export interface ThreadWorkspaceAdapter {
+  /** Owner-only, read-only host files explicitly opened from a thread link. */
+  statLinkedFile?: (input: { threadId: string; path: string }) => Promise<ThreadWorkspaceTreeNode>;
   listTree(input: {
     threadId: string;
     workspaceId?: string | null;

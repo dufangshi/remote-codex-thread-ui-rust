@@ -216,9 +216,9 @@ export function WorkspaceExplorerRow({
           <CircleAlert className="h-3.5 w-3.5" />
         </button>
       ) : null}
-      {onDownload ||
+      {node.id !== 'linked-files' && (onDownload ||
       (onCopyPath && node.path) ||
-      (!isDirectory && onPreview) ? (
+      (!isDirectory && onPreview)) ? (
         <div className="thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1">
           {!isDirectory && onPreview ? (
             <button
@@ -232,7 +232,7 @@ export function WorkspaceExplorerRow({
               <Eye className="h-3.5 w-3.5" />
             </button>
           ) : null}
-          {onDownload ? (
+          {onDownload && !node.path.startsWith('/') && !/^[a-z]:[\\/]/i.test(node.path) ? (
             <button
               type="button"
               tabIndex={-1}
