@@ -636,3 +636,46 @@
 @media (prefers-reduced-motion: reduce) { .thread-room-running { animation: none; } }
 .thread-ui-rail-collapsed .thread-graph-room-card { padding-inline: 0; }
 .thread-room-tooltip[data-slot="tooltip-content"] { max-width: min(280px, calc(100vw - 32px)); overflow-wrap: anywhere; padding: 10px 13px; border: 1px solid var(--theme-border, #444); border-radius: 12px; background: var(--theme-panel, #242420); color: var(--theme-fg, #eee); box-shadow: 0 8px 28px #0003; }
+
+.thread-graph-download-preview {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 20px;
+  overflow: auto;
+  text-align: center;
+  color: var(--theme-fg-muted);
+  font-size: 13px;
+}
+.thread-graph-download-preview strong {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: var(--theme-fg);
+  font-size: 15px;
+}
+.thread-graph-download-preview-icon {
+  box-sizing: content-box;
+  width: 28px;
+  height: 28px;
+  padding: 20px;
+  margin-bottom: 8px;
+  border: 1px solid var(--theme-border);
+  border-radius: 20px;
+}
+.thread-graph-download-preview button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid var(--theme-border);
+  border-radius: 10px;
+  color: var(--theme-fg);
+  background: var(--theme-panel);
+  cursor: pointer;
+}
+.thread-graph-download-preview button:hover { background: var(--theme-bg); }
+.thread-graph-download-preview button:disabled { opacity: .6; cursor: wait; }

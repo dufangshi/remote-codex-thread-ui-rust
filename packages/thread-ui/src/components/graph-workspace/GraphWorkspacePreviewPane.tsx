@@ -13,6 +13,7 @@ import {
   BookOpen,
   ChevronRight,
   Code2,
+  Download,
   Pencil,
   PanelLeftOpen,
   PanelRightClose,
@@ -51,6 +52,40 @@ export type GraphWorkspacePreviewTarget =
   | { kind: 'event'; node: WorkspaceTreeNode }
   | { kind: 'meta'; node: WorkspaceTreeNode }
   | null;
+
+function DownloadFilePreview({ node, onDownload }: {
+  node: WorkspaceTreeNode;
+  onDownload?: () => Promise<void> | void;
+}) {
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const size = node.size;
+  const sizeLabel = size === undefined ? null : size < 1024 ? `${size} B`
+    : size < 1024 * 1024 ? `${(size / 1024).toFixed(1)} KB`
+    : `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  return (
+    <div className="thread-graph-download-preview">
+      <Download aria-hidden="true" className="thread-graph-download-preview-icon" />
+      <strong>{node.name}</strong>
+      {sizeLabel ? <span>{sizeLabel}</span> : null}
+      <p>This file is available to download.</p>
+      {onDownload ? (
+        <button type="button" disabled={pending} aria-label={`Download ${node.name}`}
+          onClick={async () => {
+            setPending(true);
+            setError(null);
+            try { await onDownload(); }
+            catch (caught) { setError(caught instanceof Error ? caught.message : 'Download failed. Please try again.'); }
+            finally { setPending(false); }
+          }}>
+          <Download aria-hidden="true" size={16} />
+          {pending ? 'Downloading…' : 'Download file'}
+        </button>
+      ) : <span>Downloads are unavailable for this connection.</span>}
+      {error ? <p role="alert">{error}</p> : null}
+    </div>
+  );
+}
 
 const SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 const SMALL_TEXT_FILE_MAX_LINES = 1000;
@@ -424,6 +459,8 @@ export function GraphWorkspacePreviewPane({
   error,
   fileTabs = [],
   focusLine,
+  downloadOnly,
+  onDownloadFile,
   imageUrl,
   loadingMore,
   onSaveFile,
@@ -447,6 +484,8 @@ export function GraphWorkspacePreviewPane({
   error?: string | null;
   fileTabs?: WorkspaceFileTab[];
   focusLine?: number | null;
+  downloadOnly?: boolean;
+  onDownloadFile?: () => Promise<void> | void;
   imageUrl?: string | null;
   loadingMore?: boolean;
   onSaveFile?: (input: {
@@ -736,6 +775,8 @@ export function GraphWorkspacePreviewPane({
           <div className="flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500">
             Loading file preview...
           </div>
+        ) : selectedTarget.kind === 'workspace-file' && downloadOnly ? (
+          <DownloadFilePreview key={selectedTarget.node.path} node={selectedTarget.node} onDownload={onDownloadFile} />
         ) : selectedTarget.kind === 'workspace-file' && moleculeSnapshot ? (
           <div className="thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden">
             <GraphMoleculeViewer

@@ -232,7 +232,7 @@ export function WorkspaceExplorerRow({
               <Eye className="h-3.5 w-3.5" />
             </button>
           ) : null}
-          {onDownload && !node.path.startsWith('/') && !/^[a-z]:[\\/]/i.test(node.path) ? (
+          {onDownload ? (
             <button
               type="button"
               tabIndex={-1}

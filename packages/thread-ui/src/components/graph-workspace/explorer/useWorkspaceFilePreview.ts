@@ -12,6 +12,8 @@ import {
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerIdentity } from './useWorkspaceExplorerPersistence';
 
+import { isBinaryPreview, isDownloadOnlyPath } from './filePreviewPolicy';
+
 const PREVIEW_CHUNK_BYTES = 24_000;
 
 export function useWorkspaceFilePreview({
@@ -29,6 +31,7 @@ export function useWorkspaceFilePreview({
 }) {
   const [previewFile, setPreviewFile] =
     useState<ThreadWorkspaceFilePreview | null>(null);
+  const [downloadOnly, setDownloadOnly] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
@@ -37,6 +40,7 @@ export function useWorkspaceFilePreview({
   useLayoutEffect(() => {
     const selectedPath = activeNode?.kind === 'file' ? activeNode.path : null;
     if (!adapter || !selectedPath) {
+      setDownloadOnly(false);
       setPreviewFile(null);
       setImageUrl(null);
       setPdfUrl(null);
@@ -50,10 +54,15 @@ export function useWorkspaceFilePreview({
     async function loadPreview() {
       setPreviewLoading(true);
       onError(null);
+      setDownloadOnly(false);
       setPreviewFile(null);
       setImageUrl(null);
       setPdfUrl(null);
       try {
+        if (isDownloadOnlyPath(currentPath)) {
+          setDownloadOnly(true);
+          return;
+        }
         const extension = extensionOf(currentPath);
         const rawUrl = currentAdapter.getRawFileUrl?.({
           ...identity,
@@ -77,7 +86,8 @@ export function useWorkspaceFilePreview({
           limit: PREVIEW_CHUNK_BYTES,
         });
         if (!cancelled) {
-          setPreviewFile(file);
+          if (isBinaryPreview(file.content)) setDownloadOnly(true);
+          else setPreviewFile(file);
         }
       } catch (error) {
         if (!cancelled) {
@@ -149,6 +159,7 @@ export function useWorkspaceFilePreview({
   }
 
   return {
+    downloadOnly,
     imageUrl,
     loadingMore,
     loadMore,

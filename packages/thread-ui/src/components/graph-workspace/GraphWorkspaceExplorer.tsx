@@ -98,6 +98,7 @@ export function GraphWorkspaceExplorer({
   }, [focusPathRequest]);
   const pendingExplorerScrollRestoreRef = useRef<number | null>(null);
   const {
+    downloadOnly,
     imageUrl,
     loadingMore,
     loadMore: handleLoadMore,
@@ -355,6 +356,10 @@ export function GraphWorkspaceExplorer({
       dirtyFilePaths={dirtyFilePaths}
       error={workspaceError}
       fileTabs={fileTabs}
+      downloadOnly={downloadOnly}
+      {...(workspaceAdapter?.downloadNode && activeNode?.kind === 'file'
+        ? { onDownloadFile: () => workspaceAdapter.downloadNode!({...workspaceIdentity, path: activeNode.path, kind: 'file'}) }
+        : {})}
       imageUrl={imageUrl}
       loadingMore={loadingMore}
       focusLine={focusedLine}
