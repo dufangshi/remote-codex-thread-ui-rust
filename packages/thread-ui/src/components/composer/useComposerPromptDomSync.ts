@@ -55,6 +55,10 @@ function createPromptAttachmentToken(
 
     const previewUrl = attachmentPreviewUrls[attachment.clientId];
     if (previewUrl) {
+      token.setAttribute('role', 'button');
+      token.setAttribute('aria-label', `Open image preview: ${attachment.originalName || 'Pasted image'}`);
+      token.tabIndex = 0;
+      token.style.cursor = 'zoom-in';
       const image = document.createElement('img');
       image.src = previewUrl;
       image.alt = attachment.originalName || 'Pasted image';

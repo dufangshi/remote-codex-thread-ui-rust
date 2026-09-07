@@ -100,6 +100,73 @@ function TooltipContent({
   ) });
 }
 
+// src/components/workspacePaths.ts
+function normalizeFileSystemPath(value) {
+  return value.trim().replace(/\\/g, "/").replace(/^\/([a-z]:\/)/i, "$1");
+}
+var APP_LOCAL_PATH_PREFIXES = [
+  "/api/",
+  "/assets/",
+  "/control-plane",
+  "/devices/",
+  "/relay/",
+  "/relay-account",
+  "/relay-admin",
+  "/relay-devices",
+  "/relay-portal",
+  "/threads",
+  "/workspaces"
+];
+function localFileHref(value, origin) {
+  let candidate = value.trim();
+  if (!candidate || candidate.startsWith("#") || candidate.startsWith("//")) return null;
+  if (/^(https?:|file:)/i.test(candidate)) {
+    try {
+      const url = new URL(candidate);
+      if (url.protocol !== "file:" && url.origin !== origin) return null;
+      candidate = (url.protocol === "file:" && url.hostname ? `//${url.hostname}` : "") + url.pathname + url.hash;
+    } catch {
+      return null;
+    }
+  } else {
+    candidate = candidate.split("?")[0] ?? "";
+  }
+  try {
+    candidate = decodeURIComponent(candidate);
+  } catch {
+  }
+  candidate = normalizeFileSystemPath(candidate);
+  if (/^[a-z][a-z+.-]*:/i.test(candidate) && !/^[a-z]:\//i.test(candidate)) return null;
+  if (APP_LOCAL_PATH_PREFIXES.some((prefix) => candidate === prefix || candidate.startsWith(prefix))) return null;
+  return candidate || null;
+}
+function relativeWorkspacePath(value, workspaceRoot) {
+  let path = normalizeFileSystemPath(value);
+  const root = normalizeFileSystemPath(workspaceRoot).replace(/\/+$/, "");
+  const absolute = path.startsWith("/") || /^[a-z]:\//i.test(path);
+  if (absolute) {
+    const windows = /^[a-z]:\//i.test(root) || root.startsWith("//");
+    const comparePath = windows ? path.toLowerCase() : path;
+    const compareRoot = windows ? root.toLowerCase() : root;
+    if (comparePath === compareRoot) return "";
+    if (!comparePath.startsWith(`${compareRoot}/`)) return null;
+    path = path.slice(root.length + 1);
+  }
+  const segments = [];
+  for (const part of path.split("/")) {
+    if (!part || part === ".") continue;
+    if (part === "..") {
+      if (!segments.length) return null;
+      segments.pop();
+    } else segments.push(part);
+  }
+  return segments.join("/");
+}
+function workspaceDisplayPath(path, root) {
+  const relative = relativeWorkspacePath(path, root);
+  return relative === null ? null : `./${relative}`;
+}
+
 // src/components/graph-ui/Button.tsx
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
@@ -395,34 +462,6 @@ function ZoomableImage({
   ] });
 }
 
-// src/components/workspacePaths.ts
-function relativeWorkspacePath(value, workspaceRoot) {
-  let path = value.trim().replace(/\\/g, "/");
-  const root = workspaceRoot.trim().replace(/\\/g, "/").replace(/\/+$/, "");
-  const absolute = path.startsWith("/") || /^[a-z]:\//i.test(path);
-  if (absolute) {
-    const windows = /^[a-z]:\//i.test(root);
-    const comparePath = windows ? path.toLowerCase() : path;
-    const compareRoot = windows ? root.toLowerCase() : root;
-    if (comparePath === compareRoot) return "";
-    if (!comparePath.startsWith(`${compareRoot}/`)) return null;
-    path = path.slice(root.length + 1);
-  }
-  const segments = [];
-  for (const part of path.split("/")) {
-    if (!part || part === ".") continue;
-    if (part === "..") {
-      if (!segments.length) return null;
-      segments.pop();
-    } else segments.push(part);
-  }
-  return segments.join("/");
-}
-function workspaceDisplayPath(path, root) {
-  const relative = relativeWorkspacePath(path, root);
-  return relative === null ? null : `./${relative}`;
-}
-
 // src/components/WorkspaceFileLink.tsx
 import { useEffect as useEffect2, useRef as useRef2, useState as useState2 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
@@ -580,13 +619,16 @@ function getGraphChatHighlighter() {
 export {
   cn,
   Button,
+  GraphWorkspaceImageLightbox,
+  ZoomableImage,
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-  ZoomableImage,
+  normalizeFileSystemPath,
+  localFileHref,
   relativeWorkspacePath,
   workspaceDisplayPath,
   WorkspaceFileLink,

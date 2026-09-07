@@ -1,5 +1,6 @@
 import {
   Button,
+  GraphWorkspaceImageLightbox,
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
@@ -10,8 +11,9 @@ import {
   ZoomableImage,
   cn,
   getGraphChatHighlighter,
+  localFileHref,
   relativeWorkspacePath
-} from "./chunk-ZRHKJEE3.js";
+} from "./chunk-YAYFJUDI.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -38,8 +40,8 @@ styleInject(".thread-export-dialog-root {\n  --export-bg: rgb(248 250 252);\n  -
 import {
   useCallback as useCallback9,
   useMemo as useMemo2,
-  useRef as useRef6,
-  useState as useState12
+  useRef as useRef7,
+  useState as useState13
 } from "react";
 
 // src/components/composer/composerUtils.ts
@@ -4124,6 +4126,10 @@ function createPromptAttachmentToken(segment, attachmentPreviewUrls) {
     );
     const previewUrl = attachmentPreviewUrls[attachment.clientId];
     if (previewUrl) {
+      token.setAttribute("role", "button");
+      token.setAttribute("aria-label", `Open image preview: ${attachment.originalName || "Pasted image"}`);
+      token.tabIndex = 0;
+      token.style.cursor = "zoom-in";
       const image = document.createElement("img");
       image.src = previewUrl;
       image.alt = attachment.originalName || "Pasted image";
@@ -4280,6 +4286,7 @@ function ComposerGoalComposeCard({
 }
 
 // src/components/composer/ComposerPromptEditor.tsx
+import { useRef as useRef6, useState as useState11 } from "react";
 import { jsx as jsx20, jsxs as jsxs18 } from "react/jsx-runtime";
 function hasIOSNativeBridge() {
   const nativeWindow = window;
@@ -4307,6 +4314,13 @@ function ComposerPromptEditor({
   onDragLeave,
   onDrop
 }) {
+  const previewTrigger = useRef6(null);
+  const [preview, setPreview] = useState11(null);
+  function attachmentImage(target) {
+    const chip = target instanceof Element ? target.closest('[data-segment-type="attachment"]') : null;
+    if (chip?.querySelector("img")) previewTrigger.current = chip;
+    return chip?.querySelector("img");
+  }
   return /* @__PURE__ */ jsxs18(
     "div",
     {
@@ -4331,7 +4345,18 @@ function ComposerPromptEditor({
               contentEditable: !disabled,
               inputMode: "text",
               suppressContentEditableWarning: true,
+              onClick: (event) => {
+                const image = attachmentImage(event.target);
+                if (image) {
+                  event.preventDefault();
+                  setPreview({ src: image.src, alt: image.alt });
+                }
+              },
               onPointerDown: (event) => {
+                if (attachmentImage(event.target)) {
+                  event.preventDefault();
+                  return;
+                }
                 if (!disabled && document.activeElement !== event.currentTarget && hasIOSNativeBridge()) {
                   event.currentTarget.focus({ preventScroll: true });
                 }
@@ -4339,7 +4364,15 @@ function ComposerPromptEditor({
               },
               onInput,
               onPaste,
-              onKeyDown,
+              onKeyDown: (event) => {
+                const image = attachmentImage(event.target);
+                if (image && (event.key === "Enter" || event.key === " ")) {
+                  event.preventDefault();
+                  setPreview({ src: image.src, alt: image.alt });
+                  return;
+                }
+                onKeyDown(event);
+              },
               onKeyUp,
               onMouseUp,
               onBlur,
@@ -4351,6 +4384,10 @@ function ComposerPromptEditor({
             }
           )
         ] }),
+        preview ? /* @__PURE__ */ jsx20(GraphWorkspaceImageLightbox, { src: preview.src, alt: preview.alt, onClose: () => {
+          setPreview(null);
+          previewTrigger.current?.focus({ preventScroll: true });
+        } }) : null,
         canInterrupt ? /* @__PURE__ */ jsx20(
           InputGroupButton,
           {
@@ -4538,13 +4575,13 @@ function useComposerPromptSlots({
 }
 
 // src/components/composer/useComposerSettingsActions.ts
-import { useCallback as useCallback8, useEffect as useEffect7, useState as useState11 } from "react";
+import { useCallback as useCallback8, useEffect as useEffect7, useState as useState12 } from "react";
 function useComposerSettingsActions({
   collaborationMode,
   onUpdateSettings,
   closeMenu
 }) {
-  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState11(null);
+  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState12(null);
   const displayedCollaborationMode = optimisticCollaborationMode ?? collaborationMode;
   useEffect7(() => {
     setOptimisticCollaborationMode(null);
@@ -4943,10 +4980,10 @@ function ThreadComposer({
   onSteerPendingPrompt,
   onCancelPendingPrompt
 }) {
-  const [openMenu, setOpenMenu] = useState12(null);
-  const [slashPanelView, setSlashPanelView] = useState12("root");
-  const submitInFlightRef = useRef6(false);
-  const [mcpPanelMode, setMcpPanelMode] = useState12("list");
+  const [openMenu, setOpenMenu] = useState13(null);
+  const [slashPanelView, setSlashPanelView] = useState13("root");
+  const submitInFlightRef = useRef7(false);
+  const [mcpPanelMode, setMcpPanelMode] = useState13("list");
   const slashCapabilities = useMemo2(
     () => ({
       fast: capabilities?.controls.performanceMode ?? false,
@@ -4977,27 +5014,27 @@ function ThreadComposer({
     () => filterToolboxItemsForCapabilities(toolboxItems, slashCapabilities),
     [slashCapabilities, toolboxItems]
   );
-  const menuRef = useRef6(null);
-  const promptRef = useRef6(null);
-  const photoInputRef = useRef6(null);
-  const fileInputRef = useRef6(null);
-  const pendingSelectionRef = useRef6(
+  const menuRef = useRef7(null);
+  const promptRef = useRef7(null);
+  const photoInputRef = useRef7(null);
+  const fileInputRef = useRef7(null);
+  const pendingSelectionRef = useRef7(
     null
   );
-  const pendingInsertedAttachmentIdsRef = useRef6([]);
-  const selectionSnapshotRef = useRef6(
+  const pendingInsertedAttachmentIdsRef = useRef7([]);
+  const selectionSnapshotRef = useRef7(
     null
   );
-  const renderedPreviewSignatureRef = useRef6("");
-  const renderedSanitizeNonceRef = useRef6(0);
+  const renderedPreviewSignatureRef = useRef7("");
+  const renderedSanitizeNonceRef = useRef7(0);
   const isShellView = activeView === "shell";
   const canToggleShellView = shellAvailable || isShellView;
   const isMobileShell = Boolean(
     isShellView && shellControlState?.isMobileShell
   );
   const shellPromptLabel = shellControlState?.promptLabel ?? null;
-  const [isDragTargetActive, setIsDragTargetActive] = useState12(false);
-  const [editorSanitizeNonce, setEditorSanitizeNonce] = useState12(0);
+  const [isDragTargetActive, setIsDragTargetActive] = useState13(false);
+  const [editorSanitizeNonce, setEditorSanitizeNonce] = useState13(0);
   const {
     prompt,
     attachments,
@@ -5685,7 +5722,7 @@ function ThreadComposer({
 }
 
 // src/components/ThreadWorkspaceLayout.tsx
-import { useEffect as useEffect9, useMemo as useMemo3, useRef as useRef7, useState as useState13 } from "react";
+import { useEffect as useEffect9, useMemo as useMemo3, useRef as useRef8, useState as useState14 } from "react";
 import {
   ArrowLeft,
   ChevronsLeft,
@@ -6201,10 +6238,10 @@ function ThreadCard({
   showSessionCopyButton = false,
   collapsed = false
 }) {
-  const [copyState, setCopyState] = useState13(
+  const [copyState, setCopyState] = useState14(
     "idle"
   );
-  const resetTimerRef = useRef7(null);
+  const resetTimerRef = useRef8(null);
   const workspaceLabel = workspaceLabels[thread.workspaceId];
   const roomMetaLabel = workspaceLabel && !currentWorkspaceId ? workspaceLabel : null;
   const isCurrentThread = currentThreadId === thread.id;
@@ -6451,37 +6488,37 @@ function ThreadWorkspaceLayout({
   const shellNav = useAppShellNav();
   const initialShellMobileViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : layoutMode === "mobile";
   const initialWorkspaceFocusViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 1023px)").matches : layoutMode === "mobile";
-  const [systemPrefersDark, setSystemPrefersDark] = useState13(
+  const [systemPrefersDark, setSystemPrefersDark] = useState14(
     () => typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)").matches : false
   );
   const themeMode = themeModeProp ?? shellNav?.themeMode ?? "system";
   const effectiveTheme = effectiveThemeProp ?? shellNav?.effectiveTheme ?? (themeMode === "system" ? systemPrefersDark ? "dark" : "light" : themeMode);
-  const [mobileRoomsOpen, setMobileRoomsOpen] = useState13(false);
-  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState13(false);
-  const [workspaceCollapsed, setWorkspaceCollapsed] = useState13(
+  const [mobileRoomsOpen, setMobileRoomsOpen] = useState14(false);
+  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState14(false);
+  const [workspaceCollapsed, setWorkspaceCollapsed] = useState14(
     !initialWorkspaceFocusViewport
   );
-  const [isShellMobileViewport, setIsShellMobileViewport] = useState13(
+  const [isShellMobileViewport, setIsShellMobileViewport] = useState14(
     initialShellMobileViewport
   );
-  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState13(
+  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState14(
     initialWorkspaceFocusViewport
   );
-  const [mobileWorkspace, setMobileWorkspace] = useState13(
+  const [mobileWorkspace, setMobileWorkspace] = useState14(
     "chat"
   );
-  const [workspaceVisited, setWorkspaceVisited] = useState13(false);
+  const [workspaceVisited, setWorkspaceVisited] = useState14(false);
   useEffect9(() => {
     if (mobileWorkspace === "workspace") setWorkspaceVisited(true);
   }, [mobileWorkspace]);
-  const [editingThreadId, setEditingThreadId] = useState13(null);
-  const [draftTitle, setDraftTitle] = useState13("");
-  const [renamingThreadId, setRenamingThreadId] = useState13(null);
-  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState13(false);
-  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState13("");
-  const [creatingThread, setCreatingThread] = useState13(false);
-  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState13(false);
-  const [settingsTab, setSettingsTab] = useState13(
+  const [editingThreadId, setEditingThreadId] = useState14(null);
+  const [draftTitle, setDraftTitle] = useState14("");
+  const [renamingThreadId, setRenamingThreadId] = useState14(null);
+  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState14(false);
+  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState14("");
+  const [creatingThread, setCreatingThread] = useState14(false);
+  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState14(false);
+  const [settingsTab, setSettingsTab] = useState14(
     "session"
   );
   useEffect9(() => {
@@ -7210,7 +7247,7 @@ function ThreadWorkspaceLayout({
 
 // src/components/ThreadTimeline.tsx
 import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@remote-codex/shared";
-import { memo as memo6, useCallback as useCallback14, useEffect as useEffect19, useMemo as useMemo8, useRef as useRef15, useState as useState28 } from "react";
+import { memo as memo6, useCallback as useCallback14, useEffect as useEffect19, useMemo as useMemo8, useRef as useRef16, useState as useState29 } from "react";
 
 // src/components/LongTextDialog.tsx
 import { useEffect as useEffect10 } from "react";
@@ -7292,8 +7329,8 @@ function LongTextDialog({
 import {
   memo as memo3,
   useEffect as useEffect15,
-  useRef as useRef10,
-  useState as useState19
+  useRef as useRef11,
+  useState as useState20
 } from "react";
 import { Brain, Check as Check4, Copy as Copy3 } from "lucide-react";
 
@@ -7305,23 +7342,23 @@ import {
   useEffect as useEffect14,
   useLayoutEffect as useLayoutEffect4,
   useMemo as useMemo6,
-  useRef as useRef9,
-  useState as useState17
+  useRef as useRef10,
+  useState as useState18
 } from "react";
 
 // src/components/graph-chat/MessageExpansionScope.tsx
-import { createContext as createContext2, useContext as useContext2, useEffect as useEffect11, useState as useState14 } from "react";
+import { createContext as createContext2, useContext as useContext2, useEffect as useEffect11, useState as useState15 } from "react";
 import { jsx as jsx29 } from "react/jsx-runtime";
 var ExpansionContext = createContext2(null);
 function MessageExpansionScope({ children }) {
-  const [cache] = useState14(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
+  const [cache] = useState15(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
   return /* @__PURE__ */ jsx29(ExpansionContext.Provider, { value: cache, children });
 }
 function useMessageExpansion(messageId, text, streaming) {
   const cache = useContext2(ExpansionContext);
   const remembered = messageId ? cache?.messages.get(messageId) : void 0;
   const inherited = remembered ?? (cache?.live && text.startsWith(cache.live.text) ? cache.live.expanded : false);
-  const [choice, setChoice] = useState14({ messageId, expanded: inherited });
+  const [choice, setChoice] = useState15({ messageId, expanded: inherited });
   const expanded = choice.messageId === messageId ? choice.expanded : inherited;
   const setExpanded = (next) => {
     if (messageId) cache?.messages.set(messageId, next);
@@ -7376,11 +7413,11 @@ import {
   useEffect as useEffect13,
   isValidElement,
   useMemo as useMemo5,
-  useRef as useRef8,
-  useState as useState16
+  useRef as useRef9,
+  useState as useState17
 } from "react";
 import { Check as Check3, Copy as Copy2 } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkCjkFriendly from "remark-cjk-friendly";
@@ -7462,7 +7499,7 @@ function usePlugins() {
 }
 
 // src/components/graph-chat/GraphChatToolCall.tsx
-import { useEffect as useEffect12, useMemo as useMemo4, useState as useState15 } from "react";
+import { useEffect as useEffect12, useMemo as useMemo4, useState as useState16 } from "react";
 import { CheckCircle2, Loader2 as Loader22, Wrench, XCircle } from "lucide-react";
 
 // src/components/graph-workspace/GraphAccordion.tsx
@@ -7608,7 +7645,7 @@ function GraphChatToolCall({
   );
   const shouldAutoOpen = status === "pending";
   const actionLabel = /(?:exec|command|shell|terminal)/i.test(toolName) ? "Ran" : "Used";
-  const [openItem, setOpenItem] = useState15(
+  const [openItem, setOpenItem] = useState16(
     shouldAutoOpen ? "item-1" : void 0
   );
   useEffect12(() => {
@@ -7821,19 +7858,6 @@ ${mergedPayload}
 
 // src/components/graph-chat/GraphChatMessageContent.tsx
 import { Fragment as Fragment5, jsx as jsx32, jsxs as jsxs26 } from "react/jsx-runtime";
-var APP_LOCAL_PATH_PREFIXES = [
-  "/api/",
-  "/assets/",
-  "/control-plane",
-  "/devices/",
-  "/relay/",
-  "/relay-account",
-  "/relay-admin",
-  "/relay-devices",
-  "/relay-portal",
-  "/threads",
-  "/workspaces"
-];
 function ensureTransparentShikiBg(html) {
   return html.replace(/background-color:[^;"]+;?/g, "background-color: transparent;").replace(/background:[^;"]+;?/g, "background: transparent;");
 }
@@ -7864,31 +7888,8 @@ function parseWorkspaceFileHref(href, workspaceRootPath) {
   if (!href) {
     return null;
   }
-  let candidate = href.trim();
-  if (!candidate || candidate.startsWith("#")) {
-    return null;
-  }
-  try {
-    if (typeof window === "undefined") {
-      return null;
-    }
-    const parsed = /^(?:https?:|file:)/i.test(candidate) ? new URL(candidate, window.location.origin) : null;
-    if (parsed && parsed.origin !== window.location.origin && parsed.protocol !== "file:") {
-      return null;
-    }
-    if (parsed) candidate = parsed.pathname + parsed.hash;
-  } catch {
-  }
-  try {
-    candidate = decodeURIComponent(candidate);
-  } catch {
-  }
-  if (/^[a-z][a-z+.-]*:/i.test(candidate) && !/^[a-z]:[\\/]/i.test(candidate)) return null;
-  if (APP_LOCAL_PATH_PREFIXES.some(
-    (prefix) => candidate === prefix || candidate.startsWith(prefix)
-  )) {
-    return null;
-  }
+  const candidate = localFileHref(href, typeof window === "undefined" ? void 0 : window.location.origin);
+  if (!candidate) return null;
   const lineMatch = candidate.match(/(?:#L|:)(\d+)(?::\d+)?$/);
   const line = lineMatch ? Number.parseInt(lineMatch[1] ?? "", 10) : void 0;
   const rawPath = lineMatch ? candidate.slice(0, -lineMatch[0].length) : candidate;
@@ -7925,12 +7926,12 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
   workspaceRootPath,
   resolveHref
 }) {
-  const rootRef = useRef8(null);
+  const rootRef = useRef9(null);
   const plugins = usePlugins();
-  const [highlighter, setHighlighter] = useState16(null);
-  const [copyState, setCopyState] = useState16({});
-  const [touchCode, setTouchCode] = useState16(null);
-  const [dark, setDark] = useState16(false);
+  const [highlighter, setHighlighter] = useState17(null);
+  const [copyState, setCopyState] = useState17({});
+  const [touchCode, setTouchCode] = useState17(null);
+  const [dark, setDark] = useState17(false);
   const { processedContent, resultMap } = useMemo5(
     () => readOnly ? { processedContent: content, resultMap: /* @__PURE__ */ new Map() } : preprocessGraphChatToolBlocks(content),
     [content, readOnly]
@@ -8118,6 +8119,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
   return /* @__PURE__ */ jsx32("div", { ref: rootRef, "data-markdown-ready": highlighter ? "true" : "false", className: `thread-graph-message-markdown ${className}`, children: /* @__PURE__ */ jsx32(
     ReactMarkdown,
     {
+      urlTransform: (url) => !readOnly && localFileHref(url, typeof window === "undefined" ? void 0 : window.location.origin) ? url : defaultUrlTransform(url),
       remarkPlugins: [remarkGfm, remarkMath, remarkCjkFriendly],
       rehypePlugins: [rehypeKatex],
       components: {
@@ -8140,7 +8142,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
         img({ src, alt }) {
           const resolved = src ? resolveHref?.(src) ?? src : void 0;
           if (readOnly && !resolved?.startsWith("data:image/") && !/^https?:\/\//i.test(resolved ?? "")) return /* @__PURE__ */ jsx32("span", { children: alt || "Image unavailable" });
-          return /* @__PURE__ */ jsx32("img", { src: resolved, alt: alt ?? "" });
+          return resolved ? /* @__PURE__ */ jsx32(ZoomableImage, { src: resolved, alt: alt ?? "" }) : /* @__PURE__ */ jsx32("span", { children: alt || "Image unavailable" });
         },
         code: CodeBlockRenderer,
         pre: PreRenderer
@@ -8260,15 +8262,15 @@ var GraphChatMarkdownAwareBody = memo2(
     workspaceRootPath,
     resolveHref
   }) {
-    const messageRef = useRef9(null);
-    const scrollAnchorRef = useRef9(null);
+    const messageRef = useRef10(null);
+    const scrollAnchorRef = useRef10(null);
     const [expanded, setExpanded] = useMessageExpansion(messageId, text, streaming);
     const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text);
     const isLargeText = !streaming && text.length > LARGE_MESSAGE_PREVIEW_CHARS;
     const displayText = isLargeText && !expanded ? `${text.slice(0, LARGE_MESSAGE_PREVIEW_CHARS).trimEnd()}
 
 ...` : text;
-    const [isActivated, setIsActivated] = useState17(
+    const [isActivated, setIsActivated] = useState18(
       streaming || typeof IntersectionObserver === "undefined"
     );
     const toggleExpanded = useCallback10(() => {
@@ -8447,7 +8449,7 @@ var GraphChatUserMessageBody = memo2(
 );
 
 // src/components/graph-chat/GraphChatMessageFrame.tsx
-import { useState as useState18 } from "react";
+import { useState as useState19 } from "react";
 import { CheckCircle2 as CheckCircle22, Circle, Loader2 as Loader23, XCircle as XCircle2 } from "lucide-react";
 import { jsx as jsx34, jsxs as jsxs28 } from "react/jsx-runtime";
 function GraphChatRunningDots() {
@@ -8496,7 +8498,7 @@ function GraphChatMessageFrame({
   timeTitle
 }) {
   const isUser = kind === "userMessage";
-  const [touchActionsVisible, setTouchActionsVisible] = useState18(false);
+  const [touchActionsVisible, setTouchActionsVisible] = useState19(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? "";
   const showStatus = Boolean(
     status && normalizedStatus !== "complete" && normalizedStatus !== "completed"
@@ -8599,11 +8601,11 @@ var GraphChatCompactMessageItem = memo3(
     timeTitle,
     onBeforeMessageResize
   }) {
-    const [copyState, setCopyState] = useState19(
+    const [copyState, setCopyState] = useState20(
       "idle"
     );
-    const [reasoningOpen, setReasoningOpen] = useState19(false);
-    const resetTimerRef = useRef10(null);
+    const [reasoningOpen, setReasoningOpen] = useState20(false);
+    const resetTimerRef = useRef11(null);
     const reasoningItems = item.kind === "agentMessage" ? item.reasoningItems ?? [] : [];
     const reasoningText = reasoningItems.map((entry) => entry.text.trim()).filter(Boolean).join("\n\n");
     const queuedLikeStatus = item.kind === "userMessage" && (item.status === "Steering" || item.status === "Accepted" || item.status === "Awaiting response");
@@ -9223,16 +9225,16 @@ function buildActivityNoteAnchors({
 }
 
 // src/components/timeline/TimelineRequestCards.tsx
-import { useState as useState20 } from "react";
+import { useState as useState21 } from "react";
 import { Fragment as Fragment7, jsx as jsx36, jsxs as jsxs30 } from "react/jsx-runtime";
 function PendingRequestCard({
   request,
   busy = false,
   onRespond
 }) {
-  const [answers, setAnswers] = useState20({});
-  const [customAnswers, setCustomAnswers] = useState20({});
-  const [selectedPlanDecision, setSelectedPlanDecision] = useState20(null);
+  const [answers, setAnswers] = useState21({});
+  const [customAnswers, setCustomAnswers] = useState21({});
+  const [selectedPlanDecision, setSelectedPlanDecision] = useState21(null);
   const primaryQuestion = request.questions[0] ?? null;
   const OTHER_SENTINEL = "__other__";
   const isPermissionRequest = request.kind === "permissionRequest";
@@ -9602,7 +9604,7 @@ import {
   memo as memo5,
   useCallback as useCallback11,
   useMemo as useMemo7,
-  useState as useState25
+  useState as useState26
 } from "react";
 import { ChevronRight as ChevronRight4 } from "lucide-react";
 
@@ -9673,8 +9675,8 @@ function GraphChatHistoryEntries({
 import {
   memo as memo4,
   useLayoutEffect as useLayoutEffect5,
-  useRef as useRef11,
-  useState as useState21
+  useRef as useRef12,
+  useState as useState22
 } from "react";
 import {
   Archive,
@@ -10162,10 +10164,10 @@ function GraphChatHistoryToolFrame({
   const showStatus = Boolean(
     item.status && statusConfig.className !== "is-completed"
   );
-  const [openItem, setOpenItem] = useState21(
+  const [openItem, setOpenItem] = useState22(
     autoOpen ? "item-1" : void 0
   );
-  const previousAutoOpenRef = useRef11(autoOpen);
+  const previousAutoOpenRef = useRef12(autoOpen);
   useLayoutEffect5(() => {
     if (autoOpen) {
       setOpenItem("item-1");
@@ -10600,7 +10602,7 @@ var GraphChatArtifactHistoryItem = memo4(
     timeMeta
   }) {
     const plugins = usePlugins();
-    const [expanded, setExpanded] = useState21(false);
+    const [expanded, setExpanded] = useState22(false);
     const artifact = item.artifact;
     const rendered = artifact ? plugins.renderArtifact({
       artifact,
@@ -11164,8 +11166,8 @@ function GraphChatTurnFrame({
 import {
   useEffect as useEffect16,
   useLayoutEffect as useLayoutEffect6,
-  useRef as useRef12,
-  useState as useState22
+  useRef as useRef13,
+  useState as useState23
 } from "react";
 import { Fragment as Fragment11, jsx as jsx43, jsxs as jsxs35 } from "react/jsx-runtime";
 function TokenInIcon() {
@@ -11396,12 +11398,12 @@ var TURN_HEADER_BADGE_CLASS_NAME = "inline-flex shrink-0 items-center gap-1 roun
 function TurnTokenSummary({ turn }) {
   const details = buildTurnTokenDetails(turn);
   const priceBadge = buildTurnPriceBadge(turn);
-  const [isMobileOpen, setIsMobileOpen] = useState22(false);
-  const [isDesktopOpen, setIsDesktopOpen] = useState22(false);
-  const [mobilePopoverShift, setMobilePopoverShift] = useState22(0);
-  const containerRef = useRef12(null);
-  const desktopPriceRef = useRef12(null);
-  const mobilePopoverRef = useRef12(null);
+  const [isMobileOpen, setIsMobileOpen] = useState23(false);
+  const [isDesktopOpen, setIsDesktopOpen] = useState23(false);
+  const [mobilePopoverShift, setMobilePopoverShift] = useState23(0);
+  const containerRef = useRef13(null);
+  const desktopPriceRef = useRef13(null);
+  const mobilePopoverRef = useRef13(null);
   useLayoutEffect6(() => {
     if (!isMobileOpen || details.length === 0) {
       setMobilePopoverShift(0);
@@ -11542,10 +11544,10 @@ function TurnTokenSummary({ turn }) {
 }
 
 // src/components/timeline/turnStatus.tsx
-import { useEffect as useEffect17, useState as useState24 } from "react";
+import { useEffect as useEffect17, useState as useState25 } from "react";
 
 // src/components/timeline/TurnUsageInline.tsx
-import { useState as useState23 } from "react";
+import { useState as useState24 } from "react";
 import { DollarSign, ArrowDownToLine, ArrowUpFromLine, Database, Brain as Brain2, Save } from "lucide-react";
 import { jsx as jsx44, jsxs as jsxs36 } from "react/jsx-runtime";
 function formatTurnRuntimeSummary(turn) {
@@ -11554,7 +11556,7 @@ function formatTurnRuntimeSummary(turn) {
   return effort ? `${model} \xB7 ${effort}` : model;
 }
 function TurnUsageInline({ turn, readOnly = false }) {
-  const [detailsOpen, setDetailsOpen] = useState23(false);
+  const [detailsOpen, setDetailsOpen] = useState24(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
   const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
@@ -11748,7 +11750,7 @@ function deriveDisplayedLivePlan(livePlan, items, turnStatus) {
   };
 }
 function useSecondClock(enabled) {
-  const [now, setNow] = useState24(() => Date.now());
+  const [now, setNow] = useState25(() => Date.now());
   useEffect17(() => {
     if (!enabled) {
       return;
@@ -12186,7 +12188,7 @@ function TimelineTimeToggle({
   endTimestamp,
   turnStartedAt
 }) {
-  const [showAbsolute, setShowAbsolute] = useState25(false);
+  const [showAbsolute, setShowAbsolute] = useState26(false);
   if (!timestamp) {
     return null;
   }
@@ -12321,7 +12323,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     () => parseHookPromptText(visibleLiveOutput),
     [visibleLiveOutput]
   );
-  const [expandedGroups, setExpandedGroups] = useState25(
+  const [expandedGroups, setExpandedGroups] = useState26(
     {}
   );
   const toggleGroupedItem = useCallback11((groupKey) => {
@@ -12717,7 +12719,7 @@ function buildSyntheticLiveTurn(turnId, items) {
 }
 
 // src/components/timeline/useDeferredHistoryDetail.ts
-import { useCallback as useCallback12, useRef as useRef13, useState as useState26 } from "react";
+import { useCallback as useCallback12, useRef as useRef14, useState as useState27 } from "react";
 function inlineDetail(item, title, text) {
   return {
     id: item.id,
@@ -12730,11 +12732,11 @@ function useDeferredHistoryDetail({
   loadHistoryItemDetail,
   onSelectHistoryItemDetail
 }) {
-  const requestIdRef = useRef13(0);
-  const detailCacheRef = useRef13(
+  const requestIdRef = useRef14(0);
+  const detailCacheRef = useRef14(
     /* @__PURE__ */ new Map()
   );
-  const [expandedText, setExpandedText] = useState26(
+  const [expandedText, setExpandedText] = useState27(
     null
   );
   const openExpandedText = useCallback12((title, text) => {
@@ -12863,12 +12865,12 @@ import {
   useCallback as useCallback13,
   useEffect as useEffect18,
   useLayoutEffect as useLayoutEffect7,
-  useRef as useRef14,
-  useState as useState27
+  useRef as useRef15,
+  useState as useState28
 } from "react";
 function useChangeRevision(inputs) {
-  const previousInputsRef = useRef14(null);
-  const revisionRef = useRef14(0);
+  const previousInputsRef = useRef15(null);
+  const revisionRef = useRef15(0);
   const previousInputs = previousInputsRef.current;
   const changed = previousInputs === null || previousInputs.length !== inputs.length || inputs.some((input, index) => !Object.is(input, previousInputs[index]));
   if (changed) {
@@ -12888,27 +12890,27 @@ function useTimelineScroll({
   onTailVisibilityChange,
   contentRevisionInputs
 }) {
-  const scrollContainerRef = useRef14(null);
-  const scrollContentRef = useRef14(null);
-  const lastHandledScrollRequestKeyRef = useRef14(scrollRequestKey);
-  const previousContentRevisionRef = useRef14(null);
-  const previousBottomSpacerRef = useRef14(bottomSpacer);
-  const lastObservedScrollHeightRef = useRef14(0);
-  const lastScrollTopRef = useRef14(0);
-  const pendingPrependScrollRef = useRef14(null);
-  const tailSentinelRef = useRef14(null);
-  const topSentinelRef = useRef14(null);
-  const isTailVisibleRef = useRef14(true);
-  const shouldStickToBottomRef = useRef14(true);
-  const userScrolledAwayFromTailRef = useRef14(false);
-  const userScrolledHistoryRef = useRef14(false);
-  const autoLoadedEarlierRef = useRef14(false);
-  const topLoadArmedRef = useRef14(false);
-  const lastTouchYRef = useRef14(null);
-  const touchPullDistanceRef = useRef14(0);
-  const [visibleCount, setVisibleCount] = useState27(INITIAL_VISIBLE_TURNS);
-  const [loadMoreClicks, setLoadMoreClicks] = useState27(0);
-  const [isTailVisible, setIsTailVisible] = useState27(true);
+  const scrollContainerRef = useRef15(null);
+  const scrollContentRef = useRef15(null);
+  const lastHandledScrollRequestKeyRef = useRef15(scrollRequestKey);
+  const previousContentRevisionRef = useRef15(null);
+  const previousBottomSpacerRef = useRef15(bottomSpacer);
+  const lastObservedScrollHeightRef = useRef15(0);
+  const lastScrollTopRef = useRef15(0);
+  const pendingPrependScrollRef = useRef15(null);
+  const tailSentinelRef = useRef15(null);
+  const topSentinelRef = useRef15(null);
+  const isTailVisibleRef = useRef15(true);
+  const shouldStickToBottomRef = useRef15(true);
+  const userScrolledAwayFromTailRef = useRef15(false);
+  const userScrolledHistoryRef = useRef15(false);
+  const autoLoadedEarlierRef = useRef15(false);
+  const topLoadArmedRef = useRef15(false);
+  const lastTouchYRef = useRef15(null);
+  const touchPullDistanceRef = useRef15(0);
+  const [visibleCount, setVisibleCount] = useState28(INITIAL_VISIBLE_TURNS);
+  const [loadMoreClicks, setLoadMoreClicks] = useState28(0);
+  const [isTailVisible, setIsTailVisible] = useState28(true);
   const contentRevision = useChangeRevision(contentRevisionInputs);
   const serverManagedHistory = typeof onLoadEarlier === "function" || totalTurnCount !== void 0;
   const effectiveTotalTurnCount = totalTurnCount ?? turnsLength;
@@ -13291,21 +13293,21 @@ function ThreadTimelineComponent({
 }) {
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns = autoCollapseCompletedTurns ?? shellNav?.autoCollapseCompletedTurns ?? false;
-  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState28(
+  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState29(
     {}
   );
-  const [cancelingSteerIds, setCancelingSteerIds] = useState28(
+  const [cancelingSteerIds, setCancelingSteerIds] = useState29(
     () => /* @__PURE__ */ new Set()
   );
-  const lastPreviousTurnTargetIdRef = useRef15(null);
-  const lastNextTurnTargetIdRef = useRef15(null);
+  const lastPreviousTurnTargetIdRef = useRef16(null);
+  const lastNextTurnTargetIdRef = useRef16(null);
   const loadHistoryItemDetail = adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
-  const [loadedTurnDetails, setLoadedTurnDetails] = useState28({});
-  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState28(
+  const [loadedTurnDetails, setLoadedTurnDetails] = useState29({});
+  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState29(
     () => /* @__PURE__ */ new Set()
   );
-  const [turnDetailErrors, setTurnDetailErrors] = useState28({});
+  const [turnDetailErrors, setTurnDetailErrors] = useState29({});
   const openLinkedThread = adapter?.onOpenLinkedThread;
   const {
     expandedText,
@@ -13923,8 +13925,8 @@ import {
   useEffect as useEffect23,
   useImperativeHandle as useImperativeHandle2,
   useMemo as useMemo10,
-  useRef as useRef18,
-  useState as useState31
+  useRef as useRef19,
+  useState as useState32
 } from "react";
 
 // src/components/shell/ShellPane.tsx
@@ -13934,8 +13936,8 @@ import {
   useEffect as useEffect21,
   useImperativeHandle,
   useMemo as useMemo9,
-  useRef as useRef16,
-  useState as useState29
+  useRef as useRef17,
+  useState as useState30
 } from "react";
 import "xterm/css/xterm.css";
 
@@ -15275,51 +15277,51 @@ var ShellPane = forwardRef(
     onRuntimeStateChange,
     onFeedback
   }, ref) {
-    const transformRef = useRef16(inputTransform);
+    const transformRef = useRef17(inputTransform);
     transformRef.current = inputTransform;
-    const terminalRef = useRef16(null);
-    const fitAddonRef = useRef16(null);
-    const socketRef = useRef16(null);
-    const viewerIdRef = useRef16(null);
-    const shellIdRef = useRef16(null);
-    const reconnectTimerRef = useRef16(null);
-    const attachTimeoutRef = useRef16(null);
-    const attachRetryTimerRef = useRef16(null);
-    const intentionalDisconnectRef = useRef16(false);
-    const userDisconnectedShellIdRef = useRef16(null);
-    const shellSnapshotRef = useRef16("");
-    const pendingCommandRef = useRef16(null);
-    const lastCommandOutputRef = useRef16("");
-    const resizeObserverRef = useRef16(null);
-    const lastSentSizeRef = useRef16(null);
-    const snapshotCursorRef = useRef16({
+    const terminalRef = useRef17(null);
+    const fitAddonRef = useRef17(null);
+    const socketRef = useRef17(null);
+    const viewerIdRef = useRef17(null);
+    const shellIdRef = useRef17(null);
+    const reconnectTimerRef = useRef17(null);
+    const attachTimeoutRef = useRef17(null);
+    const attachRetryTimerRef = useRef17(null);
+    const intentionalDisconnectRef = useRef17(false);
+    const userDisconnectedShellIdRef = useRef17(null);
+    const shellSnapshotRef = useRef17("");
+    const pendingCommandRef = useRef17(null);
+    const lastCommandOutputRef = useRef17("");
+    const resizeObserverRef = useRef17(null);
+    const lastSentSizeRef = useRef17(null);
+    const snapshotCursorRef = useRef17({
       cursorX: void 0,
       cursorY: void 0,
       paneHeight: void 0
     });
-    const terminalInitializingRef = useRef16(false);
-    const terminalInputSubscriptionRef = useRef16(null);
-    const isVisibleRef = useRef16(isVisible);
-    const isMobileShellRef = useRef16(isMobileShell);
-    const sendShellInputRef = useRef16(() => false);
-    const syncTerminalSizeRef = useRef16(() => null);
-    const refreshTerminalLayoutRef = useRef16(() => {
+    const terminalInitializingRef = useRef17(false);
+    const terminalInputSubscriptionRef = useRef17(null);
+    const isVisibleRef = useRef17(isVisible);
+    const isMobileShellRef = useRef17(isMobileShell);
+    const sendShellInputRef = useRef17(() => false);
+    const syncTerminalSizeRef = useRef17(() => null);
+    const refreshTerminalLayoutRef = useRef17(() => {
     });
-    const attachPromiseControllerRef = useRef16(
+    const attachPromiseControllerRef = useRef17(
       createShellAttachPromiseController({
         clearTimeout: window.clearTimeout
       })
     );
-    const [terminalHostNode, setTerminalHostNode] = useState29(null);
-    const [terminalReady, setTerminalReady] = useState29(false);
-    const [viewerId, setViewerIdState] = useState29(null);
-    const [isConnecting, setIsConnecting] = useState29(false);
-    const [connectionError, setConnectionError] = useState29(null);
-    const [runtimePromptLabel, setRuntimePromptLabel] = useState29(
+    const [terminalHostNode, setTerminalHostNode] = useState30(null);
+    const [terminalReady, setTerminalReady] = useState30(false);
+    const [viewerId, setViewerIdState] = useState30(null);
+    const [isConnecting, setIsConnecting] = useState30(false);
+    const [connectionError, setConnectionError] = useState30(null);
+    const [runtimePromptLabel, setRuntimePromptLabel] = useState30(
       null
     );
-    const [isCommandRunning, setIsCommandRunning] = useState29(false);
-    const [reconnectKey, setReconnectKey] = useState29(0);
+    const [isCommandRunning, setIsCommandRunning] = useState30(false);
+    const [reconnectKey, setReconnectKey] = useState30(0);
     const shellStatus = shell?.status ?? "not_created";
     const canAttachShell = shellCanAttach({ shell, workspacePathMissing });
     const fallbackPromptLabel = useMemo9(
@@ -15849,12 +15851,12 @@ var ShellPane = forwardRef(
 );
 
 // src/components/shell/ShellTouchControls.tsx
-import { useEffect as useEffect22, useRef as useRef17, useState as useState30 } from "react";
+import { useEffect as useEffect22, useRef as useRef18, useState as useState31 } from "react";
 import { ArrowDown, ArrowLeft as ArrowLeft2, ArrowRight, ArrowUp, MessageSquare as MessageSquare2, PanelsTopLeft, Pencil as Pencil2, Trash2 as Trash22, Plus as Plus2 } from "lucide-react";
 import { Fragment as Fragment14, jsx as jsx50, jsxs as jsxs42 } from "react/jsx-runtime";
 function useShellKeyboardLayout(visible, mobile) {
-  const panelRef = useRef17(null);
-  const [layout, setLayout] = useState30({ height: 0, inset: 0 });
+  const panelRef = useRef18(null);
+  const [layout, setLayout] = useState31({ height: 0, inset: 0 });
   useEffect22(() => {
     const panel = panelRef.current;
     if (!visible || !mobile || !panel) {
@@ -15902,11 +15904,11 @@ function useShellKeyboardLayout(visible, mobile) {
   return { panelRef, layout };
 }
 function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, onChat, onRename, onKill, sessions, activeId, onSelect, onCreate, busy }) {
-  const [open, setOpen] = useState30(false);
-  const [editing, setEditing] = useState30(null);
-  const [name, setName] = useState30("");
-  const [saving, setSaving] = useState30(false);
-  const [error, setError] = useState30(null);
+  const [open, setOpen] = useState31(false);
+  const [editing, setEditing] = useState31(null);
+  const [name, setName] = useState31("");
+  const [saving, setSaving] = useState31(false);
+  const [error, setError] = useState31(null);
   async function rename(shell) {
     setSaving(true);
     setError(null);
@@ -15919,7 +15921,7 @@ function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, on
       setSaving(false);
     }
   }
-  const host = useRef17(null);
+  const host = useRef18(null);
   useEffect22(() => {
     if (!open) return;
     const outside = (event) => {
@@ -16015,39 +16017,39 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   saveSplitRatio,
   onStateChange
 }, ref) {
-  const primaryPaneRef = useRef18(null);
-  const secondaryPaneRef = useRef18(null);
-  const feedbackTimerRef = useRef18(null);
-  const terminalSplitHostRef = useRef18(null);
-  const dragFrameRef = useRef18(null);
-  const createShellInFlightRef = useRef18(false);
-  const [shellState, setShellState] = useState31(null);
-  const [loading, setLoading] = useState31(true);
-  const [busy, setBusy] = useState31(false);
-  const [error, setError] = useState31(null);
-  const [activePaneId, setActivePaneId] = useState31("primary");
-  const [primaryShellId, setPrimaryShellId] = useState31(null);
-  const [secondaryShellId, setSecondaryShellId] = useState31(null);
-  const [splitMode, setSplitMode] = useState31("single");
-  const [splitRatio, setSplitRatio] = useState31(50);
-  const [renamingShellId, setRenamingShellId] = useState31(null);
-  const [renameDraft, setRenameDraft] = useState31("");
-  const [isMobileShell, setIsMobileShell] = useState31(false);
+  const primaryPaneRef = useRef19(null);
+  const secondaryPaneRef = useRef19(null);
+  const feedbackTimerRef = useRef19(null);
+  const terminalSplitHostRef = useRef19(null);
+  const dragFrameRef = useRef19(null);
+  const createShellInFlightRef = useRef19(false);
+  const [shellState, setShellState] = useState32(null);
+  const [loading, setLoading] = useState32(true);
+  const [busy, setBusy] = useState32(false);
+  const [error, setError] = useState32(null);
+  const [activePaneId, setActivePaneId] = useState32("primary");
+  const [primaryShellId, setPrimaryShellId] = useState32(null);
+  const [secondaryShellId, setSecondaryShellId] = useState32(null);
+  const [splitMode, setSplitMode] = useState32("single");
+  const [splitRatio, setSplitRatio] = useState32(50);
+  const [renamingShellId, setRenamingShellId] = useState32(null);
+  const [renameDraft, setRenameDraft] = useState32("");
+  const [isMobileShell, setIsMobileShell] = useState32(false);
   const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(isVisible, isMobileShell);
-  const [ctrlPressed, setCtrlPressed] = useState31(false);
-  const ctrlRef = useRef18(false);
+  const [ctrlPressed, setCtrlPressed] = useState32(false);
+  const ctrlRef = useRef19(false);
   const transformInput = useCallback16((data) => {
     if (!ctrlRef.current) return data;
     ctrlRef.current = false;
     setCtrlPressed(false);
     return data.length === 1 ? controlSequenceForLetter(data) ?? data : data;
   }, []);
-  const [toolboxOpen, setToolboxOpen] = useState31(false);
-  const [paneRuntime, setPaneRuntime] = useState31({
+  const [toolboxOpen, setToolboxOpen] = useState32(false);
+  const [paneRuntime, setPaneRuntime] = useState32({
     primary: EMPTY_SHELL_PANE_RUNTIME_STATE,
     secondary: EMPTY_SHELL_PANE_RUNTIME_STATE
   });
-  const [toolboxFeedback, setToolboxFeedback] = useState31(null);
+  const [toolboxFeedback, setToolboxFeedback] = useState32(null);
   const status = shellState?.state ?? "not_created";
   const shells = useMemo10(() => shellState?.shells ?? [], [shellState?.shells]);
   const liveShells = useMemo10(
@@ -17088,7 +17090,7 @@ function ConfirmDialog({
 
 // src/components/ExportTranscriptDialog.tsx
 import { Users, Link2, FileCode, Pencil as Pencil3 } from "lucide-react";
-import { useEffect as useEffect25, useMemo as useMemo11, useState as useState32 } from "react";
+import { useEffect as useEffect25, useMemo as useMemo11, useState as useState33 } from "react";
 import { createPortal as createPortal4 } from "react-dom";
 import { Fragment as Fragment16, jsx as jsx54, jsxs as jsxs45 } from "react/jsx-runtime";
 function formatTurnTime(value) {
@@ -17174,18 +17176,18 @@ function ThreadActionsDialog({
   onUpdateShare
 }) {
   const turns = useMemo11(() => turnsState.data?.turns ?? [], [turnsState.data?.turns]);
-  const [actionMode, setActionMode] = useState32(initialMode);
-  const [turnSelection, setTurnSelection] = useState32("latest-10");
-  const [selectedTurnIds, setSelectedTurnIds] = useState32(
+  const [actionMode, setActionMode] = useState33(initialMode);
+  const [turnSelection, setTurnSelection] = useState33("latest-10");
+  const [selectedTurnIds, setSelectedTurnIds] = useState33(
     () => /* @__PURE__ */ new Set()
   );
-  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState32(true);
-  const [targetIdentifier, setTargetIdentifier] = useState32("");
-  const [threadAccess, setThreadAccess] = useState32("read");
-  const [workspaceAccess, setWorkspaceAccess] = useState32("none");
-  const [shareLabel, setShareLabel] = useState32("");
-  const [editingShare, setEditingShare] = useState32(null);
-  const [effectiveTheme, setEffectiveTheme] = useState32(
+  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState33(true);
+  const [targetIdentifier, setTargetIdentifier] = useState33("");
+  const [threadAccess, setThreadAccess] = useState33("read");
+  const [workspaceAccess, setWorkspaceAccess] = useState33("none");
+  const [shareLabel, setShareLabel] = useState33("");
+  const [editingShare, setEditingShare] = useState33(null);
+  const [effectiveTheme, setEffectiveTheme] = useState33(
     () => typeof document !== "undefined" && !document.documentElement.classList.contains("dark") ? "light" : "dark"
   );
   useEffect25(() => {
@@ -17618,8 +17620,8 @@ import {
   useEffect as useEffect26,
   useLayoutEffect as useLayoutEffect8,
   useMemo as useMemo12,
-  useRef as useRef19,
-  useState as useState33
+  useRef as useRef20,
+  useState as useState34
 } from "react";
 import { jsx as jsx55, jsxs as jsxs46 } from "react/jsx-runtime";
 function GraphChatThreadChatPanel({
@@ -17636,12 +17638,12 @@ function GraphChatThreadChatPanel({
   floatingMobileComposerBottomOffset = 0,
   composerHostRef
 }) {
-  const [isMobileViewport, setIsMobileViewport] = useState33(false);
-  const [mobileComposerHeight, setMobileComposerHeight] = useState33(0);
-  const [mobileComposerOverlap, setMobileComposerOverlap] = useState33(0);
-  const [mobileKeyboardInset, setMobileKeyboardInset] = useState33(0);
-  const [mobilePromptFocused, setMobilePromptFocused] = useState33(false);
-  const internalComposerHostRef = useRef19(null);
+  const [isMobileViewport, setIsMobileViewport] = useState34(false);
+  const [mobileComposerHeight, setMobileComposerHeight] = useState34(0);
+  const [mobileComposerOverlap, setMobileComposerOverlap] = useState34(0);
+  const [mobileKeyboardInset, setMobileKeyboardInset] = useState34(0);
+  const [mobilePromptFocused, setMobilePromptFocused] = useState34(false);
+  const internalComposerHostRef = useRef20(null);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
   const queuedPrompts = useMemo12(() => {
@@ -18082,6 +18084,13 @@ function ThreadDetailSurface({
       ...getImageAssetUrl ? {
         getImageAssetUrl: (input) => getImageAssetUrl(input.path)
       } : {},
+      resolveHref: (href) => {
+        const path = localFileHref(href, typeof window === "undefined" ? void 0 : window.location.origin);
+        if (!path || !detail || !adapter.workspace?.getRawFileUrl) return href;
+        const relative = relativeWorkspacePath(path, detail.workspace.absPath);
+        if (relative === null && !adapter.workspace.statLinkedFile) return "";
+        return adapter.workspace.getRawFileUrl({ threadId: detail.thread.id, workspaceId: detail.workspace.id, path: relative ?? path });
+      },
       workspaceRootPath: detail?.workspace.absPath,
       onOpenLinkedThread: openThread,
       ...openWorkspaceFile ? { onOpenWorkspaceFile: openWorkspaceFile } : {},
@@ -18091,6 +18100,9 @@ function ThreadDetailSurface({
     }),
     [
       detail?.workspace.absPath,
+      detail?.workspace.id,
+      detail?.thread.id,
+      adapter.workspace,
       cancelPendingSteer,
       getImageAssetUrl,
       loadHistoryItemDetail,
@@ -18247,7 +18259,7 @@ import {
   useCallback as useCallback18,
   useEffect as useEffect27,
   useMemo as useMemo14,
-  useState as useState34
+  useState as useState35
 } from "react";
 import { jsx as jsx57 } from "react/jsx-runtime";
 var DEFAULT_PLUGIN_PROVIDER_ADAPTER = {};
@@ -18257,11 +18269,11 @@ function PluginProvider({
   builtinPlugins = DEFAULT_BUILTIN_PLUGINS,
   children
 }) {
-  const [plugins, setPlugins] = useState34(
+  const [plugins, setPlugins] = useState35(
     () => mergePluginState(builtinPlugins, [])
   );
-  const [loading, setLoading] = useState34(false);
-  const [error, setError] = useState34(null);
+  const [loading, setLoading] = useState35(false);
+  const [error, setError] = useState35(null);
   const refresh = useCallback18(async () => {
     setLoading(true);
     setError(null);
@@ -18417,7 +18429,7 @@ function PluginProvider({
 }
 
 // src/app-shell/AppShellNavigation.tsx
-import { useEffect as useEffect28, useRef as useRef20, useState as useState35 } from "react";
+import { useEffect as useEffect28, useRef as useRef21, useState as useState36 } from "react";
 import { jsx as jsx58, jsxs as jsxs48 } from "react/jsx-runtime";
 function MenuIcon() {
   return /* @__PURE__ */ jsx58("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-4 w-4 fill-current", children: /* @__PURE__ */ jsx58("path", { d: "M2 3.25h12v1.5H2Zm0 4h12v1.5H2Zm0 4h12v1.5H2Z" }) });
@@ -18470,7 +18482,7 @@ function AppShellNavigationMenu({
   onNavigate
 }) {
   const shellNav = useAppShellNav();
-  const menuRef = useRef20(null);
+  const menuRef = useRef21(null);
   useEffect28(() => {
     if (!shellNav?.navOpen) {
       return;
@@ -18562,8 +18574,8 @@ function AppShellSettingsDialog({
 } = {}) {
   const shellNav = useAppShellNav();
   const plugins = usePlugins();
-  const [pluginImportDraft, setPluginImportDraft] = useState35("");
-  const [pluginImportState, setPluginImportState] = useState35({
+  const [pluginImportDraft, setPluginImportDraft] = useState36("");
+  const [pluginImportState, setPluginImportState] = useState36({
     busy: false,
     message: null,
     error: null

@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { GraphWorkspaceImageLightbox } from '../ZoomableImage';
 import type {
   ClipboardEvent,
   DragEvent,
@@ -64,6 +66,13 @@ export function ComposerPromptEditor({
   onDragLeave,
   onDrop,
 }: ComposerPromptEditorProps) {
+  const previewTrigger = useRef<HTMLElement | null>(null);
+  const [preview, setPreview] = useState<{src: string; alt: string} | null>(null);
+  function attachmentImage(target: EventTarget | null) {
+    const chip = target instanceof Element ? target.closest<HTMLElement>('[data-segment-type="attachment"]') : null;
+    if (chip?.querySelector('img')) previewTrigger.current = chip;
+    return chip?.querySelector('img');
+  }
   return (
     <div
       data-slot="input-group-control"
@@ -87,7 +96,12 @@ export function ComposerPromptEditor({
           contentEditable={!disabled}
           inputMode="text"
           suppressContentEditableWarning
+          onClick={event => {
+            const image = attachmentImage(event.target);
+            if (image) { event.preventDefault(); setPreview({src: image.src, alt: image.alt}); }
+          }}
           onPointerDown={(event) => {
+            if (attachmentImage(event.target)) { event.preventDefault(); return; }
             if (
               !disabled &&
               document.activeElement !== event.currentTarget &&
@@ -101,7 +115,13 @@ export function ComposerPromptEditor({
           }}
           onInput={onInput}
           onPaste={onPaste}
-          onKeyDown={onKeyDown}
+          onKeyDown={event => {
+            const image = attachmentImage(event.target);
+            if (image && (event.key === 'Enter' || event.key === ' ')) {
+              event.preventDefault(); setPreview({src: image.src, alt: image.alt}); return;
+            }
+            onKeyDown(event);
+          }}
           onKeyUp={onKeyUp}
           onMouseUp={onMouseUp}
           onBlur={onBlur}
@@ -114,6 +134,10 @@ export function ComposerPromptEditor({
           } ${disabled ? 'cursor-not-allowed text-slate-500' : ''}`}
         />
       </div>
+      {preview ? <GraphWorkspaceImageLightbox src={preview.src} alt={preview.alt} onClose={() => {
+        setPreview(null);
+        previewTrigger.current?.focus({preventScroll: true});
+      }} /> : null}
       {canInterrupt ? (
         <InputGroupButton
           type="button"

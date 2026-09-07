@@ -48,6 +48,8 @@ import {
 } from "./components/graph-chat/GraphChatThreadChatPanel";
 import { formatCompactUsd } from "./components/timeline/tokenFormatting";
 
+import { localFileHref, relativeWorkspacePath } from "./components/workspacePaths";
+
 function summarizeThreadUsage(
   detail: ThreadDetailDto,
 ): GraphChatThreadUsageSummary {
@@ -307,6 +309,13 @@ export function ThreadDetailSurface({
               getImageAssetUrl(input.path),
           }
         : {}),
+      resolveHref: (href: string) => {
+        const path = localFileHref(href, typeof window === 'undefined' ? undefined : window.location.origin);
+        if (!path || !detail || !adapter.workspace?.getRawFileUrl) return href;
+        const relative = relativeWorkspacePath(path, detail.workspace.absPath);
+        if (relative === null && !adapter.workspace.statLinkedFile) return '';
+        return adapter.workspace.getRawFileUrl({threadId: detail.thread.id, workspaceId: detail.workspace.id, path: relative ?? path});
+      },
       workspaceRootPath: detail?.workspace.absPath,
       onOpenLinkedThread: openThread,
       ...(openWorkspaceFile ? { onOpenWorkspaceFile: openWorkspaceFile } : {}),
@@ -318,6 +327,9 @@ export function ThreadDetailSurface({
     }),
     [
       detail?.workspace.absPath,
+      detail?.workspace.id,
+      detail?.thread.id,
+      adapter.workspace,
       cancelPendingSteer,
       getImageAssetUrl,
       loadHistoryItemDetail,

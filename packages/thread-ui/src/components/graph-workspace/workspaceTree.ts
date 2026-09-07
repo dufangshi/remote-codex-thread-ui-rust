@@ -1,4 +1,4 @@
-import { relativeWorkspacePath } from '../workspacePaths';
+import { normalizeFileSystemPath, relativeWorkspacePath } from '../workspacePaths';
 import type {
   AgentRuntimeStatusDto,
   ThreadArtifactDto,
@@ -198,7 +198,7 @@ export function normalizeWorkspacePath(path: string) {
 }
 
 export function workspaceRelativeFocusPath(path: string, workspaceRootPath: string) {
-  return relativeWorkspacePath(path, workspaceRootPath) ?? path.replace(/\\/g, '/');
+  return relativeWorkspacePath(path, workspaceRootPath) ?? normalizeFileSystemPath(path);
 }
 
 export function ancestorDirectoryPaths(path: string) {

@@ -20,7 +20,8 @@ import {
   Save,
   X,
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
+import { localFileHref, relativeWorkspacePath, normalizeFileSystemPath } from '../workspacePaths';
 import remarkGfm from 'remark-gfm';
 import type { HighlighterCore } from 'shiki/core';
 
@@ -106,117 +107,19 @@ function transparentHighlightBackground(html: string) {
     .replace(/background:[^;"]+;?/g, 'background: transparent;');
 }
 
-function decodeWorkspaceResourcePath(value: string) {
-  try {
-    return decodeURIComponent(value);
-  } catch {
-    return value;
-  }
-}
-
-function normalizeWorkspaceResourceSegments(value: string) {
-  const segments: string[] = [];
-  for (const segment of value.replace(/\\/g, '/').split('/')) {
-    if (!segment || segment === '.') {
-      continue;
-    }
-    if (segment === '..') {
-      if (segments.length === 0) {
-        return null;
-      }
-      segments.pop();
-      continue;
-    }
-    segments.push(segment);
-  }
-  return segments.join('/');
-}
-
-export function resolveWorkspaceMarkdownPath({
-  markdownPath,
-  resourceUrl,
-  workspaceRootPath = '',
-}: {
-  markdownPath: string;
-  resourceUrl: string;
-  workspaceRootPath?: string;
+export function resolveWorkspaceMarkdownPath({ markdownPath, resourceUrl, workspaceRootPath = '' }: {
+  markdownPath: string; resourceUrl: string; workspaceRootPath?: string;
 }) {
-  const trimmed = resourceUrl.trim();
-  const windowsAbsolutePath = /^[a-zA-Z]:[\\/]/.test(trimmed);
-  if (
-    !trimmed ||
-    trimmed.startsWith('#') ||
-    trimmed.startsWith('//') ||
-    (!windowsAbsolutePath && /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed))
-  ) {
-    if (!/^https?:/i.test(trimmed) || typeof window === 'undefined') {
-      return null;
-    }
-    try {
-      const parsed = new URL(trimmed);
-      if (parsed.origin !== window.location.origin) {
-        return null;
-      }
-      resourceUrl = parsed.pathname;
-    } catch {
-      return null;
-    }
+  const raw = localFileHref(resourceUrl, typeof window === 'undefined' ? undefined : window.location.origin);
+  if (!raw) return null;
+  const path = raw.split('#')[0] ?? '';
+  if (path.startsWith('/') || /^[a-z]:\//i.test(path)) {
+    return workspaceRootPath ? relativeWorkspacePath(path, workspaceRootPath) : path.replace(/^\/+/, '');
   }
-
-  const rawPath = decodeWorkspaceResourcePath(
-    resourceUrl.trim().split(/[?#]/, 1)[0] ?? '',
-  );
-  if (!rawPath) {
-    return null;
-  }
-
-  const normalizedRoot = workspaceRootPath
-    .trim()
-    .replace(/\\/g, '/')
-    .replace(/\/+$/, '');
-  const normalizedRawPath = rawPath.replace(/\\/g, '/');
-  const absolutePath =
-    normalizedRawPath.startsWith('/') || /^[a-zA-Z]:\//.test(normalizedRawPath);
-  if (absolutePath) {
-    if (
-      normalizedRoot &&
-      normalizedRawPath !== normalizedRoot &&
-      !normalizedRawPath.startsWith(`${normalizedRoot}/`)
-    ) {
-      return null;
-    }
-    const rootMatches =
-      normalizedRoot &&
-      (normalizedRawPath === normalizedRoot ||
-        normalizedRawPath.startsWith(`${normalizedRoot}/`));
-    const rootRelativePath = rootMatches
-      ? normalizedRawPath.slice(normalizedRoot.length)
-      : normalizedRawPath;
-    return normalizeWorkspaceResourceSegments(rootRelativePath);
-  }
-
-  const normalizedMarkdownPath = markdownPath.replace(/\\/g, '/');
-  const markdownPathIsAbsolute =
-    normalizedMarkdownPath.startsWith('/') ||
-    /^[a-zA-Z]:\//.test(normalizedMarkdownPath);
-  if (
-    markdownPathIsAbsolute &&
-    normalizedRoot &&
-    normalizedMarkdownPath !== normalizedRoot &&
-    !normalizedMarkdownPath.startsWith(`${normalizedRoot}/`)
-  ) {
-    return null;
-  }
-  const workspaceRelativeMarkdownPath =
-    markdownPathIsAbsolute && normalizedRoot
-      ? normalizedMarkdownPath.slice(normalizedRoot.length).replace(/^\/+/, '')
-      : normalizedMarkdownPath.replace(/^\/+/, '');
-  const lastSlash = workspaceRelativeMarkdownPath.lastIndexOf('/');
-  const directory =
-    lastSlash >= 0 ? workspaceRelativeMarkdownPath.slice(0, lastSlash) : '';
-  return normalizeWorkspaceResourceSegments(
-    directory ? `${directory}/${rawPath}` : rawPath,
-  );
+  const base = workspaceRootPath ? relativeWorkspacePath(markdownPath, workspaceRootPath) : normalizeFileSystemPath(markdownPath);
+  if (base === null) return null;
+  const directory = base.slice(0, Math.max(0, base.lastIndexOf('/')));
+  return relativeWorkspacePath(directory ? `${directory}/${path}` : path, workspaceRootPath);
 }
 
 function isSmallEditableTextFile(file: ThreadWorkspaceFilePreview) {
@@ -412,6 +315,7 @@ const GraphWorkspaceMarkdownPreview = memo(
     return (
       <div className="thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6">
         <ReactMarkdown
+          urlTransform={url => localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
           remarkPlugins={[remarkGfm]}
           components={{
             a({ href, children, ...props }) {

@@ -262,3 +262,9 @@ describe('GraphWorkspacePreviewPane', () => {
     ).toBe(true);
   });
 });
+
+it('resolves Windows Markdown resources with case-insensitive roots and browser drive prefixes', () => {
+  for (const resourceUrl of ['C:/WORK/demo/assets/a.png', '/C:/Work/demo/assets/a.png', 'file:///C:/work/demo/assets/a.png', `${window.location.origin}/C%3A/Work/demo/assets/a.png`, '../assets/a.png']) {
+    expect(resolveWorkspaceMarkdownPath({markdownPath:'C:\\Work\\demo\\docs\\readme.md', resourceUrl, workspaceRootPath:'c:\\work\\demo'})).toBe('assets/a.png');
+  }
+});

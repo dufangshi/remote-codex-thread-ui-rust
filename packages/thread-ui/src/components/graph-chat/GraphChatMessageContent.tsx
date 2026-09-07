@@ -10,14 +10,15 @@ import {
   type ReactNode,
 } from 'react';
 import { Check, Copy } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkCjkFriendly from 'remark-cjk-friendly';
 import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 
-import { relativeWorkspacePath } from '../workspacePaths';
+import { localFileHref, relativeWorkspacePath } from '../workspacePaths';
+import { ZoomableImage } from '../ZoomableImage';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { Button } from '../graph-ui/Button';
 import { usePlugins } from '../../plugins/usePlugins';
@@ -41,20 +42,6 @@ type OpenWorkspaceFileHandler = (input: {
   path: string;
   line?: number;
 }) => void;
-
-const APP_LOCAL_PATH_PREFIXES = [
-  '/api/',
-  '/assets/',
-  '/control-plane',
-  '/devices/',
-  '/relay/',
-  '/relay-account',
-  '/relay-admin',
-  '/relay-devices',
-  '/relay-portal',
-  '/threads',
-  '/workspaces',
-];
 
 function ensureTransparentShikiBg(html: string) {
   return html
@@ -101,42 +88,8 @@ function parseWorkspaceFileHref(href: string | undefined, workspaceRootPath?: st
     return null;
   }
 
-  let candidate = href.trim();
-  if (!candidate || candidate.startsWith('#')) {
-    return null;
-  }
-
-  try {
-    if (typeof window === 'undefined') {
-      return null;
-    }
-    const parsed = /^(?:https?:|file:)/i.test(candidate) ? new URL(candidate, window.location.origin) : null;
-    if (
-      parsed && parsed.origin !== window.location.origin &&
-      parsed.protocol !== 'file:'
-    ) {
-      return null;
-    }
-    if (parsed) candidate = parsed.pathname + parsed.hash;
-  } catch {
-    // Fall back to raw href parsing.
-  }
-
-  try {
-    candidate = decodeURIComponent(candidate);
-  } catch {
-    // Keep the raw candidate when decoding fails.
-  }
-
-  if (/^[a-z][a-z+.-]*:/i.test(candidate) && !/^[a-z]:[\\/]/i.test(candidate)) return null;
-
-  if (
-    APP_LOCAL_PATH_PREFIXES.some(
-      (prefix) => candidate === prefix || candidate.startsWith(prefix),
-    )
-  ) {
-    return null;
-  }
+  const candidate = localFileHref(href, typeof window === 'undefined' ? undefined : window.location.origin);
+  if (!candidate) return null;
 
   const lineMatch = candidate.match(/(?:#L|:)(\d+)(?::\d+)?$/);
   const line = lineMatch ? Number.parseInt(lineMatch[1] ?? '', 10) : undefined;
@@ -437,6 +390,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   return (
     <div ref={rootRef} data-markdown-ready={highlighter ? 'true' : 'false'} className={`thread-graph-message-markdown ${className}`}>
       <ReactMarkdown
+        urlTransform={url => !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
         remarkPlugins={[remarkGfm, remarkMath, remarkCjkFriendly]}
         rehypePlugins={[rehypeKatex]}
         components={{
@@ -461,7 +415,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
           img({src, alt}) {
             const resolved = src ? (resolveHref?.(src) ?? src) : undefined;
             if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || 'Image unavailable'}</span>;
-            return <img src={resolved} alt={alt ?? ''} />;
+            return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} /> : <span>{alt || 'Image unavailable'}</span>;
           },
           code: CodeBlockRenderer,
           pre: PreRenderer,

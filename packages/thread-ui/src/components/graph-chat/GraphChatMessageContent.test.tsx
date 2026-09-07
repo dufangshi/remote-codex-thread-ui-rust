@@ -146,3 +146,13 @@ describe('GraphChatMessageContent', () => {
     );
   });
 });
+
+it('keeps Windows drive and file URLs through Markdown sanitization and opens their exact workspace path', () => {
+  const open = vi.fn();
+  const element = render(<GraphChatMessageContent workspaceRootPath="c:/Users/Admin/美股" onOpenWorkspaceFile={open}
+    content={`[Drive](C:/Users/Admin/美股/a.png) [File](file:///C:/Users/Admin/美股/a.png) [Browser](${window.location.origin}/C%3A/Users/Admin/%E7%BE%8E%E8%82%A1/a.png) [Unsafe](javascript:alert)`} />);
+  const links = element.querySelectorAll('a');
+  for (const link of Array.from(links).slice(0,3)) act(() => {link.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));});
+  expect(open.mock.calls).toEqual([[{path:'a.png'}],[{path:'a.png'}],[{path:'a.png'}]]);
+  expect(links[3]!.getAttribute('href')).not.toContain('javascript:');
+});

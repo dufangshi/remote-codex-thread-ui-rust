@@ -13,7 +13,7 @@ function clampImageLightboxScale(scale: number) {
   );
 }
 
-function GraphWorkspaceImageLightbox({
+export function GraphWorkspaceImageLightbox({
   alt,
   onClose,
   src,
