@@ -6,8 +6,9 @@ import {
   Check,
   Copy,
   Folder,
-  Menu,
   MessageSquare,
+  LoaderCircle,
+  CircleAlert,
   Monitor,
   Moon,
   PanelLeftClose,
@@ -52,6 +53,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./graph-ui/Dialog";
+
+import { Tooltip, TooltipContent, TooltipTrigger } from "./graph-ui/Tooltip";
 
 const THEME_MODE_OPTIONS: Array<{
   value: ThemeMode;
@@ -223,11 +226,12 @@ function ThreadCard({
   const cardContent = (
     <>
       <div
+        data-thread-status={thread.status}
         className={`thread-graph-room-card-icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
           isCurrentThread ? "is-active" : ""
         }`}
       >
-        <MessageSquare className="h-4 w-4" />
+        {thread.status === "running" ? <LoaderCircle className="thread-room-running h-4 w-4" aria-label="Running" /> : thread.status === "failed" ? <CircleAlert className="h-4 w-4" aria-label="Failed" /> : <MessageSquare className="h-4 w-4" />}
       </div>
       <div
         className={`min-w-0 flex-1 ${
@@ -325,52 +329,26 @@ function ThreadCard({
   );
   const href = getThreadHref?.(thread.id);
 
-  if (renderThreadLink) {
-    return (
-      <>
-        {renderThreadLink({
-          thread,
-          children: cardContent,
-          className: cardClassName,
-          onClick: openThread,
-        })}
-      </>
-    );
-  }
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        onClick={(event) => {
-          event.preventDefault();
-          openThread();
-        }}
-        title={collapsed ? thread.title : undefined}
-        className={cardClassName}
-      >
-        {cardContent}
-      </a>
-    );
-  }
-
-  return (
-    <div
-      role="link"
-      tabIndex={0}
-      onClick={openThread}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openThread();
-        }
-      }}
-      title={collapsed ? thread.title : undefined}
-      className={cardClassName}
-    >
+  const card = renderThreadLink ? renderThreadLink({
+    thread, children: cardContent, className: cardClassName, onClick: openThread,
+  }) : href ? (
+    <a href={href} onClick={(event) => { event.preventDefault(); openThread(); }} className={cardClassName}>
       {cardContent}
-    </div>
+    </a>
+  ) : (
+    <div role="link" tabIndex={0} onClick={openThread} onKeyDown={(event) => {
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openThread(); }
+    }} className={cardClassName}>{cardContent}</div>
   );
+  return collapsed ? (
+    <Tooltip delayDuration={180}>
+      <TooltipTrigger asChild>{card}</TooltipTrigger>
+      <TooltipContent side="right" sideOffset={10} collisionPadding={12} className="thread-room-tooltip">
+        <span className="block font-medium">{thread.title}</span>
+        <span className="mt-1 block text-[11px] opacity-70">{threadStatusLabel(thread.status)}</span>
+      </TooltipContent>
+    </Tooltip>
+  ) : card;
 }
 
 export function ThreadCards({
@@ -822,7 +800,7 @@ export function ThreadWorkspaceLayout({
             type="button"
             aria-label="Open settings"
             title="Settings"
-            className="thread-icon-button inline-flex h-10 w-10 items-center justify-center rounded-full sm:h-9 sm:w-9"
+            className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
           >
             <Settings className="h-4 w-4" />
           </button>
@@ -1071,7 +1049,6 @@ export function ThreadWorkspaceLayout({
     layoutMode === "mobile" ||
     (layoutMode === "responsive" && isWorkspaceFocusViewport);
   const renderMobileTopbarControls = renderMobileWorkspaceSplit;
-  const shouldShowMobileRoomsButton = !mobileRoomsOpen;
   const canReturnToWorkspace = Boolean(
     workspaceReturnHref || onWorkspaceReturn,
   );
@@ -1084,7 +1061,7 @@ export function ThreadWorkspaceLayout({
           onWorkspaceReturn();
         }
       }}
-      className="thread-icon-button inline-flex h-10 w-10 items-center justify-center rounded-full sm:h-9 sm:w-9"
+      className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
       title="Back to workspace"
       aria-label="Back to workspace"
     >
@@ -1103,24 +1080,20 @@ export function ThreadWorkspaceLayout({
             <GraphChatTopbarShell>
               <div className="thread-topbar-row flex min-h-12 items-center px-3 py-1.5 sm:min-h-12 sm:px-4">
                 <div className="flex w-full items-center justify-between gap-3 sm:gap-4">
-                  <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                    {shouldShowMobileRoomsButton && !hideRoomsRail ? (
-                      <button
-                        type="button"
-                        onClick={() => renderMobileTopbarControls ? setMobileRoomsOpen(true) : setRoomsRailCollapsed((value) => !value)}
-                        aria-label="Open rooms"
-                        title="Open rooms"
-                        className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-                      >
-                        <Menu className="h-4 w-4" />
-                      </button>
-                    ) : null}
+                  <div className="flex min-w-0 flex-1 items-center gap-2">
+                    {!hideRoomsRail ? renderSettingsDialog() : null}
+                    {workspaceReturnControl}
                     <div className="min-w-0">
                       <h1
                         className="min-w-0 truncate text-sm font-semibold leading-tight text-[var(--theme-fg)] sm:text-base"
                         title={currentThreadLabel ?? "Shared Workspace"}
                       >
-                        {currentThreadLabel ?? "Shared Workspace"}
+                        {renderMobileTopbarControls && !hideRoomsRail ? (
+                          <button type="button" aria-label="Open rooms" aria-expanded={mobileRoomsOpen} onClick={() => setMobileRoomsOpen(true)} className="flex max-w-full items-center gap-1.5 text-left">
+                            <span className="truncate">{currentThreadLabel ?? "Shared Workspace"}</span>
+                            <PanelLeftOpen className="h-3.5 w-3.5 shrink-0 opacity-60" />
+                          </button>
+                        ) : currentThreadLabel ?? "Shared Workspace"}
                       </h1>
                       <div className="relative mt-0.5 flex min-w-0 items-center gap-1.5">
                         <button
@@ -1284,8 +1257,6 @@ export function ThreadWorkspaceLayout({
                     roomsRailCollapsed ? "thread-desktop-collapsed-hidden" : ""
                   }`}
                 >
-                  {renderSettingsDialog()}
-                  {workspaceReturnControl}
                   <button
                     type="button"
                     onClick={() => setMobileRoomsOpen(false)}
