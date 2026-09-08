@@ -72,6 +72,7 @@ describe('GraphChatMessageContent', () => {
 
     const link = element.querySelector('a');
     expect(link).not.toBeNull();
+    expect(link?.getAttribute('target')).toBeNull();
 
     act(() => {
       link?.dispatchEvent(
@@ -119,6 +120,8 @@ describe('GraphChatMessageContent', () => {
 
     const link = element.querySelector('a');
     expect(link?.getAttribute('href')).toBe('https://example.com/docs');
+    expect(link?.getAttribute('target')).toBe('_blank');
+    expect(link?.getAttribute('rel')).toBe('noopener noreferrer');
 
     act(() => {
       link?.dispatchEvent(

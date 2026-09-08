@@ -10,10 +10,11 @@ import {
   WorkspaceFileLink,
   ZoomableImage,
   cn,
+  externalLinkProps,
   getGraphChatHighlighter,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-YAYFJUDI.js";
+} from "./chunk-SN4G7ZXR.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -8129,11 +8130,13 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
           if (workspaceTarget && onOpenWorkspaceFile) {
             return /* @__PURE__ */ jsx32(WorkspaceFileLink, { ...workspaceTarget, onOpen: onOpenWorkspaceFile, children });
           }
+          const resolvedHref = href ? resolveHref?.(href) ?? href : href;
           return /* @__PURE__ */ jsx32(
             "a",
             {
               ...props,
-              href: href ? resolveHref?.(href) ?? href : href,
+              ...externalLinkProps(resolvedHref),
+              href: resolvedHref,
               className: "thread-inline-link",
               children
             }

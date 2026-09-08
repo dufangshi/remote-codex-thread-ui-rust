@@ -462,6 +462,20 @@ function ZoomableImage({
   ] });
 }
 
+// src/components/externalLinkProps.ts
+function externalLinkProps(href) {
+  if (!href) return {};
+  try {
+    const origin = typeof window === "undefined" ? void 0 : window.location.origin;
+    const url = new URL(href, origin);
+    if ((url.protocol === "http:" || url.protocol === "https:") && url.origin !== origin) {
+      return { target: "_blank", rel: "noopener noreferrer" };
+    }
+  } catch {
+  }
+  return {};
+}
+
 // src/components/WorkspaceFileLink.tsx
 import { useEffect as useEffect2, useRef as useRef2, useState as useState2 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
@@ -627,6 +641,7 @@ export {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  externalLinkProps,
   normalizeFileSystemPath,
   localFileHref,
   relativeWorkspacePath,

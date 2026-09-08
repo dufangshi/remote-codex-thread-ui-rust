@@ -1,3 +1,4 @@
+import { externalLinkProps } from '../externalLinkProps';
 import {
   memo,
   useEffect,
@@ -402,10 +403,12 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
                 <WorkspaceFileLink {...workspaceTarget} onOpen={onOpenWorkspaceFile}>{children}</WorkspaceFileLink>
               );
             }
+            const resolvedHref = href ? (resolveHref?.(href) ?? href) : href;
             return (
               <a
                 {...props}
-                href={href ? (resolveHref?.(href) ?? href) : href}
+                {...externalLinkProps(resolvedHref)}
+                href={resolvedHref}
                 className="thread-inline-link"
               >
                 {children}

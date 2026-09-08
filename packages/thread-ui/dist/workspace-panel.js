@@ -9,12 +9,13 @@ import {
   WorkspaceFileLink,
   ZoomableImage,
   cn,
+  externalLinkProps,
   getGraphChatHighlighter,
   localFileHref,
   normalizeFileSystemPath,
   relativeWorkspacePath,
   workspaceDisplayPath
-} from "./chunk-YAYFJUDI.js";
+} from "./chunk-SN4G7ZXR.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect8, useMemo as useMemo9, useState as useState10 } from "react";
@@ -3752,7 +3753,7 @@ var GraphWorkspaceMarkdownPreview = memo(
             if (workspacePath && onOpenWorkspaceFile) {
               return /* @__PURE__ */ jsx13(WorkspaceFileLink, { path: workspacePath, onOpen: ({ path }) => onOpenWorkspaceFile(path), children });
             }
-            return /* @__PURE__ */ jsx13("a", { ...props, href, children });
+            return /* @__PURE__ */ jsx13("a", { ...props, ...externalLinkProps(href), href, children });
           },
           img({ src, alt, ...props }) {
             const workspacePath = resolvePath(src);

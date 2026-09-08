@@ -1,3 +1,4 @@
+import { externalLinkProps } from '../externalLinkProps';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
 import {
@@ -326,7 +327,7 @@ const GraphWorkspaceMarkdownPreview = memo(
                 );
               }
               return (
-                <a {...props} href={href}>
+                <a {...props} {...externalLinkProps(href)} href={href}>
                   {children}
                 </a>
               );
