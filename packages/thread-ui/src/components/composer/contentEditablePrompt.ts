@@ -9,7 +9,9 @@ export function textFromClipboardHtml(value: string) {
 }
 
 export function editorContainsStyledRichText(editor: HTMLDivElement) {
-  return Boolean(editor.querySelector('[style], font'));
+  return Array.from(editor.querySelectorAll('[style], font')).some(
+    node => !node.closest('[data-segment-type="attachment"][contenteditable="false"]'),
+  );
 }
 
 export interface EditorSelectionOffsets {

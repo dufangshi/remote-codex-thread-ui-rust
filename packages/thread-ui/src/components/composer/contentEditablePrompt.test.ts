@@ -140,3 +140,11 @@ describe('contenteditable prompt helpers', () => {
     editor.remove();
   });
 });
+
+it('excludes noneditable attachment styling from rich-text cleanup', () => {
+  const editor = document.createElement('div');
+  editor.innerHTML = '<span data-segment-type="attachment" contenteditable="false" style="cursor:zoom-in"><img style="width:96px"></span>你好';
+  expect(editorContainsStyledRichText(editor)).toBe(false);
+  editor.insertAdjacentHTML('beforeend', '<span style="color:red">pasted formatting</span>');
+  expect(editorContainsStyledRichText(editor)).toBe(true);
+});

@@ -723,6 +723,8 @@ export function ThreadComposer({
   }
 
   function handlePromptInput() {
+    // The browser owns the composition text and selection until it commits.
+    if (promptRef.current?.dataset.imeComposing === 'true') return;
     const nextPrompt = serializeEditorPrompt();
     const nextSelection = snapshotSelection();
     selectionSnapshotRef.current = nextSelection;

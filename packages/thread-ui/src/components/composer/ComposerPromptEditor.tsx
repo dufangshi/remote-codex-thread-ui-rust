@@ -113,9 +113,17 @@ export function ComposerPromptEditor({
             }
             onPointerDown?.(event);
           }}
+          onCompositionStart={event => {
+            event.currentTarget.dataset.imeComposing = 'true';
+          }}
+          onCompositionEnd={event => {
+            delete event.currentTarget.dataset.imeComposing;
+            onInput();
+          }}
           onInput={onInput}
           onPaste={onPaste}
           onKeyDown={event => {
+            if (event.currentTarget.dataset.imeComposing === 'true' || event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
             const image = attachmentImage(event.target);
             if (image && (event.key === 'Enter' || event.key === ' ')) {
               event.preventDefault(); setPreview({src: image.src, alt: image.alt}); return;

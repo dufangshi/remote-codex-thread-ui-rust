@@ -873,7 +873,9 @@ function textFromClipboardHtml(value) {
   return serializePromptContent(container, false);
 }
 function editorContainsStyledRichText(editor) {
-  return Boolean(editor.querySelector("[style], font"));
+  return Array.from(editor.querySelectorAll("[style], font")).some(
+    (node) => !node.closest('[data-segment-type="attachment"][contenteditable="false"]')
+  );
 }
 var BLOCK_PROMPT_TAGS = /* @__PURE__ */ new Set(["DIV", "LI", "P"]);
 function serializePromptNode(node, currentText) {
@@ -4130,7 +4132,7 @@ function createPromptAttachmentToken(segment, attachmentPreviewUrls) {
       token.setAttribute("role", "button");
       token.setAttribute("aria-label", `Open image preview: ${attachment.originalName || "Pasted image"}`);
       token.tabIndex = 0;
-      token.style.cursor = "zoom-in";
+      token.classList.add("cursor-zoom-in");
       const image = document.createElement("img");
       image.src = previewUrl;
       image.alt = attachment.originalName || "Pasted image";
@@ -4205,7 +4207,7 @@ function useComposerPromptDomSync({
 }) {
   useLayoutEffect3(() => {
     const editor = promptRef.current;
-    if (!editor || isShellView) {
+    if (!editor || isShellView || editor.dataset.imeComposing === "true") {
       return;
     }
     const pendingSelection = pendingSelectionRef.current;
@@ -4363,9 +4365,17 @@ function ComposerPromptEditor({
                 }
                 onPointerDown?.(event);
               },
+              onCompositionStart: (event) => {
+                event.currentTarget.dataset.imeComposing = "true";
+              },
+              onCompositionEnd: (event) => {
+                delete event.currentTarget.dataset.imeComposing;
+                onInput();
+              },
               onInput,
               onPaste,
               onKeyDown: (event) => {
+                if (event.currentTarget.dataset.imeComposing === "true" || event.nativeEvent.isComposing || event.nativeEvent.keyCode === 229) return;
                 const image = attachmentImage(event.target);
                 if (image && (event.key === "Enter" || event.key === " ")) {
                   event.preventDefault();
@@ -5361,6 +5371,7 @@ function ThreadComposer({
     await submitPrompt();
   }
   function handlePromptInput() {
+    if (promptRef.current?.dataset.imeComposing === "true") return;
     const nextPrompt = serializeEditorPrompt2();
     const nextSelection = snapshotSelection();
     selectionSnapshotRef.current = nextSelection;

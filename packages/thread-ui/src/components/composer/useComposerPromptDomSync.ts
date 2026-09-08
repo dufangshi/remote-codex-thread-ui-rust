@@ -58,7 +58,7 @@ function createPromptAttachmentToken(
       token.setAttribute('role', 'button');
       token.setAttribute('aria-label', `Open image preview: ${attachment.originalName || 'Pasted image'}`);
       token.tabIndex = 0;
-      token.style.cursor = 'zoom-in';
+      token.classList.add('cursor-zoom-in');
       const image = document.createElement('img');
       image.src = previewUrl;
       image.alt = attachment.originalName || 'Pasted image';
@@ -151,7 +151,7 @@ export function useComposerPromptDomSync({
 }: UseComposerPromptDomSyncInput) {
   useLayoutEffect(() => {
     const editor = promptRef.current;
-    if (!editor || isShellView) {
+    if (!editor || isShellView || editor.dataset.imeComposing === 'true') {
       return;
     }
 
