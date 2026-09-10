@@ -1081,19 +1081,27 @@ export function ThreadWorkspaceLayout({
               <div className="thread-topbar-row flex min-h-12 items-center px-3 py-1.5 sm:min-h-12 sm:px-4">
                 <div className="flex w-full items-center justify-between gap-3 sm:gap-4">
                   <div className="flex min-w-0 flex-1 items-center gap-2">
-                    {!hideRoomsRail ? renderSettingsDialog() : null}
+                    {!hideRoomsRail ? (
+                      renderMobileTopbarControls ? (
+                        <button
+                          type="button"
+                          aria-label="Open rooms"
+                          title="Open rooms"
+                          aria-expanded={mobileRoomsOpen}
+                          onClick={() => setMobileRoomsOpen(true)}
+                          className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+                        >
+                          <PanelLeftOpen className="h-4 w-4" />
+                        </button>
+                      ) : renderSettingsDialog()
+                    ) : null}
                     {workspaceReturnControl}
                     <div className="min-w-0">
                       <h1
                         className="min-w-0 truncate text-sm font-semibold leading-tight text-[var(--theme-fg)] sm:text-base"
                         title={currentThreadLabel ?? "Shared Workspace"}
                       >
-                        {renderMobileTopbarControls && !hideRoomsRail ? (
-                          <button type="button" aria-label="Open rooms" aria-expanded={mobileRoomsOpen} onClick={() => setMobileRoomsOpen(true)} className="flex max-w-full items-center gap-1.5 text-left">
-                            <span className="truncate">{currentThreadLabel ?? "Shared Workspace"}</span>
-                            <PanelLeftOpen className="h-3.5 w-3.5 shrink-0 opacity-60" />
-                          </button>
-                        ) : currentThreadLabel ?? "Shared Workspace"}
+                        {currentThreadLabel ?? "Shared Workspace"}
                       </h1>
                       <div className="relative mt-0.5 flex min-w-0 items-center gap-1.5">
                         <button
@@ -1234,6 +1242,7 @@ export function ThreadWorkspaceLayout({
                 }`}
               >
                 <div className="flex min-w-0 items-center gap-3">
+                  {renderMobileTopbarControls ? renderSettingsDialog() : null}
                   <button
                     type="button"
                     onClick={() => setRoomsRailCollapsed((current) => !current)}

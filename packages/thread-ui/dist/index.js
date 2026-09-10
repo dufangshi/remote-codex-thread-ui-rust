@@ -6991,7 +6991,18 @@ function ThreadWorkspaceLayout({
         children: [
           /* @__PURE__ */ jsx27(GraphChatTopbarShell, { children: /* @__PURE__ */ jsx27("div", { className: "thread-topbar-row flex min-h-12 items-center px-3 py-1.5 sm:min-h-12 sm:px-4", children: /* @__PURE__ */ jsxs22("div", { className: "flex w-full items-center justify-between gap-3 sm:gap-4", children: [
             /* @__PURE__ */ jsxs22("div", { className: "flex min-w-0 flex-1 items-center gap-2", children: [
-              !hideRoomsRail ? renderSettingsDialog() : null,
+              !hideRoomsRail ? renderMobileTopbarControls ? /* @__PURE__ */ jsx27(
+                "button",
+                {
+                  type: "button",
+                  "aria-label": "Open rooms",
+                  title: "Open rooms",
+                  "aria-expanded": mobileRoomsOpen,
+                  onClick: () => setMobileRoomsOpen(true),
+                  className: "thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full",
+                  children: /* @__PURE__ */ jsx27(PanelLeftOpen, { className: "h-4 w-4" })
+                }
+              ) : renderSettingsDialog() : null,
               workspaceReturnControl,
               /* @__PURE__ */ jsxs22("div", { className: "min-w-0", children: [
                 /* @__PURE__ */ jsx27(
@@ -6999,10 +7010,7 @@ function ThreadWorkspaceLayout({
                   {
                     className: "min-w-0 truncate text-sm font-semibold leading-tight text-[var(--theme-fg)] sm:text-base",
                     title: currentThreadLabel ?? "Shared Workspace",
-                    children: renderMobileTopbarControls && !hideRoomsRail ? /* @__PURE__ */ jsxs22("button", { type: "button", "aria-label": "Open rooms", "aria-expanded": mobileRoomsOpen, onClick: () => setMobileRoomsOpen(true), className: "flex max-w-full items-center gap-1.5 text-left", children: [
-                      /* @__PURE__ */ jsx27("span", { className: "truncate", children: currentThreadLabel ?? "Shared Workspace" }),
-                      /* @__PURE__ */ jsx27(PanelLeftOpen, { className: "h-3.5 w-3.5 shrink-0 opacity-60" })
-                    ] }) : currentThreadLabel ?? "Shared Workspace"
+                    children: currentThreadLabel ?? "Shared Workspace"
                   }
                 ),
                 /* @__PURE__ */ jsxs22("div", { className: "relative mt-0.5 flex min-w-0 items-center gap-1.5", children: [
@@ -7124,17 +7132,20 @@ function ThreadWorkspaceLayout({
                             {
                               className: `flex w-full items-center gap-3 ${roomsRailCollapsed ? "sm:justify-center" : "justify-between"}`,
                               children: [
-                                /* @__PURE__ */ jsx27("div", { className: "flex min-w-0 items-center gap-3", children: /* @__PURE__ */ jsx27(
-                                  "button",
-                                  {
-                                    type: "button",
-                                    onClick: () => setRoomsRailCollapsed((current) => !current),
-                                    className: "thread-icon-button thread-desktop-only-flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
-                                    title: roomsRailCollapsed ? "Expand rooms" : "Collapse rooms",
-                                    "aria-label": roomsRailCollapsed ? "Expand rooms" : "Collapse rooms",
-                                    children: roomsRailCollapsed ? /* @__PURE__ */ jsx27(PanelLeftOpen, { className: "h-4 w-4" }) : /* @__PURE__ */ jsx27(PanelLeftClose, { className: "h-4 w-4" })
-                                  }
-                                ) }),
+                                /* @__PURE__ */ jsxs22("div", { className: "flex min-w-0 items-center gap-3", children: [
+                                  renderMobileTopbarControls ? renderSettingsDialog() : null,
+                                  /* @__PURE__ */ jsx27(
+                                    "button",
+                                    {
+                                      type: "button",
+                                      onClick: () => setRoomsRailCollapsed((current) => !current),
+                                      className: "thread-icon-button thread-desktop-only-flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
+                                      title: roomsRailCollapsed ? "Expand rooms" : "Collapse rooms",
+                                      "aria-label": roomsRailCollapsed ? "Expand rooms" : "Collapse rooms",
+                                      children: roomsRailCollapsed ? /* @__PURE__ */ jsx27(PanelLeftOpen, { className: "h-4 w-4" }) : /* @__PURE__ */ jsx27(PanelLeftClose, { className: "h-4 w-4" })
+                                    }
+                                  )
+                                ] }),
                                 /* @__PURE__ */ jsx27(
                                   "div",
                                   {
