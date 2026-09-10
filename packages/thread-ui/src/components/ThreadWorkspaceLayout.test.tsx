@@ -188,6 +188,37 @@ describe('ThreadWorkspaceLayout', () => {
     expect(element.querySelector('[aria-label="Thread actions"]')).toBeTruthy();
   });
 
+  it('puts mobile navigation first and settings in the expanded rail header', () => {
+    mockViewport(true);
+    const element = render(
+      <ThreadWorkspaceLayout threads={[]} currentThreadLabel="A long thread title" globalSettingsContent={<div>Host settings</div>}>
+        <div>Chat</div>
+      </ThreadWorkspaceLayout>,
+    );
+    const topbar = element.querySelector('.thread-topbar-row')!;
+    const open = topbar.querySelector<HTMLButtonElement>('[aria-label="Open rooms"]')!;
+    expect(topbar.querySelector('button')).toBe(open);
+    expect(topbar.querySelector('[aria-label="Open settings"]')).toBeNull();
+    expect(topbar.querySelector('h1 button')).toBeNull();
+    expect(topbar.querySelector('h1')?.textContent).toBe('A long thread title');
+    expect(element.querySelector('.thread-rooms-rail-header [aria-label="Open settings"]')).toBeTruthy();
+    flushSync(() => open.click());
+    expect(open.getAttribute('aria-expanded')).toBe('true');
+    flushSync(() => element.querySelector<HTMLButtonElement>('[aria-label="Close rooms"]')!.click());
+    expect(open.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('keeps desktop settings in the topbar', () => {
+    const element = render(
+      <ThreadWorkspaceLayout threads={[]} globalSettingsContent={<div>Host settings</div>}>
+        <div>Chat</div>
+      </ThreadWorkspaceLayout>,
+    );
+    expect(element.querySelector('.thread-topbar-row [aria-label="Open settings"]')).toBeTruthy();
+    expect(element.querySelector('.thread-rooms-rail-header [aria-label="Open settings"]')).toBeNull();
+    expect(element.querySelector('[aria-label="Open rooms"]')).toBeNull();
+  });
+
   it('uses a switchable workspace focus view at tablet widths', () => {
     mockViewportWidth(900);
     const element = renderLayout();
