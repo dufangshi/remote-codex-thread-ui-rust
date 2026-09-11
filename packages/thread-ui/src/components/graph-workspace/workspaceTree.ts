@@ -95,11 +95,18 @@ export function workspaceTreeNodeToGraphNode(
 ): WorkspaceTreeNode {
   const kind: WorkspaceNodeKind =
     node.kind === 'directory' ? 'directory' : 'file';
+  // The device API uses "." for the root and "./name" for its children.
+  // Explorer lookups and link focus must use the same path representation.
+  // Keep absolute linked-file paths intact, including Windows and UNC paths.
+  const normalized = normalizeFileSystemPath(node.path);
+  const path = normalized.startsWith('/') || /^[a-z]:\//i.test(normalized)
+    ? normalized
+    : relativeWorkspacePath(normalized, '') ?? normalized;
   const children = (node.children ?? []).map(workspaceTreeNodeToGraphNode);
   return {
-    id: `workspace:${node.path}`,
+    id: `workspace:${path}`,
     name: node.name,
-    path: node.path,
+    path,
     kind,
     ...(node.size !== undefined ? { size: node.size } : {}),
     ...(node.hasChildren !== undefined
@@ -113,7 +120,7 @@ export function workspaceTreeNodeToGraphNode(
         ? { childrenLoaded: node.children !== undefined }
         : {}),
     ...(node.truncated !== undefined ? { truncated: node.truncated } : {}),
-    workspaceNode: node,
+    workspaceNode: { ...node, path },
     children,
   };
 }
