@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { formatMessageTimestamp, formatPreciseMessageTimestamp } from './threadPresentation';
+import { threadStatusLabel, turnStatusLabel, formatMessageTimestamp, formatPreciseMessageTimestamp } from './threadPresentation';
 
 afterEach(() => vi.useRealTimers());
 
@@ -39,4 +39,9 @@ describe.each([
   it('handles a missing timestamp', () => {
     expect(format(null)).toBe('Time unavailable');
   });
+});
+
+it('labels uncertain backend state without claiming completion or a user interrupt', () => {
+  expect(threadStatusLabel('recovering')).toBe('Confirming status');
+  expect(turnStatusLabel('recovering')).toBe('Confirming status');
 });

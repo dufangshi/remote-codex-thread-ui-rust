@@ -772,13 +772,13 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [groupedItems, activeForRendering],
   );
   const workedLabel = useMemo(
-    () => activeForRendering ? 'Working' : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
-    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt],
+    () => turn.status === 'recovering' ? 'Confirming status' : activeForRendering ? 'Working' : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
+    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status],
   );
   const interruptedLabel =
     turn.status === 'interrupted' ? (
       <span className="thread-graph-worked-interrupted shrink-0 text-[11px]">
-        Interrupted by user
+        Interrupted
       </span>
     ) : null;
   const hasCollapsedHiddenItems =

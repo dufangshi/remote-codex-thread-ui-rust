@@ -396,9 +396,9 @@ declare function LongTextDialog({ open, title, text, onClose, }: LongTextDialogP
 
 declare function formatShortTimestamp(value: string | null): string;
 declare function formatLongTimestamp(value: string | null): string;
-declare function threadStatusLabel(status: ThreadDto['status']): "Idle" | "Running" | "Interrupted" | "Failed" | "Not Loaded" | "System Error";
+declare function threadStatusLabel(status: ThreadDto['status']): "Confirming status" | "Idle" | "Running" | "Interrupted" | "Failed" | "Not Loaded" | "System Error";
 declare function threadStatusClassName(status: ThreadDto['status']): "ui-status-warning" | "ui-status-neutral" | "ui-status-info" | "ui-status-danger";
-declare function turnStatusLabel(status: ThreadTurnDto['status'] | 'sending'): "Running" | "Interrupted" | "Failed" | "Sending" | "Completed";
+declare function turnStatusLabel(status: ThreadTurnDto['status'] | 'sending'): "Confirming status" | "Running" | "Interrupted" | "Failed" | "Sending" | "Completed";
 declare function historyItemAccentClassName(kind: ThreadHistoryItemDto['kind']): "ui-status-neutral" | "timeline-kind-user" | "timeline-kind-agent" | "timeline-kind-action" | "timeline-kind-command" | "timeline-kind-search" | "timeline-kind-file-read" | "timeline-kind-reasoning" | "timeline-kind-agent-tool" | "timeline-kind-skill-tool" | "timeline-kind-plan" | "timeline-kind-file";
 declare function historyItemLabel(kind: ThreadHistoryItemDto['kind']): "User" | "Agent" | "Artifact" | "Image" | "Context" | "Command" | "Web Search" | "File Read" | "Reasoning" | "Skill" | "Tool" | "Plan" | "File Change" | "Hook" | "Other";
 

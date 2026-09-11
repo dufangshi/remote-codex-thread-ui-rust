@@ -5816,6 +5816,8 @@ function formatPreciseMessageTimestamp(value) {
 }
 function threadStatusLabel(status) {
   switch (status) {
+    case "recovering":
+      return "Confirming status";
     case "idle":
       return "Idle";
     case "running":
@@ -5836,6 +5838,7 @@ function threadStatusClassName(status) {
       return "ui-status-neutral";
     case "running":
       return "ui-status-info";
+    case "recovering":
     case "interrupted":
       return "ui-status-warning";
     case "failed":
@@ -5847,6 +5850,8 @@ function threadStatusClassName(status) {
 }
 function turnStatusLabel(status) {
   switch (status) {
+    case "recovering":
+      return "Confirming status";
     case "sending":
       return "Sending";
     case "completed":
@@ -12426,10 +12431,10 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     [groupedItems, activeForRendering]
   );
   const workedLabel = useMemo7(
-    () => activeForRendering ? "Working" : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
-    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt]
+    () => turn.status === "recovering" ? "Confirming status" : activeForRendering ? "Working" : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
+    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status]
   );
-  const interruptedLabel = turn.status === "interrupted" ? /* @__PURE__ */ jsx46("span", { className: "thread-graph-worked-interrupted shrink-0 text-[11px]", children: "Interrupted by user" }) : null;
+  const interruptedLabel = turn.status === "interrupted" ? /* @__PURE__ */ jsx46("span", { className: "thread-graph-worked-interrupted shrink-0 text-[11px]", children: "Interrupted" }) : null;
   const hasCollapsedHiddenItems = collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
