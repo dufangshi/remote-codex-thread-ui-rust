@@ -603,6 +603,7 @@ export function useWorkspaceExplorerController({
       ++refreshGenerationRef.current;
       focusPendingRef.current = false;
       setLoadingTree(false);
+      setWorkspaceError(null);
       setSelectedNodeId(id);
     },
     setWorkspaceError,

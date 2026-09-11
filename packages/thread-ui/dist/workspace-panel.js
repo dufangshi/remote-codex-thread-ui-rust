@@ -71,17 +71,19 @@ function fileNameFromPath(path) {
 }
 function workspaceTreeNodeToGraphNode(node) {
   const kind = node.kind === "directory" ? "directory" : "file";
+  const normalized = normalizeFileSystemPath(node.path);
+  const path = normalized.startsWith("/") || /^[a-z]:\//i.test(normalized) ? normalized : relativeWorkspacePath(normalized, "") ?? normalized;
   const children = (node.children ?? []).map(workspaceTreeNodeToGraphNode);
   return {
-    id: `workspace:${node.path}`,
+    id: `workspace:${path}`,
     name: node.name,
-    path: node.path,
+    path,
     kind,
     ...node.size !== void 0 ? { size: node.size } : {},
     ...node.hasChildren !== void 0 ? { hasChildren: node.hasChildren } : kind === "directory" ? { hasChildren: children.length > 0 } : {},
     ...node.childrenLoaded !== void 0 ? { childrenLoaded: node.childrenLoaded } : kind === "directory" ? { childrenLoaded: node.children !== void 0 } : {},
     ...node.truncated !== void 0 ? { truncated: node.truncated } : {},
-    workspaceNode: node,
+    workspaceNode: { ...node, path },
     children
   };
 }
@@ -1005,6 +1007,7 @@ function useWorkspaceExplorerController({
       ++refreshGenerationRef.current;
       focusPendingRef.current = false;
       setLoadingTree(false);
+      setWorkspaceError(null);
       setSelectedNodeId(id);
     },
     setWorkspaceError,
