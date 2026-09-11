@@ -328,6 +328,7 @@ export interface ReasoningEffortOptionDto {
 }
 
 export type ThreadStatusDto =
+  | 'recovering'
   | 'idle'
   | 'running'
   | 'interrupted'
@@ -537,7 +538,7 @@ export interface ThreadTurnDto {
   id: string;
   startedAt: string | null;
   completedAt?: string | null;
-  status: 'completed' | 'interrupted' | 'failed' | 'inProgress';
+  status: 'completed' | 'interrupted' | 'failed' | 'inProgress' | 'recovering';
   error: string | null;
   model?: string | null;
   reasoningEffort?: ReasoningEffortDto | null;

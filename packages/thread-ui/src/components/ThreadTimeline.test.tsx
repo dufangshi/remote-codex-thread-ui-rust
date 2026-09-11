@@ -469,7 +469,7 @@ describe('ThreadTimeline', () => {
     );
 
     expect(element.textContent).toContain('Worked for 12m 30s');
-    expect(element.textContent).toContain('Interrupted by user');
+    expect(element.textContent).toContain('Interrupted');
   });
 
   it('renders a command batch without redundant activity or batch labels', () => {

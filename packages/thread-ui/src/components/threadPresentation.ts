@@ -62,6 +62,8 @@ export function formatPreciseMessageTimestamp(value: string | null) {
 
 export function threadStatusLabel(status: ThreadDto['status']) {
   switch (status) {
+    case 'recovering':
+      return 'Confirming status';
     case 'idle':
       return 'Idle';
     case 'running':
@@ -83,6 +85,7 @@ export function threadStatusClassName(status: ThreadDto['status']) {
       return 'ui-status-neutral';
     case 'running':
       return 'ui-status-info';
+    case 'recovering':
     case 'interrupted':
       return 'ui-status-warning';
     case 'failed':
@@ -95,6 +98,8 @@ export function threadStatusClassName(status: ThreadDto['status']) {
 
 export function turnStatusLabel(status: ThreadTurnDto['status'] | 'sending') {
   switch (status) {
+    case 'recovering':
+      return 'Confirming status';
     case 'sending':
       return 'Sending';
     case 'completed':
