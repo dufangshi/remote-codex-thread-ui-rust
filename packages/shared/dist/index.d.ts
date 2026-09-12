@@ -120,7 +120,7 @@ interface AgentBackendConfigFileSchemaDto {
     description: string;
     roles?: Array<'runtime' | 'auth' | 'mcp' | 'hooks' | 'providerSettings'>;
 }
-type AgentBackendToolboxActionDto = 'fast' | 'compact' | 'goal' | 'fork' | 'skills' | 'mcp' | 'hooks' | 'prompt' | 'unsupported';
+type AgentBackendToolboxActionDto = 'fast' | 'compact' | 'goal' | 'fork' | 'skills' | 'mcp' | 'hooks' | 'prompt' | 'harness' | 'unsupported';
 interface AgentBackendToolboxItemSchemaDto {
     action: AgentBackendToolboxActionDto;
     command: string;
@@ -238,7 +238,7 @@ interface WorkspaceTreeDto {
     nodes: WorkspaceTreeNodeDto[];
 }
 type ApprovalMode = 'yolo' | 'guarded';
-type ReasoningEffortDto = 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max' | 'ultra';
+type ReasoningEffortDto = 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max' | 'ultra' | (string & {});
 type CollaborationModeDto = 'default' | 'plan';
 type SandboxModeDto = 'read-only' | 'workspace-write' | 'danger-full-access';
 interface ReasoningEffortOptionDto {

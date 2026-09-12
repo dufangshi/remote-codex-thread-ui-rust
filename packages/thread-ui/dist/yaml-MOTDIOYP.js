@@ -1,10 +1,10 @@
 import {
   languages
-} from "./chunk-JXQIYSAV.js";
+} from "./chunk-M7OM543P.js";
 import "./chunk-7O5E2ZHX.js";
-import "./chunk-SSOM5P4O.js";
+import "./chunk-NDPKTSNE.js";
 
-// ../../node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/languages/definitions/yaml/yaml.js
+// ../../../../remoteCodex-thread-messaging/remote-codex-thread-ui/node_modules/.pnpm/monaco-editor@0.56.0/node_modules/monaco-editor/esm/vs/languages/definitions/yaml/yaml.js
 var conf = {
   comments: {
     lineComment: "#"

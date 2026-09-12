@@ -152,6 +152,7 @@ export interface ThreadComposerProps {
   onCompact?: () => Promise<void> | void;
   onOpenSkills?: () => Promise<void> | void;
   onOpenMcp?: () => Promise<void> | void;
+  onOpenHarness?: () => Promise<void> | void;
   onOpenHooks?: () => Promise<void> | void;
   onCreateHook?: (input: CreateThreadHookInput) => Promise<void> | void;
   onUpdateHook?: (input: UpdateThreadHookInput) => Promise<void> | void;
@@ -262,6 +263,7 @@ export function ThreadComposer({
   onOpenSkills,
   onOpenMcp,
   onOpenHooks,
+  onOpenHarness,
   onCreateHook,
   onUpdateHook,
   onTrustHook,
@@ -550,6 +552,10 @@ export function ThreadComposer({
         insertPlainTextIntoPrompt(decision.text);
         setSlashPanelView('root');
         setOpenMenu(null);
+        break;
+      case 'openHarness':
+        setOpenMenu(null);
+        void onOpenHarness?.();
         break;
       case 'noop':
         break;

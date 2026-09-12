@@ -166,6 +166,7 @@ export type AgentBackendToolboxActionDto =
   | 'mcp'
   | 'hooks'
   | 'prompt'
+  | 'harness'
   | 'unsupported';
 
 export interface AgentBackendToolboxItemSchemaDto {
@@ -318,7 +319,8 @@ export type ReasoningEffortDto =
   | 'high'
   | 'xhigh'
   | 'max'
-  | 'ultra';
+  | 'ultra'
+  | (string & {}); // ACP values are opaque, including the provider-default empty value.
 export type CollaborationModeDto = 'default' | 'plan';
 export type SandboxModeDto = 'read-only' | 'workspace-write' | 'danger-full-access';
 

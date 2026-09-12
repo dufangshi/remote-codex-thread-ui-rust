@@ -13,6 +13,7 @@ export type ToolboxActionDecision =
   | { type: 'exitGoalCompose' }
   | { type: 'openPanel'; panel: Exclude<SlashPanelView, 'root' | 'forkTurns'> }
   | { type: 'insertPrompt'; text: string }
+  | { type: 'openHarness' }
   | { type: 'noop' };
 
 export interface ToolboxItemCapabilities {
@@ -48,6 +49,7 @@ export function filterToolboxItemsForCapabilities(
         return capabilities.mcp;
       case 'hooks':
         return capabilities.hooks;
+      case 'harness':
       case 'prompt':
       case 'unsupported':
         return true;
@@ -81,6 +83,8 @@ export function toolboxItemActionDecision(
     case 'mcp':
     case 'hooks':
       return { type: 'openPanel', panel: item.action };
+    case 'harness':
+      return { type: 'openHarness' };
     case 'prompt':
       return { type: 'insertPrompt', text: `${item.command} ` };
     default:
@@ -120,6 +124,7 @@ export function toolboxItemStatus(
     case 'skills':
     case 'mcp':
     case 'hooks':
+    case 'harness':
       return 'View';
     case 'prompt':
       return 'Compose';

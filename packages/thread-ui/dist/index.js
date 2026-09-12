@@ -776,6 +776,7 @@ function filterToolboxItemsForCapabilities(toolboxItems, capabilities) {
         return capabilities.mcp;
       case "hooks":
         return capabilities.hooks;
+      case "harness":
       case "prompt":
       case "unsupported":
         return true;
@@ -800,6 +801,8 @@ function toolboxItemActionDecision(item, {
     case "mcp":
     case "hooks":
       return { type: "openPanel", panel: item.action };
+    case "harness":
+      return { type: "openHarness" };
     case "prompt":
       return { type: "insertPrompt", text: `${item.command} ` };
     default:
@@ -825,6 +828,7 @@ function toolboxItemStatus(item, {
     case "skills":
     case "mcp":
     case "hooks":
+    case "harness":
       return "View";
     case "prompt":
       return "Compose";
@@ -4964,6 +4968,7 @@ function ThreadComposer({
   onOpenSkills,
   onOpenMcp,
   onOpenHooks,
+  onOpenHarness,
   onCreateHook,
   onUpdateHook,
   onTrustHook,
@@ -5227,6 +5232,10 @@ function ThreadComposer({
         insertPlainTextIntoPrompt(decision.text);
         setSlashPanelView("root");
         setOpenMenu(null);
+        break;
+      case "openHarness":
+        setOpenMenu(null);
+        void onOpenHarness?.();
         break;
       case "noop":
         break;

@@ -95,6 +95,11 @@ describe('composerToolbox', () => {
       }),
     ).toEqual({ type: 'insertPrompt', text: '/compact ' });
     expect(
+      toolboxItemActionDecision(item('harness'), {
+        fastMode: false, goalComposeMode: false,
+      }),
+    ).toEqual({ type: 'openHarness' });
+    expect(
       toolboxItemActionDecision(item('unsupported'), {
         fastMode: false,
         goalComposeMode: false,
