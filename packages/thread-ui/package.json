@@ -62,8 +62,11 @@
     "@remote-codex/plugin-terminal": "workspace:*",
     "@remote-codex/shared": "workspace:*",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "mdast-util-from-markdown": "^2.0.3",
+    "micromark-util-types": "^2.0.2",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
+    "unified": "^11.0.5",
     "vitest": "^3.1.1"
   },
   "peerDependencies": {

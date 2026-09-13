@@ -7459,6 +7459,86 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkMath from "remark-math";
+
+// src/components/graph-chat/remarkLatex.ts
+var tokenize = function(effects, ok, nok) {
+  let closing;
+  const start = (code) => {
+    effects.enter("latexMath");
+    effects.consume(code);
+    return open;
+  };
+  const open = (code) => {
+    if (code !== 40 && code !== 91) return nok(code);
+    closing = code === 40 ? 41 : 93;
+    effects.consume(code);
+    return body;
+  };
+  const body = (code) => {
+    if (code === null) return nok(code);
+    if (code === -5 || code === -4 || code === -3) {
+      effects.enter("lineEnding");
+      effects.consume(code);
+      effects.exit("lineEnding");
+      return body;
+    }
+    effects.enter("latexMathData");
+    return data(code);
+  };
+  const data = (code) => {
+    if (code === null) return nok(code);
+    if (code === -5 || code === -4 || code === -3) {
+      effects.exit("latexMathData");
+      return body(code);
+    }
+    effects.consume(code);
+    return code === 92 ? slash : data;
+  };
+  const slash = (code) => {
+    if (code === closing) {
+      effects.consume(code);
+      effects.exit("latexMathData");
+      effects.exit("latexMath");
+      return ok;
+    }
+    if (code === null) return nok(code);
+    if (code === 92) {
+      effects.consume(code);
+      return data;
+    }
+    return data(code);
+  };
+  return start;
+};
+var syntax = { text: { 92: { name: "latexMath", tokenize } } };
+var fromMarkdown = {
+  enter: {
+    latexMath(token) {
+      const raw = this.sliceSerialize(token);
+      this.enter({
+        type: "inlineMath",
+        value: raw.slice(2, -2).trim(),
+        data: {
+          hName: "code",
+          hChildren: [{ type: "text", value: raw.slice(2, -2).trim() }],
+          hProperties: {
+            className: ["language-math", raw[1] === "[" ? "math-display" : "math-inline"]
+          }
+        }
+      }, token);
+    }
+  },
+  exit: { latexMath(token) {
+    this.exit(token);
+  } }
+};
+function remarkLatex() {
+  const data = this.data();
+  (data.micromarkExtensions ??= []).push(syntax);
+  (data.fromMarkdownExtensions ??= []).push(fromMarkdown);
+}
+
+// src/components/graph-chat/GraphChatMessageContent.tsx
 import "katex/dist/katex.min.css";
 
 // src/plugins/usePlugins.ts
@@ -8157,7 +8237,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
     ReactMarkdown,
     {
       urlTransform: (url) => !readOnly && localFileHref(url, typeof window === "undefined" ? void 0 : window.location.origin) ? url : defaultUrlTransform(url),
-      remarkPlugins: [remarkGfm, remarkMath, remarkCjkFriendly],
+      remarkPlugins: [remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly],
       rehypePlugins: [rehypeKatex],
       components: {
         a({ href, children, ...props }) {

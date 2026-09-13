@@ -50,6 +50,36 @@ describe('GraphChatMessageContent', () => {
     expect(element.querySelector('.katex-display')).not.toBeNull();
   });
 
+  it('renders backslash-delimited Chinese formulas without changing code or escaped delimiters', () => {
+    const formula = String.raw`(x,y)\longmapsto\text{这个位置的像素颜色}`;
+    const element = render(<GraphChatMessageContent content={[
+      `\\[\n${formula}\n\\]`,
+      String.raw`行内 \(x_i^2\) 和 $E=mc^2$。`,
+      String.raw`\[\begin{matrix}a\\b\end{matrix}\]`,
+      '`\\(literal\\)`',
+      '```tex\n\\[literal\\]\n```',
+      String.raw`\\(escaped\\)`,
+      String.raw`不完整 \(x`,
+    ].join('\n\n')} />);
+    expect(element.querySelectorAll('.katex')).toHaveLength(4);
+    expect(element.querySelectorAll('.katex-display')).toHaveLength(2);
+    expect(element.querySelector('.katex-error')).toBeNull();
+    expect(Array.from(element.querySelectorAll('annotation')).map(node => node.textContent)).toContain(formula);
+    expect(element.textContent).toContain('\\(literal\\)');
+    expect(element.textContent).toContain('\\[literal\\]');
+    expect(element.textContent).toContain('\\(escaped\\)');
+    expect(element.textContent).toContain('不完整 (x');
+  });
+
+  it('renders completed streamed math inside Markdown containers', () => {
+    const element = render(<GraphChatMessageContent content={'引用：\n\n> \\[\n> x_1'} />);
+    expect(element.querySelector('.katex')).toBeNull();
+    act(() => root!.render(<GraphChatMessageContent content={'引用：\n\n> \\[\n> x_1 + x_2\n> \\]\n\n- 行内 \\(y\\)'} />));
+    expect(element.querySelectorAll('.katex')).toHaveLength(2);
+    expect(element.querySelector('blockquote .katex-display annotation')?.textContent).toBe('x_1 + x_2');
+    expect(element.querySelector('li .katex annotation')?.textContent).toBe('y');
+  });
+
   it('keeps out-of-workspace local and same-origin image links inside Explorer', () => {
     const open = vi.fn();
     const path = '/Users/mac/.codex/generated_images/test image.png';

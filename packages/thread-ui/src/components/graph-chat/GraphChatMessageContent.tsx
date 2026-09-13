@@ -16,6 +16,7 @@ import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkCjkFriendly from 'remark-cjk-friendly';
 import remarkMath from 'remark-math';
+import { remarkLatex } from './remarkLatex';
 import 'katex/dist/katex.min.css';
 
 import { localFileHref, relativeWorkspacePath } from '../workspacePaths';
@@ -392,7 +393,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
     <div ref={rootRef} data-markdown-ready={highlighter ? 'true' : 'false'} className={`thread-graph-message-markdown ${className}`}>
       <ReactMarkdown
         urlTransform={url => !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
-        remarkPlugins={[remarkGfm, remarkMath, remarkCjkFriendly]}
+        remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly]}
         rehypePlugins={[rehypeKatex]}
         components={{
           a({ href, children, ...props }) {
