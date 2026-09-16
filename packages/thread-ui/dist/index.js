@@ -7461,76 +7461,108 @@ import remarkCjkFriendly from "remark-cjk-friendly";
 import remarkMath from "remark-math";
 
 // src/components/graph-chat/remarkLatex.ts
-var tokenize = function(effects, ok, nok) {
-  let closing;
-  const start = (code) => {
-    effects.enter("latexMath");
-    effects.consume(code);
-    return open;
-  };
-  const open = (code) => {
-    if (code !== 40 && code !== 91) return nok(code);
-    closing = code === 40 ? 41 : 93;
-    effects.consume(code);
-    return body;
-  };
-  const body = (code) => {
-    if (code === null) return nok(code);
-    if (code === -5 || code === -4 || code === -3) {
-      effects.enter("lineEnding");
+function tokenizer(flow) {
+  return function(effects, ok, nok) {
+    const self = this;
+    const tokenType = flow ? "latexMathFlow" : "latexMath";
+    let closing;
+    const start = (code) => {
+      effects.enter(tokenType);
       effects.consume(code);
-      effects.exit("lineEnding");
+      return open;
+    };
+    const open = (code) => {
+      if (code !== 40 && code !== 91) return nok(code);
+      if (flow && code !== 91) return nok(code);
+      closing = code === 40 ? 41 : 93;
+      effects.consume(code);
       return body;
-    }
-    effects.enter("latexMathData");
-    return data(code);
-  };
-  const data = (code) => {
-    if (code === null) return nok(code);
-    if (code === -5 || code === -4 || code === -3) {
-      effects.exit("latexMathData");
-      return body(code);
-    }
-    effects.consume(code);
-    return code === 92 ? slash : data;
-  };
-  const slash = (code) => {
-    if (code === closing) {
+    };
+    const body = (code) => {
+      if (code === null || flow && self.parser.lazy[self.now().line])
+        return nok(code);
+      if (code === -5 || code === -4 || code === -3) {
+        effects.enter("lineEnding");
+        effects.consume(code);
+        effects.exit("lineEnding");
+        return body;
+      }
+      effects.enter("latexMathData");
+      return data(code);
+    };
+    const data = (code) => {
+      if (code === null) return nok(code);
+      if (code === -5 || code === -4 || code === -3) {
+        effects.exit("latexMathData");
+        return body(code);
+      }
       effects.consume(code);
-      effects.exit("latexMathData");
-      effects.exit("latexMath");
-      return ok;
-    }
-    if (code === null) return nok(code);
-    if (code === 92) {
-      effects.consume(code);
-      return data;
-    }
-    return data(code);
+      return code === 92 ? slash : data;
+    };
+    const slash = (code) => {
+      if (code === closing) {
+        effects.consume(code);
+        effects.exit("latexMathData");
+        return flow ? afterClose : finish;
+      }
+      if (code === null) return nok(code);
+      if (code === 92) {
+        effects.consume(code);
+        return data;
+      }
+      return data(code);
+    };
+    const finish = (code) => {
+      effects.exit(tokenType);
+      return ok(code);
+    };
+    const afterClose = (code) => {
+      if (code === 32 || code === -2 || code === -1) {
+        effects.consume(code);
+        return afterClose;
+      }
+      return code === null || code === -5 || code === -4 || code === -3 ? finish(code) : nok(code);
+    };
+    return start;
   };
-  return start;
+}
+var syntax = {
+  text: { 92: { name: "latexMath", tokenize: tokenizer(false) } },
+  // Block parsing must precede setext headings, lists and blank paragraphs.
+  flow: {
+    92: { name: "latexMathFlow", tokenize: tokenizer(true), concrete: true }
+  }
 };
-var syntax = { text: { 92: { name: "latexMath", tokenize } } };
-var fromMarkdown = {
-  enter: {
-    latexMath(token) {
-      const raw = this.sliceSerialize(token);
-      this.enter({
-        type: "inlineMath",
-        value: raw.slice(2, -2).trim(),
-        data: {
-          hName: "code",
-          hChildren: [{ type: "text", value: raw.slice(2, -2).trim() }],
-          hProperties: {
-            className: ["language-math", raw[1] === "[" ? "math-display" : "math-inline"]
-          }
+var enterMath = function(token) {
+  const raw = this.sliceSerialize(token).trimEnd();
+  this.enter(
+    {
+      type: token.type === "latexMathFlow" ? "math" : "inlineMath",
+      value: raw.slice(2, -2).trim(),
+      data: {
+        hName: "code",
+        hChildren: [{ type: "text", value: raw.slice(2, -2).trim() }],
+        hProperties: {
+          className: [
+            "language-math",
+            raw[1] === "[" ? "math-display" : "math-inline"
+          ]
         }
-      }, token);
+      }
+    },
+    token
+  );
+};
+var fromMarkdown = {
+  enter: { latexMath: enterMath, latexMathFlow: enterMath },
+  exit: {
+    latexMath(token) {
+      this.exit(token);
+    },
+    latexMathFlow(token) {
+      this.exit(token);
     }
-  },
-  exit: { latexMath(token) {
-    this.exit(token);
-  } }
+  }
 };
 function remarkLatex() {
   const data = this.data();
