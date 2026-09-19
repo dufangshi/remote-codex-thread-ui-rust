@@ -1,0 +1,402 @@
+import { useEffect, useState, type ReactNode } from 'react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Bell,
+  ChevronDown,
+  ChevronRight,
+  Home,
+  MessageSquare,
+  PanelLeft,
+  PanelRight,
+  Search,
+  Star,
+  Terminal,
+  X,
+} from 'lucide-react';
+import { WorkbenchContext } from './WorkbenchContext';
+
+export interface WorkbenchThread {
+  key: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  status: string;
+  favorite: boolean;
+}
+export interface WorkbenchNotification {
+  id: string;
+  title: string;
+  href: string;
+  occurredAt: string;
+}
+export interface MatterWorkbenchOptions {
+  threads: WorkbenchThread[];
+  currentKey: string;
+  favorite: boolean;
+  favoriteBusy?: boolean;
+  error?: string | null;
+  workspacePath: string;
+  activeView: 'chat' | 'shell';
+  terminalEnabled: boolean;
+  onViewChange: (view: 'chat' | 'shell') => void;
+  onToggleFavorite: () => void;
+  onNavigate: (href: string) => void;
+  onSearch: () => void;
+  notifications: WorkbenchNotification[];
+  unreadCount: number;
+  onReadNotifications: () => void;
+}
+
+export function MatterWorkbench({
+  options: o,
+  title,
+  homeHref,
+  settings,
+  newThread,
+  actions,
+  threadMenu,
+  connection,
+  explorer,
+  revealExplorer,
+  children,
+}: {
+  options: MatterWorkbenchOptions;
+  title: string;
+  homeHref: string;
+  settings: ReactNode;
+  newThread: ReactNode;
+  actions: ReactNode;
+  threadMenu: ReactNode;
+  connection: ReactNode;
+  explorer: ReactNode;
+  revealExplorer: number;
+  children: ReactNode;
+}) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarHidden, setSidebarHidden] = useState(false);
+  const [mobile, setMobile] = useState(
+    () =>
+      typeof window !== 'undefined' &&
+      window.matchMedia('(max-width: 639px)').matches,
+  );
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 639px)');
+    const change = () => setMobile(query.matches);
+    query.addEventListener('change', change);
+    return () => query.removeEventListener('change', change);
+  }, []);
+  const [shortcutsOpen, setShortcutsOpen] = useState(true);
+  const [recentsOpen, setRecentsOpen] = useState(true);
+  const [bellOpen, setBellOpen] = useState(false);
+  const [explorerOpen, setExplorerOpen] = useState(false);
+  const [lastReveal, setLastReveal] = useState(revealExplorer);
+  if (lastReveal !== revealExplorer) {
+    setLastReveal(revealExplorer);
+    if (revealExplorer > 0) setExplorerOpen(true);
+  }
+  const navigate = (href: string) => {
+    setSidebarOpen(false);
+    setBellOpen(false);
+    o.onNavigate(href);
+  };
+  const renderThread = (thread: WorkbenchThread) => (
+    <a
+      key={thread.key}
+      href={thread.href}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(thread.href);
+      }}
+      className="matter-thread-row"
+      aria-current={thread.key === o.currentKey ? 'page' : undefined}
+      title={`${thread.title}\n${thread.subtitle} · ${thread.status}`}
+    >
+      <span
+        className="matter-status-dot"
+        data-status={thread.status}
+        aria-label={thread.status}
+      />
+      <span className="matter-thread-copy">
+        <span>{thread.title}</span>
+        <small>{thread.subtitle}</small>
+      </span>
+    </a>
+  );
+  return (
+    <div
+      className={`matter-workbench ${sidebarHidden ? 'is-sidebar-hidden' : ''}`}
+      onClick={(e) => {
+        if (
+          e.target instanceof Element &&
+          !e.target.closest('.matter-thread-menu')
+        ) {
+          e.currentTarget
+            .querySelector('.matter-thread-menu[open]')
+            ?.removeAttribute('open');
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          setBellOpen(false);
+          setSidebarOpen(false);
+          e.currentTarget
+            .querySelector('.matter-thread-menu[open]')
+            ?.removeAttribute('open');
+        }
+      }}
+    >
+      <nav className="matter-rail" aria-label="Workspace tools">
+        <a
+          className="matter-brand"
+          href={homeHref}
+          aria-label="Remote Codex home"
+        >
+          r<span>c</span>
+        </a>
+        <button
+          aria-label="Chat"
+          aria-pressed={o.activeView === 'chat'}
+          onClick={() => o.onViewChange('chat')}
+        >
+          <MessageSquare />
+        </button>
+        {o.terminalEnabled && (
+          <button
+            aria-label="Terminal"
+            aria-pressed={o.activeView === 'shell'}
+            onClick={() => o.onViewChange('shell')}
+          >
+            <Terminal />
+          </button>
+        )}
+        <div className="matter-rail-bottom">{settings}</div>
+      </nav>
+      <header className="matter-topbar">
+        <button
+          aria-label="Toggle shortcuts sidebar"
+          aria-expanded={mobile ? sidebarOpen : !sidebarHidden}
+          onClick={() => {
+            if (mobile) setSidebarOpen(!sidebarOpen);
+            else setSidebarHidden(!sidebarHidden);
+          }}
+        >
+          <PanelLeft />
+        </button>
+        <span className="matter-topbar-brand">Remote Codex</span>
+        <span className="matter-topbar-separator" />
+        <button aria-label="Go back" onClick={() => history.back()}>
+          <ArrowLeft />
+        </button>
+        <button aria-label="Go forward" onClick={() => history.forward()}>
+          <ArrowRight />
+        </button>
+        <a href={homeHref} aria-label="Back to workspaces" title="Workspaces">
+          <Home />
+        </a>
+        <button
+          className="matter-search-trigger"
+          aria-label="Search conversation"
+          onClick={o.onSearch}
+        >
+          <Search />
+          <span>Search conversation</span>
+        </button>
+        <div className="matter-topbar-end">
+          <div className="matter-connection">{connection}</div>
+          <button
+            aria-label="Notifications"
+            aria-expanded={bellOpen}
+            onClick={() => {
+              setBellOpen(!bellOpen);
+              o.onReadNotifications();
+            }}
+          >
+            <Bell />
+            {o.unreadCount > 0 && <span className="matter-unread" />}
+          </button>
+        </div>
+      </header>
+      {sidebarOpen && (
+        <button
+          className="matter-sidebar-scrim"
+          aria-label="Close navigation"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <aside
+        className={`matter-sidebar ${sidebarOpen ? 'is-open' : ''}`}
+        aria-label="Thread navigation"
+      >
+        <div className="matter-sidebar-heading">
+          <span>Workspace</span>
+          <button
+            className="matter-mobile-close"
+            aria-label="Close sidebar"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <X />
+          </button>
+        </div>
+        {o.error && (
+          <p className="matter-sidebar-error" role="alert">
+            {o.error}
+          </p>
+        )}
+        <button
+          className="matter-section-heading"
+          aria-expanded={shortcutsOpen}
+          onClick={() => setShortcutsOpen(!shortcutsOpen)}
+        >
+          {shortcutsOpen ? <ChevronDown /> : <ChevronRight />}
+          <span>Shortcuts</span>
+          <Star />
+        </button>
+        {shortcutsOpen && (
+          <div className="matter-thread-section" data-testid="shortcuts">
+            {o.threads.filter((t) => t.favorite).map(renderThread)}
+            {!o.threads.some((t) => t.favorite) && (
+              <p className="matter-sidebar-hint">
+                Star a thread to keep it close.
+                <br />
+                Across workspaces and devices.
+              </p>
+            )}
+          </div>
+        )}
+        <button
+          className="matter-section-heading"
+          aria-expanded={recentsOpen}
+          onClick={() => setRecentsOpen(!recentsOpen)}
+        >
+          {recentsOpen ? <ChevronDown /> : <ChevronRight />}
+          <span>Recent chats</span>
+          <span className="matter-section-count">{o.threads.length}</span>
+        </button>
+        {recentsOpen && (
+          <div className="matter-thread-section" data-testid="recent-chats">
+            {o.threads.map(renderThread)}
+          </div>
+        )}
+        <div className="matter-sidebar-footer">
+          Your conversations, together.
+        </div>
+      </aside>
+      <main className="matter-main">
+        <nav className="matter-thread-tabs" aria-label="Open threads">
+          {o.threads.slice(0, 8).map((t) => (
+            <a
+              key={t.key}
+              href={t.href}
+              aria-current={t.key === o.currentKey ? 'page' : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(t.href);
+              }}
+              title={t.title}
+            >
+              <span className="matter-status-dot" data-status={t.status} />
+              <span>{t.title}</span>
+            </a>
+          ))}
+          {newThread}
+        </nav>
+        <div className="matter-breadcrumb">
+          <span className="matter-workspace-path" title={o.workspacePath}>
+            {o.workspacePath}
+          </span>
+          <ChevronRight />
+          <span className="matter-current-title" title={title}>
+            {title}
+          </span>
+          <button
+            aria-label={o.favorite ? 'Remove shortcut' : 'Add shortcut'}
+            aria-pressed={o.favorite}
+            disabled={o.favoriteBusy}
+            onClick={o.onToggleFavorite}
+          >
+            <Star fill={o.favorite ? 'currentColor' : 'none'} />
+          </button>
+          <div className="matter-thread-actions">
+            {actions}
+            {threadMenu}
+            <button
+              aria-label="Toggle Explorer"
+              aria-expanded={explorerOpen}
+              onClick={() => setExplorerOpen(!explorerOpen)}
+            >
+              <PanelRight />
+            </button>
+          </div>
+        </div>
+        <div className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
+          <div className="matter-chat">
+            <WorkbenchContext.Provider value={true}>
+              {children}
+            </WorkbenchContext.Provider>
+          </div>
+          {explorerOpen && (
+            <aside className="matter-explorer" aria-label="Explorer">
+              <div className="matter-explorer-heading">
+                Explorer
+                <button
+                  aria-label="Close Explorer"
+                  onClick={() => setExplorerOpen(false)}
+                >
+                  <X />
+                </button>
+              </div>
+              {explorer}
+            </aside>
+          )}
+        </div>
+      </main>
+      {bellOpen && (
+        <>
+          <button
+            className="matter-popover-scrim"
+            aria-label="Close notifications"
+            onClick={() => setBellOpen(false)}
+          />
+          <section
+            className="matter-notifications"
+            aria-label="Notifications"
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setBellOpen(false);
+            }}
+          >
+            <div className="matter-notifications-heading">
+              Notifications
+              <button
+                aria-label="Close notification panel"
+                onClick={() => setBellOpen(false)}
+              >
+                <X />
+              </button>
+            </div>
+            {o.notifications.length ? (
+              o.notifications.map((n) => (
+                <a
+                  key={n.id}
+                  href={n.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(n.href);
+                  }}
+                >
+                  <span className="matter-status-dot" data-status="completed" />
+                  <span>
+                    {n.title}
+                    <small>{new Date(n.occurredAt).toLocaleString()}</small>
+                  </span>
+                </a>
+              ))
+            ) : (
+              <p>All caught up. Completed threads will appear here.</p>
+            )}
+          </section>
+        </>
+      )}
+    </div>
+  );
+}

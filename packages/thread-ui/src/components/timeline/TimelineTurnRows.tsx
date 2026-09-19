@@ -1,6 +1,7 @@
 import {
   memo,
   useCallback,
+  useContext,
   useMemo,
   useState,
   type RefCallback,
@@ -58,6 +59,7 @@ import {
 import { TurnTokenSummary } from './tokenFormatting';
 import { deriveDisplayedLivePlan, TurnStatusBar } from './turnStatus';
 import { TurnUsageInline } from './TurnUsageInline';
+import { WorkbenchContext } from '../WorkbenchContext';
 
 type LivePlan = {
   turnId: string;
@@ -690,6 +692,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
     {},
   );
+  const workbench = useContext(WorkbenchContext);
 
   const toggleGroupedItem = useCallback((groupKey: string) => {
     setExpandedGroups((current) => ({
@@ -700,7 +703,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
 
   const renderHistoryEntries = (entries: TimelineHistoryEntry[]) => (
     <TimelineHistoryEntries
-      entries={entries}
+      entries={workbench ? entries.flatMap(entry => entry.kind === 'agentActivityGroup' ? entry.entries : [entry]) : entries}
       expandedGroups={expandedGroups}
       onToggleGroupedItem={toggleGroupedItem}
       threadId={threadId}
@@ -843,13 +846,14 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           {interruptedLabel}
           <ChevronRight className={`h-4 w-4 shrink-0 transition ${effectiveCollapsed ? '' : 'rotate-90'}`} />
           </button>
+          <span className="thread-execution-step-count">{turn.deferredItemCount ?? collapsedSummary.hiddenEntries.length} steps</span>
           <TurnUsageInline turn={turn} />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
             aria-hidden="true"
           />
         </div>
-        {!effectiveCollapsed ? renderHistoryEntries(collapsedSummary.hiddenEntries) : null}
+        {!effectiveCollapsed ? <div className="thread-execution-timeline">{renderHistoryEntries(collapsedSummary.hiddenEntries)}</div> : null}
         {visibleSummaryAgent ? (
           <CompactMessageItem
             threadId={threadId}
