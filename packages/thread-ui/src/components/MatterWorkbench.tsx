@@ -37,6 +37,9 @@ export interface WorkbenchNotification {
   occurredAt: string;
 }
 export interface MatterWorkbenchOptions {
+  navigationReady?: boolean;
+  harnessSessionId?: string | null;
+  harnessSessionUrl?: string | null;
   threads: WorkbenchThread[];
   currentKey: string;
   favorite: boolean;
@@ -79,6 +82,29 @@ export function MatterWorkbench({
   revealExplorer: number;
   children: ReactNode;
 }) {
+  const [tabKeys, setTabKeys] = useState<string[]>(() => {
+    try {
+      const keys: unknown = JSON.parse(sessionStorage.getItem('remote-codex.workbench-tabs.v1') ?? '[]');
+      return Array.isArray(keys) ? keys.filter((key): key is string => typeof key === 'string').slice(0, 8) : [];
+    } catch { return []; }
+  });
+  useEffect(() => {
+    if (o.navigationReady === false) return;
+    setTabKeys(previous => {
+      // Preserve open-tab order across visits, polling and reloads. New tabs append.
+      let next = previous.filter(key => o.threads.some(thread => thread.key === key));
+      for (const thread of o.threads) {
+        if (next.length < 8 && !next.includes(thread.key)) next.push(thread.key);
+      }
+      if (o.currentKey && o.threads.some(t => t.key === o.currentKey) && !next.includes(o.currentKey)) {
+        next = [...next.slice(-7), o.currentKey];
+      }
+      if (next.join('\n') === previous.join('\n')) return previous;
+      try { sessionStorage.setItem('remote-codex.workbench-tabs.v1', JSON.stringify(next)); } catch { /* Storage is optional. */ }
+      return next;
+    });
+  }, [o.threads, o.currentKey, o.navigationReady]);
+  const tabs = tabKeys.map(key => o.threads.find(thread => thread.key === key)).filter((thread): thread is WorkbenchThread => Boolean(thread));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const [mobile, setMobile] = useState(
@@ -291,7 +317,7 @@ export function MatterWorkbench({
       </aside>
       <main className="matter-main">
         <nav className="matter-thread-tabs" aria-label="Open threads">
-          {o.threads.slice(0, 8).map((t) => (
+          {tabs.map((t) => (
             <a
               key={t.key}
               href={t.href}

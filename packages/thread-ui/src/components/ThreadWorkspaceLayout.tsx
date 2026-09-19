@@ -499,6 +499,16 @@ export function ThreadWorkspaceLayout({
   const [settingsTab, setSettingsTab] = useState<"session" | "global">(
     "session",
   );
+  const [sessionCopyNotice, setSessionCopyNotice] = useState('');
+  useEffect(() => setSessionCopyNotice(''), [currentThreadId]);
+  async function copySessionValue(value: string, label: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setSessionCopyNotice(`${label} copied`);
+    } catch {
+      setSessionCopyNotice('Copy failed. Clipboard access is unavailable.');
+    }
+  }
 
   useEffect(() => {
     if (workspaceRevealRequestKey === undefined) {
@@ -813,7 +823,8 @@ export function ThreadWorkspaceLayout({
           data-testid="settings-dialog"
           data-theme-effective={effectiveTheme}
           data-theme-mode={themeMode}
-          className="thread-graph-settings-dialog thread-graph-dialog"
+          className={`thread-graph-settings-dialog thread-graph-dialog ${workbench ? 'matter-settings-dialog' : ''}`}
+          {...(workbench ? { overlayClassName: 'matter-settings-overlay' } : {})}
         >
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
@@ -1082,8 +1093,11 @@ export function ThreadWorkspaceLayout({
           <summary aria-label="Thread actions" title="Thread actions"><MoreHorizontal size={16} /></summary>
           <div>
             {onRenameThread && <button onClick={event => { const thread = threads.find(t => t.id === currentThreadId); if (thread) beginRenameThread(thread); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Pencil size={14} />Rename thread</button>}
-            <button onClick={event => { void navigator.clipboard?.writeText(topbarSessionLabel); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Copy size={14} />Copy session ID</button>
+            <button disabled={!currentThreadId} onClick={() => currentThreadId && void copySessionValue(currentThreadId, 'Remote Codex session ID')}><Copy size={14} />Copy Remote Codex session ID</button>
+            <button disabled={!workbench.harnessSessionId} title={workbench.harnessSessionId ?? 'The harness has not assigned a session ID yet.'} onClick={() => workbench.harnessSessionId && void copySessionValue(workbench.harnessSessionId, 'Harness session ID')}><Copy size={14} />Copy harness session ID</button>
+            {workbench.harnessSessionUrl && <button onClick={() => void copySessionValue(workbench.harnessSessionUrl!, 'Codex deeplink')}><Copy size={14} />Copy Codex deeplink</button>}
             {onDeleteThread && <button onClick={event => { const thread = threads.find(t => t.id === currentThreadId); if (thread) onDeleteThread(thread); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Trash2 size={14} />Delete thread</button>}
+            {sessionCopyNotice && <p role="status" className="matter-copy-notice">{sessionCopyNotice}</p>}
           </div>
         </details>}
         explorer={workspaceContent} revealExplorer={workspaceRevealRequestKey ?? 0}>

@@ -127,6 +127,9 @@ interface WorkbenchNotification {
     occurredAt: string;
 }
 interface MatterWorkbenchOptions {
+    navigationReady?: boolean;
+    harnessSessionId?: string | null;
+    harnessSessionUrl?: string | null;
     threads: WorkbenchThread[];
     currentKey: string;
     favorite: boolean;
