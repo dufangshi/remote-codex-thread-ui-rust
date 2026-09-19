@@ -125,6 +125,7 @@ interface WorkbenchNotification {
     title: string;
     href: string;
     occurredAt: string;
+    summary?: string;
 }
 interface MatterWorkbenchOptions {
     navigationReady?: boolean;
@@ -278,6 +279,11 @@ interface ThreadTimelineProps {
     onRespondToRequest?: (requestId: string, input: RespondThreadActionRequestInput) => Promise<void> | void;
     liveOutput: string;
     scrollRequestKey?: number;
+    searchTarget?: {
+        turnId: string;
+        itemId: string;
+        key: number;
+    };
     previousTurnScrollRequestKey?: number;
     nextTurnScrollRequestKey?: number;
     bottomSpacer?: number;
@@ -316,7 +322,7 @@ interface ThreadTimelineProps {
     adapter?: ThreadTimelineAdapter | undefined;
     autoCollapseCompletedTurns?: boolean;
 }
-declare function ThreadTimelineComponent({ threadId, turns, totalTurnCount, pendingRequests, activeTurnId, threadRunning, pendingSteers, livePlan, liveItems, respondingRequestId, onRespondToRequest, liveOutput, scrollRequestKey, previousTurnScrollRequestKey, nextTurnScrollRequestKey, bottomSpacer, className, onTailVisibilityChange, onPreviousTurnAvailabilityChange, onNextTurnAvailabilityChange, loadingEarlier, onLoadEarlier, ephemeralUserNote, answeredRequestNotes, activityNotes, optimisticSteers, optimisticTurn, onLoadHistoryItemDetail, onLoadTurnDetail, onOpenThread, onSelectArtifact, onSelectHistoryItemDetail, adapter, autoCollapseCompletedTurns, }: ThreadTimelineProps): react.JSX.Element;
+declare function ThreadTimelineComponent({ threadId, turns, totalTurnCount, pendingRequests, activeTurnId, threadRunning, pendingSteers, livePlan, liveItems, respondingRequestId, onRespondToRequest, liveOutput, scrollRequestKey, searchTarget, previousTurnScrollRequestKey, nextTurnScrollRequestKey, bottomSpacer, className, onTailVisibilityChange, onPreviousTurnAvailabilityChange, onNextTurnAvailabilityChange, loadingEarlier, onLoadEarlier, ephemeralUserNote, answeredRequestNotes, activityNotes, optimisticSteers, optimisticTurn, onLoadHistoryItemDetail, onLoadTurnDetail, onOpenThread, onSelectArtifact, onSelectHistoryItemDetail, adapter, autoCollapseCompletedTurns, }: ThreadTimelineProps): react.JSX.Element;
 declare const ThreadTimeline: react.MemoExoticComponent<typeof ThreadTimelineComponent>;
 
 interface ThreadShellControlState {
@@ -385,12 +391,14 @@ interface ExportTurnsState {
     error: string | null;
 }
 interface CreateThreadShareInput {
+    scope?: 'thread' | 'device';
     targetIdentifier: string;
     threadAccess: RelayThreadAccess;
     workspaceAccess: RelayWorkspaceAccess;
     label?: string | null;
 }
 interface ThreadShareSummary {
+    scope?: 'thread' | 'device';
     id: string;
     targetUsername: string;
     label: string | null;
@@ -418,10 +426,11 @@ interface ThreadActionsDialogProps {
     onCreateShare?: (input: CreateThreadShareInput) => void | Promise<void>;
     onRevokeShare?: (shareId: string) => void | Promise<void>;
     onOpenDeviceSharing?: () => void;
+    deviceShareAvailable?: boolean;
     linkContent?: ReactNode;
     onUpdateShare?: (id: string, input: CreateThreadShareInput) => void | Promise<void>;
 }
-declare function ThreadActionsDialog({ appearance, open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, onOpenDeviceSharing, linkContent, onUpdateShare, }: ThreadActionsDialogProps): react.ReactPortal | null;
+declare function ThreadActionsDialog({ appearance, open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, deviceShareAvailable, linkContent, onUpdateShare, }: ThreadActionsDialogProps): react.ReactPortal | null;
 declare const ExportTranscriptDialog: typeof ThreadActionsDialog;
 
 interface LongTextDialogProps {

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode, type CSSProperties } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -35,6 +35,7 @@ export interface WorkbenchNotification {
   title: string;
   href: string;
   occurredAt: string;
+  summary?: string;
 }
 export interface MatterWorkbenchOptions {
   navigationReady?: boolean;
@@ -122,6 +123,17 @@ export function MatterWorkbench({
   const [recentsOpen, setRecentsOpen] = useState(true);
   const [bellOpen, setBellOpen] = useState(false);
   const [explorerOpen, setExplorerOpen] = useState(false);
+  const [explorerWidth, setExplorerWidth] = useState(() => {
+    try { return Math.max(260, Math.min(800, Number(localStorage.getItem('remote-codex.explorer-width')) || 360)); } catch { return 360; }
+  });
+  const contentRef = useRef<HTMLDivElement>(null);
+  const resizeOrigin = useRef<{ x: number; width: number } | null>(null);
+  const resizeExplorer = (width: number) => {
+    const max = Math.max(260, (contentRef.current?.clientWidth ?? 1000) - 320);
+    const next = Math.round(Math.max(260, Math.min(max, width)));
+    setExplorerWidth(next);
+    try { localStorage.setItem('remote-codex.explorer-width', String(next)); } catch { /* Optional preference. */ }
+  };
   const [lastReveal, setLastReveal] = useState(revealExplorer);
   if (lastReveal !== revealExplorer) {
     setLastReveal(revealExplorer);
@@ -360,7 +372,7 @@ export function MatterWorkbench({
             </button>
           </div>
         </div>
-        <div className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
+        <div ref={contentRef} style={{ '--explorer-width': `${explorerWidth}px` } as CSSProperties} className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
           <div className="matter-chat">
             <WorkbenchContext.Provider value={true}>
               {children}
@@ -368,6 +380,13 @@ export function MatterWorkbench({
           </div>
           {explorerOpen && (
             <aside className="matter-explorer" aria-label="Explorer">
+              {!mobile && <div role="separator" aria-label="Resize Explorer" aria-orientation="vertical" aria-valuemin={260} aria-valuemax={Math.max(260, (contentRef.current?.clientWidth ?? 1000) - 320)} aria-valuenow={explorerWidth} tabIndex={0} className="matter-explorer-resize"
+                onPointerDown={e => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); resizeOrigin.current = { x: e.clientX, width: explorerWidth }; }}
+                onPointerMove={e => { if (resizeOrigin.current) resizeExplorer(resizeOrigin.current.width + resizeOrigin.current.x - e.clientX); }}
+                onPointerUp={e => { resizeOrigin.current = null; e.currentTarget.releasePointerCapture(e.pointerId); }}
+                onLostPointerCapture={() => { resizeOrigin.current = null; }}
+                onKeyDown={e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); resizeExplorer(explorerWidth + (e.key === 'ArrowLeft' ? 24 : -24)); } }}
+              />}
               <div className="matter-explorer-heading">
                 Explorer
                 <button
@@ -418,6 +437,7 @@ export function MatterWorkbench({
                   <span className="matter-status-dot" data-status="completed" />
                   <span>
                     {n.title}
+                    {n.summary && <p className="matter-notification-summary">{n.summary}</p>}
                     <small>{new Date(n.occurredAt).toLocaleString()}</small>
                   </span>
                 </a>
