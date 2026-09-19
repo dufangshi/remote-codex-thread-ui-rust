@@ -401,6 +401,7 @@ interface ShareState {
     error: string | null;
 }
 interface ThreadActionsDialogProps {
+    appearance?: 'default' | 'matter';
     open: boolean;
     busy?: boolean;
     turnsState: ExportTurnsState;
@@ -417,7 +418,7 @@ interface ThreadActionsDialogProps {
     linkContent?: ReactNode;
     onUpdateShare?: (id: string, input: CreateThreadShareInput) => void | Promise<void>;
 }
-declare function ThreadActionsDialog({ open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, onOpenDeviceSharing, linkContent, onUpdateShare, }: ThreadActionsDialogProps): react.ReactPortal | null;
+declare function ThreadActionsDialog({ appearance, open, busy, turnsState, shareAvailable, shareUnavailableMessage, shareState, initialMode, onCancel, onLoadTurns, onExport, onCreateShare, onRevokeShare, onOpenDeviceSharing, linkContent, onUpdateShare, }: ThreadActionsDialogProps): react.ReactPortal | null;
 declare const ExportTranscriptDialog: typeof ThreadActionsDialog;
 
 interface LongTextDialogProps {

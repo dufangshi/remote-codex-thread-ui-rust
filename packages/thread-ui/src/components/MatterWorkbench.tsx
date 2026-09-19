@@ -15,6 +15,12 @@ import {
   X,
 } from 'lucide-react';
 import { WorkbenchContext } from './WorkbenchContext';
+import { WorkbenchPath } from './WorkbenchPath';
+
+const statusLabels: Record<string, string> = {
+  running: 'Running', unread: 'Completed, unread', idle: 'Idle, read',
+  failed: 'Failed', interrupted: 'Interrupted', unknown: 'Status unavailable',
+};
 
 export interface WorkbenchThread {
   key: string;
@@ -110,12 +116,13 @@ export function MatterWorkbench({
       }}
       className="matter-thread-row"
       aria-current={thread.key === o.currentKey ? 'page' : undefined}
-      title={`${thread.title}\n${thread.subtitle} · ${thread.status}`}
+      title={`${thread.title}\n${thread.subtitle} · ${statusLabels[thread.status] ?? thread.status}`}
     >
       <span
         className="matter-status-dot"
         data-status={thread.status}
-        aria-label={thread.status}
+        role="img"
+        aria-label={statusLabels[thread.status] ?? thread.status}
       />
       <span className="matter-thread-copy">
         <span>{thread.title}</span>
@@ -295,16 +302,14 @@ export function MatterWorkbench({
               }}
               title={t.title}
             >
-              <span className="matter-status-dot" data-status={t.status} />
+              <span className="matter-status-dot" data-status={t.status} role="img" aria-label={statusLabels[t.status] ?? t.status} />
               <span>{t.title}</span>
             </a>
           ))}
           {newThread}
         </nav>
         <div className="matter-breadcrumb">
-          <span className="matter-workspace-path" title={o.workspacePath}>
-            {o.workspacePath}
-          </span>
+          <WorkbenchPath path={o.workspacePath} />
           <ChevronRight />
           <span className="matter-current-title" title={title}>
             {title}
