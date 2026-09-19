@@ -50,9 +50,9 @@
 .thread-graph-dialog.matter-settings-dialog {
   padding: 0;
   background: #e8eef0;
-  --thread-gc-bg: #fdfdfd;
-  --thread-gc-panel: #fdfdfd;
-  --thread-gc-workspace: #f8f8f8;
+  --thread-gc-bg: #f1f3f2;
+  --thread-gc-panel: #f7f8f6;
+  --thread-gc-workspace: #edf0ee;
   --thread-gc-surface: #f0f3f4;
   --thread-gc-muted: #e8eef0;
   --thread-gc-hover: #e9eef0;
@@ -61,7 +61,7 @@
   --thread-gc-border-contrast: #828a92;
   --thread-gc-fg: #121416;
   --thread-gc-fg-soft: #5b6269;
-  --thread-gc-fg-muted: #727c85;
+  --thread-gc-fg-muted: #5d6972;
   --thread-gc-primary: #00a764;
   --thread-gc-primary-hover: #00975a;
   --thread-gc-primary-fg: #fff;
@@ -241,13 +241,13 @@
   display: flex;
   align-items: center;
 }
-.matter-connection button {
-  width: 26px !important;
-  height: 26px !important;
+.matter-connection .device-connection-button {
+  width: 28px;
+  height: 28px;
 }
-.matter-connection svg {
-  width: 14px !important;
-  height: 14px !important;
+.matter-connection .device-connection-button > svg {
+  width: 17px;
+  height: 17px;
 }
 .matter-unread {
   position: absolute;
@@ -541,13 +541,24 @@
   height: 100%;
 }
 .matter-explorer {
+  position: relative;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  width: clamp(280px, 32%, 480px);
+  width: min(var(--explorer-width, 360px), max(260px, calc(100% - 320px)));
   min-height: 0;
   border-left: 1px solid var(--theme-border);
   background: var(--theme-surface);
 }
+.matter-explorer-resize { position: absolute; z-index: 5; left: -4px; top: 0; bottom: 0; width: 8px; cursor: col-resize; touch-action: none; }
+.matter-explorer-resize:hover, .matter-explorer-resize:focus-visible { background: color-mix(in srgb, var(--theme-accent-solid) 30%, transparent); outline: none; }
+.matter-notification-summary { margin: 5px 0; color: var(--theme-fg-soft); font-size: 12px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.thread-ui-shell .matter-workbench .thread-graph-message-time-row .thread-graph-message-time { opacity: 1; color: var(--theme-fg-muted); }
+.thread-ui-shell .matter-workbench .animate-pulse.rounded-full { background: var(--theme-accent-strong); }
+.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button { right: 0 !important; top: 0 !important; width: 32px !important; height: 32px !important; border-radius: 50%; background: color-mix(in srgb, #c83b42 12%, var(--theme-panel)); color: #b62f38; border: 1px solid color-mix(in srgb, #c83b42 30%, var(--theme-border)) !important; box-shadow: none; }
+.thread-ui-shell[data-theme-effective='dark'] .matter-workbench .thread-graph-composer-stop-button { color: #ff9b9f; }
+.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button:hover { background: color-mix(in srgb, #c83b42 22%, var(--theme-panel)); }
+.thread-ui-shell .matter-workbench :is(.thread-graph-composer-stop-button, .thread-graph-composer-send-button) { min-width: 32px !important; min-height: 32px !important; }
 .matter-explorer > :last-child {
   flex: 1;
   min-height: 0;

@@ -65,6 +65,7 @@ export interface ThreadTimelineProps {
   ) => Promise<void> | void;
   liveOutput: string;
   scrollRequestKey?: number;
+  searchTarget?: { turnId: string; itemId: string; key: number };
   previousTurnScrollRequestKey?: number;
   nextTurnScrollRequestKey?: number;
   bottomSpacer?: number;
@@ -161,6 +162,7 @@ function ThreadTimelineComponent({
   onRespondToRequest,
   liveOutput,
   scrollRequestKey = 0,
+  searchTarget,
   previousTurnScrollRequestKey = 0,
   nextTurnScrollRequestKey = 0,
   bottomSpacer = 0,
@@ -196,6 +198,7 @@ function ThreadTimelineComponent({
   );
   const lastPreviousTurnTargetIdRef = useRef<string | null>(null);
   const lastNextTurnTargetIdRef = useRef<string | null>(null);
+  const lastSearchKeyRef = useRef<number | null>(null);
   const loadHistoryItemDetail =
     adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
@@ -209,6 +212,9 @@ function ThreadTimelineComponent({
     Record<string, string | undefined>
   >({});
   const openLinkedThread = adapter?.onOpenLinkedThread;
+  useEffect(() => {
+    if (searchTarget) setCollapsedTurnOverrides(current => ({ ...current, [searchTarget.turnId]: false }));
+  }, [searchTarget]);
   const {
     expandedText,
     openExpandedText: handleOpenExpandedText,
@@ -272,6 +278,22 @@ function ThreadTimelineComponent({
     setLoadingTurnDetailIds(new Set());
     setTurnDetailErrors({});
   }, [threadId]);
+
+  useEffect(() => {
+    if (!searchTarget || lastSearchKeyRef.current === searchTarget.key || collapsedTurnOverrides[searchTarget.turnId] !== false) return;
+    preserveScrollPositionForResize();
+    const frame = requestAnimationFrame(() => {
+      const container = scrollContainerRef.current;
+      const turn = Array.from(container?.querySelectorAll<HTMLElement>('[data-turn-id]') ?? []).find(node => node.dataset.turnId === searchTarget.turnId);
+      const message = Array.from(turn?.querySelectorAll<HTMLElement>('[data-message-id]') ?? []).find(node => node.dataset.messageId === searchTarget.itemId);
+      const target = message ?? turn;
+      if (!container || !target) return;
+      lastSearchKeyRef.current = searchTarget.key;
+      container.scrollTo({ top: container.scrollTop + target.getBoundingClientRect().top - container.getBoundingClientRect().top - 24, behavior: 'instant' });
+      target.animate([{ backgroundColor: 'var(--theme-accent-soft)' }, { backgroundColor: 'transparent' }], { duration: 1400 });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [searchTarget, collapsedTurnOverrides, preserveScrollPositionForResize]);
 
   const handleToggleCollapse = useCallback((
     turn: TimelineTurn,

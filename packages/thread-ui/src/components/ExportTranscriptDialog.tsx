@@ -21,6 +21,7 @@ interface ExportTurnsState {
 }
 
 export interface CreateThreadShareInput {
+  scope?: 'thread' | 'device';
   targetIdentifier: string;
   threadAccess: RelayThreadAccess;
   workspaceAccess: RelayWorkspaceAccess;
@@ -28,6 +29,7 @@ export interface CreateThreadShareInput {
 }
 
 export interface ThreadShareSummary {
+  scope?: 'thread' | 'device';
   id: string;
   targetUsername: string;
   label: string | null;
@@ -57,6 +59,7 @@ export interface ThreadActionsDialogProps {
   onCreateShare?: (input: CreateThreadShareInput) => void | Promise<void>;
   onRevokeShare?: (shareId: string) => void | Promise<void>;
   onOpenDeviceSharing?: () => void;
+  deviceShareAvailable?: boolean;
   linkContent?: ReactNode;
   onUpdateShare?: (id: string, input: CreateThreadShareInput) => void | Promise<void>;
 }
@@ -148,7 +151,7 @@ export function ThreadActionsDialog({
   onExport,
   onCreateShare,
   onRevokeShare,
-  onOpenDeviceSharing,
+  deviceShareAvailable = false,
   linkContent, onUpdateShare,
 }: ThreadActionsDialogProps) {
   const turns = useMemo(() => turnsState.data?.turns ?? [], [turnsState.data?.turns]);
@@ -162,6 +165,7 @@ export function ThreadActionsDialog({
   const [threadAccess, setThreadAccess] = useState<RelayThreadAccess>('read');
   const [workspaceAccess, setWorkspaceAccess] = useState<RelayWorkspaceAccess>('none');
   const [shareLabel, setShareLabel] = useState('');
+  const [shareDevice, setShareDevice] = useState(false);
   const [editingShare, setEditingShare] = useState<string | null>(null);
   const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>(() =>
     typeof document !== 'undefined' &&
@@ -181,7 +185,7 @@ export function ThreadActionsDialog({
     setTargetIdentifier('');
     setThreadAccess('read');
     setWorkspaceAccess('none');
-    setShareLabel(''); setEditingShare(null);
+    setShareLabel(''); setEditingShare(null); setShareDevice(false);
     void onLoadTurns();
   }, [initialMode, onLoadTurns, open]);
 
@@ -301,6 +305,7 @@ export function ThreadActionsDialog({
     const submit = editingShare ? (input: CreateThreadShareInput) => onUpdateShare?.(editingShare, input) : onCreateShare;
     void Promise.resolve(submit?.({
       targetIdentifier: targetIdentifier.trim(),
+      scope: shareDevice ? 'device' : 'thread',
       threadAccess,
       workspaceAccess,
       label: shareLabel.trim() || null,
@@ -394,11 +399,11 @@ export function ThreadActionsDialog({
                             {share.targetUsername}
                           </p>
                           <p className="thread-export-dialog-subtitle mt-0.5 text-xs">
-                            {share.label ? `${share.label} · ` : ''}
+                            {share.scope === 'device' ? 'Whole device · ' : ''}{share.label ? `${share.label} · ` : ''}
                             {shareThreadAccessLabel(share.threadAccess)} / {shareWorkspaceAccessLabel(share.workspaceAccess)}
                           </p>
                         </div>
-                        {onUpdateShare && <button type="button" aria-label={`Edit permissions for ${share.targetUsername}`} className="thread-export-dialog-secondary-button ml-auto flex items-center gap-1 rounded-lg border px-2 py-1.5 text-xs" disabled={busy} onClick={() => {setEditingShare(share.id);setTargetIdentifier(share.targetUsername);setThreadAccess(share.threadAccess ?? 'read');setWorkspaceAccess(share.workspaceAccess ?? 'none');setShareLabel(share.label ?? '');}}><Pencil size={13}/>Edit</button>}
+                        {onUpdateShare && <button type="button" aria-label={`Edit permissions for ${share.targetUsername}`} className="thread-export-dialog-secondary-button ml-auto flex items-center gap-1 rounded-lg border px-2 py-1.5 text-xs" disabled={busy} onClick={() => {setEditingShare(share.id);setShareDevice(share.scope === 'device');setTargetIdentifier(share.targetUsername);setThreadAccess(share.threadAccess ?? 'read');setWorkspaceAccess(share.workspaceAccess ?? 'none');setShareLabel(share.label ?? '');}}><Pencil size={13}/>Edit</button>}
                         {onRevokeShare ? (
                           <button
                             type="button"
@@ -424,23 +429,11 @@ export function ThreadActionsDialog({
                   {shareUnavailableMessage}
                 </p>
               ) : null}
-              {shareAvailable && onOpenDeviceSharing ? (
-                <div className="thread-export-dialog-box flex flex-wrap items-center justify-between gap-3 rounded-2xl border px-3 py-3">
-                  <div className="min-w-0">
-                    <p className="thread-export-dialog-strong text-sm font-medium">Share this thread</p>
-                    <p className="thread-export-dialog-subtitle mt-1 text-xs">
-                      Need broader access? Share the whole device from Relay Portal.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className="thread-export-dialog-secondary-button rounded-full border px-3 py-1.5 text-xs font-medium transition"
-                    disabled={busy}
-                    onClick={onOpenDeviceSharing}
-                  >
-                    Share whole device
-                  </button>
-                </div>
+              {shareAvailable && deviceShareAvailable ? (
+                <label className="matter-share-scope">
+                  <input type="checkbox" checked={shareDevice} disabled={busy || Boolean(editingShare)} onChange={event => setShareDevice(event.target.checked)} />
+                  <span><strong>Share whole device</strong><small>{shareDevice ? 'Applies to all threads on this device, with the permissions below.' : 'Off: only this conversation is shared.'}</small></span>
+                </label>
               ) : null}
 
               <label className="thread-export-dialog-body-text block text-sm">
@@ -607,7 +600,7 @@ export function ThreadActionsDialog({
           <p className="thread-export-dialog-subtitle min-w-0 text-xs">
             {actionMode === 'link' ? 'Read-only · No login required' : actionMode === 'share'
               ? shareAvailable
-                ? 'Only invited members can access this thread.'
+                ? shareDevice ? 'Access applies to all threads on this device.' : 'Only invited members can access this thread.'
                 : 'Sharing is unavailable in this connection.'
               : `${selectedCount} ${selectedCount === 1 ? 'turn' : 'turns'} selected.`}
           </p>
@@ -627,7 +620,7 @@ export function ThreadActionsDialog({
                 disabled={!canShare}
                 className={`${matter ? 'matter-dialog-primary' : 'ui-status-warning'} rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60`}
               >
-                {busy ? 'Saving...' : editingShare ? 'Save permissions' : 'Share this thread'}
+                {busy ? 'Saving...' : editingShare ? 'Save permissions' : shareDevice ? 'Share device' : 'Share this thread'}
               </button>
             ) : (
               <button
