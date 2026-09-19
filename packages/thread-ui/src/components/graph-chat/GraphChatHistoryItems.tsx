@@ -1,5 +1,6 @@
 import {
   memo,
+  useContext,
   useLayoutEffect,
   useRef,
   useState,
@@ -9,6 +10,7 @@ import {
 import {
   Archive,
   Bot,
+  Check,
   CheckCircle2,
   ChevronDown,
   ChevronRight,
@@ -42,6 +44,7 @@ import {
   AccordionTrigger,
 } from '../graph-workspace/GraphAccordion';
 import { Badge } from '../graph-ui/Badge';
+import { WorkbenchContext } from '../WorkbenchContext';
 
 interface ContextCompactionHistoryItem extends ThreadHistoryItemDto {
   kind: 'contextCompaction';
@@ -1225,6 +1228,7 @@ export const GraphChatCommandGroupItem = memo(
     onOpen: (item: CommandHistoryItem, title: string) => void;
     timeMeta?: ReactNode;
   }) {
+    const workbench = useContext(WorkbenchContext);
     const runningCount = items.filter((item) =>
       isRunningHistoryStatus(item.status),
     ).length;
@@ -1260,6 +1264,21 @@ export const GraphChatCommandGroupItem = memo(
       >
         {items.map((item, index) => {
           const summary = summarizeInlinePreviewText(item.text);
+          const status = graphHistoryStatusConfig(item.status);
+          if (workbench) return (
+            <button key={item.id} type="button"
+              aria-label={`Open grouped command ${index + 1}`}
+              onClick={() => onOpen(item, `Command Output ${index + 1}`)}
+              className="matter-command-step" title={summary.firstLine}>
+              <span className="matter-step-number" aria-label={`Step ${index + 1}`}>{String(index + 1).padStart(2, '0')}</span>
+              <span className="matter-step-title">{summary.firstLine}</span>
+              <span className={`matter-step-status ${status.className}`} role="img" aria-label={status.label} title={status.label}>
+                {status.className === 'is-completed' ? <Check size={13} /> : status.icon}
+              </span>
+              {item.createdAt && <time className="matter-step-time" dateTime={item.createdAt} title={new Date(item.createdAt).toLocaleString()}>{new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</time>}
+              <ChevronRight className="matter-step-chevron" size={12} />
+            </button>
+          );
           return (
             <button
               key={item.id}

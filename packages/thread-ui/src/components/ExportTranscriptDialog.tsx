@@ -43,6 +43,7 @@ interface ShareState {
 }
 
 export interface ThreadActionsDialogProps {
+  appearance?: 'default' | 'matter';
   open: boolean;
   busy?: boolean;
   turnsState: ExportTurnsState;
@@ -134,6 +135,7 @@ function shareWorkspaceAccessLabel(access: RelayWorkspaceAccess | undefined) {
 }
 
 export function ThreadActionsDialog({
+  appearance = 'default',
   open,
   busy = false,
   turnsState,
@@ -310,10 +312,13 @@ export function ThreadActionsDialog({
     ...(linkContent ? [{mode: 'link' as const, label: 'Share as link'}] : []),
     { mode: 'html', label: 'HTML' },
   ];
+  const matter = appearance === 'matter';
+  const title = actionMode === 'link' ? 'Share read-only link' : actionMode === 'share' ? 'Sharing permissions' : 'Download HTML';
+  const description = actionMode === 'link' ? 'A snapshot of this conversation, ready to share.' : actionMode === 'share' ? 'Choose who can view or collaborate on this thread.' : 'Save a readable copy of your conversation.';
 
   return createPortal(
     <div
-      className={`thread-export-dialog-root thread-ui-theme-${effectiveTheme} fixed inset-0 z-[96] flex items-end justify-center p-0 sm:items-center sm:p-6`}
+      className={`thread-export-dialog-root ${matter ? 'matter-actions-dialog' : ''} thread-ui-theme-${effectiveTheme} fixed inset-0 z-[96] flex items-end justify-center p-0 sm:items-center sm:p-6`}
       data-theme-effective={effectiveTheme}
     >
       <button
@@ -331,9 +336,9 @@ export function ThreadActionsDialog({
       >
         <div className="thread-export-dialog-header flex items-start justify-between gap-3 border-b px-5 py-4">
           <div className="min-w-0">
-            <p className="thread-export-dialog-title text-sm font-semibold">Share & export</p>
+            <p className="thread-export-dialog-title text-sm font-semibold">{matter ? title : 'Share & export'}</p>
             <p className="thread-export-dialog-subtitle mt-1 text-xs">
-              Manage access or save a copy.
+              {matter ? description : 'Manage access or save a copy.'}
             </p>
           </div>
           <button
@@ -350,7 +355,7 @@ export function ThreadActionsDialog({
         </div>
 
         <div className="min-h-0 flex-1 overflow-auto px-5 py-4">
-          <div className="thread-export-dialog-segment inline-flex rounded-full border p-1">
+          {!matter && <div className="thread-export-dialog-segment inline-flex rounded-full border p-1">
             {actionTabs.map((tab) => (
               <button
                 key={tab.mode}
@@ -365,9 +370,11 @@ export function ThreadActionsDialog({
                 {tab.mode === 'share' ? <Users size={16}/> : tab.mode === 'link' ? <Link2 size={16}/> : <FileCode size={16}/>}<span>{tab.label}</span>
               </button>
             ))}
-          </div>
+          </div>}
 
-          {actionMode === 'link' ? linkContent : actionMode === 'share' ? (
+          {actionMode === 'link' ? linkContent : actionMode === 'share' && matter && !shareAvailable ? (
+            <p className="matter-sharing-unavailable" role="status"><Users size={20} />{shareUnavailableMessage}</p>
+          ) : actionMode === 'share' ? (
             <form id="thread-actions-share-form" className="mt-4 space-y-4" onSubmit={handleShare}>
               <div className="thread-export-dialog-box rounded-2xl border">
                 <div className="thread-export-dialog-box-header flex items-center justify-between border-b px-3 py-2.5">
@@ -578,7 +585,7 @@ export function ThreadActionsDialog({
                 </div>
               ) : null}
 
-              <div className="thread-export-dialog-body-text mt-4 grid gap-2 text-sm sm:grid-cols-2">
+              <div className={`thread-export-dialog-body-text mt-4 ${matter ? 'matter-export-options' : 'grid gap-2 text-sm sm:grid-cols-2'}`}>
                 <label className="thread-export-dialog-box flex items-center gap-2 rounded-xl border px-3 py-2">
                   <input
                     type="checkbox"
@@ -601,7 +608,7 @@ export function ThreadActionsDialog({
             {actionMode === 'link' ? 'Read-only · No login required' : actionMode === 'share'
               ? shareAvailable
                 ? 'Only invited members can access this thread.'
-                : 'Share permissions are not wired yet.'
+                : 'Sharing is unavailable in this connection.'
               : `${selectedCount} ${selectedCount === 1 ? 'turn' : 'turns'} selected.`}
           </p>
           <div className="flex items-center gap-2">
@@ -611,14 +618,14 @@ export function ThreadActionsDialog({
               disabled={busy}
               className="thread-export-dialog-secondary-button rounded-full border px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Cancel
+              {matter ? 'Close' : 'Cancel'}
             </button>
-            {actionMode === 'link' ? null : actionMode === 'share' ? (
+            {actionMode === 'link' || (matter && actionMode === 'share' && !shareAvailable) ? null : actionMode === 'share' ? (
               <button
                 type="submit"
                 form="thread-actions-share-form"
                 disabled={!canShare}
-                className="ui-status-warning rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
+                className={`${matter ? 'matter-dialog-primary' : 'ui-status-warning'} rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60`}
               >
                 {busy ? 'Saving...' : editingShare ? 'Save permissions' : 'Share this thread'}
               </button>
@@ -627,7 +634,7 @@ export function ThreadActionsDialog({
                 type="button"
                 onClick={handleExport}
                 disabled={!canExport}
-                className="ui-status-warning rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60"
+                className={`${matter ? 'matter-dialog-primary' : 'ui-status-warning'} rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60`}
               >
                 {busy ? 'Exporting...' : `Export ${actionMode.toUpperCase()}`}
               </button>
