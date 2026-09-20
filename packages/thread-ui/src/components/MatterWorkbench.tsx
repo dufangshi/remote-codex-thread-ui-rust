@@ -56,6 +56,7 @@ export interface MatterWorkbenchOptions {
   notifications: WorkbenchNotification[];
   unreadCount: number;
   onReadNotifications: () => void;
+  renderThreadMenu?: (thread: WorkbenchThread) => ReactNode;
 }
 
 export function MatterWorkbench({
@@ -145,8 +146,8 @@ export function MatterWorkbench({
     o.onNavigate(href);
   };
   const renderThread = (thread: WorkbenchThread) => (
+    <div key={thread.key} className="matter-thread-entry">
     <a
-      key={thread.key}
       href={thread.href}
       onClick={(e) => {
         e.preventDefault();
@@ -167,6 +168,8 @@ export function MatterWorkbench({
         <small>{thread.subtitle}</small>
       </span>
     </a>
+    {o.renderThreadMenu?.(thread)}
+    </div>
   );
   return (
     <div

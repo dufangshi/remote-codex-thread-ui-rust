@@ -146,6 +146,7 @@ interface MatterWorkbenchOptions {
     notifications: WorkbenchNotification[];
     unreadCount: number;
     onReadNotifications: () => void;
+    renderThreadMenu?: (thread: WorkbenchThread) => ReactNode;
 }
 
 type ThemeMode = 'system' | 'light' | 'dark';

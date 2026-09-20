@@ -18,6 +18,7 @@ import {
   Plus,
   Rows3,
   Settings,
+  Star,
   Sun,
   Trash2,
   X,
@@ -1092,6 +1093,7 @@ export function ThreadWorkspaceLayout({
         threadMenu={<details className="matter-thread-menu">
           <summary aria-label="Thread actions" title="Thread actions"><MoreHorizontal size={16} /></summary>
           <div>
+            <button disabled={workbench.favoriteBusy} onClick={event => { workbench.onToggleFavorite(); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Star size={14} fill={workbench.favorite ? 'currentColor' : 'none'} />{workbench.favorite ? 'Unstar thread' : 'Star thread'}</button>
             {onRenameThread && <button onClick={event => { const thread = threads.find(t => t.id === currentThreadId); if (thread) beginRenameThread(thread); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Pencil size={14} />Rename thread</button>}
             <button disabled={!currentThreadId} onClick={() => currentThreadId && void copySessionValue(currentThreadId, 'Remote Codex session ID')}><Copy size={14} />Copy Remote Codex session ID</button>
             <button disabled={!workbench.harnessSessionId} title={workbench.harnessSessionId ?? 'The harness has not assigned a session ID yet.'} onClick={() => workbench.harnessSessionId && void copySessionValue(workbench.harnessSessionId, 'Harness session ID')}><Copy size={14} />Copy harness session ID</button>
