@@ -194,7 +194,7 @@
   --export-fg: #121416;
   --export-fg-soft: #5b6269;
   --export-fg-muted: #5d6972;
-  --export-accent: #008b53;
+  --export-accent: #007a49;
   --export-accent-bg: #e5f8f0;
   --export-accent-border: #bee9d8;
   --theme-bg: var(--export-panel);
@@ -209,7 +209,7 @@
   --export-border: #263038;
   --export-fg: #f4f7f6;
   --export-fg-soft: #a7b0b7;
-  --export-fg-muted: #8d99a2;
+  --export-fg-muted: #a7b3bc;
   --export-accent: #00cc76;
   --export-accent-bg: #102b23;
   --export-accent-border: #215240;
@@ -242,6 +242,8 @@
 .matter-actions-dialog .thread-public-link-create { background: var(--export-accent); border-color: var(--export-accent); color: #fdfdfd; }
 .matter-actions-dialog[data-theme-effective='dark'] .thread-public-link-create { color: #082016; }
 .matter-actions-dialog .thread-public-link-create:hover:not(:disabled) { background: var(--export-accent); filter: brightness(.95); color: #fdfdfd; }
+.matter-actions-dialog[data-theme-effective='dark'] .thread-public-link-create:hover:not(:disabled) { color: #082016; }
+.matter-actions-dialog .thread-public-link-create:disabled { background: var(--export-surface-strong); color: var(--export-fg-soft); border-color: var(--export-border); opacity: 1; }
 @media (max-width: 639px) {
   .matter-actions-dialog .thread-export-dialog-panel { max-width: none; border-radius: 14px 14px 0 0; }
   .matter-actions-dialog .thread-export-dialog-footer { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
