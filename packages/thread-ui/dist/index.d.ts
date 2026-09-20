@@ -166,6 +166,8 @@ interface AppShellNavContextValue {
     setDefaultBackend: (backend: AgentBackendId) => void;
     autoCollapseCompletedTurns?: boolean;
     setAutoCollapseCompletedTurns?: (enabled: boolean) => void;
+    showReasoningSummaries?: boolean;
+    setShowReasoningSummaries?: (enabled: boolean) => void;
 }
 declare const AppShellNavContext: react.Context<AppShellNavContextValue | null>;
 declare function useAppShellNav(): AppShellNavContextValue | null;
@@ -438,9 +440,10 @@ interface LongTextDialogProps {
     open: boolean;
     title: string;
     text: string;
+    kind?: string | undefined;
     onClose: () => void;
 }
-declare function LongTextDialog({ open, title, text, onClose, }: LongTextDialogProps): react.ReactPortal | null;
+declare function LongTextDialog({ open, title, text, kind, onClose, }: LongTextDialogProps): react.ReactPortal | null;
 
 declare function formatShortTimestamp(value: string | null): string;
 declare function formatLongTimestamp(value: string | null): string;

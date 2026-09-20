@@ -796,7 +796,8 @@
 }
 .thread-ui-shell .matter-workbench .thread-graph-history-group-list {
   margin-top: 2px;
-  padding: 0 0 0 4px;
+  padding: 0;
+  margin-left: -28px;
   border-top: 0;
   border-left: 0;
   border-radius: 0;
@@ -810,7 +811,7 @@
   box-shadow: none;
 }
 .thread-ui-shell .matter-workbench .thread-graph-history-detail-row::before {
-  content: '';
+  content: none;
   position: absolute;
   top: 17px;
   left: -18px;
@@ -906,6 +907,25 @@
 .matter-step-status.is-pending { color: #418ad4; }
 .matter-step-time { flex-shrink: 0; font-size: 10px; font-variant-numeric: tabular-nums; color: var(--theme-fg-muted); }
 .matter-step-chevron { flex-shrink: 0; color: var(--theme-fg-muted); opacity: 0; }
+.thread-diff { font: 12px/1.7 ui-monospace, monospace; min-width: max-content; }
+.thread-diff-line { display: flex; min-height: 1.7em; padding-right: 12px; }
+.thread-diff-number { width: 4ch; text-align: right; margin-right: 1ch; color: var(--theme-fg-muted); user-select: none; }
+.thread-diff-sign { width: 2ch; flex-shrink: 0; }
+.thread-diff-line.is-add { background: light-dark(oklch(91% .045 150), oklch(29% .05 150)); }
+.thread-diff-line.is-remove { background: light-dark(oklch(91% .04 25), oklch(29% .05 25)); }
+.thread-diff-line.is-add .thread-diff-sign { color: light-dark(oklch(40% .12 150), oklch(77% .14 150)); }
+.thread-diff-line.is-remove .thread-diff-sign { color: light-dark(oklch(43% .16 25), oklch(77% .12 25)); }
+.thread-diff-line.is-meta { color: var(--theme-fg-muted); }
+.thread-history-direct-row { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 0; font-size: 12px; color: var(--theme-fg-soft); }
+.thread-history-direct-action { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; text-align: left; border-radius: 6px; padding: 4px 2px; }
+.thread-history-direct-action:hover { background: var(--theme-hover); }
+.thread-history-direct-action:focus-visible { outline: 2px solid var(--theme-accent-border); }
+.thread-history-direct-action .thread-graph-history-tool-icon { display: flex; flex-shrink: 0; width: 18px; }
+.thread-history-direct-preview { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-history-direct-preview.is-path { direction: rtl; text-align: left; }
+.thread-history-direct-preview.is-expanded { direction: ltr; white-space: pre-wrap; overflow-wrap: anywhere; }
+.thread-ui-shell .matter-workbench .thread-graph-history-group-icon { margin-top: 0; }
+.thread-ui-shell .matter-workbench .thread-graph-history-group-verb { font-weight: 500; }
 .matter-command-step:is(:hover, :focus-visible) .matter-step-chevron { opacity: 1; }
 @media (max-width: 1000px) and (min-width: 640px) {
   .thread-ui-shell .matter-workbench {
@@ -927,11 +947,11 @@
 @media (max-width: 639px) {
   .thread-ui-shell .matter-workbench,
   .thread-ui-shell .matter-workbench.is-sidebar-hidden {
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: calc(44px + env(safe-area-inset-top)) minmax(0, 1fr);
   }
   .matter-topbar {
-    grid-column: 2;
+    grid-column: 1;
     padding: env(safe-area-inset-top) 4px 0;
     gap: 0;
   }
@@ -953,13 +973,13 @@
     padding-top: env(safe-area-inset-top);
   }
   .matter-main {
-    grid-column: 2;
+    grid-column: 1;
   }
   .thread-ui-shell .matter-workbench .matter-sidebar {
     position: fixed;
     top: 44px;
     bottom: 0;
-    left: 40px;
+    left: 0;
     width: min(270px, calc(100vw - 56px));
     z-index: 65;
     visibility: hidden;
@@ -977,7 +997,7 @@
   .matter-sidebar-scrim {
     display: block;
     position: fixed;
-    inset: 44px 0 0 40px;
+    inset: 44px 0 0 0;
     background: rgb(0 0 0 / 25%);
     z-index: 64;
   }

@@ -194,7 +194,7 @@ export function MatterWorkbench({
         }
       }}
     >
-      <nav className="matter-rail" aria-label="Workspace tools">
+      {!mobile && <nav className="matter-rail" aria-label="Workspace tools">
         <a
           className="matter-brand"
           href={homeHref}
@@ -219,7 +219,7 @@ export function MatterWorkbench({
           </button>
         )}
         <div className="matter-rail-bottom">{settings}</div>
-      </nav>
+      </nav>}
       <header className="matter-topbar">
         <button
           aria-label="Toggle shortcuts sidebar"
@@ -251,6 +251,11 @@ export function MatterWorkbench({
           <span>Search conversation</span>
         </button>
         <div className="matter-topbar-end">
+          {mobile && <>
+            <button aria-label="Chat" aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
+            {o.terminalEnabled && <button aria-label="Terminal" aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
+            {settings}
+          </>}
           <div className="matter-connection">{connection}</div>
           <button
             aria-label="Notifications"
