@@ -10,6 +10,7 @@ import {
   PanelLeft,
   PanelRight,
   Search,
+  SlidersHorizontal,
   Star,
   Terminal,
   X,
@@ -42,6 +43,7 @@ export interface MatterWorkbenchOptions {
   harnessSessionId?: string | null;
   harnessSessionUrl?: string | null;
   threads: WorkbenchThread[];
+  workspaceThreads?: WorkbenchThread[];
   currentKey: string;
   favorite: boolean;
   favoriteBusy?: boolean;
@@ -84,29 +86,11 @@ export function MatterWorkbench({
   revealExplorer: number;
   children: ReactNode;
 }) {
-  const [tabKeys, setTabKeys] = useState<string[]>(() => {
-    try {
-      const keys: unknown = JSON.parse(sessionStorage.getItem('remote-codex.workbench-tabs.v1') ?? '[]');
-      return Array.isArray(keys) ? keys.filter((key): key is string => typeof key === 'string').slice(0, 8) : [];
-    } catch { return []; }
-  });
+  const tabs = o.workspaceThreads ?? o.threads.filter(thread => thread.key === o.currentKey);
+  const tabsRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    if (o.navigationReady === false) return;
-    setTabKeys(previous => {
-      // Preserve open-tab order across visits, polling and reloads. New tabs append.
-      let next = previous.filter(key => o.threads.some(thread => thread.key === key));
-      for (const thread of o.threads) {
-        if (next.length < 8 && !next.includes(thread.key)) next.push(thread.key);
-      }
-      if (o.currentKey && o.threads.some(t => t.key === o.currentKey) && !next.includes(o.currentKey)) {
-        next = [...next.slice(-7), o.currentKey];
-      }
-      if (next.join('\n') === previous.join('\n')) return previous;
-      try { sessionStorage.setItem('remote-codex.workbench-tabs.v1', JSON.stringify(next)); } catch { /* Storage is optional. */ }
-      return next;
-    });
-  }, [o.threads, o.currentKey, o.navigationReady]);
-  const tabs = tabKeys.map(key => o.threads.find(thread => thread.key === key)).filter((thread): thread is WorkbenchThread => Boolean(thread));
+    tabsRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [o.currentKey, tabs.length]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const [mobile, setMobile] = useState(
@@ -123,6 +107,7 @@ export function MatterWorkbench({
   const [shortcutsOpen, setShortcutsOpen] = useState(true);
   const [recentsOpen, setRecentsOpen] = useState(true);
   const [bellOpen, setBellOpen] = useState(false);
+  const [toolbarOpen, setToolbarOpen] = useState(false);
   const [explorerOpen, setExplorerOpen] = useState(false);
   const [explorerWidth, setExplorerWidth] = useState(() => {
     try { return Math.max(260, Math.min(800, Number(localStorage.getItem('remote-codex.explorer-width')) || 360)); } catch { return 360; }
@@ -336,7 +321,8 @@ export function MatterWorkbench({
         </div>
       </aside>
       <main className="matter-main">
-        <nav className="matter-thread-tabs" aria-label="Open threads">
+        <div className="matter-tabs-row">
+        <nav ref={tabsRef} className="matter-thread-tabs" aria-label="Workspace threads">
           {tabs.map((t) => (
             <a
               key={t.key}
@@ -354,7 +340,9 @@ export function MatterWorkbench({
           ))}
           {newThread}
         </nav>
-        <div className="matter-breadcrumb">
+        <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>
+        </div>
+        {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">
           <WorkbenchPath path={o.workspacePath} />
           <ChevronRight />
           <span className="matter-current-title" title={title}>
@@ -379,7 +367,7 @@ export function MatterWorkbench({
               <PanelRight />
             </button>
           </div>
-        </div>
+        </div>}
         <div ref={contentRef} style={{ '--explorer-width': `${explorerWidth}px` } as CSSProperties} className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
           <div className="matter-chat">
             <WorkbenchContext.Provider value={true}>

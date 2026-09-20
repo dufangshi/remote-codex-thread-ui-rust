@@ -132,6 +132,7 @@ interface MatterWorkbenchOptions {
     harnessSessionId?: string | null;
     harnessSessionUrl?: string | null;
     threads: WorkbenchThread[];
+    workspaceThreads?: WorkbenchThread[];
     currentKey: string;
     favorite: boolean;
     favoriteBusy?: boolean;
