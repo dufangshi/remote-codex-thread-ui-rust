@@ -186,11 +186,11 @@
 
 /* Portaled action dialogs use the same tokens as the Matter workbench. */
 .thread-export-dialog-root.matter-actions-dialog {
-  --export-bg: #e8eef0;
-  --export-panel: #f7f8f6;
-  --export-surface: #f5f7f8;
-  --export-surface-strong: #e9eef0;
-  --export-border: #e1e5e8;
+  --export-bg: oklch(0.915 0.007 145);
+  --export-panel: oklch(0.946 0.006 145);
+  --export-surface: oklch(0.929 0.006 145);
+  --export-surface-strong: oklch(0.875 0.008 145);
+  --export-border: oklch(0.83 0.008 145);
   --export-fg: #121416;
   --export-fg-soft: #5b6269;
   --export-fg-muted: #5d6972;
@@ -244,6 +244,22 @@
 .matter-actions-dialog .thread-public-link-create:hover:not(:disabled) { background: var(--export-accent); filter: brightness(.95); color: #fdfdfd; }
 .matter-actions-dialog[data-theme-effective='dark'] .thread-public-link-create:hover:not(:disabled) { color: #082016; }
 .matter-actions-dialog .thread-public-link-create:disabled { background: var(--export-surface-strong); color: var(--export-fg-soft); border-color: var(--export-border); opacity: 1; }
+.thread-public-link-options { min-width: 0; border: 0; padding: 0; margin: 0; color: var(--export-fg); }
+.thread-public-link-options legend { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+.thread-public-link-scope { display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 13px; }
+.thread-public-link-scope label, .thread-public-link-turns > label, .thread-public-link-live { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.thread-public-link-options input { accent-color: var(--export-accent); margin: 3px 0 0; flex-shrink: 0; }
+.thread-public-link-turns { margin-top: 12px; max-height: 230px; overflow: auto; border-block: 1px solid var(--export-border); }
+.thread-public-link-selection { display: flex; justify-content: space-between; padding: 9px 0; font-size: 12px; color: var(--export-fg-soft); }
+.thread-public-link-selection button { color: var(--export-accent); }
+.thread-public-link-turns > label { padding: 9px 4px; border-radius: 6px; font-size: 12px; }
+.thread-public-link-turns > label:hover { background: var(--export-surface-strong); }
+.thread-public-link-turns > label > span { min-width: 0; }
+.thread-public-link-turns strong { font-weight: 500; }
+.thread-public-link-turns label span span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--export-fg-soft); margin-top: 3px; }
+.thread-public-link-live { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--export-border); font-size: 13px; }
+.thread-public-link-live strong { display: block; font-weight: 500; }
+.thread-public-link-live span span { display: block; margin-top: 5px; font-size: 12px; line-height: 1.6; color: var(--export-fg-soft); }
 @media (max-width: 639px) {
   .matter-actions-dialog .thread-export-dialog-panel { max-width: none; border-radius: 14px 14px 0 0; }
   .matter-actions-dialog .thread-export-dialog-footer { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
