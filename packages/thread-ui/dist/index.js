@@ -1618,10 +1618,12 @@ function ComposerMenuSurface({
       '[data-composer-menu-trigger="true"]'
     );
     if (!menu || !trigger) return;
-    if (typeof menu.showPopover === "function") {
+    const topLayer = typeof menu.showPopover === "function";
+    if (topLayer) {
       menu.showPopover();
     } else {
       menu.removeAttribute("popover");
+      menu.style.position = "absolute";
     }
     const updatePosition = () => {
       const viewport = window.visualViewport;
@@ -1642,8 +1644,10 @@ function ComposerMenuSurface({
       const bounds = menu.getBoundingClientRect();
       const preferredLeft = align === "end" ? anchor.right - bounds.width : anchor.left;
       const preferredTop = openAbove ? anchor.top - gutter - bounds.height : anchor.bottom + gutter;
-      menu.style.left = `${Math.max(left, Math.min(preferredLeft, right - bounds.width))}px`;
-      menu.style.top = `${Math.max(top, Math.min(preferredTop, bottom - bounds.height))}px`;
+      const parent = !topLayer ? menu.offsetParent : null;
+      const origin = parent?.getBoundingClientRect();
+      menu.style.left = `${Math.max(left, Math.min(preferredLeft, right - bounds.width)) - (origin?.left ?? 0) - (parent?.clientLeft ?? 0) + (parent?.scrollLeft ?? 0)}px`;
+      menu.style.top = `${Math.max(top, Math.min(preferredTop, bottom - bounds.height)) - (origin?.top ?? 0) - (parent?.clientTop ?? 0) + (parent?.scrollTop ?? 0)}px`;
     };
     let frame = 0;
     const schedulePosition = () => {
