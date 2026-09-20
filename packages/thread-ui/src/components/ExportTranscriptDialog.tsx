@@ -319,7 +319,7 @@ export function ThreadActionsDialog({
   ];
   const matter = appearance === 'matter';
   const title = actionMode === 'link' ? 'Share read-only link' : actionMode === 'share' ? 'Sharing permissions' : 'Download HTML';
-  const description = actionMode === 'link' ? 'A snapshot of this conversation, ready to share.' : actionMode === 'share' ? 'Choose who can view or collaborate on this thread.' : 'Save a readable copy of your conversation.';
+  const description = actionMode === 'link' ? 'Choose what to share and whether it stays up to date.' : actionMode === 'share' ? 'Choose who can view or collaborate on this thread.' : 'Save a readable copy of your conversation.';
 
   return createPortal(
     <div

@@ -582,6 +582,9 @@ interface PublicTranscriptSnapshot {
     turns: PublicTranscriptTurn[];
     theme?: 'light' | 'dark';
     images?: Record<string, string>;
+    live?: boolean;
+    stale?: boolean;
+    updatedAt?: string;
 }
 declare function transcriptSnapshot(title: string, turns: ThreadTurnDto[], theme: 'light' | 'dark'): PublicTranscriptSnapshot;
 declare function PublicTranscript({ snapshot }: {
