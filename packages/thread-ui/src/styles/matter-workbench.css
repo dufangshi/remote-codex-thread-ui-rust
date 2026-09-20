@@ -409,11 +409,16 @@
   background: transparent;
 }
 .matter-status-dot[data-status='running'] {
-  width: 9px;
-  height: 9px;
-  border-color: #418ad4;
+  width: 12px;
+  height: 12px;
+  border-width: 2.5px;
+  border-color: oklch(0.48 0.19 255);
   border-top-color: transparent;
   animation: matter-running 1s linear infinite;
+}
+.thread-ui-shell[data-theme-effective='dark'] .matter-status-dot[data-status='running'] {
+  border-color: oklch(0.8 0.12 245);
+  border-top-color: transparent;
 }
 .matter-status-dot[data-status='unread'] {
   background: var(--theme-accent-solid);
@@ -443,13 +448,32 @@
   flex-direction: column;
   background: var(--theme-bg);
 }
+.matter-tabs-row {
+  display: flex;
+  min-width: 0;
+  flex-shrink: 0;
+  background: var(--theme-surface);
+  border-bottom: 1px solid var(--theme-border);
+}
+.matter-toolbar-toggle {
+  flex-shrink: 0;
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--theme-fg-soft);
+  border-left: 1px solid var(--theme-border);
+}
+.matter-toolbar-toggle svg { width: 16px; height: 16px; }
+.matter-toolbar-toggle:active { background: var(--theme-hover); }
 .matter-thread-tabs {
+  flex: 1;
+  min-width: 0;
   height: 34px;
   flex-shrink: 0;
   display: flex;
   align-items: stretch;
   overflow-x: auto;
-  border-bottom: 1px solid var(--theme-border);
   background: var(--theme-surface);
   scrollbar-width: thin;
 }
@@ -458,9 +482,9 @@
   align-items: center;
   flex-shrink: 0;
   gap: 9px;
-  min-width: 130px;
-  max-width: 230px;
-  padding: 0 17px;
+  min-width: 76px;
+  max-width: 180px;
+  padding: 0 10px;
   border-right: 1px solid var(--theme-border);
   font-size: 12px;
   color: var(--theme-fg-soft);
@@ -514,6 +538,16 @@
 }
 .matter-breadcrumb button[aria-pressed='true'] {
   color: var(--theme-accent-strong);
+}
+/* Touch browsers keep :hover after a tap. Only show pressed feedback there. */
+@media (hover: none) {
+  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):not(:active) {
+    background: transparent;
+    box-shadow: none;
+  }
+  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):active {
+    background: var(--theme-hover);
+  }
 }
 .matter-thread-actions {
   display: flex;
@@ -674,7 +708,7 @@
   gap: 2px;
   border: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--theme-panel) 78%, transparent);
+  background: color-mix(in srgb, var(--theme-panel) 48%, transparent);
   color: var(--theme-fg-soft);
   backdrop-filter: blur(18px) saturate(130%);
   -webkit-backdrop-filter: blur(18px) saturate(130%);
@@ -1005,9 +1039,9 @@
     height: 36px;
   }
   .matter-thread-tabs > a {
-    min-width: 110px;
-    max-width: 200px;
-    padding: 0 12px;
+    min-width: 64px;
+    max-width: 140px;
+    padding: 0 8px;
   }
   .matter-breadcrumb {
     height: 42px;
@@ -1040,6 +1074,25 @@
   }
   .thread-ui-shell .matter-workbench .thread-graph-composer-layer {
     padding: 0 9px;
+  }
+  .thread-ui-shell .matter-workbench .thread-graph-composer-form {
+    padding-top: 0 !important;
+  }
+  .thread-ui-shell .matter-workbench .thread-jump-latest-badge {
+    height: 18px;
+    min-width: 72px;
+    padding: 1.8px;
+    gap: 1.2px;
+    bottom: 1px;
+    background: color-mix(in srgb, var(--theme-panel) 36%, transparent);
+    box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 2px 8px rgb(18 32 25 / 12%);
+  }
+  .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {
+    width: 24px;
+  }
+  .thread-ui-shell .matter-workbench .thread-jump-latest-badge svg {
+    width: 8.4px;
+    height: 8.4px;
   }
   .thread-ui-shell .matter-workbench .thread-graph-message-list {
     padding-inline: 9px;
