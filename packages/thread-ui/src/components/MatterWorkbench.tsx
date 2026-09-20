@@ -39,6 +39,7 @@ export interface WorkbenchNotification {
   summary?: string;
 }
 export interface MatterWorkbenchOptions {
+  emptyWorkspace?: boolean;
   navigationReady?: boolean;
   harnessSessionId?: string | null;
   harnessSessionUrl?: string | null;
@@ -230,6 +231,7 @@ export function MatterWorkbench({
         <button
           className="matter-search-trigger"
           aria-label="Search conversation"
+          disabled={o.emptyWorkspace}
           onClick={o.onSearch}
         >
           <Search />
@@ -340,7 +342,7 @@ export function MatterWorkbench({
           ))}
           {newThread}
         </nav>
-        <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>
+        {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>}
         </div>
         {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">
           <WorkbenchPath path={o.workspacePath} />
