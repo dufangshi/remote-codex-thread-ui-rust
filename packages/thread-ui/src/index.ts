@@ -97,6 +97,7 @@ export {
   type AppShellSettingsDialogProps,
 } from './app-shell/AppShellNavigation';
 export type { MatterWorkbenchOptions, WorkbenchThread, WorkbenchNotification } from './components/MatterWorkbench';
+export { MatterWorkbench } from './components/MatterWorkbench';
 export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } from './components/PublicTranscript';
 
 export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./components/graph-ui/Dialog";

@@ -6325,6 +6325,7 @@ ${thread.subtitle} \xB7 ${statusLabels[thread.status] ?? thread.status}`,
             {
               className: "matter-search-trigger",
               "aria-label": "Search conversation",
+              disabled: o.emptyWorkspace,
               onClick: o.onSearch,
               children: [
                 /* @__PURE__ */ jsx26(Search, {}),
@@ -6444,7 +6445,7 @@ ${thread.subtitle} \xB7 ${statusLabels[thread.status] ?? thread.status}`,
               )),
               newThread
             ] }),
-            /* @__PURE__ */ jsx26("button", { className: "matter-toolbar-toggle", "aria-label": "Thread tools", "aria-expanded": toolbarOpen, "aria-controls": "matter-thread-tools", onClick: () => setToolbarOpen((open) => !open), title: toolbarOpen ? "Hide thread tools" : "Show thread tools", children: /* @__PURE__ */ jsx26(SlidersHorizontal, {}) })
+            !o.emptyWorkspace && /* @__PURE__ */ jsx26("button", { className: "matter-toolbar-toggle", "aria-label": "Thread tools", "aria-expanded": toolbarOpen, "aria-controls": "matter-thread-tools", onClick: () => setToolbarOpen((open) => !open), title: toolbarOpen ? "Hide thread tools" : "Show thread tools", children: /* @__PURE__ */ jsx26(SlidersHorizontal, {}) })
           ] }),
           toolbarOpen && /* @__PURE__ */ jsxs21("div", { className: "matter-breadcrumb", id: "matter-thread-tools", children: [
             /* @__PURE__ */ jsx26(WorkbenchPath, { path: o.workspacePath }),
@@ -19696,6 +19697,7 @@ export {
   DialogTitle,
   ExportTranscriptDialog,
   LongTextDialog,
+  MatterWorkbench,
   MemoizedThreadGraphWorkspacePanel,
   PluginContext,
   PluginProvider,
