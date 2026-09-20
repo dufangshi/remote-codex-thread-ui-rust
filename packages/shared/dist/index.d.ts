@@ -285,6 +285,7 @@ interface ThreadHistoryItemDto {
     previewText?: string;
     detailText?: string | null;
     hasDeferredDetail?: boolean | null;
+    updatedAt?: string | null;
     sequence?: number | null;
     transcriptOrder?: number | null;
     sourceTurnId?: string | null;

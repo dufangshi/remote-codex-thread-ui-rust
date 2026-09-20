@@ -1,8 +1,6 @@
 import {
   memo,
   useContext,
-  useLayoutEffect,
-  useRef,
   useState,
   type ReactNode,
   type RefObject,
@@ -15,7 +13,6 @@ import {
   ChevronDown,
   ChevronRight,
   ClipboardList,
-  ExternalLink,
   FilePenLine,
   FileText,
   Image as ImageIconLucide,
@@ -37,12 +34,6 @@ import {
   GraphChatMarkdownAwareBody,
 } from './GraphChatMessageBody';
 import { GraphChatHistoryGroupFrame } from './GraphChatHistoryGroupFrame';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../graph-workspace/GraphAccordion';
 import { Badge } from '../graph-ui/Badge';
 import { WorkbenchContext } from '../WorkbenchContext';
 
@@ -493,18 +484,7 @@ function GraphChatHistoryEventFrame({
 }
 
 function GraphChatHistoryToolFrame({
-  actionLabel = 'Open details',
-  actionTitle,
-  autoOpen = false,
-  className,
-  details,
-  icon,
-  item,
-  onOpen,
-  preview,
-  timeMeta,
-  title,
-  tone,
+  actionLabel = 'Open details', className, icon, item, onOpen, preview, timeMeta, title, tone,
 }: {
   actionLabel?: string;
   actionTitle: string;
@@ -519,108 +499,25 @@ function GraphChatHistoryToolFrame({
   title: string;
   tone: GraphHistoryToolTone;
 }) {
-  const statusConfig = graphHistoryStatusConfig(item.status);
-  const showStatus = Boolean(
-    item.status && statusConfig.className !== 'is-completed',
-  );
-  const [openItem, setOpenItem] = useState<string | undefined>(
-    autoOpen ? 'item-1' : undefined,
-  );
-  const previousAutoOpenRef = useRef(autoOpen);
-
-  useLayoutEffect(() => {
-    if (autoOpen) {
-      setOpenItem('item-1');
-    } else if (previousAutoOpenRef.current) {
-      setOpenItem(undefined);
-    }
-    previousAutoOpenRef.current = autoOpen;
-  }, [autoOpen, item.id]);
-
+  const status = graphHistoryStatusConfig(item.status);
+  const [pathExpanded, setPathExpanded] = useState(false);
+  const isRead = tone === 'fileRead';
   return (
-    <div
-      className={`thread-graph-event thread-graph-history-tool ${graphHistoryToneClassName(tone)} ${className ?? ''}`}
-    >
-      <Accordion
-        type="single"
-        collapsible
-        onValueChange={(value) => {
-          setOpenItem(value || undefined);
-        }}
-        className="thread-graph-tool-accordion thread-graph-history-tool-accordion w-full overflow-hidden rounded-lg border"
-        value={openItem ?? ''}
-      >
-        <AccordionItem value="item-1" className="border-0">
-          <AccordionTrigger
-            aria-label={`${openItem === 'item-1' ? 'Collapse' : 'Expand'} ${title} history item`}
-            className="thread-graph-tool-trigger thread-graph-history-tool-trigger px-4 py-3 hover:no-underline"
-          >
-            <div className="flex min-w-0 flex-1 items-center gap-2">
-              <span className="thread-graph-history-tool-icon shrink-0">
-                {icon}
-              </span>
-              <span className="thread-graph-history-tool-label shrink-0 text-sm font-medium">
-                {title}
-              </span>
-              <span className="thread-graph-history-tool-preview min-w-0 truncate text-sm">
-                {preview.firstLine}
-              </span>
-              {preview.showGap ? (
-                <span
-                  className="thread-graph-history-tool-preview-ellipsis"
-                  aria-hidden="true"
-                >
-                  ...
-                </span>
-              ) : null}
-              {showStatus ? (
-                <Badge
-                  variant="outline"
-                  className={`thread-graph-tool-badge ${statusConfig.className} rounded-full px-2 py-0.5 text-xs font-normal`}
-                  title={statusConfig.label}
-                  aria-label={`Status: ${statusConfig.label}`}
-                >
-                  {statusConfig.icon}
-                  <span className="thread-graph-status-label">
-                    {statusConfig.label}
-                  </span>
-                </Badge>
-              ) : null}
-            </div>
-            {timeMeta ? (
-              <span className="thread-graph-history-tool-time shrink-0">
-                {timeMeta}
-              </span>
-            ) : null}
-          </AccordionTrigger>
-
-          <AccordionContent className="thread-graph-tool-content thread-graph-history-tool-content px-4 pb-4 pt-1">
-            <section>
-              <h4>Summary</h4>
-              <div className="thread-graph-history-tool-summary">
-                <GraphChatLinkifiedPlainText text={preview.firstLine} />
-                {preview.showGap ? (
-                  <span className="thread-graph-history-tool-ellipsis">
-                    ...
-                  </span>
-                ) : null}
-              </div>
-            </section>
-
-            {details ? <section>{details}</section> : null}
-
-            <button
-              type="button"
-              aria-label={actionLabel}
-              onClick={onOpen}
-              className="thread-graph-history-tool-open inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm font-medium transition"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              {actionTitle}
-            </button>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+    <div className={`thread-graph-event thread-graph-history-tool ${graphHistoryToneClassName(tone)} ${className ?? ''}`}>
+      <div className="thread-history-direct-row">
+        <button type="button" aria-label={isRead ? 'Show full file path' : actionLabel}
+          aria-expanded={isRead ? pathExpanded : undefined}
+          onClick={isRead ? () => setPathExpanded(value => !value) : onOpen}
+          className="thread-history-direct-action">
+          <span className="thread-graph-history-tool-icon">{icon}</span>
+          <span className="thread-graph-history-tool-label">{title}</span>
+          <span title={preview.firstLine} className={`thread-history-direct-preview ${isRead ? 'is-path' : ''} ${pathExpanded ? 'is-expanded' : ''}`}>
+            {preview.firstLine}
+          </span>
+          <span className={`matter-step-status ${status.className}`} aria-label={status.label}>{status.icon}</span>
+        </button>
+        {timeMeta}
+      </div>
     </div>
   );
 }
@@ -1221,12 +1118,14 @@ export const GraphChatCommandGroupItem = memo(
     onToggleExpanded,
     onOpen,
     timeMeta,
+    renderItemTime,
   }: {
     items: CommandHistoryItem[];
     expanded: boolean;
     onToggleExpanded: () => void;
     onOpen: (item: CommandHistoryItem, title: string) => void;
     timeMeta?: ReactNode;
+    renderItemTime?: (timestamp: string | null | undefined) => ReactNode;
   }) {
     const workbench = useContext(WorkbenchContext);
     const runningCount = items.filter((item) =>
@@ -1263,7 +1162,7 @@ export const GraphChatCommandGroupItem = memo(
         toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} command entries`}
       >
         {items.map((item, index) => {
-          const summary = summarizeInlinePreviewText(item.text);
+          const summary = summarizeInlinePreviewText(item.previewText ?? item.text);
           const status = graphHistoryStatusConfig(item.status);
           if (workbench) return (
             <button key={item.id} type="button"
@@ -1275,7 +1174,7 @@ export const GraphChatCommandGroupItem = memo(
               <span className={`matter-step-status ${status.className}`} role="img" aria-label={status.label} title={status.label}>
                 {status.className === 'is-completed' ? <Check size={13} /> : status.icon}
               </span>
-              {item.createdAt && <time className="matter-step-time" dateTime={item.createdAt} title={new Date(item.createdAt).toLocaleString()}>{new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}</time>}
+              {renderItemTime?.(item.createdAt)}
               <ChevronRight className="matter-step-chevron" size={12} />
             </button>
           );
@@ -1571,44 +1470,9 @@ export const GraphChatFileReadGroupItem = memo(
         timeMeta={timeMeta}
         toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} file read entries`}
       >
-        {items.map((item, index) => {
-          const previewText =
-            item.previewText?.trim() || item.text || 'File read';
-          const summary = summarizeInlinePreviewText(previewText);
-          const detailText =
-            item.detailText?.trim() || item.text || 'File read';
-
-          return (
-            <button
-              key={item.id}
-              type="button"
-              aria-label={`Open grouped file read ${index + 1}`}
-              onClick={() => onOpen(`File Read ${index + 1}`, detailText)}
-              className="thread-graph-history-detail-row block w-full rounded-md border px-3 py-2 text-left transition"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-cyan-300/18 bg-cyan-300/[0.07] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-cyan-100">
-                  Read {index + 1}
-                </span>
-                {item.status && (
-                  <span className="thread-graph-history-detail-meta text-xs">
-                    {item.status}
-                  </span>
-                )}
-              </div>
-              <div className="mt-1 flex min-w-0 items-center gap-2 text-sm leading-6">
-                <p className="thread-graph-history-detail-text min-w-0 flex-1 overflow-hidden whitespace-nowrap text-clip">
-                  {summary.firstLine}
-                </p>
-                {summary.showGap ? (
-                  <span className="thread-graph-history-detail-meta shrink-0 text-[11px] font-medium tracking-[0.28em]">
-                    ...
-                  </span>
-                ) : null}
-              </div>
-            </button>
-          );
-        })}
+        {items.map((item) => (
+          <GraphChatFileReadItem key={item.id} item={item} onOpen={onOpen} />
+        ))}
       </GraphChatHistoryGroupFrame>
     );
   },
@@ -1621,12 +1485,14 @@ export const GraphChatFileChangeGroupItem = memo(
     onToggleExpanded,
     onOpen,
     timeMeta,
+    renderItemTime,
   }: {
     items: FileChangeHistoryItem[];
     expanded: boolean;
     onToggleExpanded: () => void;
-    onOpen: (title: string, text: string) => void;
+    onOpen: (item: FileChangeHistoryItem, title: string) => void;
     timeMeta?: ReactNode;
+    renderItemTime?: (timestamp: string | null | undefined) => ReactNode;
   }) {
     const changedFiles = items.reduce(
       (sum, item) => sum + (item.changedFiles ?? 0),
@@ -1686,8 +1552,6 @@ export const GraphChatFileChangeGroupItem = memo(
         }
       >
         {items.map((item, index) => {
-          const detailText =
-            item.detailText?.trim() || item.previewText?.trim() || item.text;
           const pathSummary =
             item.previewText?.trim() &&
             item.text.trim() !== item.previewText.trim()
@@ -1698,9 +1562,10 @@ export const GraphChatFileChangeGroupItem = memo(
               key={item.id}
               type="button"
               aria-label={`Open grouped file change ${index + 1}`}
-              onClick={() => onOpen(`File Change ${index + 1}`, detailText)}
-              className="thread-graph-history-detail-row block w-full rounded-md border px-3 py-2 text-left transition"
+              onClick={() => onOpen(item, `File Change ${index + 1}`)}
+              className="matter-command-step w-full text-left"
             >
+              <span className="matter-step-number">{String(index + 1).padStart(2, '0')}</span>
               <div className="flex min-w-0 items-center gap-2">
                 <span
                   className="thread-graph-history-detail-text min-w-0 flex-1 text-sm leading-6"
@@ -1721,6 +1586,8 @@ export const GraphChatFileChangeGroupItem = memo(
                   ) : null}
                 </span>
               </div>
+              <span className={`matter-step-status ${graphHistoryStatusConfig(item.status).className}`}>{graphHistoryStatusConfig(item.status).icon}</span>
+              {renderItemTime?.(item.createdAt)}
             </button>
           );
         })}
