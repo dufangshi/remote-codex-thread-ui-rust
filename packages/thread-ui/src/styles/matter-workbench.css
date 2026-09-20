@@ -449,6 +449,7 @@
   background: var(--theme-bg);
 }
 .matter-tabs-row {
+  position: relative;
   display: flex;
   min-width: 0;
   flex-shrink: 0;
@@ -474,6 +475,7 @@
   display: flex;
   align-items: stretch;
   overflow-x: auto;
+  overflow-y: hidden;
   background: var(--theme-surface);
   scrollbar-width: thin;
 }
@@ -508,6 +510,12 @@
   height: 16px;
 }
 .matter-breadcrumb {
+  position: absolute;
+  top: 100%;
+  inset-inline: 0;
+  z-index: 40;
+  background: var(--theme-surface);
+  box-shadow: 0 4px 12px #0002;
   display: flex;
   align-items: center;
   height: 40px;
@@ -1036,12 +1044,16 @@
     z-index: 64;
   }
   .matter-thread-tabs {
+    scrollbar-width: none;
     height: 36px;
   }
   .matter-thread-tabs > a {
     min-width: 64px;
     max-width: 140px;
     padding: 0 8px;
+  }
+  .matter-thread-tabs::-webkit-scrollbar {
+    display: none;
   }
   .matter-breadcrumb {
     height: 42px;
