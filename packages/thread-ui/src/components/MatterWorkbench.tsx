@@ -343,7 +343,6 @@ export function MatterWorkbench({
           {newThread}
         </nav>
         {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>}
-        </div>
         {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">
           <WorkbenchPath path={o.workspacePath} />
           <ChevronRight />
@@ -370,6 +369,7 @@ export function MatterWorkbench({
             </button>
           </div>
         </div>}
+        </div>
         <div ref={contentRef} style={{ '--explorer-width': `${explorerWidth}px` } as CSSProperties} className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
           <div className="matter-chat">
             <WorkbenchContext.Provider value={true}>
@@ -423,7 +423,7 @@ export function MatterWorkbench({
               </button>
             </div>
             {o.notifications.length ? (
-              o.notifications.map((n) => (
+              [...o.notifications].sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt)).slice(0, 10).map((n) => (
                 <a
                   key={n.id}
                   href={n.href}
