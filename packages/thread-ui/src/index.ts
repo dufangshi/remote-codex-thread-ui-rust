@@ -101,3 +101,4 @@ export { MatterWorkbench } from './components/MatterWorkbench';
 export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } from './components/PublicTranscript';
 
 export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./components/graph-ui/Dialog";
+export { SettingsPanels, type SettingsSection } from './components/SettingsPanels';

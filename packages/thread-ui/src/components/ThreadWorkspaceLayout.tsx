@@ -1,3 +1,4 @@
+import { SettingsPanels } from "./SettingsPanels";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -100,6 +101,7 @@ interface ThreadWorkspaceLayoutProps {
   metaContent?: ReactNode;
   settingsContent?: ReactNode;
   globalSettingsContent?: ReactNode;
+  settingsSections?: import("./SettingsPanels").SettingsSection[];
   appMenuButton?: ReactNode;
   appNavigationMenu?: ReactNode;
   workspaceReturnHref?: string;
@@ -428,6 +430,7 @@ export function ThreadWorkspaceLayout({
   metaContent,
   settingsContent,
   globalSettingsContent,
+  settingsSections,
   workspaceLabels = {},
   workspaceReturnHref,
   onWorkspaceReturn,
@@ -497,9 +500,7 @@ export function ThreadWorkspaceLayout({
   const [newThreadTitleDraft, setNewThreadTitleDraft] = useState("");
   const [creatingThread, setCreatingThread] = useState(false);
   const [topbarDetailsOpen, setTopbarDetailsOpen] = useState(false);
-  const [settingsTab, setSettingsTab] = useState<"session" | "global">(
-    "session",
-  );
+
   const [sessionCopyNotice, setSessionCopyNotice] = useState('');
   useEffect(() => setSessionCopyNotice(''), [currentThreadId]);
   async function copySessionValue(value: string, label: string) {
@@ -786,20 +787,16 @@ export function ThreadWorkspaceLayout({
       !settingsContent &&
       !metaContent &&
       !globalSettingsContent &&
+      !settingsSections?.length &&
       !canUpdateThemeMode
     ) {
       return null;
     }
 
-    const hasSessionSettings = Boolean(settingsContent || metaContent);
-    const hasGlobalSettings = Boolean(globalSettingsContent);
-    const showSettingsTabs = hasSessionSettings && hasGlobalSettings;
-    const activeSettingsTab =
-      settingsTab === "global" && hasGlobalSettings
-        ? "global"
-        : !hasSessionSettings && hasGlobalSettings
-          ? "global"
-          : "session";
+    const sections = [
+      ...(settingsContent || metaContent ? [{ id: "session", label: "Session", description: "Controls and details for this conversation.", content: <div className="space-y-5">{settingsContent}{metaContent && <details className="settings-detail"><summary>Session details</summary><div>{metaContent}</div></details>}</div> }] : []),
+      ...(settingsSections ?? (globalSettingsContent ? [{ id: "preferences", label: "Preferences", content: globalSettingsContent }] : [])),
+    ];
 
     return (
       <Dialog
@@ -830,10 +827,10 @@ export function ThreadWorkspaceLayout({
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
             <DialogDescription>
-              Manage this session and host-wide preferences.
+              Your workspace, connected device, and personal preferences.
             </DialogDescription>
           </DialogHeader>
-          {canUpdateThemeMode ? (
+          {canUpdateThemeMode && !settingsSections ? (
             <div className="thread-graph-settings-card rounded-lg border p-3">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
@@ -874,55 +871,7 @@ export function ThreadWorkspaceLayout({
               </div>
             </div>
           ) : null}
-          {showSettingsTabs ? (
-            <div className="thread-graph-settings-tabs grid grid-cols-2 gap-1 rounded-lg border p-1">
-              <button
-                type="button"
-                aria-pressed={activeSettingsTab === "session"}
-                onClick={() => setSettingsTab("session")}
-                className={`thread-graph-settings-tab-button rounded-md px-3 py-2 text-sm font-medium transition ${
-                  activeSettingsTab === "session" ? "is-active" : ""
-                }`}
-              >
-                Session
-              </button>
-              <button
-                type="button"
-                aria-pressed={activeSettingsTab === "global"}
-                onClick={() => setSettingsTab("global")}
-                className={`thread-graph-settings-tab-button rounded-md px-3 py-2 text-sm font-medium transition ${
-                  activeSettingsTab === "global" ? "is-active" : ""
-                }`}
-              >
-                Global
-              </button>
-            </div>
-          ) : null}
-          <div className="thread-graph-settings-body mt-2 min-h-0 pr-1 text-sm">
-            {activeSettingsTab === "session" ? (
-              <div className="grid gap-4">
-                {settingsContent ? (
-                  <div className="thread-graph-settings-card rounded-lg border p-3">
-                    {settingsContent}
-                  </div>
-                ) : null}
-                {metaContent ? (
-                  <div className="thread-graph-settings-card rounded-lg border p-3">
-                    {metaContent}
-                  </div>
-                ) : null}
-                {!hasSessionSettings ? (
-                  <div className="thread-graph-settings-card rounded-lg border p-3 text-[var(--theme-fg-muted)]">
-                    No session settings are available.
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <div className="thread-graph-settings-global-content">
-                {globalSettingsContent}
-              </div>
-            )}
-          </div>
+          <SettingsPanels sections={sections} initialId="preferences" />
         </DialogContent>
       </Dialog>
     );
