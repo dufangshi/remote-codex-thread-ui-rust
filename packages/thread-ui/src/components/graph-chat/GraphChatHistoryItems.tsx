@@ -1151,11 +1151,6 @@ export const GraphChatCommandGroupItem = memo(
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
-            {runningCount > 0 ? (
-              <span className="inline-flex items-center text-xs text-amber-100/90">
-                <RunningDots />
-              </span>
-            ) : null}
           </>
         }
         timeMeta={timeMeta}
