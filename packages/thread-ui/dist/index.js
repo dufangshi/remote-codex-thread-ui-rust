@@ -3020,9 +3020,10 @@ function ComposerSlashToolboxMenu({
             )
           ),
           availableToolboxItems.length === 0 && !planModeAvailable ? /* @__PURE__ */ jsx17("p", { className: "px-3 py-2 text-sm text-stone-400", children: "No backend tools are available for this thread." }) : null
-        ] }) : /* @__PURE__ */ jsxs15("div", { className: "max-h-80 overflow-auto", children: [
-          forkError && (slashPanelView === "fork" || slashPanelView === "forkTurns") ? /* @__PURE__ */ jsx17("p", { role: "alert", className: "m-2 rounded-xl border border-rose-500/35 bg-rose-500/10 px-3 py-3 text-sm text-rose-100/90", children: forkError }) : null,
-          slashPanelView === "goals" ? /* @__PURE__ */ jsx17(
+        ] }) : /* @__PURE__ */ jsxs15("div", { className: "flex min-h-0 max-h-80 flex-col", children: [
+          forkBusy && (slashPanelView === "fork" || slashPanelView === "forkTurns") ? /* @__PURE__ */ jsx17("p", { role: "status", className: "shrink-0 px-3 py-2 text-sm text-[var(--theme-fg-muted)]", children: "Creating fork\u2026 You will be taken to the new thread when it is ready." }) : null,
+          forkError && (slashPanelView === "fork" || slashPanelView === "forkTurns") ? /* @__PURE__ */ jsx17("p", { role: "alert", className: "m-2 shrink-0 rounded-xl border border-[var(--status-danger-border)] bg-[var(--status-danger-bg)] px-3 py-3 text-sm text-[var(--status-danger-fg)]", children: forkError }) : null,
+          /* @__PURE__ */ jsx17("div", { className: "min-h-0 overflow-auto", children: slashPanelView === "goals" ? /* @__PURE__ */ jsx17(
             ComposerGoalsPanel,
             {
               goalState,
@@ -3117,7 +3118,7 @@ function ComposerSlashToolboxMenu({
               onSaveHttpMcp,
               onSaveRawMcpBlock
             }
-          )
+          ) })
         ] })
       }
     )
