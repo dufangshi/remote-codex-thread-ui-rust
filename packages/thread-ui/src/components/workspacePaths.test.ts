@@ -23,3 +23,16 @@ it('normalizes browser Windows paths, URL encodings and UNC paths without captur
   for (const url of ['https://other.test/C:/file.png', '//other.test/a.png', 'javascript:alert(1)', '/api/files/raw']) expect(localFileHref(url, origin)).toBeNull();
   expect(localFileHref(`${origin}/C:/100%2525.png`, origin)).toBe('C:/100%25.png');
 });
+
+it('rejects scheme-obfuscated links that browsers would resolve as javascript:',async()=>{
+  const {localFileHref} = await import('./workspacePaths');
+  const origin = 'https://relay.example.com';
+  // Browsers strip ASCII control characters before resolving the scheme, so each of these
+  // navigates as javascript:. Returning non-null hands the raw URL back through
+  // urlTransform, bypassing react-markdown's defaultUrlTransform - its only guard.
+  for (const url of ['jav\tascript:alert(1)', 'jav\nascript:alert(1)', 'jav\rascript:alert(1)', '\u0001javascript:alert(1)', 'javascript:alert(1)'])
+    expect(localFileHref(url, origin)).toBeNull();
+  // Real workspace paths must still resolve.
+  expect(localFileHref('src/main.rs', origin)).toBe('src/main.rs');
+  expect(localFileHref('docs/readme.md#L12', origin)).toBe('docs/readme.md#L12');
+});

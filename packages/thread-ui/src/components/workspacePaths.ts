@@ -24,6 +24,11 @@ export function localFileHref(value: string, origin?: string): string | null {
   }
   try { candidate = decodeURIComponent(candidate); } catch { /* Retain malformed literal escapes. */ }
   candidate = normalizeFileSystemPath(candidate);
+  // Browsers drop ASCII control characters before resolving a scheme, so "jav\tascript:"
+  // navigates as "javascript:". Strip them first or the scheme test below reads the
+  // interruption as a plain path and hands an unvalidated URL back to urlTransform.
+  candidate = candidate.replace(/[\u0000-\u001F\u007F]/g, '');
+  if (!candidate) return null;
   if (/^[a-z][a-z+.-]*:/i.test(candidate) && !/^[a-z]:\//i.test(candidate)) return null;
   if (APP_LOCAL_PATH_PREFIXES.some(prefix => candidate === prefix || candidate.startsWith(prefix))) return null;
   return candidate || null;
