@@ -10245,11 +10245,13 @@ function PendingRequestCard({
       {
         type: "button",
         disabled: busy || request.questions.some(
-          (question) => !currentAnswerForQuestion(question)
+          (question) => question.required !== false && !currentAnswerForQuestion(question)
         ),
         onClick: () => void onRespond?.(request.id, {
           answers: Object.fromEntries(
-            request.questions.map((question) => [
+            request.questions.filter(
+              (question) => question.required !== false || currentAnswersForQuestion(question).length > 0
+            ).map((question) => [
               question.id,
               {
                 answers: currentAnswersForQuestion(question)
