@@ -67,6 +67,8 @@ describe('ThreadTimeline', () => {
     flushSync(() => root?.render(<ThreadTimeline {...props} pendingRequests={[request]} />));
     const region = element.querySelector('[aria-label="Pending questions and approvals"]')!;
     expect(region).not.toBeNull();
+    expect((region as HTMLElement).style.maxHeight).toBe('min(45%, 45dvh)');
+    expect((region as HTMLElement).style.overflowY).toBe('auto');
     expect(region.closest('[data-testid="thread-scroll-container"]')).toBeNull();
     expect(element.querySelectorAll('.timeline-pending-card')).toHaveLength(1);
     expect(element.querySelector('button[aria-label*="Expand turn 1"]')).not.toBeNull();

@@ -574,6 +574,11 @@ function ThreadTimelineComponent({
             role="region"
             aria-label="Pending questions and approvals"
             className="thread-pending-action-panel"
+            // Some hosts supply their own theme instead of importing styles.css.
+            // Keep these visibility-critical constraints with the component.
+            style={{ flex: '0 1 auto', minHeight: 0, maxHeight: 'min(45%, 45dvh)',
+              overflowY: 'auto', overscrollBehavior: 'contain',
+              background: 'var(--theme-surface)', borderBottom: '1px solid var(--theme-border)' }}
           >
             <RequestEntrySectionForTurn
               notes={[]}
