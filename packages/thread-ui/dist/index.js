@@ -10245,11 +10245,13 @@ function PendingRequestCard({
       {
         type: "button",
         disabled: busy || request.questions.some(
-          (question) => !currentAnswerForQuestion(question)
+          (question) => question.required !== false && !currentAnswerForQuestion(question)
         ),
         onClick: () => void onRespond?.(request.id, {
           answers: Object.fromEntries(
-            request.questions.map((question) => [
+            request.questions.filter(
+              (question) => question.required !== false || currentAnswersForQuestion(question).length > 0
+            ).map((question) => [
               question.id,
               {
                 answers: currentAnswersForQuestion(question)
@@ -14276,11 +14278,13 @@ function ThreadTimelineComponent({
   const requestEntryAnchors = useMemo9(
     () => buildRequestEntryAnchors({
       answeredRequestNotes,
-      pendingRequests,
+      // Actionable requests stay in the always-visible panel, never in a
+      // turn's history/pagination/collapse or underneath the floating composer.
+      pendingRequests: [],
       visibleTurns,
       optimisticTurn
     }),
-    [answeredRequestNotes, optimisticTurn, pendingRequests, visibleTurns]
+    [answeredRequestNotes, optimisticTurn, visibleTurns]
   );
   const activityNoteAnchors = useMemo9(
     () => buildActivityNoteAnchors({
@@ -14355,355 +14359,383 @@ function ThreadTimelineComponent({
     navigateToTurn(target);
   }, [previousTurnScrollRequestKey, nextTurnScrollRequestKey, findTurn, scrollContainerRef, hiddenCount, loadingEarlier, handleLoadEarlierClick, navigateToTurn]);
   return /* @__PURE__ */ jsxs42(Fragment14, { children: [
-    /* @__PURE__ */ jsx52("section", { className: `flex min-h-0 flex-1 flex-col ${className}`.trim(), children: /* @__PURE__ */ jsx52(
-      "div",
-      {
-        ref: scrollContainerRef,
-        "data-testid": "thread-scroll-container",
-        onScroll: handleTimelineScroll,
-        onWheel: (event) => {
-          resetNavigation();
-          handleWheel(event);
-        },
-        onTouchStart: (event) => {
-          resetNavigation();
-          handleTouchStart(event);
-        },
-        onPointerDown: resetNavigation,
-        onKeyDown: (event) => {
-          if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) resetNavigation();
-        },
-        onTouchMove: handleTouchMove,
-        onTouchEnd: handleTouchEnd,
-        onTouchCancel: handleTouchEnd,
-        className: "thread-graph-scroll-container min-h-0 flex-1 overflow-y-auto overscroll-contain",
-        style: bottomSpacer > 0 ? { paddingBottom: bottomSpacer } : void 0,
-        children: /* @__PURE__ */ jsxs42("div", { ref: scrollContentRef, className: "thread-graph-scroll-content", children: [
-          /* @__PURE__ */ jsx52("div", { ref: topSentinelRef, "aria-hidden": "true", className: "h-px" }),
-          turns.length > 0 && /* @__PURE__ */ jsx52("div", { className: "thread-graph-history-control px-3 pb-1 pt-2 sm:px-5 sm:pb-1.5 sm:pt-3", children: /* @__PURE__ */ jsxs42("div", { className: "flex flex-wrap items-center gap-2.5 text-xs sm:text-sm", children: [
-            hiddenCount > 0 && /* @__PURE__ */ jsxs42(
-              "button",
+    /* @__PURE__ */ jsxs42("section", { className: `flex min-h-0 flex-1 flex-col ${className}`.trim(), children: [
+      pendingRequests.length > 0 && /* @__PURE__ */ jsx52(
+        "div",
+        {
+          role: "region",
+          "aria-label": "Pending questions and approvals",
+          className: "thread-pending-action-panel",
+          style: {
+            flex: "0 1 auto",
+            minHeight: 0,
+            maxHeight: "min(45%, 45dvh)",
+            overflowY: "auto",
+            overscrollBehavior: "contain",
+            background: "var(--theme-surface)",
+            borderBottom: "1px solid var(--theme-border)"
+          },
+          children: /* @__PURE__ */ jsx52(
+            RequestEntrySectionForTurn,
+            {
+              notes: [],
+              requests: pendingRequests,
+              respondingRequestId,
+              onRespondToRequest: onRespondToRequest ?? void 0
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsx52(
+        "div",
+        {
+          ref: scrollContainerRef,
+          "data-testid": "thread-scroll-container",
+          onScroll: handleTimelineScroll,
+          onWheel: (event) => {
+            resetNavigation();
+            handleWheel(event);
+          },
+          onTouchStart: (event) => {
+            resetNavigation();
+            handleTouchStart(event);
+          },
+          onPointerDown: resetNavigation,
+          onKeyDown: (event) => {
+            if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(event.key)) resetNavigation();
+          },
+          onTouchMove: handleTouchMove,
+          onTouchEnd: handleTouchEnd,
+          onTouchCancel: handleTouchEnd,
+          className: "thread-graph-scroll-container min-h-0 flex-1 overflow-y-auto overscroll-contain",
+          style: bottomSpacer > 0 ? { paddingBottom: bottomSpacer } : void 0,
+          children: /* @__PURE__ */ jsxs42("div", { ref: scrollContentRef, className: "thread-graph-scroll-content", children: [
+            /* @__PURE__ */ jsx52("div", { ref: topSentinelRef, "aria-hidden": "true", className: "h-px" }),
+            turns.length > 0 && /* @__PURE__ */ jsx52("div", { className: "thread-graph-history-control px-3 pb-1 pt-2 sm:px-5 sm:pb-1.5 sm:pt-3", children: /* @__PURE__ */ jsxs42("div", { className: "flex flex-wrap items-center gap-2.5 text-xs sm:text-sm", children: [
+              hiddenCount > 0 && /* @__PURE__ */ jsxs42(
+                "button",
+                {
+                  type: "button",
+                  onClick: handleLoadEarlierClick,
+                  disabled: loadingEarlier,
+                  "aria-busy": loadingEarlier,
+                  className: "thread-history-earlier flex items-center gap-2 px-2 py-2 text-xs transition",
+                  children: [
+                    /* @__PURE__ */ jsx52("span", { className: "thread-history-arrow", "aria-hidden": "true", children: "\u2191" }),
+                    loadingEarlier ? "Loading earlier\u2026" : "Earlier messages"
+                  ]
+                }
+              ),
+              showLoadAll && /* @__PURE__ */ jsx52(
+                "button",
+                {
+                  type: "button",
+                  onClick: handleLoadAllClick,
+                  className: "rounded-full border border-amber-300/40 px-2.5 py-1.5 text-amber-200 transition hover:bg-amber-300/10",
+                  children: "Load full history"
+                }
+              ),
+              /* @__PURE__ */ jsxs42("p", { className: "timeline-meta-text", children: [
+                "Showing ",
+                visibleTurns.length,
+                " of ",
+                effectiveTotalTurnCount,
+                " turns",
+                hiddenCount > 0 ? ` \xB7 ${hiddenCount} earlier hidden${loadedHiddenCount > 0 && unloadedHiddenCount > 0 ? ` (${loadedHiddenCount} loaded)` : ""}` : ""
+              ] })
+            ] }) }),
+            turns.length === 0 && !liveOutput && !optimisticTurn && pendingRequests.length === 0 && /* @__PURE__ */ jsx52("div", { className: "thread-graph-empty-state px-3 py-8 text-sm sm:px-5", children: "Send the first prompt to start the thread." }),
+            (visibleTurns.length > 0 || optimisticTurn || activityNoteAnchors.leading.length > 0 || activityNoteAnchors.trailing.length > 0) && /* @__PURE__ */ jsxs42("div", { className: "thread-graph-message-list", children: [
+              activityNoteAnchors.leading.length > 0 ? /* @__PURE__ */ jsx52(
+                ActivityNoteSection,
+                {
+                  notes: activityNoteAnchors.leading,
+                  onOpenThread,
+                  onOpenLinkedThread: openLinkedThread
+                }
+              ) : null,
+              visibleTurns.map((turn, visibleIndex) => /* @__PURE__ */ jsxs42("div", { "data-timeline-turn": true, "data-turn-id": turn.id, children: [
+                (activityNoteAnchors.beforeTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  ActivityNoteSection,
+                  {
+                    notes: activityNoteAnchors.beforeTurnId.get(turn.id) ?? [],
+                    onOpenThread,
+                    onOpenLinkedThread: openLinkedThread
+                  }
+                ) : null,
+                (requestEntryAnchors.beforeTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  RequestEntrySection,
+                  {
+                    entries: requestEntryAnchors.beforeTurnId.get(turn.id) ?? [],
+                    respondingRequestId,
+                    onRespondToRequest: onRespondToRequest ?? void 0
+                  }
+                ) : null,
+                (() => {
+                  const loadedTurn = loadedTurnDetails[turn.id];
+                  const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
+                  for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem2(mergedItems.get(item.id), item));
+                  const hydratedTurn = loadedTurn ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] } : turn;
+                  const displayTurn = mergeOptimisticTurnItems(
+                    hydratedTurn,
+                    optimisticTurn
+                  );
+                  const rowLivePlan = livePlan?.turnId === turn.id ? livePlan : null;
+                  const rowLiveItems = liveItemsTargetTurnId === turn.id ? liveItems?.items ?? null : null;
+                  const rowLiveOutput = liveOutputTargetTurnId === turn.id ? liveOutput : "";
+                  const rowLiveActivityAt = latestTimestamp(
+                    rowLivePlan?.updatedAt,
+                    liveItemsTargetTurnId === turn.id ? liveItems?.updatedAt : null,
+                    rowLiveOutput ? liveOutputActivityAt : null
+                  );
+                  const rowForceActive = activeTurnId === turn.id || shouldForceLatestVisibleTurnActive && latestVisibleTurnId === turn.id;
+                  const rowHasLiveActivity = Boolean(rowLivePlan) || Boolean(rowLiveOutput) || Boolean(rowLiveItems && rowLiveItems.length > 0);
+                  const rowCollapsed = collapsedStateForTurn(displayTurn, {
+                    forceActive: rowForceActive,
+                    hasLiveActivity: rowHasLiveActivity
+                  });
+                  return /* @__PURE__ */ jsx52(
+                    ThreadTurnRow,
+                    {
+                      threadId,
+                      ...adapter ? { adapter } : {},
+                      turn: displayTurn,
+                      absoluteIndex: visibleTurnAbsoluteOffset + visibleIndex + 1,
+                      isCollapsed: rowCollapsed,
+                      livePlan: rowLivePlan,
+                      liveItems: rowLiveItems,
+                      liveActivityAt: rowLiveActivityAt,
+                      liveOutput: rowLiveOutput,
+                      forceActive: rowForceActive,
+                      onToggleCollapse: handleToggleCollapse,
+                      deferredItemsLoading: loadingTurnDetailIds.has(turn.id),
+                      deferredItemsError: turnDetailErrors[turn.id],
+                      onOpenExpandedText: handleOpenExpandedText,
+                      onOpenCommandDetail: handleOpenCommandDetail,
+                      onOpenToolCallDetail: handleOpenToolCallDetail,
+                      onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
+                      onBeforeMessageResize: preserveScrollPositionForResize,
+                      ...onSelectArtifact ? { onSelectArtifact } : {},
+                      scrollRootRef: scrollContainerRef,
+                      articleRef: void 0
+                    }
+                  );
+                })(),
+                (activityNoteAnchors.afterTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  ActivityNoteSection,
+                  {
+                    notes: activityNoteAnchors.afterTurnId.get(turn.id) ?? [],
+                    onOpenThread,
+                    onOpenLinkedThread: openLinkedThread
+                  }
+                ) : null,
+                requestEntryAnchors.notesByTurnId.get(turn.id)?.length || requestEntryAnchors.pendingRequestsByTurnId.get(turn.id)?.length ? /* @__PURE__ */ jsx52(
+                  RequestEntrySectionForTurn,
+                  {
+                    notes: requestEntryAnchors.notesByTurnId.get(turn.id) ?? [],
+                    requests: requestEntryAnchors.pendingRequestsByTurnId.get(turn.id) ?? [],
+                    respondingRequestId,
+                    onRespondToRequest: onRespondToRequest ?? void 0
+                  }
+                ) : null
+              ] }, turn.id)),
+              optimisticTurn && visibleTurns.every((turn) => turn.id !== optimisticTurn.id) && /* @__PURE__ */ jsxs42(Fragment14, { children: [
+                (activityNoteAnchors.beforeTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  ActivityNoteSection,
+                  {
+                    notes: activityNoteAnchors.beforeTurnId.get(optimisticTurn.id) ?? [],
+                    onOpenThread,
+                    onOpenLinkedThread: openLinkedThread
+                  }
+                ) : null,
+                (requestEntryAnchors.beforeTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  RequestEntrySection,
+                  {
+                    entries: requestEntryAnchors.beforeTurnId.get(optimisticTurn.id) ?? [],
+                    respondingRequestId,
+                    onRespondToRequest: onRespondToRequest ?? void 0
+                  }
+                ) : null,
+                (() => {
+                  const rowLiveOutput = liveOutputAttachedToOptimisticTurn ? liveOutput : "";
+                  const rowLiveActivityAt = latestTimestamp(
+                    liveItemsTargetTurnId === optimisticTurn.id ? liveItems?.updatedAt : null,
+                    rowLiveOutput ? liveOutputActivityAt : null
+                  );
+                  const rowForceActive = activeTurnId === optimisticTurn.id || shouldForceLatestVisibleTurnActive && latestVisibleTurnId === optimisticTurn.id;
+                  const rowHasLiveActivity = Boolean(optimisticLiveItems && optimisticLiveItems.length > 0) || Boolean(rowLiveOutput);
+                  const rowCollapsed = collapsedStateForTurn(optimisticTurn, {
+                    forceActive: rowForceActive,
+                    hasLiveActivity: rowHasLiveActivity
+                  });
+                  return /* @__PURE__ */ jsx52(
+                    ThreadTurnRow,
+                    {
+                      threadId,
+                      ...adapter ? { adapter } : {},
+                      turn: optimisticTurn,
+                      absoluteIndex: optimisticAbsoluteIndex,
+                      isCollapsed: rowCollapsed,
+                      livePlan: null,
+                      liveItems: optimisticLiveItems,
+                      liveActivityAt: rowLiveActivityAt,
+                      liveOutput: rowLiveOutput,
+                      forceActive: rowForceActive,
+                      onToggleCollapse: handleToggleCollapse,
+                      onOpenExpandedText: handleOpenExpandedText,
+                      onOpenCommandDetail: handleOpenCommandDetail,
+                      onOpenToolCallDetail: handleOpenToolCallDetail,
+                      onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
+                      onBeforeMessageResize: preserveScrollPositionForResize,
+                      ...onSelectArtifact ? { onSelectArtifact } : {},
+                      scrollRootRef: scrollContainerRef
+                    }
+                  );
+                })(),
+                (activityNoteAnchors.afterTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
+                  ActivityNoteSection,
+                  {
+                    notes: activityNoteAnchors.afterTurnId.get(optimisticTurn.id) ?? [],
+                    onOpenThread,
+                    onOpenLinkedThread: openLinkedThread
+                  }
+                ) : null
+              ] })
+            ] }),
+            queuedSteers.length > 0 && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: queuedSteers.map((steer) => /* @__PURE__ */ jsxs42("div", { className: "space-y-1.5", children: [
+              /* @__PURE__ */ jsx52(
+                GraphChatCompactMessageItem,
+                {
+                  threadId,
+                  item: {
+                    id: steer.id,
+                    kind: "userMessage",
+                    text: steer.prompt,
+                    status: steer.status
+                  },
+                  scrollRootRef: scrollContainerRef,
+                  onBeforeMessageResize: preserveScrollPositionForResize,
+                  ...adapter ? { adapter } : {}
+                }
+              ),
+              threadId && steer.canCancel && adapter?.cancelPendingSteer ? /* @__PURE__ */ jsx52("div", { className: "flex justify-end px-1", children: /* @__PURE__ */ jsx52(
+                "button",
+                {
+                  type: "button",
+                  className: "thread-graph-history-button rounded-full border px-2.5 py-1 text-xs transition disabled:cursor-not-allowed disabled:opacity-60",
+                  disabled: cancelingSteerIds.has(steer.id),
+                  onClick: () => {
+                    setCancelingSteerIds((current) => new Set(current).add(steer.id));
+                    void Promise.resolve(adapter.cancelPendingSteer?.(threadId, steer.id)).catch(() => void 0).finally(() => {
+                      setCancelingSteerIds((current) => {
+                        const next = new Set(current);
+                        next.delete(steer.id);
+                        return next;
+                      });
+                    });
+                  },
+                  children: cancelingSteerIds.has(steer.id) ? "Canceling..." : "Cancel"
+                }
+              ) }) : null
+            ] }, steer.id)) }),
+            (requestEntryAnchors.trailing.length > 0 || activityNoteAnchors.trailing.length > 0) && /* @__PURE__ */ jsx52(
+              ActivityRequestEntrySection,
               {
-                type: "button",
-                onClick: handleLoadEarlierClick,
-                disabled: loadingEarlier,
-                "aria-busy": loadingEarlier,
-                className: "thread-history-earlier flex items-center gap-2 px-2 py-2 text-xs transition",
-                children: [
-                  /* @__PURE__ */ jsx52("span", { className: "thread-history-arrow", "aria-hidden": "true", children: "\u2191" }),
-                  loadingEarlier ? "Loading earlier\u2026" : "Earlier messages"
-                ]
-              }
-            ),
-            showLoadAll && /* @__PURE__ */ jsx52(
-              "button",
-              {
-                type: "button",
-                onClick: handleLoadAllClick,
-                className: "rounded-full border border-amber-300/40 px-2.5 py-1.5 text-amber-200 transition hover:bg-amber-300/10",
-                children: "Load full history"
-              }
-            ),
-            /* @__PURE__ */ jsxs42("p", { className: "timeline-meta-text", children: [
-              "Showing ",
-              visibleTurns.length,
-              " of ",
-              effectiveTotalTurnCount,
-              " turns",
-              hiddenCount > 0 ? ` \xB7 ${hiddenCount} earlier hidden${loadedHiddenCount > 0 && unloadedHiddenCount > 0 ? ` (${loadedHiddenCount} loaded)` : ""}` : ""
-            ] })
-          ] }) }),
-          turns.length === 0 && !liveOutput && !optimisticTurn && /* @__PURE__ */ jsx52("div", { className: "thread-graph-empty-state px-3 py-8 text-sm sm:px-5", children: "Send the first prompt to start the thread." }),
-          (visibleTurns.length > 0 || optimisticTurn || activityNoteAnchors.leading.length > 0 || activityNoteAnchors.trailing.length > 0) && /* @__PURE__ */ jsxs42("div", { className: "thread-graph-message-list", children: [
-            activityNoteAnchors.leading.length > 0 ? /* @__PURE__ */ jsx52(
-              ActivityNoteSection,
-              {
-                notes: activityNoteAnchors.leading,
+                entries: [
+                  ...activityNoteAnchors.trailing.map((note) => ({
+                    kind: "activity",
+                    id: note.id,
+                    createdAt: note.createdAt,
+                    note
+                  })),
+                  ...requestEntryAnchors.trailing
+                ],
+                respondingRequestId,
+                onRespondToRequest: onRespondToRequest ?? void 0,
                 onOpenThread,
                 onOpenLinkedThread: openLinkedThread
               }
-            ) : null,
-            visibleTurns.map((turn, visibleIndex) => /* @__PURE__ */ jsxs42("div", { "data-timeline-turn": true, "data-turn-id": turn.id, children: [
-              (activityNoteAnchors.beforeTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                ActivityNoteSection,
-                {
-                  notes: activityNoteAnchors.beforeTurnId.get(turn.id) ?? [],
-                  onOpenThread,
-                  onOpenLinkedThread: openLinkedThread
-                }
-              ) : null,
-              (requestEntryAnchors.beforeTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                RequestEntrySection,
-                {
-                  entries: requestEntryAnchors.beforeTurnId.get(turn.id) ?? [],
-                  respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
-                }
-              ) : null,
-              (() => {
-                const loadedTurn = loadedTurnDetails[turn.id];
-                const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
-                for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem2(mergedItems.get(item.id), item));
-                const hydratedTurn = loadedTurn ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] } : turn;
-                const displayTurn = mergeOptimisticTurnItems(
-                  hydratedTurn,
-                  optimisticTurn
-                );
-                const rowLivePlan = livePlan?.turnId === turn.id ? livePlan : null;
-                const rowLiveItems = liveItemsTargetTurnId === turn.id ? liveItems?.items ?? null : null;
-                const rowLiveOutput = liveOutputTargetTurnId === turn.id ? liveOutput : "";
-                const rowLiveActivityAt = latestTimestamp(
-                  rowLivePlan?.updatedAt,
-                  liveItemsTargetTurnId === turn.id ? liveItems?.updatedAt : null,
-                  rowLiveOutput ? liveOutputActivityAt : null
-                );
-                const rowForceActive = activeTurnId === turn.id || shouldForceLatestVisibleTurnActive && latestVisibleTurnId === turn.id;
-                const rowHasLiveActivity = Boolean(rowLivePlan) || Boolean(rowLiveOutput) || Boolean(rowLiveItems && rowLiveItems.length > 0);
-                const rowCollapsed = collapsedStateForTurn(displayTurn, {
-                  forceActive: rowForceActive,
-                  hasLiveActivity: rowHasLiveActivity
-                });
-                return /* @__PURE__ */ jsx52(
-                  ThreadTurnRow,
-                  {
-                    threadId,
-                    ...adapter ? { adapter } : {},
-                    turn: displayTurn,
-                    absoluteIndex: visibleTurnAbsoluteOffset + visibleIndex + 1,
-                    isCollapsed: rowCollapsed,
-                    livePlan: rowLivePlan,
-                    liveItems: rowLiveItems,
-                    liveActivityAt: rowLiveActivityAt,
-                    liveOutput: rowLiveOutput,
-                    forceActive: rowForceActive,
-                    onToggleCollapse: handleToggleCollapse,
-                    deferredItemsLoading: loadingTurnDetailIds.has(turn.id),
-                    deferredItemsError: turnDetailErrors[turn.id],
-                    onOpenExpandedText: handleOpenExpandedText,
-                    onOpenCommandDetail: handleOpenCommandDetail,
-                    onOpenToolCallDetail: handleOpenToolCallDetail,
-                    onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
-                    onBeforeMessageResize: preserveScrollPositionForResize,
-                    ...onSelectArtifact ? { onSelectArtifact } : {},
-                    scrollRootRef: scrollContainerRef,
-                    articleRef: void 0
-                  }
-                );
-              })(),
-              (activityNoteAnchors.afterTurnId.get(turn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                ActivityNoteSection,
-                {
-                  notes: activityNoteAnchors.afterTurnId.get(turn.id) ?? [],
-                  onOpenThread,
-                  onOpenLinkedThread: openLinkedThread
-                }
-              ) : null,
-              requestEntryAnchors.notesByTurnId.get(turn.id)?.length || requestEntryAnchors.pendingRequestsByTurnId.get(turn.id)?.length ? /* @__PURE__ */ jsx52(
-                RequestEntrySectionForTurn,
-                {
-                  notes: requestEntryAnchors.notesByTurnId.get(turn.id) ?? [],
-                  requests: requestEntryAnchors.pendingRequestsByTurnId.get(turn.id) ?? [],
-                  respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
-                }
-              ) : null
-            ] }, turn.id)),
-            optimisticTurn && visibleTurns.every((turn) => turn.id !== optimisticTurn.id) && /* @__PURE__ */ jsxs42(Fragment14, { children: [
-              (activityNoteAnchors.beforeTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                ActivityNoteSection,
-                {
-                  notes: activityNoteAnchors.beforeTurnId.get(optimisticTurn.id) ?? [],
-                  onOpenThread,
-                  onOpenLinkedThread: openLinkedThread
-                }
-              ) : null,
-              (requestEntryAnchors.beforeTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                RequestEntrySection,
-                {
-                  entries: requestEntryAnchors.beforeTurnId.get(optimisticTurn.id) ?? [],
-                  respondingRequestId,
-                  onRespondToRequest: onRespondToRequest ?? void 0
-                }
-              ) : null,
-              (() => {
-                const rowLiveOutput = liveOutputAttachedToOptimisticTurn ? liveOutput : "";
-                const rowLiveActivityAt = latestTimestamp(
-                  liveItemsTargetTurnId === optimisticTurn.id ? liveItems?.updatedAt : null,
-                  rowLiveOutput ? liveOutputActivityAt : null
-                );
-                const rowForceActive = activeTurnId === optimisticTurn.id || shouldForceLatestVisibleTurnActive && latestVisibleTurnId === optimisticTurn.id;
-                const rowHasLiveActivity = Boolean(optimisticLiveItems && optimisticLiveItems.length > 0) || Boolean(rowLiveOutput);
-                const rowCollapsed = collapsedStateForTurn(optimisticTurn, {
-                  forceActive: rowForceActive,
-                  hasLiveActivity: rowHasLiveActivity
-                });
-                return /* @__PURE__ */ jsx52(
-                  ThreadTurnRow,
-                  {
-                    threadId,
-                    ...adapter ? { adapter } : {},
-                    turn: optimisticTurn,
-                    absoluteIndex: optimisticAbsoluteIndex,
-                    isCollapsed: rowCollapsed,
-                    livePlan: null,
-                    liveItems: optimisticLiveItems,
-                    liveActivityAt: rowLiveActivityAt,
-                    liveOutput: rowLiveOutput,
-                    forceActive: rowForceActive,
-                    onToggleCollapse: handleToggleCollapse,
-                    onOpenExpandedText: handleOpenExpandedText,
-                    onOpenCommandDetail: handleOpenCommandDetail,
-                    onOpenToolCallDetail: handleOpenToolCallDetail,
-                    onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
-                    onBeforeMessageResize: preserveScrollPositionForResize,
-                    ...onSelectArtifact ? { onSelectArtifact } : {},
-                    scrollRootRef: scrollContainerRef
-                  }
-                );
-              })(),
-              (activityNoteAnchors.afterTurnId.get(optimisticTurn.id)?.length ?? 0) > 0 ? /* @__PURE__ */ jsx52(
-                ActivityNoteSection,
-                {
-                  notes: activityNoteAnchors.afterTurnId.get(optimisticTurn.id) ?? [],
-                  onOpenThread,
-                  onOpenLinkedThread: openLinkedThread
-                }
-              ) : null
-            ] })
-          ] }),
-          queuedSteers.length > 0 && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section space-y-3 px-3 py-4 sm:px-5", children: queuedSteers.map((steer) => /* @__PURE__ */ jsxs42("div", { className: "space-y-1.5", children: [
-            /* @__PURE__ */ jsx52(
+            ),
+            ephemeralUserNote && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section px-3 py-2.5 sm:px-5", children: /* @__PURE__ */ jsx52(
               GraphChatCompactMessageItem,
               {
                 threadId,
                 item: {
-                  id: steer.id,
+                  id: "ephemeral-plan-decision-note",
                   kind: "userMessage",
-                  text: steer.prompt,
-                  status: steer.status
+                  text: ephemeralUserNote
                 },
                 scrollRootRef: scrollContainerRef,
+                onBeforeMessageResize: preserveScrollPositionForResize
+              }
+            ) }),
+            unattachedLiveTurn && unattachedLiveItems && unattachedLiveItems.length > 0 && /* @__PURE__ */ jsx52(
+              ThreadTurnRow,
+              {
+                threadId,
+                ...adapter ? { adapter } : {},
+                turn: unattachedLiveTurn,
+                absoluteIndex: unattachedLiveTurnIndex,
+                isCollapsed: collapsedTurnOverrides[unattachedLiveTurn.id] ?? false,
+                livePlan: livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null,
+                liveItems: unattachedLiveItems,
+                liveActivityAt: latestTimestamp(
+                  livePlan?.turnId === unattachedLiveTurn.id ? livePlan.updatedAt : null,
+                  liveItems?.turnId === unattachedLiveTurn.id ? liveItems.updatedAt : null
+                ),
+                liveOutput: "",
+                forceActive: true,
+                onToggleCollapse: handleToggleCollapse,
+                onOpenExpandedText: handleOpenExpandedText,
+                onOpenCommandDetail: handleOpenCommandDetail,
+                onOpenToolCallDetail: handleOpenToolCallDetail,
+                onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
+                onBeforeMessageResize: preserveScrollPositionForResize,
+                ...onSelectArtifact ? { onSelectArtifact } : {},
+                scrollRootRef: scrollContainerRef
+              }
+            ),
+            liveOutput && !liveOutputAttachedToVisibleTurn && !liveOutputAttachedToOptimisticTurn && !hasStructuredLiveItems && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section px-3 py-2.5 sm:px-5", children: unattachedLiveHookPromptItem ? /* @__PURE__ */ jsx52(
+              HistoryItemRow,
+              {
+                threadId,
+                item: unattachedLiveHookPromptItem,
+                scrollRootRef: scrollContainerRef,
+                onOpenExpandedText: handleOpenExpandedText,
+                onOpenCommandDetail: handleOpenCommandDetail,
+                onOpenToolCallDetail: handleOpenToolCallDetail,
+                onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
+                onBeforeMessageResize: preserveScrollPositionForResize,
+                ...onSelectArtifact ? { onSelectArtifact } : {},
+                ...adapter ? { adapter } : {}
+              }
+            ) : /* @__PURE__ */ jsx52(
+              GraphChatCompactMessageItem,
+              {
+                threadId,
+                item: {
+                  id: "live-agent-message-fallback",
+                  kind: "agentMessage",
+                  text: liveOutput
+                },
+                scrollRootRef: scrollContainerRef,
+                streaming: true,
                 onBeforeMessageResize: preserveScrollPositionForResize,
                 ...adapter ? { adapter } : {}
               }
-            ),
-            threadId && steer.canCancel && adapter?.cancelPendingSteer ? /* @__PURE__ */ jsx52("div", { className: "flex justify-end px-1", children: /* @__PURE__ */ jsx52(
-              "button",
+            ) }),
+            /* @__PURE__ */ jsx52(
+              "div",
               {
-                type: "button",
-                className: "thread-graph-history-button rounded-full border px-2.5 py-1 text-xs transition disabled:cursor-not-allowed disabled:opacity-60",
-                disabled: cancelingSteerIds.has(steer.id),
-                onClick: () => {
-                  setCancelingSteerIds((current) => new Set(current).add(steer.id));
-                  void Promise.resolve(adapter.cancelPendingSteer?.(threadId, steer.id)).catch(() => void 0).finally(() => {
-                    setCancelingSteerIds((current) => {
-                      const next = new Set(current);
-                      next.delete(steer.id);
-                      return next;
-                    });
-                  });
-                },
-                children: cancelingSteerIds.has(steer.id) ? "Canceling..." : "Cancel"
+                ref: tailSentinelRef,
+                "aria-hidden": "true",
+                className: "h-px w-full"
               }
-            ) }) : null
-          ] }, steer.id)) }),
-          (requestEntryAnchors.trailing.length > 0 || activityNoteAnchors.trailing.length > 0) && /* @__PURE__ */ jsx52(
-            ActivityRequestEntrySection,
-            {
-              entries: [
-                ...activityNoteAnchors.trailing.map((note) => ({
-                  kind: "activity",
-                  id: note.id,
-                  createdAt: note.createdAt,
-                  note
-                })),
-                ...requestEntryAnchors.trailing
-              ],
-              respondingRequestId,
-              onRespondToRequest: onRespondToRequest ?? void 0,
-              onOpenThread,
-              onOpenLinkedThread: openLinkedThread
-            }
-          ),
-          ephemeralUserNote && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section px-3 py-2.5 sm:px-5", children: /* @__PURE__ */ jsx52(
-            GraphChatCompactMessageItem,
-            {
-              threadId,
-              item: {
-                id: "ephemeral-plan-decision-note",
-                kind: "userMessage",
-                text: ephemeralUserNote
-              },
-              scrollRootRef: scrollContainerRef,
-              onBeforeMessageResize: preserveScrollPositionForResize
-            }
-          ) }),
-          unattachedLiveTurn && unattachedLiveItems && unattachedLiveItems.length > 0 && /* @__PURE__ */ jsx52(
-            ThreadTurnRow,
-            {
-              threadId,
-              ...adapter ? { adapter } : {},
-              turn: unattachedLiveTurn,
-              absoluteIndex: unattachedLiveTurnIndex,
-              isCollapsed: collapsedTurnOverrides[unattachedLiveTurn.id] ?? false,
-              livePlan: livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null,
-              liveItems: unattachedLiveItems,
-              liveActivityAt: latestTimestamp(
-                livePlan?.turnId === unattachedLiveTurn.id ? livePlan.updatedAt : null,
-                liveItems?.turnId === unattachedLiveTurn.id ? liveItems.updatedAt : null
-              ),
-              liveOutput: "",
-              forceActive: true,
-              onToggleCollapse: handleToggleCollapse,
-              onOpenExpandedText: handleOpenExpandedText,
-              onOpenCommandDetail: handleOpenCommandDetail,
-              onOpenToolCallDetail: handleOpenToolCallDetail,
-              onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
-              onBeforeMessageResize: preserveScrollPositionForResize,
-              ...onSelectArtifact ? { onSelectArtifact } : {},
-              scrollRootRef: scrollContainerRef
-            }
-          ),
-          liveOutput && !liveOutputAttachedToVisibleTurn && !liveOutputAttachedToOptimisticTurn && !hasStructuredLiveItems && /* @__PURE__ */ jsx52("div", { className: "thread-graph-message-section px-3 py-2.5 sm:px-5", children: unattachedLiveHookPromptItem ? /* @__PURE__ */ jsx52(
-            HistoryItemRow,
-            {
-              threadId,
-              item: unattachedLiveHookPromptItem,
-              scrollRootRef: scrollContainerRef,
-              onOpenExpandedText: handleOpenExpandedText,
-              onOpenCommandDetail: handleOpenCommandDetail,
-              onOpenToolCallDetail: handleOpenToolCallDetail,
-              onOpenDeferredHistoryItemDetail: handleOpenDeferredHistoryItemDetail,
-              onBeforeMessageResize: preserveScrollPositionForResize,
-              ...onSelectArtifact ? { onSelectArtifact } : {},
-              ...adapter ? { adapter } : {}
-            }
-          ) : /* @__PURE__ */ jsx52(
-            GraphChatCompactMessageItem,
-            {
-              threadId,
-              item: {
-                id: "live-agent-message-fallback",
-                kind: "agentMessage",
-                text: liveOutput
-              },
-              scrollRootRef: scrollContainerRef,
-              streaming: true,
-              onBeforeMessageResize: preserveScrollPositionForResize,
-              ...adapter ? { adapter } : {}
-            }
-          ) }),
-          /* @__PURE__ */ jsx52(
-            "div",
-            {
-              ref: tailSentinelRef,
-              "aria-hidden": "true",
-              className: "h-px w-full"
-            }
-          )
-        ] })
-      }
-    ) }),
+            )
+          ] })
+        }
+      )
+    ] }),
     /* @__PURE__ */ jsx52(
       LongTextDialog,
       {
