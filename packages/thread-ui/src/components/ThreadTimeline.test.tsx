@@ -6,7 +6,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { ThreadTurnDto } from '@remote-codex/shared';
+import type { ThreadActionRequestDto, ThreadTurnDto } from '@remote-codex/shared';
 
 import { ThreadTimeline } from './ThreadTimeline';
 vi.mock('../app-shell/AppShellNavContext', () => ({ useAppShellNav: () => ({ showReasoningSummaries: true }) }));
@@ -51,6 +51,46 @@ function completedTurn(items: ThreadTurnDto['items']): ThreadTurnDto {
 }
 
 describe('ThreadTimeline', () => {
+  it('shows arriving questions outside collapsed history and removes them after resolution', () => {
+    const turn = { ...completedTurn([{ id: 'prompt', kind: 'userMessage', text: 'Work on this' }]),
+      status: 'inProgress', hasDeferredItems: true, deferredItemCount: 100 };
+    const request: ThreadActionRequestDto = {
+      id: 'question-1', kind: 'requestUserInput', title: 'Question', description: null,
+      turnId: turn.id, itemId: 'ask-tool', createdAt: '2026-09-29T00:00:00Z',
+      questions: [{id: 'scope', header: 'Scope', question: 'Which scope?', isOther: true,
+        isSecret: false, options: [{label: 'Full rewrite', description: ''}]}],
+    };
+    const onRespondToRequest = vi.fn();
+    const onLoadTurnDetail = vi.fn();
+    const props = {turns: [turn], liveOutput: '', onRespondToRequest, onLoadTurnDetail};
+    const element = render(<ThreadTimeline {...props} pendingRequests={[]} />);
+    flushSync(() => root?.render(<ThreadTimeline {...props} pendingRequests={[request]} />));
+    const region = element.querySelector('[aria-label="Pending questions and approvals"]')!;
+    expect(region).not.toBeNull();
+    expect(region.closest('[data-testid="thread-scroll-container"]')).toBeNull();
+    expect(element.querySelectorAll('.timeline-pending-card')).toHaveLength(1);
+    expect(element.querySelector('button[aria-label*="Expand turn 1"]')).not.toBeNull();
+    expect(onLoadTurnDetail).not.toHaveBeenCalled();
+    const button = (label: string) => Array.from(region.querySelectorAll('button')).find(b => b.textContent === label)!;
+    flushSync(() => button('Full rewrite').click());
+    expect(button('Submit').disabled).toBe(false);
+    flushSync(() => button('Submit').click());
+    expect(onRespondToRequest).toHaveBeenCalledWith('question-1', {answers: {scope: {answers: ['Full rewrite']}}});
+    flushSync(() => root?.render(<ThreadTimeline {...props} pendingRequests={[]} />));
+    expect(element.querySelector('[aria-label="Pending questions and approvals"]')).toBeNull();
+  });
+
+  it('keeps pending questions visible even when their turn is not loaded', () => {
+    const element = render(<ThreadTimeline turns={[]} liveOutput="" pendingRequests={[{
+      id: 'input-unloaded', kind: 'requestUserInput', title: 'Question', description: null,
+      turnId: 'unloaded-turn', itemId: null, createdAt: '2026-09-29T00:00:00Z',
+      questions: [{id: 'q', header: 'Choice', question: 'Continue?', required: false,
+        isOther: false, isSecret: false, options: null}],
+    }]} />);
+    expect(element.querySelectorAll('.timeline-pending-card')).toHaveLength(1);
+    expect(element.querySelector('[aria-label="Pending questions and approvals"]')?.textContent).toContain('Continue?');
+  });
+
   it('lazy-loads a complete collapsed turn and keeps Worked below the user message', async () => {
     let resolveTurn!: (turn: ThreadTurnDto) => void;
     const onLoadTurnDetail = vi.fn(

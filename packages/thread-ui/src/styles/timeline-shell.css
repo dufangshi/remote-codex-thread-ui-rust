@@ -35,6 +35,19 @@
   padding: 1rem 0 max(0rem, var(--thread-graph-chat-scroll-bottom-spacer, 0px));
 }
 
+/* Pending input is actionable UI, not collapsible execution history. Keep it
+   visible even while the user reads an older turn; long forms scroll locally. */
+.thread-ui-shell .thread-pending-action-panel {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: 45%;
+  max-height: min(45%, 45dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--theme-surface);
+  border-bottom: 1px solid var(--theme-border);
+}
+
 .thread-ui-shell .thread-graph-message-list {
   display: flex;
   flex-direction: column;

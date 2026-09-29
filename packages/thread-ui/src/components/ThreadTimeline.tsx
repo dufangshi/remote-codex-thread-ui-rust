@@ -484,11 +484,13 @@ function ThreadTimelineComponent({
     () =>
       buildRequestEntryAnchors({
         answeredRequestNotes,
-        pendingRequests,
+        // Actionable requests stay in the always-visible panel, never in a
+        // turn's history/pagination/collapse or underneath the floating composer.
+        pendingRequests: [],
         visibleTurns,
         optimisticTurn,
       }),
-    [answeredRequestNotes, optimisticTurn, pendingRequests, visibleTurns],
+    [answeredRequestNotes, optimisticTurn, visibleTurns],
   );
   const activityNoteAnchors = useMemo(
     () =>
@@ -567,6 +569,20 @@ function ThreadTimelineComponent({
   return (
     <>
       <section className={`flex min-h-0 flex-1 flex-col ${className}`.trim()}>
+        {pendingRequests.length > 0 && (
+          <div
+            role="region"
+            aria-label="Pending questions and approvals"
+            className="thread-pending-action-panel"
+          >
+            <RequestEntrySectionForTurn
+              notes={[]}
+              requests={pendingRequests}
+              respondingRequestId={respondingRequestId}
+              onRespondToRequest={onRespondToRequest ?? undefined}
+            />
+          </div>
+        )}
         <div
           ref={scrollContainerRef}
           data-testid="thread-scroll-container"
@@ -621,7 +637,7 @@ function ThreadTimelineComponent({
             </div>
           )}
 
-          {turns.length === 0 && !liveOutput && !optimisticTurn && (
+          {turns.length === 0 && !liveOutput && !optimisticTurn && pendingRequests.length === 0 && (
             <div className="thread-graph-empty-state px-3 py-8 text-sm sm:px-5">
               Send the first prompt to start the thread.
             </div>
