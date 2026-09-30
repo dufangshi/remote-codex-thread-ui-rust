@@ -261,6 +261,58 @@ describe('GraphWorkspacePreviewPane', () => {
         ?.classList.contains('is-focused-line'),
     ).toBe(true);
   });
+
+  it('expands the reader to full width and collapses again on Escape', () => {
+    const element = render(
+      <GraphWorkspacePreviewPane
+        plugins={createDefaultPluginContextValue()}
+        selectedTarget={{ kind: 'workspace-file', node: markdownNode }}
+        previewFile={{
+          path: markdownNode.path,
+          name: markdownNode.name,
+          content: '# Long read\n\nBody text.',
+          language: 'markdown',
+          size: 24,
+          truncated: false,
+          nextOffset: 24,
+        }}
+        workspaceRootPath="/home/u/treer"
+        fileTabs={[
+          { name: markdownNode.name, path: markdownNode.path, pinned: false },
+        ]}
+        activeFilePath={markdownNode.path}
+        onSelectFileTab={() => {}}
+        onCloseFileTab={() => {}}
+      />,
+    );
+
+    const surface = element.querySelector<HTMLElement>('.thread-graph-viewer');
+    const toggle = element.querySelector<HTMLButtonElement>(
+      '[data-testid="toggle-expanded-viewer"]',
+    );
+    expect(toggle).not.toBeNull();
+    expect(surface?.dataset.expanded).toBeUndefined();
+    expect(toggle?.getAttribute('aria-label')).toBe('Read full width');
+
+    act(() => toggle?.click());
+    expect(surface?.dataset.expanded).toBe('true');
+    expect(surface?.className).toContain('fixed');
+    expect(
+      element
+        .querySelector('[data-testid="toggle-expanded-viewer"]')
+        ?.getAttribute('aria-label'),
+    ).toBe('Exit full width');
+
+    // Escape collapses the reader rather than dismissing the whole Explorer.
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    });
+    expect(
+      element.querySelector<HTMLElement>('.thread-graph-viewer')?.dataset
+        .expanded,
+    ).toBeUndefined();
+  });
+
 });
 
 it('resolves Windows Markdown resources with case-insensitive roots and browser drive prefixes', () => {

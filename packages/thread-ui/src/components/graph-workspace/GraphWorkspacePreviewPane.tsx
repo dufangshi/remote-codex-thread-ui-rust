@@ -15,6 +15,8 @@ import {
   ChevronRight,
   Code2,
   Download,
+  Maximize2,
+  Minimize2,
   Pencil,
   PanelLeftOpen,
   PanelRightClose,
@@ -420,6 +422,23 @@ export function GraphWorkspacePreviewPane({
   const [markdownView, setMarkdownView] = useState<'preview' | 'source'>(
     'preview',
   );
+  // A CSS overlay rather than requestFullscreen(): the same component renders inside
+  // the iOS/Android WebViews and Treer's iframe tunnel, where the Fullscreen API is
+  // either gated on an allow-attribute we do not control or unsupported outright.
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    if (!expanded) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        setExpanded(false);
+      }
+    };
+    // Capture phase: the surrounding shell also closes panels on Escape, and a reader
+    // at full width should collapse back rather than dismiss the whole Explorer.
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [expanded]);
   const [compactViewer, setCompactViewer] = useState(
     () =>
       typeof window === 'undefined' ||
@@ -634,18 +653,44 @@ export function GraphWorkspacePreviewPane({
     </button>
   ) : null;
 
+  const expandControl = (
+    <button
+      type="button"
+      onClick={() => setExpanded(value => !value)}
+      data-testid="toggle-expanded-viewer"
+      className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]"
+      title={expanded ? 'Exit full width (Esc)' : 'Read full width'}
+      aria-label={expanded ? 'Exit full width' : 'Read full width'}
+      aria-pressed={expanded}
+    >
+      {expanded ? (
+        <Minimize2 className="h-3.5 w-3.5" />
+      ) : (
+        <Maximize2 className="h-3.5 w-3.5" />
+      )}
+    </button>
+  );
+
   return (
     <section
       ref={surfaceRef}
-      className="thread-graph-viewer flex h-full min-h-0 flex-col overflow-hidden rounded-md"
+      className={`thread-graph-viewer flex min-h-0 flex-col overflow-hidden ${
+        expanded
+          ? 'fixed inset-0 z-50 h-auto rounded-none'
+          : 'h-full rounded-md'
+      }`}
       data-preview-target-kind={selectedTarget?.kind ?? 'none'}
+      data-expanded={expanded ? 'true' : undefined}
     >
       {selectedTarget?.kind !== 'workspace-file' ? (
         <div className="thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5">
           <span className="min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]">
             {title ?? 'Preview'}
           </span>
-          {viewerPaneToggle}
+          <div className="flex shrink-0 items-center gap-0.5">
+            {expandControl}
+            {viewerPaneToggle}
+          </div>
         </div>
       ) : null}
       {fileTabs.length > 0 && onCloseFileTab && onSelectFileTab ? (
@@ -656,12 +701,11 @@ export function GraphWorkspacePreviewPane({
           onSelect={onSelectFileTab}
           tabs={fileTabs}
           trailingAction={
-            fileToolbar || viewerPaneToggle ? (
-              <>
-                {fileToolbar}
-                {viewerPaneToggle}
-              </>
-            ) : null
+            <>
+              {fileToolbar}
+              {expandControl}
+              {viewerPaneToggle}
+            </>
           }
         />
       ) : null}
