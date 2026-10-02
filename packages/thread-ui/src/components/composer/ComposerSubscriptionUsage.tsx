@@ -27,7 +27,7 @@ export function ComposerSubscriptionUsage({
   if (
     !usage ||
     usage.authKind !== 'subscription' ||
-    usage.windows.length === 0 || usage.stale
+    usage.windows.length === 0
   ) {
     return null;
   }
@@ -40,13 +40,16 @@ export function ComposerSubscriptionUsage({
       return `${window.label}: ${remaining}% remaining, ${resetLabel(window.resetsAt)}`;
     })
     .join('. ');
+  const observed = new Date(usage.observedAt);
+  const updated = Number.isNaN(observed.getTime()) ? 'update time unavailable' : `updated ${observed.toLocaleString()}`;
+  const freshness = `${usage.stale ? 'last known · ' : ''}${updated}`;
 
   return (
     <button
       ref={ref}
       type="button"
       className={`thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-4 items-center gap-1 rounded-t-md border border-b-0 border-stone-500/50 bg-stone-950 px-1 text-[9px] font-normal leading-none text-stone-200 shadow-sm transition-[border-color,background-color,opacity] duration-200 hover:border-stone-400/75 hover:bg-stone-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:text-[9px] ${usage.stale ? 'opacity-70' : 'opacity-95'}`}
-      aria-label={`${usage.provider} subscription usage. ${description}`}
+      aria-label={`${usage.provider} subscription usage. ${description}. ${freshness}`}
       aria-expanded={detailsVisible}
       onClick={() => setDetailsVisible((current) => !current)}
     >
@@ -71,6 +74,7 @@ export function ComposerSubscriptionUsage({
           </span>
         );
       })}
+      {usage.stale ? <span aria-hidden="true">~</span> : null}
       <span
         role="tooltip"
         aria-hidden={!detailsVisible}
@@ -81,7 +85,7 @@ export function ComposerSubscriptionUsage({
             {window.label} · {Math.max(0, Math.round(100 - window.usedPercent))}% remaining · {resetLabel(window.resetsAt)}
           </span>
         ))}
-        {usage.stale ? ' · last known' : ''}
+        <span className="block">{freshness}</span>
       </span>
     </button>
   );
