@@ -130,6 +130,8 @@ interface WorkbenchThread {
     href: string;
     status: string;
     favorite: boolean;
+    parentKey?: string;
+    rootKey?: string;
 }
 interface WorkbenchNotification {
     id: string;
