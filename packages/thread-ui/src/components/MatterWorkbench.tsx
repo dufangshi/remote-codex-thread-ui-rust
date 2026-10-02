@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { WorkbenchContext } from './WorkbenchContext';
 import { WorkbenchPath } from './WorkbenchPath';
+import { GroupedThreadTabs, groupThreads } from './GroupedThreadTabs';
 
 const statusLabels: Record<string, string> = {
   running: 'Running', unread: 'Completed, unread', idle: 'Idle, read',
@@ -30,6 +31,8 @@ export interface WorkbenchThread {
   href: string;
   status: string;
   favorite: boolean;
+  parentKey?: string;
+  rootKey?: string;
 }
 export interface WorkbenchNotification {
   id: string;
@@ -157,6 +160,15 @@ export function MatterWorkbench({
     {o.renderThreadMenu?.(thread)}
     </div>
   );
+  const renderThreadGroups = (threads: WorkbenchThread[]) => groupThreads(threads).map(({ root, children }) => (
+    <div key={root.key}>
+      {renderThread(root)}
+      {children.length > 0 && <details open={children.some(child => child.key === o.currentKey) || undefined} style={{ margin: '0 0 6px 14px' }}>
+        <summary style={{ padding: '4px 8px', fontSize: 12, cursor: 'pointer', color: 'var(--theme-fg-soft)' }}>{children.length} agent threads</summary>
+        {children.map(renderThread)}
+      </details>}
+    </div>
+  ));
   return (
     <div
       className={`matter-workbench ${sidebarHidden ? 'is-sidebar-hidden' : ''}`}
@@ -315,7 +327,7 @@ export function MatterWorkbench({
         </button>
         {recentsOpen && (
           <div className="matter-thread-section" data-testid="recent-chats">
-            {o.threads.map(renderThread)}
+            {renderThreadGroups(o.threads)}
           </div>
         )}
         <div className="matter-sidebar-footer">
@@ -325,21 +337,7 @@ export function MatterWorkbench({
       <main className="matter-main">
         <div className="matter-tabs-row">
         <nav ref={tabsRef} className="matter-thread-tabs" aria-label="Workspace threads">
-          {tabs.map((t) => (
-            <a
-              key={t.key}
-              href={t.href}
-              aria-current={t.key === o.currentKey ? 'page' : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(t.href);
-              }}
-              title={t.title}
-            >
-              <span className="matter-status-dot" data-status={t.status} role="img" aria-label={statusLabels[t.status] ?? t.status} />
-              <span>{t.title}</span>
-            </a>
-          ))}
+          <GroupedThreadTabs threads={tabs} currentKey={o.currentKey} onNavigate={navigate} />
           {newThread}
         </nav>
         {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>}
