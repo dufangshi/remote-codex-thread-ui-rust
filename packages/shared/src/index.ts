@@ -522,6 +522,17 @@ export interface ThreadTurnTokenUsageDto {
   total: ThreadTurnTokenBreakdownDto;
   last: ThreadTurnTokenBreakdownDto;
   modelContextWindow: number | null;
+  generationSpeed?: {
+    outputTokens: number;
+    llmTimeMs: number;
+    averageTokensPerSecond: number | null;
+    recentTokensPerSecond: number | null;
+    windowSeconds: number;
+    active: boolean;
+    state: 'llm' | 'tool';
+    measurement: 'usageIntervals';
+    updatedAt: string;
+  } | null;
 }
 
 export type ThreadTurnPricingTierDto = 'standard' | 'fast';

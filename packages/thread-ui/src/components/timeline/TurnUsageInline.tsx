@@ -17,6 +17,9 @@ export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn
   const [detailsOpen, setDetailsOpen] = useState(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
+  const active = ['inProgress', 'sending', 'recovering'].includes(turn.status);
+  const speed = turn.tokenUsage?.generationSpeed;
+  const rate = active ? speed?.recentTokensPerSecond : speed?.averageTokensPerSecond;
   const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
   const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
   const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
@@ -121,6 +124,11 @@ export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn
           Price unavailable
         </span>
       ) : null}
+      {(active || speed) ? <span className="thread-turn-token-speed" data-testid="turn-token-speed"
+        aria-label={active ? 'Recent output token speed' : 'Average output token speed'}
+        title={`${active ? 'Last 60 seconds, averaged over usage-report intervals' : 'Whole-turn average'}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.${rate == null ? ' Waiting for a token usage report or no LLM activity in this window.' : ''}`}>
+        {rate != null && Number.isFinite(rate) && rate >= 0 ? rate.toLocaleString('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : '—'} tok/s
+      </span> : null}
     </span>
   );
 }

@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { describe, expect, it } from 'vitest';
 import type { ThreadTurnDto } from '@remote-codex/shared';
 import { ThreadTimeline } from '../ThreadTimeline';
+import { TurnUsageInline } from './TurnUsageInline';
 
 const total = {
   totalTokens: 3500,
@@ -20,7 +21,11 @@ const turn: ThreadTurnDto = {
   error: null,
   model: 'gpt-6-astra',
   reasoningEffort: 'high',
-  tokenUsage: { total, last: total, modelContextWindow: 1050000 },
+  tokenUsage: { total, last: total, modelContextWindow: 1050000, generationSpeed: {
+    outputTokens: 2000, llmTimeMs: 20000, averageTokensPerSecond: 100,
+    recentTokensPerSecond: 80, windowSeconds: 60, active: false, state: 'llm',
+    measurement: 'usageIntervals', updatedAt: '2026-09-05T10:01:12.000Z',
+  } },
   priceEstimate: {
     pricingModelKey: 'gpt-6-astra',
     pricingTierKey: 'standard',
@@ -43,6 +48,14 @@ const turn: ThreadTurnDto = {
 };
 
 describe('turn usage in the visible timeline', () => {
+  it('uses the trailing-minute speed live, rather than the completed whole-turn speed', () => {
+    const container = document.createElement('div');
+    const root = createRoot(container);
+    try {
+      flushSync(() => root.render(<TurnUsageInline turn={{...turn,status:'inProgress'}} />));
+      expect(container.querySelector('[data-testid="turn-token-speed"]')?.textContent).toBe('80.0 tok/s');
+    } finally { flushSync(() => root.unmount()); }
+  });
   it.each([true, false])(
     'keeps usage on the Worked row when collapsed=%s',
     (collapsed) => {
@@ -67,6 +80,7 @@ describe('turn usage in the visible timeline', () => {
         expect(summary?.textContent).toContain('2k out');
         expect(summary?.textContent).toContain('500 cached');
         expect(summary?.textContent).toContain('$0.11');
+        expect(summary?.textContent).toContain('100.0 tok/s');
         expect(summary?.querySelector('button button')).toBeNull();
       } finally {
         flushSync(() => root.unmount());
