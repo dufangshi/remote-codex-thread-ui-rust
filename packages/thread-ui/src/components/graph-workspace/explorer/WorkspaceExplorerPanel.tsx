@@ -21,6 +21,7 @@ import {
 
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import { WorkspaceExplorerTree } from './WorkspaceExplorerTree';
+import type { WorkspaceNodeActionProps } from './WorkspaceNodeActions';
 
 const iconButtonClassName =
   'thread-graph-explorer-icon-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40';
@@ -43,6 +44,8 @@ export function WorkspaceExplorerPanel({
   onCollapseAll,
   onCopyPath,
   onDownload,
+  onRename,
+  onDelete,
   onEmptyGarbage,
   onExpandViewer,
   onFilterModeChange,
@@ -75,7 +78,6 @@ export function WorkspaceExplorerPanel({
   liveNodes?: WorkspaceTreeNode[];
   onCollapse?: () => void;
   onCollapseAll: () => void;
-  onCopyPath?: (node: WorkspaceTreeNode) => void;
   onDownload?: (node: WorkspaceTreeNode) => void;
   onEmptyGarbage?: () => void;
   onExpandViewer?: () => void;
@@ -95,7 +97,7 @@ export function WorkspaceExplorerPanel({
   revealRequestKey?: number | undefined;
   tree: WorkspaceTreeNode;
   rootError?: string | null;
-}) {
+} & WorkspaceNodeActionProps) {
   const visibleTree = useMemo(
     () => ({
       ...tree,
@@ -358,6 +360,8 @@ export function WorkspaceExplorerPanel({
           scrollerRef={explorerScrollerRef}
           scrollTopRef={explorerScrollTopRef}
           {...(onCopyPath ? { onCopyPath } : {})}
+          {...(onRename ? { onRename } : {})}
+          {...(onDelete ? { onDelete } : {})}
           {...(onDownload ? { onDownload } : {})}
           onOpenFilter={openFilter}
           onFilterResultsChange={handleFilterResultsChange}

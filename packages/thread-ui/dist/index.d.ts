@@ -1,5 +1,5 @@
-import { T as ThreadShellControlState$1, P as PromptAttachmentUpload, a as ThreadTimelineAdapter, b as ThreadShellAdapter, c as ThreadGraphWorkspacePanelProps, d as PluginContextValue, e as ThreadDetailUiAdapter, f as ThreadGraphWorkspaceFeatures } from './workspace-panel-CK0b-4Si.js';
-export { g as PluginContext, S as SendPromptInput, h as ShellSocketConnection, i as ShellSocketHandlers, j as ThreadWorkspaceAdapter, W as WorkspaceTab, k as createDefaultPluginContextValue, m as mergePluginState } from './workspace-panel-CK0b-4Si.js';
+import { T as ThreadShellControlState$1, P as PromptAttachmentUpload, a as ThreadTimelineAdapter, b as ThreadShellAdapter, c as ThreadGraphWorkspacePanelProps, d as PluginContextValue, e as ThreadDetailUiAdapter, f as ThreadGraphWorkspaceFeatures } from './workspace-panel-DdvWdKUM.js';
+export { g as PluginContext, S as SendPromptInput, h as ShellSocketConnection, i as ShellSocketHandlers, j as ThreadWorkspaceAdapter, W as WorkspaceTab, k as createDefaultPluginContextValue, m as mergePluginState } from './workspace-panel-DdvWdKUM.js';
 import * as react from 'react';
 import { Dispatch, SetStateAction, ReactNode, RefObject, Ref, ComponentType, ForwardRefExoticComponent, RefAttributes, ComponentProps } from 'react';
 import { ReasoningEffortDto, CollaborationModeDto, SandboxModeDto, ModelOptionDto, ThreadContextUsageDto, AgentProviderCapabilitiesDto, AgentBackendToolboxItemSchemaDto, AgentBackendHookCommandTemplateDto, AgentBackendManagementSchemaDto, PromptAttachmentKindDto, ThreadSkillsDto, ThreadMcpServersDto, ThreadHooksDto, ThreadForkTurnOptionDto, ThreadGoalDto, CreateThreadHookInput, UpdateThreadHookInput, ThreadGoalStatusDto, ProviderHostFileDto, AgentSubscriptionUsageDto, UpdateThreadSettingsInput, AgentBackendIdDto, ThreadDto, AgentRuntimeStatusDto, ThreadTurnDto, ThreadActionRequestDto, ThreadHistoryItemDto, RespondThreadActionRequestInput, ThreadAnsweredRequestNoteDto, ThreadActivityNoteDto, ThreadPendingSteerDto, ThreadHistoryItemDetailDto, ShellStatusDto, ThreadExportTurnOptionsDto, ThreadExportFormatDto, ExportThreadTranscriptInput, ThreadDetailDto, PluginDto, ImportPluginInput, UpdatePluginInput } from '@remote-codex/shared';
@@ -141,6 +141,7 @@ interface WorkbenchNotification {
     summary?: string;
 }
 interface MatterWorkbenchOptions {
+    statusActions?: ReactNode;
     emptyWorkspace?: boolean;
     navigationReady?: boolean;
     harnessSessionId?: string | null;
@@ -409,10 +410,11 @@ interface ConfirmDialogProps {
     confirmLabel?: string;
     busyLabel?: string;
     busy?: boolean;
+    error?: string | null;
     onCancel: () => void;
     onConfirm: () => void | Promise<void>;
 }
-declare function ConfirmDialog({ open, title, description, confirmLabel, busyLabel, busy, onCancel, onConfirm, }: ConfirmDialogProps): react.ReactPortal | null;
+declare function ConfirmDialog({ open, title, description, confirmLabel, busyLabel, busy, error, onCancel, onConfirm, }: ConfirmDialogProps): react.ReactPortal | null;
 
 type ThreadActionMode = ThreadExportFormatDto | 'share' | 'link';
 type RelayThreadAccess = 'read' | 'control';

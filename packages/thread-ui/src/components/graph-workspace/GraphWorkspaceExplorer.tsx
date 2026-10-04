@@ -292,6 +292,25 @@ export function GraphWorkspaceExplorer({
 
   const explorerActions = {
     onCopyPath: handleCopyPath,
+    ...(workspaceAdapter?.renameNode ? {onRename: async (node: WorkspaceTreeNode, name: string) => {
+      const relative = relativeWorkspacePath(node.path, detail.workspace.absPath);
+      if (!relative || !name.trim() || name === '.' || name === '..' || /[\\/\x00-\x1f]/.test(name)) throw new Error('Enter a valid filename without path separators.');
+      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error('Save or discard unsaved changes before renaming.');
+      const prefix = relative.includes('/') ? relative.slice(0, relative.lastIndexOf('/') + 1) : '';
+      const toPath = prefix + name.trim();
+      await workspaceAdapter.renameNode!({...workspaceIdentity, fromPath: relative, toPath});
+      setFileTabs(tabs => tabs.map(tab => tab.path === node.path || tab.path.startsWith(`${node.path}/`) ? {...tab, path: toPath + tab.path.slice(node.path.length), name: tab.path === node.path ? name.trim() : tab.name} : tab));
+      await refreshWorkspaceTree(toPath);
+    }} : {}),
+    ...(workspaceAdapter?.deleteNode ? {onDelete: async (node: WorkspaceTreeNode) => {
+      const relative = relativeWorkspacePath(node.path, detail.workspace.absPath);
+      if (!relative) throw new Error('The workspace root cannot be deleted.');
+      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error('Save or discard unsaved changes before deleting.');
+      await workspaceAdapter.deleteNode!({...workspaceIdentity, path: relative});
+      setFileTabs(tabs => tabs.filter(tab => tab.path !== node.path && !tab.path.startsWith(`${node.path}/`)));
+      if (activeNode?.path === node.path || activeNode?.path.startsWith(`${node.path}/`)) setSelectedNodeId(null);
+      await refreshWorkspaceTree();
+    }} : {}),
     ...(workspaceAdapter?.downloadNode ? { onDownload: handleDownload } : {}),
     ...(workspaceAdapter?.emptyGarbage
       ? { onEmptyGarbage: handleOpenGarbage }

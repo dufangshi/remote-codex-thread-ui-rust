@@ -14,6 +14,7 @@ import { createWorkspaceExplorerModel } from './workspaceExplorerModel';
 import { projectWorkspaceExplorerRows } from './workspaceExplorerProjection';
 import { workspaceExplorerCommandForKey } from './workspaceExplorerCommands';
 import { WorkspaceExplorerRow } from './WorkspaceExplorerRow';
+import type { WorkspaceNodeActionProps } from './WorkspaceNodeActions';
 
 export function WorkspaceExplorerTree({
   tree,
@@ -29,6 +30,8 @@ export function WorkspaceExplorerTree({
   scrollTopRef,
   onCopyPath,
   onDownload,
+  onRename,
+  onDelete,
   onOpenFilter,
   onFilterResultsChange,
   onPreview,
@@ -49,7 +52,6 @@ export function WorkspaceExplorerTree({
   revealRequestKey?: number | undefined;
   scrollerRef: MutableRefObject<HTMLDivElement | null>;
   scrollTopRef?: MutableRefObject<number>;
-  onCopyPath?: (node: WorkspaceTreeNode) => void;
   onDownload?: (node: WorkspaceTreeNode) => void;
   onOpenFilter?: () => void;
   onFilterResultsChange?: (input: {
@@ -62,7 +64,7 @@ export function WorkspaceExplorerTree({
   onSelect: (node: WorkspaceTreeNode) => void;
   onToggle: (path: string) => void;
   virtualize?: boolean;
-}) {
+} & WorkspaceNodeActionProps) {
   const model = useMemo(() => createWorkspaceExplorerModel(tree), [tree]);
   const projection = useMemo(
     () =>
@@ -269,6 +271,8 @@ export function WorkspaceExplorerTree({
                 {...(onRetryDirectory ? { onRetry: onRetryDirectory } : {})}
                 {...(onDownload ? { onDownload } : {})}
                 {...(onCopyPath ? { onCopyPath } : {})}
+                {...(onRename ? { onRename } : {})}
+                {...(onDelete ? { onDelete } : {})}
               />
             </div>
           );

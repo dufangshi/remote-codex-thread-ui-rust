@@ -130,6 +130,17 @@ interface ThreadWorkspaceAdapter {
         path: string;
         kind: 'file' | 'directory';
     }) => Promise<void> | void;
+    renameNode?: (input: {
+        threadId: string;
+        workspaceId?: string | null;
+        fromPath: string;
+        toPath: string;
+    }) => Promise<void>;
+    deleteNode?: (input: {
+        threadId: string;
+        workspaceId?: string | null;
+        path: string;
+    }) => Promise<void>;
     listGarbage?: (input: {
         threadId: string;
         workspaceId?: string | null;

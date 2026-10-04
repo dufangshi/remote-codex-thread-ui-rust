@@ -2,9 +2,6 @@ import {
   ChevronDown,
   ChevronRight,
   CircleAlert,
-  Copy,
-  Download,
-  Eye,
   File,
   FileArchive,
   FileCode2,
@@ -17,6 +14,7 @@ import type { KeyboardEvent, ReactNode, Ref } from 'react';
 
 import { extensionOf, type WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerRowProjection } from './workspaceExplorerTypes';
+import { WorkspaceNodeActions, type WorkspaceNodeActionProps } from './WorkspaceNodeActions';
 
 function iconForNode(node: WorkspaceTreeNode, expanded: boolean) {
   if (node.kind === 'directory') {
@@ -75,6 +73,8 @@ export function WorkspaceExplorerRow({
   onRetry,
   onDownload,
   onCopyPath,
+  onRename,
+  onDelete,
 }: {
   row: WorkspaceExplorerRowProjection;
   selected: boolean;
@@ -90,8 +90,7 @@ export function WorkspaceExplorerRow({
   onPin?: (node: WorkspaceTreeNode) => void;
   onRetry?: (path: string) => void;
   onDownload?: (node: WorkspaceTreeNode) => void;
-  onCopyPath?: (node: WorkspaceTreeNode) => void;
-}) {
+} & WorkspaceNodeActionProps) {
   const node: WorkspaceTreeNode = {
     ...row.node.source,
     children: [],
@@ -216,48 +215,10 @@ export function WorkspaceExplorerRow({
           <CircleAlert className="h-3.5 w-3.5" />
         </button>
       ) : null}
-      {node.id !== 'linked-files' && (onDownload ||
-      (onCopyPath && node.path) ||
-      (!isDirectory && onPreview)) ? (
-        <div className="thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1">
-          {!isDirectory && onPreview ? (
-            <button
-              type="button"
-              tabIndex={-1}
-              onClick={() => onPreview(node)}
-              className="thread-graph-tree-action flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition sm:h-7 sm:w-7"
-              title={`Preview ${node.name}`}
-              aria-label={`Preview ${node.name}`}
-            >
-              <Eye className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-          {onDownload ? (
-            <button
-              type="button"
-              tabIndex={-1}
-              onClick={() => onDownload(node)}
-              className="thread-graph-tree-action flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition sm:h-7 sm:w-7"
-              title={`Download ${node.name}`}
-              aria-label={`Download ${node.name}`}
-            >
-              <Download className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-          {onCopyPath ? (
-            <button
-              type="button"
-              tabIndex={-1}
-              onClick={() => onCopyPath(node)}
-              className="thread-graph-tree-action flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition sm:h-7 sm:w-7"
-              title={`Copy path for ${node.name}`}
-              aria-label={`Copy path for ${node.name}`}
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </button>
-          ) : null}
-        </div>
-      ) : null}
+      {node.id !== 'linked-files' && node.path ? <WorkspaceNodeActions node={node}
+        {...(onDownload ? {onDownload} : {})} {...(onCopyPath ? {onCopyPath} : {})}
+        {...(onRename && !node.path.startsWith('/') && !/^[a-z]:/i.test(node.path) ? {onRename} : {})}
+        {...(onDelete && !node.path.startsWith('/') && !/^[a-z]:/i.test(node.path) ? {onDelete} : {})} /> : null}
     </div>
   );
 }

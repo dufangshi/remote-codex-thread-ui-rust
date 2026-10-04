@@ -7,6 +7,7 @@ interface RenameDialogProps {
   label: string;
   value: string;
   busy?: boolean;
+  error?: string | null;
   onChange: (value: string) => void;
   onCancel: () => void;
   onSubmit: () => void | Promise<void>;
@@ -18,6 +19,7 @@ export function RenameDialog({
   label,
   value,
   busy = false,
+  error,
   onChange,
   onCancel,
   onSubmit,
@@ -99,6 +101,7 @@ export function RenameDialog({
         </div>
 
         <div className="mt-5 flex items-center justify-end gap-2">
+          {error ? <p role="alert" className="text-sm text-rose-500">{error}</p> : null}
           <button
             type="button"
             onClick={onCancel}

@@ -6,6 +6,7 @@ import {
   ChevronDown,
   ChevronRight,
   Home,
+  FolderOpen,
   MessageSquare,
   PanelLeft,
   PanelRight,
@@ -42,6 +43,7 @@ export interface WorkbenchNotification {
   summary?: string;
 }
 export interface MatterWorkbenchOptions {
+  statusActions?: ReactNode;
   emptyWorkspace?: boolean;
   navigationReady?: boolean;
   harnessSessionId?: string | null;
@@ -216,6 +218,8 @@ export function MatterWorkbench({
             <Terminal />
           </button>
         )}
+        <button aria-label="Toggle Explorer" aria-pressed={explorerOpen} aria-expanded={explorerOpen}
+          title="Explorer" onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
         <div className="matter-rail-bottom">{settings}</div>
       </nav>}
       <header className="matter-topbar">
@@ -282,6 +286,7 @@ export function MatterWorkbench({
       >
         <div className="matter-sidebar-heading">
           <span>Workspace</span>
+          <button className="matter-mobile-close" aria-label="Open Explorer" onClick={() => {setExplorerOpen(true);setSidebarOpen(false);}}><FolderOpen /></button>
           <button
             className="matter-mobile-close"
             aria-label="Close sidebar"
@@ -323,7 +328,7 @@ export function MatterWorkbench({
         >
           {recentsOpen ? <ChevronDown /> : <ChevronRight />}
           <span>Recent chats</span>
-          <span className="matter-section-count">{o.threads.length}</span>
+          <span className="matter-section-count" title={`${o.threads.length} conversations, ${groupThreads(o.threads).length} groups`}>{groupThreads(o.threads).length}</span>
         </button>
         {recentsOpen && (
           <div className="matter-thread-section" data-testid="recent-chats">
@@ -341,6 +346,7 @@ export function MatterWorkbench({
           {newThread}
         </nav>
         {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>}
+        {o.statusActions}
         {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">
           <WorkbenchPath path={o.workspacePath} />
           <ChevronRight />

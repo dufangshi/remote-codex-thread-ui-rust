@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react';
 
-import { workspaceDisplayPath } from '../../workspacePaths';
+import { normalizeFileSystemPath, relativeWorkspacePath } from '../../workspacePaths';
 import type { ThreadWorkspaceAdapter } from '../../../adapters';
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerIdentity } from './useWorkspaceExplorerPersistence';
@@ -82,7 +82,8 @@ export function useWorkspaceExplorerActions({
     });
   }
 
-  function copyPath(node: WorkspaceTreeNode) {
+  function copyPath(node: WorkspaceTreeNode, kind: 'relative' | 'absolute' = 'relative') {
+    onError(null);
     if (
       !node.path ||
       typeof navigator === 'undefined' ||
@@ -90,8 +91,9 @@ export function useWorkspaceExplorerActions({
     ) {
       return;
     }
-    const path = workspaceDisplayPath(node.path, workspaceRootPath) ?? node.path;
-    if (path === null) return;
+    const relative = relativeWorkspacePath(node.path, workspaceRootPath);
+    if (kind === 'relative' && relative === null) { onError('This file is outside the workspace. Copy its absolute path instead.'); return; }
+    const path = kind === 'relative' ? relative! : relative === null ? normalizeFileSystemPath(node.path) : `${normalizeFileSystemPath(workspaceRootPath).replace(/\/+$/, '')}/${relative}`;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(
         error instanceof Error ? error.message : 'Failed to copy file path',

@@ -250,6 +250,12 @@
   color: var(--theme-fg);
 }
 
+.workspace-node-menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 4px; text-align: left; }
+.workspace-node-menu button:hover, .workspace-node-menu button:focus-visible { background: var(--theme-hover); }
+@media (hover: none) {
+  .thread-ui-shell .thread-graph-tree-actions { opacity: 1; pointer-events: auto; }
+}
+
 .thread-ui-shell .thread-graph-explorer-filter-mode button {
   color: var(--theme-fg-muted);
 }
