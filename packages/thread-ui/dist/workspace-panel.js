@@ -1327,11 +1327,24 @@ import {
 } from "lucide-react";
 
 // src/components/graph-workspace/explorer/WorkspaceNodeActions.tsx
-import { Copy, ClipboardCopy, Download, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  ClipboardCopy,
+  Download,
+  MoreHorizontal,
+  Pencil,
+  Trash2
+} from "lucide-react";
 import { useEffect as useEffect2, useRef as useRef3, useState as useState4 } from "react";
 import { createPortal } from "react-dom";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-function WorkspaceNodeActions({ node, onCopyPath, onDownload, onRename, onDelete }) {
+function WorkspaceNodeActions({
+  node,
+  onCopyPath,
+  onDownload,
+  onRename,
+  onDelete
+}) {
   const [menu, setMenu] = useState4(null);
   const [dialog, setDialog] = useState4(null);
   const [name, setName] = useState4(node.name);
@@ -1346,7 +1359,8 @@ function WorkspaceNodeActions({ node, onCopyPath, onDownload, onRename, onDelete
   useEffect2(() => {
     if (!menu) return;
     const outside = (event) => {
-      if (!popup.current?.contains(event.target) && !trigger.current?.contains(event.target)) setMenu(null);
+      if (!popup.current?.contains(event.target) && !trigger.current?.contains(event.target))
+        setMenu(null);
     };
     const escape = (event) => {
       if (event.key === "Escape") close();
@@ -1372,43 +1386,170 @@ function WorkspaceNodeActions({ node, onCopyPath, onDownload, onRename, onDelete
       setDialog(null);
       trigger.current?.focus();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "File operation failed.");
+      setError(
+        caught instanceof Error ? caught.message : "File operation failed."
+      );
     } finally {
       setBusy(false);
     }
   };
-  return /* @__PURE__ */ jsxs("div", { className: "thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1", onKeyDown: (event) => event.stopPropagation(), children: [
-    onDownload && /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onDownload(node), className: actionClass, title: `Download ${node.name}`, "aria-label": `Download ${node.name}`, children: /* @__PURE__ */ jsx(Download, { size: 14 }) }),
-    onCopyPath && /* @__PURE__ */ jsxs(Fragment, { children: [
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onCopyPath(node, "relative"), className: actionClass, title: `Copy relative path for ${node.name}`, "aria-label": `Copy relative path for ${node.name}`, children: /* @__PURE__ */ jsx(Copy, { size: 14 }) }),
-      /* @__PURE__ */ jsx("button", { type: "button", onClick: () => onCopyPath(node, "absolute"), className: actionClass, title: `Copy absolute path for ${node.name}`, "aria-label": `Copy absolute path for ${node.name}`, children: /* @__PURE__ */ jsx(ClipboardCopy, { size: 14 }) })
-    ] }),
-    (onRename || onDelete) && /* @__PURE__ */ jsx("button", { ref: trigger, type: "button", "aria-label": `More actions for ${node.name}`, "aria-haspopup": "menu", "aria-expanded": !!menu, className: actionClass, onClick: () => {
-      const box = trigger.current.getBoundingClientRect();
-      setMenu(menu ? null : { left: Math.max(8, Math.min(box.right - 176, window.innerWidth - 184)), top: Math.max(8, Math.min(box.bottom + 4, window.innerHeight - 104)) });
-    }, children: /* @__PURE__ */ jsx(MoreHorizontal, { size: 14 }) }),
-    menu && createPortal(/* @__PURE__ */ jsxs("div", { ref: popup, role: "menu", "aria-label": `Actions for ${node.name}`, className: "thread-ui-shell workspace-node-menu", style: { position: "fixed", left: menu.left, top: menu.top, zIndex: 1e3, width: 176, background: "var(--theme-panel)", color: "var(--theme-fg)", border: "1px solid var(--theme-border)", borderRadius: 8, padding: 4, boxShadow: "0 8px 24px #0004" }, children: [
-      onRename && /* @__PURE__ */ jsxs("button", { role: "menuitem", type: "button", onClick: () => {
-        setName(node.name);
-        setError(null);
-        setDialog("rename");
-        setMenu(null);
-      }, children: [
-        /* @__PURE__ */ jsx(Pencil, { size: 14 }),
-        " Rename"
-      ] }),
-      onDelete && /* @__PURE__ */ jsxs("button", { role: "menuitem", type: "button", onClick: () => {
-        setError(null);
-        setDialog("delete");
-        setMenu(null);
-      }, children: [
-        /* @__PURE__ */ jsx(Trash2, { size: 14 }),
-        " Delete"
-      ] })
-    ] }), document.body),
-    /* @__PURE__ */ jsx(RenameDialog, { open: dialog === "rename", title: `Rename ${node.kind === "directory" ? "folder" : "file"}`, label: "Name", value: name, onChange: setName, onCancel: () => setDialog(null), onSubmit: mutate, busy, error }),
-    /* @__PURE__ */ jsx(ConfirmDialog, { open: dialog === "delete", title: `Delete ${node.kind === "directory" ? "folder" : "file"}?`, description: `Permanently delete ${node.path}${node.kind === "directory" ? " and its contents" : ""}?`, onCancel: () => setDialog(null), onConfirm: mutate, busy, error })
-  ] });
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: "thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1",
+      onKeyDown: (event) => event.stopPropagation(),
+      children: [
+        onDownload && /* @__PURE__ */ jsx(
+          "button",
+          {
+            type: "button",
+            onClick: () => onDownload(node),
+            className: actionClass,
+            title: `Download ${node.name}`,
+            "aria-label": `Download ${node.name}`,
+            children: /* @__PURE__ */ jsx(Download, { size: 14 })
+          }
+        ),
+        onCopyPath && /* @__PURE__ */ jsxs(Fragment, { children: [
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => onCopyPath(node, "relative"),
+              className: actionClass,
+              title: `Copy relative path for ${node.name}`,
+              "aria-label": `Copy relative path for ${node.name}`,
+              children: /* @__PURE__ */ jsx(Copy, { size: 14 })
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "button",
+            {
+              type: "button",
+              onClick: () => onCopyPath(node, "absolute"),
+              className: actionClass,
+              title: `Copy absolute path for ${node.name}`,
+              "aria-label": `Copy absolute path for ${node.name}`,
+              children: /* @__PURE__ */ jsx(ClipboardCopy, { size: 14 })
+            }
+          )
+        ] }),
+        (onRename || onDelete) && /* @__PURE__ */ jsx(
+          "button",
+          {
+            ref: trigger,
+            type: "button",
+            "aria-label": `More actions for ${node.name}`,
+            "aria-haspopup": "menu",
+            "aria-expanded": !!menu,
+            className: actionClass,
+            onClick: () => {
+              const box = trigger.current.getBoundingClientRect();
+              setMenu(
+                menu ? null : {
+                  left: Math.max(
+                    8,
+                    Math.min(box.right - 176, window.innerWidth - 184)
+                  ),
+                  top: Math.max(
+                    8,
+                    Math.min(box.bottom + 4, window.innerHeight - 104)
+                  )
+                }
+              );
+            },
+            children: /* @__PURE__ */ jsx(MoreHorizontal, { size: 14 })
+          }
+        ),
+        menu && createPortal(
+          /* @__PURE__ */ jsxs(
+            "div",
+            {
+              ref: popup,
+              role: "menu",
+              "aria-label": `Actions for ${node.name}`,
+              className: "thread-ui-shell workspace-node-menu",
+              style: {
+                position: "fixed",
+                left: menu.left,
+                top: menu.top,
+                zIndex: 1e3,
+                width: 176,
+                background: "var(--theme-panel)",
+                color: "var(--theme-fg)",
+                border: "1px solid var(--theme-border)",
+                borderRadius: 8,
+                padding: 4,
+                boxShadow: "0 8px 24px #0004"
+              },
+              children: [
+                onRename && /* @__PURE__ */ jsxs(
+                  "button",
+                  {
+                    role: "menuitem",
+                    type: "button",
+                    onClick: () => {
+                      setName(node.name);
+                      setError(null);
+                      setDialog("rename");
+                      setMenu(null);
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx(Pencil, { size: 14 }),
+                      " Rename"
+                    ]
+                  }
+                ),
+                onDelete && /* @__PURE__ */ jsxs(
+                  "button",
+                  {
+                    role: "menuitem",
+                    type: "button",
+                    onClick: () => {
+                      setError(null);
+                      setDialog("delete");
+                      setMenu(null);
+                    },
+                    children: [
+                      /* @__PURE__ */ jsx(Trash2, { size: 14 }),
+                      " Delete"
+                    ]
+                  }
+                )
+              ]
+            }
+          ),
+          document.body
+        ),
+        /* @__PURE__ */ jsx(
+          RenameDialog,
+          {
+            open: dialog === "rename",
+            title: `Rename ${node.kind === "directory" ? "folder" : "file"}`,
+            label: "Name",
+            value: name,
+            onChange: setName,
+            onCancel: () => setDialog(null),
+            onSubmit: mutate,
+            busy,
+            error
+          }
+        ),
+        /* @__PURE__ */ jsx(
+          ConfirmDialog,
+          {
+            open: dialog === "delete",
+            title: `Delete ${node.kind === "directory" ? "folder" : "file"}?`,
+            description: `Permanently delete ${node.path}${node.kind === "directory" ? " and its contents" : ""}?`,
+            onCancel: () => setDialog(null),
+            onConfirm: mutate,
+            busy,
+            error
+          }
+        )
+      ]
+    }
+  );
 }
 
 // src/components/graph-workspace/explorer/WorkspaceExplorerRow.tsx

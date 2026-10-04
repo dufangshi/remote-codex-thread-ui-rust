@@ -206,6 +206,13 @@
 
 .matter-watches-toggle { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; flex-shrink: 0; height: 34px; color: var(--theme-fg-muted); border-left: 1px solid var(--theme-border); }
 .matter-watches-toggle:hover { background: var(--theme-hover); color: var(--theme-fg); }
+
+@media (min-width: 640px) {
+  /* Four file actions must remain inside the narrow side Explorer. */
+  .matter-explorer .thread-graph-workspace-resizable > [data-panel]:has(> .thread-graph-workspace-explorer-pane) {
+    min-width: 144px !important;
+  }
+}
 .matter-topbar {
   grid-column: 2 / -1;
   display: flex;
