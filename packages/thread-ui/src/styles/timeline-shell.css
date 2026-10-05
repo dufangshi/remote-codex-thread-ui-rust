@@ -17,6 +17,7 @@
 }
 
 .thread-ui-shell .thread-graph-scroll-container {
+  overflow-x: hidden;
   background: var(--theme-surface);
   color: var(--theme-fg);
   scrollbar-color: rgb(203 213 225) transparent;
@@ -448,7 +449,7 @@
   cursor: pointer;
 }
 @media (max-width: 640px) {
-  .thread-ui-shell .thread-turn-usage { flex-wrap: nowrap; gap: 0.4rem; }
+  .thread-ui-shell .thread-turn-usage { max-width: 100%; flex-wrap: wrap; gap: 0.4rem; }
   .thread-ui-shell .thread-turn-usage-model {
     display: flex;
     min-width: 0;
@@ -464,7 +465,8 @@
   .thread-ui-shell .thread-turn-usage-tokens > span:not(:first-child) { display: none; }
   .thread-ui-shell .thread-turn-usage-tokens,
   .thread-ui-shell .thread-turn-usage-price { flex-shrink: 0; }
-  .thread-ui-shell .thread-graph-worked-summary { flex-wrap: nowrap; gap: 0.35rem; }
+  .thread-ui-shell .thread-graph-worked-summary { flex-wrap: wrap; gap: 0.35rem; }
+  .thread-ui-shell .thread-execution-step-count { flex-shrink: 0; white-space: nowrap; }
 }
 
 /* Keep the last reply close to its work summary, on both pointer layouts. */

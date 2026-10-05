@@ -9,7 +9,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ThreadTurnDto } from '@remote-codex/shared';
 
 import { ThreadTimeline } from './ThreadTimeline';
-vi.mock('../app-shell/AppShellNavContext', () => ({ useAppShellNav: () => ({ showReasoningSummaries: true }) }));
+const shellSettings = vi.hoisted(() => ({ showReasoningSummaries: true }));
+vi.mock('../app-shell/AppShellNavContext', () => ({ useAppShellNav: () => shellSettings }));
 import {
   formatPreciseMessageTimestamp,
   formatShortTimestamp,
@@ -29,6 +30,7 @@ function render(node: ReactNode) {
 }
 
 afterEach(() => {
+  shellSettings.showReasoningSummaries = true;
   if (root) {
     flushSync(() => {
       root?.unmount();
@@ -88,6 +90,7 @@ describe('ThreadTimeline', () => {
 
     expect(element.textContent).toContain('Keep the original prompt.');
     expect(element.textContent).toContain('Final answer.');
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('3 steps');
     expect(element.textContent).not.toContain('Intermediate checkpoint.');
     const initialText = element.textContent ?? '';
     expect(initialText.indexOf('Keep the original prompt.')).toBeLessThan(
@@ -141,6 +144,7 @@ describe('ThreadTimeline', () => {
       expandedText.indexOf('Intermediate checkpoint.'),
     );
     expect(expandedText).toContain('Final answer.');
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('3 steps');
 
     const collapseButton = Array.from(element.querySelectorAll('button')).find(
       (button) => button.getAttribute('aria-label')?.includes('Collapse turn 1'),
@@ -152,6 +156,28 @@ describe('ThreadTimeline', () => {
     flushSync(() => cachedExpandButton?.click());
     expect(onLoadTurnDetail).toHaveBeenCalledTimes(1);
     expect(element.textContent).toContain('Intermediate checkpoint.');
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('3 steps');
+  });
+
+  it('counts work steps individually even when commands are grouped and reasoning is hidden', () => {
+    shellSettings.showReasoningSummaries = false;
+    const element = render(<ThreadTimeline autoCollapseCompletedTurns liveOutput="" turns={[{
+      ...completedTurn([
+        {id:'prompt',kind:'userMessage',text:'Check the reports'},
+        {id:'progress',kind:'agentMessage',text:'Checking reports'},
+        {id:'thought',kind:'reasoning',text:'Hidden reasoning'},
+        {id:'command-1',kind:'commandExecution',text:'Read A',status:'completed'},
+        {id:'command-2',kind:'commandExecution',text:'Read B',status:'completed'},
+        {id:'answer',kind:'agentMessage',text:'Final answer'},
+      ]), hasDeferredItems:false, deferredItemCount:0,
+    }]} />);
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('4 steps');
+    const expand = element.querySelector<HTMLButtonElement>('[aria-label*="Expand turn 1"]')!;
+    expect(expand).not.toBeNull();
+    flushSync(() => expand.click());
+    expect(element.textContent).toMatch(/Ran\s*2 commands/);
+    expect(element.textContent).not.toContain('Hidden reasoning');
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('4 steps');
   });
 
   it('defers running operations until expansion and merges later summary messages', async () => {

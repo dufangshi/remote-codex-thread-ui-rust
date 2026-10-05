@@ -105,6 +105,18 @@ function renderableHistoryItems(
   return items.filter(isRenderableHistoryItem);
 }
 
+// Count recorded work items before display grouping or reasoning preferences.
+// Deferred items are only the missing part of a summary, never the total.
+export function countTurnSteps(
+  turn: Pick<ThreadTurnDto, 'hasDeferredItems' | 'deferredItemCount'>,
+  items: ThreadHistoryItemDto[],
+) {
+  const recorded = renderableHistoryItems([...new Map(items.map(item => [item.id, item])).values()]);
+  const latestReply = recorded.findLast(item => item.kind === 'agentMessage');
+  const loaded = recorded.filter(item => item.kind !== 'userMessage' && item.id !== latestReply?.id).length;
+  return loaded + (turn.hasDeferredItems ? turn.deferredItemCount ?? 0 : 0);
+}
+
 function decodeXmlEntities(value: string) {
   return value
     .replace(/&quot;/g, '"')

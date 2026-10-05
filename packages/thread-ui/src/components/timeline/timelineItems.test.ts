@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ThreadHistoryItemDto } from "@remote-codex/shared";
 import {
+  countTurnSteps,
   getLiveOutputTailForTurn,
   groupTimelineHistoryItems,
   isRunningHistoryStatus,
@@ -25,6 +26,20 @@ function item(
 }
 
 describe("timeline item utilities", () => {
+  it('counts loaded work plus deferred operations in a running summary', () => {
+    const items = [item('prompt','userMessage'), item('progress','agentMessage'), item('checkpoint','agentMessage')];
+    expect(countTurnSteps({hasDeferredItems:true,deferredItemCount:4},items)).toBe(5);
+    expect(countTurnSteps({hasDeferredItems:false,deferredItemCount:0},[
+      items[0]!, items[1]!, item('command-1','commandExecution'), item('command-2','commandExecution'),
+      item('read','fileRead'), item('thought','reasoning'), items[2]!,
+    ])).toBe(5);
+  });
+
+  it('ignores stale deferred counts and duplicate live item updates when counting work', () => {
+    const items = [item('prompt','userMessage'), item('command','commandExecution'),
+      item('command','commandExecution',{status:'completed'}), item('empty','reasoning',{text:' '}), item('answer','agentMessage')];
+    expect(countTurnSteps({hasDeferredItems:false,deferredItemCount:9},items)).toBe(1);
+  });
   it("keeps leading unsequenced user messages before sequenced history", () => {
     const leadingUser = item("user-1", "userMessage");
     const later = item("later", "agentMessage", { sequence: 20 });

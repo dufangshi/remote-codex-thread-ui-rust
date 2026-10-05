@@ -46,6 +46,7 @@ import { MessageExpansionScope } from '../graph-chat/MessageExpansionScope';
 import { GraphChatTurnBody } from '../graph-chat/GraphChatTurnBody';
 import { GraphChatTurnFrame } from '../graph-chat/GraphChatTurnFrame';
 import {
+  countTurnSteps,
   getLiveOutputTailForTurn,
   groupTimelineHistoryItems,
   isActiveTurnStatus,
@@ -589,6 +590,10 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     () => mergeLiveTurnItems(turn.items, liveItems),
     [liveItems, turn.items],
   );
+  const stepCount = useMemo(
+    () => countTurnSteps({ hasDeferredItems: turn.hasDeferredItems, deferredItemCount: turn.deferredItemCount }, mergedItems),
+    [mergedItems, turn.hasDeferredItems, turn.deferredItemCount],
+  );
   const lastActivityAt = useMemo(
     () => latestActivityTimestamp(turn.startedAt, mergedItems, liveActivityAt),
     [liveActivityAt, mergedItems, turn.startedAt],
@@ -774,7 +779,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           {interruptedLabel}
           <ChevronRight className={`h-4 w-4 shrink-0 transition ${effectiveCollapsed ? '' : 'rotate-90'}`} />
           </button>
-          <span className="thread-execution-step-count">{turn.deferredItemCount ?? collapsedSummary.hiddenEntries.length} steps</span>
+          <span className="thread-execution-step-count">{stepCount} steps</span>
           <TurnUsageInline turn={turn} />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
