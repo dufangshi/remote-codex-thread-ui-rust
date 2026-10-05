@@ -17,7 +17,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-YGSEKE2R.js";
+} from "./chunk-ENXGHAYD.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -12393,6 +12393,7 @@ function TurnUsageInline({ turn, readOnly = false }) {
           side: "top",
           sideOffset: 6,
           className: "thread-usage-details",
+          arrowStyle: { fill: "#252622" },
           style: { background: "#252622", color: "#f2f1e9", border: "1px solid #484a41", borderRadius: 10, padding: "9px 12px", boxShadow: "0 6px 22px #0005", zIndex: 80 },
           children: /* @__PURE__ */ jsxs39("div", { style: { display: "grid", gridTemplateColumns: "16px auto auto", gap: "6px 12px", alignItems: "center", fontVariantNumeric: "tabular-nums" }, children: [
             /* @__PURE__ */ jsx48(DollarSign, { size: 14, "aria-label": "API cost" }),
@@ -13043,12 +13044,11 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
   onSelectArtifact,
   onBeforeMessageResize,
   scrollRootRef,
-  articleRef,
-  isLatestVisibleTurn = false
+  articleRef
 }) {
   const showReasoningSummaries = useAppShellNav()?.showReasoningSummaries ?? false;
   const hasLiveActivity = Boolean(livePlan) || Boolean(liveOutput) || Boolean(liveItems && liveItems.length > 0);
-  const activeForRendering = forceActive || isActiveTurnStatus(turn.status) || hasLiveActivity || isLatestVisibleTurn;
+  const activeForRendering = forceActive || isActiveTurnStatus(turn.status) || hasLiveActivity && !isTerminalTurnStatus(turn.status);
   const activeFooterTurn = activeForRendering && !isActiveTurnStatus(turn.status) ? {
     ...turn,
     status: "inProgress"
@@ -13081,7 +13081,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     () => groupTimelineHistoryItems(preparedItems),
     [preparedItems]
   );
-  const autoOpenLatestToolDetails = forceActive || isActiveTurnStatus(turn.status) || hasLiveActivity;
+  const autoOpenLatestToolDetails = activeForRendering;
   const turnTimeLabel = formatShortTimestamp(turn.startedAt);
   const turnTimeTitle = formatLongTimestamp(turn.startedAt);
   const visibleLiveHookPrompt = useMemo8(
@@ -14461,7 +14461,13 @@ function ThreadTimelineComponent({
                 const loadedTurn = loadedTurnDetails[turn.id];
                 const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
                 for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem2(mergedItems.get(item.id), item));
-                const hydratedTurn = loadedTurn ? { ...turn, ...loadedTurn, items: [...mergedItems.values()] } : turn;
+                const hydratedTurn = loadedTurn ? {
+                  ...loadedTurn,
+                  ...turn,
+                  hasDeferredItems: loadedTurn.hasDeferredItems,
+                  deferredItemCount: loadedTurn.deferredItemCount,
+                  items: [...mergedItems.values()]
+                } : turn;
                 const displayTurn = mergeOptimisticTurnItems(
                   hydratedTurn,
                   optimisticTurn

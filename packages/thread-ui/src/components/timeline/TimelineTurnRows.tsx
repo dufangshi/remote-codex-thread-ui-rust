@@ -406,7 +406,6 @@ interface ThreadTurnRowProps {
   onBeforeMessageResize?: () => void;
   scrollRootRef: RefObject<HTMLDivElement | null>;
   articleRef?: RefCallback<HTMLElement> | undefined;
-  isLatestVisibleTurn?: boolean;
 }
 
 function isTerminalTurnStatus(status: TimelineTurn['status']) {
@@ -567,7 +566,6 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   onBeforeMessageResize,
   scrollRootRef,
   articleRef,
-  isLatestVisibleTurn = false,
 }: ThreadTurnRowProps) {
   const showReasoningSummaries = useAppShellNav()?.showReasoningSummaries ?? false;
   const hasLiveActivity =
@@ -577,8 +575,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const activeForRendering =
     forceActive ||
     isActiveTurnStatus(turn.status) ||
-    hasLiveActivity ||
-    isLatestVisibleTurn;
+    (hasLiveActivity && !isTerminalTurnStatus(turn.status));
   const activeFooterTurn: TimelineTurn =
     activeForRendering && !isActiveTurnStatus(turn.status)
       ? {
@@ -615,7 +612,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [preparedItems],
   );
   const autoOpenLatestToolDetails =
-    forceActive || isActiveTurnStatus(turn.status) || hasLiveActivity;
+    activeForRendering;
   const turnTimeLabel = formatShortTimestamp(turn.startedAt);
   const turnTimeTitle = formatLongTimestamp(turn.startedAt);
   const visibleLiveHookPrompt = useMemo(

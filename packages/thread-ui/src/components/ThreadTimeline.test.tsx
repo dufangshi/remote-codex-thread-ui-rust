@@ -207,6 +207,52 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain('Final checkpoint');
   });
 
+  it('keeps the final status when a collapsed turn has cached running details', async () => {
+    const summary: ThreadTurnDto = {
+      ...completedTurn([
+        { id: 'prompt', kind: 'userMessage', text: 'Check status' },
+        { id: 'reply', kind: 'agentMessage', text: 'Checking' },
+      ]), status: 'inProgress', hasDeferredItems: true, deferredItemCount: 1,
+    };
+    const onLoadTurnDetail = vi.fn().mockResolvedValue({ ...summary,
+      hasDeferredItems: false, deferredItemCount: 0,
+      items: [summary.items[0]!, { id: 'command', kind: 'commandExecution', text: 'read report', status: 'completed' }, summary.items[1]!],
+    });
+    const props = { liveOutput: '', onLoadTurnDetail };
+    const element = render(<ThreadTimeline {...props} threadRunning activeTurnId="turn-1" turns={[summary]} />);
+    flushSync(() => element.querySelector<HTMLButtonElement>('[aria-label*="Expand turn 1"]')!.click());
+    await vi.waitFor(() => expect(element.querySelector('[aria-label*="Collapse turn 1"]')).not.toBeNull());
+    flushSync(() => element.querySelector<HTMLButtonElement>('[aria-label*="Collapse turn 1"]')!.click());
+    flushSync(() => root?.render(<ThreadTimeline {...props} threadRunning={false} activeTurnId={null} turns={[{
+      ...summary, status: 'completed', completedAt: '2026-07-03T20:12:11Z',
+      model: 'final-model', items: [summary.items[0]!, { ...summary.items[1]!, text: 'Finished' }],
+    }]} />));
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe('Worked for 1m 12s');
+    expect(element.querySelector('.thread-graph-turn-footer')).toBeNull();
+    expect(element.textContent).toContain('Finished');
+    expect(element.textContent).toContain('final-model');
+    expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('1 steps');
+    expect(onLoadTurnDetail).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['completed', 'failed', 'interrupted'] as const)('stops showing live activity after a turn is %s', (status) => {
+    const operation = { id: 'command', kind: 'commandExecution' as const, text: 'read report', status: 'completed' };
+    const turn = { ...completedTurn([{ id: 'prompt', kind: 'userMessage' as const, text: 'Check' }, operation,
+      { id: 'reply', kind: 'agentMessage' as const, text: 'Finished' }]), status: 'inProgress' as const };
+    const props = { liveOutput: '', autoCollapseCompletedTurns: false,
+      liveItems: { turnId: turn.id, items: [operation] },
+      livePlan: { turnId: turn.id, explanation: null, plan: [{ step: 'Read report', status: 'completed' as const }] },
+    };
+    const element = render(<ThreadTimeline {...props} threadRunning activeTurnId={turn.id} turns={[turn]} />);
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe('Working');
+    expect(element.querySelector('.thread-graph-turn-footer')).not.toBeNull();
+    flushSync(() => root?.render(<ThreadTimeline {...props} threadRunning={false} activeTurnId={null}
+      turns={[{ ...turn, status, completedAt: '2026-07-03T20:12:11Z' }]} />));
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe('Worked for 1m 12s');
+    expect(element.querySelector('.thread-graph-turn-footer')).toBeNull();
+    expect(element.textContent).toContain('Finished');
+  });
+
   it('uses hydrated deferred flags so an empty expansion cannot show a stale step count', async () => {
     const summary: ThreadTurnDto = {
       ...completedTurn([

@@ -82,6 +82,7 @@ export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn
             </button>
           </TooltipTrigger>
           <TooltipContent side="top" sideOffset={6} className="thread-usage-details"
+            arrowStyle={{ fill: '#252622' }}
             style={{ background: '#252622', color: '#f2f1e9', border: '1px solid #484a41', borderRadius: 10, padding: '9px 12px', boxShadow: '0 6px 22px #0005', zIndex: 80 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '16px auto auto', gap: '6px 12px', alignItems: 'center', fontVariantNumeric: 'tabular-nums' }}>
               <DollarSign size={14} aria-label="API cost" /><span style={{gridColumn:"span 2", textAlign:"right"}}>{hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle}</span>

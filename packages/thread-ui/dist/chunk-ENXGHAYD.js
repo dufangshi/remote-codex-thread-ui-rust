@@ -298,6 +298,7 @@ function TooltipContent({
   children,
   className,
   sideOffset = 0,
+  arrowStyle,
   ...props
 }) {
   return /* @__PURE__ */ jsx4(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs3(
@@ -312,7 +313,7 @@ function TooltipContent({
       ...props,
       children: [
         children,
-        /* @__PURE__ */ jsx4(TooltipPrimitive.Arrow, { className: "z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" })
+        /* @__PURE__ */ jsx4(TooltipPrimitive.Arrow, { "data-slot": "tooltip-arrow", width: 10, height: 5, className: "fill-foreground", style: arrowStyle })
       ]
     }
   ) });
