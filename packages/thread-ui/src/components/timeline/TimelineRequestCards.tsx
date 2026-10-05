@@ -69,42 +69,50 @@ export function PendingRequestCard({
     question: ThreadActionRequestDto['questions'][number],
   ) {
     const selected = answers[question.id] ?? '';
+    const customAnswer = (customAnswers[question.id] ?? '').trim();
     if (Array.isArray(selected)) {
-      return selected
+      const selectedValues = selected
         .map((answer) =>
           answer === OTHER_SENTINEL
-            ? (customAnswers[question.id] ?? '').trim()
+            ? customAnswer
             : answer.trim(),
         )
-        .filter(Boolean)
-        .join(', ');
+        .filter(Boolean);
+      return selectedValues.length > 0
+        ? selectedValues.join(', ')
+        : customAnswer;
     }
     if (selected === OTHER_SENTINEL) {
-      return (customAnswers[question.id] ?? '').trim();
+      return customAnswer;
     }
 
-    return selected.trim();
+    return selected.trim() || customAnswer;
   }
 
   function currentAnswersForQuestion(
     question: ThreadActionRequestDto['questions'][number],
   ) {
     const selected = answers[question.id] ?? '';
+    const customAnswer = (customAnswers[question.id] ?? '').trim();
     if (Array.isArray(selected)) {
-      return selected
+      const selectedValues = selected
         .map((answer) =>
           answer === OTHER_SENTINEL
-            ? (customAnswers[question.id] ?? '').trim()
+            ? customAnswer
             : answer.trim(),
         )
         .filter(Boolean);
+      return selectedValues.length > 0
+        ? selectedValues
+        : customAnswer
+          ? [customAnswer]
+          : [];
     }
     if (selected === OTHER_SENTINEL) {
-      const customAnswer = (customAnswers[question.id] ?? '').trim();
       return customAnswer ? [customAnswer] : [];
     }
     const singleAnswer = selected.trim();
-    return singleAnswer ? [singleAnswer] : [];
+    return singleAnswer ? [singleAnswer] : customAnswer ? [customAnswer] : [];
   }
 
   function toggleMultiSelectAnswer(questionId: string, label: string) {
@@ -272,7 +280,7 @@ export function PendingRequestCard({
                       ? Array.isArray(selectedAnswer) &&
                         selectedAnswer.includes(OTHER_SENTINEL)
                       : selectedAnswer === OTHER_SENTINEL;
-                    return showOtherInput ? (
+                    return showOtherInput || question.isOther ? (
                       <input
                         aria-label={`${question.header} custom answer`}
                         value={customAnswers[question.id] ?? ''}

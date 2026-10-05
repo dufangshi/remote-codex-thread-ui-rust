@@ -662,7 +662,7 @@ function ThreadTimelineComponent({
                     const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
                     for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem(mergedItems.get(item.id), item));
                     const hydratedTurn = loadedTurn
-                      ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] }
+                      ? { ...turn, ...loadedTurn, items: [...mergedItems.values()] }
                       : turn;
                     const displayTurn = mergeOptimisticTurnItems(
                       hydratedTurn,

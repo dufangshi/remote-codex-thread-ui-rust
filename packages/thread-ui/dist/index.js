@@ -10099,29 +10099,32 @@ function PendingRequestCard({
   }
   function currentAnswerForQuestion(question) {
     const selected = answers[question.id] ?? "";
+    const customAnswer = (customAnswers[question.id] ?? "").trim();
     if (Array.isArray(selected)) {
-      return selected.map(
-        (answer) => answer === OTHER_SENTINEL ? (customAnswers[question.id] ?? "").trim() : answer.trim()
-      ).filter(Boolean).join(", ");
+      const selectedValues = selected.map(
+        (answer) => answer === OTHER_SENTINEL ? customAnswer : answer.trim()
+      ).filter(Boolean);
+      return selectedValues.length > 0 ? selectedValues.join(", ") : customAnswer;
     }
     if (selected === OTHER_SENTINEL) {
-      return (customAnswers[question.id] ?? "").trim();
+      return customAnswer;
     }
-    return selected.trim();
+    return selected.trim() || customAnswer;
   }
   function currentAnswersForQuestion(question) {
     const selected = answers[question.id] ?? "";
+    const customAnswer = (customAnswers[question.id] ?? "").trim();
     if (Array.isArray(selected)) {
-      return selected.map(
-        (answer) => answer === OTHER_SENTINEL ? (customAnswers[question.id] ?? "").trim() : answer.trim()
+      const selectedValues = selected.map(
+        (answer) => answer === OTHER_SENTINEL ? customAnswer : answer.trim()
       ).filter(Boolean);
+      return selectedValues.length > 0 ? selectedValues : customAnswer ? [customAnswer] : [];
     }
     if (selected === OTHER_SENTINEL) {
-      const customAnswer = (customAnswers[question.id] ?? "").trim();
       return customAnswer ? [customAnswer] : [];
     }
     const singleAnswer = selected.trim();
-    return singleAnswer ? [singleAnswer] : [];
+    return singleAnswer ? [singleAnswer] : customAnswer ? [customAnswer] : [];
   }
   function toggleMultiSelectAnswer(questionId, label) {
     setAnswers((current) => {
@@ -10228,7 +10231,7 @@ function PendingRequestCard({
             question.isOther && (() => {
               const selectedAnswer = answers[question.id];
               const showOtherInput = question.multiSelect ? Array.isArray(selectedAnswer) && selectedAnswer.includes(OTHER_SENTINEL) : selectedAnswer === OTHER_SENTINEL;
-              return showOtherInput ? /* @__PURE__ */ jsx40(
+              return showOtherInput || question.isOther ? /* @__PURE__ */ jsx40(
                 "input",
                 {
                   "aria-label": `${question.header} custom answer`,
@@ -14448,7 +14451,7 @@ function ThreadTimelineComponent({
                 const loadedTurn = loadedTurnDetails[turn.id];
                 const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
                 for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem2(mergedItems.get(item.id), item));
-                const hydratedTurn = loadedTurn ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] } : turn;
+                const hydratedTurn = loadedTurn ? { ...turn, ...loadedTurn, items: [...mergedItems.values()] } : turn;
                 const displayTurn = mergeOptimisticTurnItems(
                   hydratedTurn,
                   optimisticTurn
