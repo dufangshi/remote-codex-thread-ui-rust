@@ -14481,7 +14481,7 @@ function ThreadTimelineComponent({
                 const loadedTurn = loadedTurnDetails[turn.id];
                 const mergedItems = new Map(loadedTurn?.items.map((item) => [item.id, item]));
                 for (const item of turn.items) mergedItems.set(item.id, mergeThreadHistoryItem2(mergedItems.get(item.id), item));
-                const hydratedTurn = loadedTurn ? { ...loadedTurn, ...turn, items: [...mergedItems.values()] } : turn;
+                const hydratedTurn = loadedTurn ? { ...turn, ...loadedTurn, items: [...mergedItems.values()] } : turn;
                 const displayTurn = mergeOptimisticTurnItems(
                   hydratedTurn,
                   optimisticTurn
