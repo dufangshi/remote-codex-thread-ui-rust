@@ -54,6 +54,40 @@ function renderPermission(onRespond = vi.fn()) {
   return { view: container, onRespond };
 }
 
+function renderOtherAnswer(onRespond = vi.fn()) {
+  const request: ThreadActionRequestDto = {
+    id: "input-7",
+    kind: "requestUserInput",
+    title: "Answer Required",
+    description: null,
+    turnId: "turn-1",
+    itemId: "call-1",
+    createdAt: "2026-09-04T00:00:00Z",
+    questions: [
+      {
+        id: "limit",
+        header: "行数上限",
+        question: "行数上限",
+        isOther: true,
+        isSecret: false,
+        options: [
+          { label: "上限提到 55k", description: "raise limit" },
+          { label: "保持 50k", description: "keep limit" },
+        ],
+      },
+    ],
+  };
+  container = document.createElement("div");
+  document.body.append(container);
+  root = createRoot(container);
+  flushSync(() => {
+    root?.render(
+      <PendingRequestCard request={request} onRespond={onRespond} />,
+    );
+  });
+  return { view: container, onRespond };
+}
+
 describe("PendingRequestCard permissions", () => {
   it("renders ACP choices as immediate permission actions", () => {
     const { view, onRespond } = renderPermission();
@@ -71,6 +105,36 @@ describe("PendingRequestCard permissions", () => {
       answers: {
         permission: { answers: ["Allow always"] },
       },
+    });
+  });
+});
+
+describe("PendingRequestCard custom answers", () => {
+  it("allows submitting a custom Other answer without selecting an option", () => {
+    const { view, onRespond } = renderOtherAnswer();
+    const input = view.querySelector<HTMLInputElement>(
+      'input[aria-label="行数上限 custom answer"]',
+    );
+    expect(input).not.toBeNull();
+    const submit = Array.from(view.querySelectorAll("button")).find(
+      (button) => button.textContent === "Submit",
+    );
+    expect(submit?.disabled).toBe(true);
+
+    const valueSetter = Object.getOwnPropertyDescriptor(
+      HTMLInputElement.prototype,
+      "value",
+    )?.set;
+    flushSync(() => {
+      valueSetter?.call(input, "不限制仓库行数");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      input?.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    expect(submit?.disabled).toBe(false);
+    flushSync(() => submit?.click());
+    expect(onRespond).toHaveBeenCalledWith("input-7", {
+      answers: { limit: { answers: ["不限制仓库行数"] } },
     });
   });
 });
