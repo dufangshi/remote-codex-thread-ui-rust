@@ -70,7 +70,7 @@ describe('TurnStatusBar footer', () => {
     expect(zeroHtml).toContain('$0');
   });
 
-  it('shows live per-turn input, output, cache, total and model effort', () => {
+  it('shows a compact live total and model effort without inline token breakdowns', () => {
     const total = { totalTokens: 3500, inputTokens: 1500, outputTokens: 2000, cachedInputTokens: 500, reasoningOutputTokens: 800 };
     const html = renderToStaticMarkup(
       <TurnStatusBar
@@ -83,9 +83,9 @@ describe('TurnStatusBar footer', () => {
     );
     expect(html).toContain('gpt-5.4 · medium');
     expect(html).toContain('Total tokens: 3,500');
-    expect(html).toContain('Input tokens (including cached input): 1,500');
-    expect(html).toContain('Output tokens (including reasoning): 2,000');
-    expect(html).toContain('Cached input tokens: 500');
+    expect(html).not.toContain('1k in');
+    expect(html).not.toContain('2k out');
+    expect(html).not.toContain('500 cached');
     expect(html).toContain('Price unavailable');
     expect(html).not.toContain('$0');
   });

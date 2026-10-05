@@ -12320,36 +12320,13 @@ function TurnUsageInline({ turn, readOnly = false }) {
   const price = turn.priceEstimate;
   const active = ["inProgress", "sending", "recovering"].includes(turn.status);
   const speed = turn.tokenUsage?.generationSpeed;
-  const rate = active ? speed?.recentTokensPerSecond : speed?.averageTokensPerSecond;
+  const measured = speed?.latestOutputTokensPerSecond !== void 0;
+  const rate = active ? measured ? speed?.latestOutputTokensPerSecond : speed?.recentTokensPerSecond : speed?.averageOutputTokensPerSecond ?? speed?.averageTokensPerSecond;
+  const speedTitle = measured ? active ? `Latest confirmed response, ${((speed?.latestOutputTimeMs ?? 0) / 1e3).toLocaleString("en-US", { maximumFractionDigits: 1 })} seconds: actual output tokens (including reasoning and tool arguments) / LLM response time, including time to first output. Tool execution and user waits excluded. Updates when the harness reports tokens, not on each text chunk.${speed?.latestOutputMeasuredAt ? ` Measured at ${new Date(speed.latestOutputMeasuredAt).toLocaleTimeString()}.` : ""}` : "Whole-turn average of confirmed response intervals. Actual output tokens include reasoning and tool arguments; response latency is included. Tool execution, user waits and unreported idle tails are excluded. This is not instantaneous decoder speed." : `${active ? "Last 60 seconds, confirmed usage-report intervals only" : "Whole-turn average"}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
   const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
   const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
   const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
   const hasPrice = price && Number.isFinite(price.totalUsd) && price.totalUsd >= 0;
-  const counts = usage ? [
-    { label: "tok", value: usage.totalTokens, title: "Total tokens" },
-    {
-      label: "in",
-      value: uncachedInput,
-      title: "Input tokens (excluding cache)"
-    },
-    {
-      label: "out",
-      value: usage.outputTokens,
-      title: "Output tokens (including reasoning)"
-    },
-    {
-      label: "cached",
-      value: usage.cachedInputTokens,
-      title: "Cached input tokens"
-    },
-    ...usage.cacheWriteInputTokens ? [
-      {
-        label: "cache write",
-        value: usage.cacheWriteInputTokens,
-        title: "Cache write input tokens"
-      }
-    ] : []
-  ] : [];
   const priceTitle = "API price unavailable for this model or usage report.";
   const details = usage ? [
     { label: "Input", icon: ArrowDownToLine, value: uncachedInput, usd: price?.inputUsd },
@@ -12373,39 +12350,32 @@ function TurnUsageInline({ turn, readOnly = false }) {
         ]
       }
     ),
-    counts.length > 0 ? /* @__PURE__ */ jsx48(
+    usage ? /* @__PURE__ */ jsx48(
       "span",
       {
         className: "thread-turn-usage-tokens",
         "aria-label": "Turn token usage",
-        children: counts.map(({ label, value, title }) => /* @__PURE__ */ jsxs39(
-          "span",
-          {
-            title: `${title}: ${value.toLocaleString("en-US")}`,
-            children: [
-              /* @__PURE__ */ jsx48("span", { className: "thread-turn-usage-value", children: formatCompactTokenCount(value) }),
-              " ",
-              label
-            ]
-          },
-          label
-        ))
+        children: /* @__PURE__ */ jsxs39("span", { title: `Total tokens: ${usage.totalTokens.toLocaleString("en-US")}`, children: [
+          /* @__PURE__ */ jsx48("span", { className: "thread-turn-usage-value", children: formatCompactTokenCount(usage.totalTokens) }),
+          " ",
+          "tok"
+        ] })
       }
     ) : null,
-    hasPrice && readOnly ? /* @__PURE__ */ jsx48("span", { className: "thread-turn-usage-price", children: formatCompactUsd(price.totalUsd) }) : hasPrice ? /* @__PURE__ */ jsxs39(Tooltip, { open: detailsOpen, onOpenChange: setDetailsOpen, children: [
+    hasPrice && readOnly ? /* @__PURE__ */ jsx48("span", { className: "thread-turn-usage-price", children: formatCompactUsd(price.totalUsd) }) : hasPrice || usage ? /* @__PURE__ */ jsxs39(Tooltip, { open: detailsOpen, onOpenChange: setDetailsOpen, children: [
       /* @__PURE__ */ jsx48(TooltipTrigger, { asChild: true, children: /* @__PURE__ */ jsx48(
         "button",
         {
           type: "button",
-          className: "thread-turn-usage-price",
-          "aria-label": `API cost ${formatCompactUsd(price.totalUsd)}. Show token details`,
+          className: hasPrice ? "thread-turn-usage-price" : "thread-turn-usage-unavailable",
+          "aria-label": `${hasPrice ? `API cost ${formatCompactUsd(price.totalUsd)}` : "API price unavailable"}. Show token details`,
           "aria-expanded": detailsOpen,
           onClick: (event) => {
             event.preventDefault();
             event.stopPropagation();
             setDetailsOpen((open) => !open);
           },
-          children: formatCompactUsd(price.totalUsd)
+          children: hasPrice ? formatCompactUsd(price.totalUsd) : "Price unavailable"
         }
       ) }),
       /* @__PURE__ */ jsx48(
@@ -12417,7 +12387,7 @@ function TurnUsageInline({ turn, readOnly = false }) {
           style: { background: "#252622", color: "#f2f1e9", border: "1px solid #484a41", borderRadius: 10, padding: "9px 12px", boxShadow: "0 6px 22px #0005", zIndex: 80 },
           children: /* @__PURE__ */ jsxs39("div", { style: { display: "grid", gridTemplateColumns: "16px auto auto", gap: "6px 12px", alignItems: "center", fontVariantNumeric: "tabular-nums" }, children: [
             /* @__PURE__ */ jsx48(DollarSign, { size: 14, "aria-label": "API cost" }),
-            /* @__PURE__ */ jsx48("span", { style: { gridColumn: "span 2", textAlign: "right" }, children: formatCompactUsd(price.totalUsd) }),
+            /* @__PURE__ */ jsx48("span", { style: { gridColumn: "span 2", textAlign: "right" }, children: hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle }),
             details.map(({ label, icon: Icon, value, usd }) => /* @__PURE__ */ jsxs39("span", { style: { display: "contents" }, children: [
               /* @__PURE__ */ jsx48(Icon, { size: 14, "aria-label": label }),
               /* @__PURE__ */ jsx48("span", { "aria-label": `${label}: ${value.toLocaleString("en-US")} tokens`, title: `${label}: ${value.toLocaleString("en-US")}`, children: formatCompactTokenCount(value) }),
@@ -12426,14 +12396,14 @@ function TurnUsageInline({ turn, readOnly = false }) {
           ] })
         }
       )
-    ] }) : usage ? /* @__PURE__ */ jsx48("span", { className: "thread-turn-usage-unavailable", title: priceTitle, children: "Price unavailable" }) : null,
+    ] }) : null,
     active || speed ? /* @__PURE__ */ jsxs39(
       "span",
       {
         className: "thread-turn-token-speed",
         "data-testid": "turn-token-speed",
-        "aria-label": active ? "Recent output token speed" : "Average output token speed",
-        title: `${active ? "Last 60 seconds, averaged over usage-report intervals" : "Whole-turn average"}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.${rate == null ? " Waiting for a token usage report or no LLM activity in this window." : ""}`,
+        "aria-label": active ? measured ? "Latest confirmed output token speed" : "Recent output token speed" : "Average output token speed",
+        title: `${speedTitle}${rate == null ? " Waiting for the first output token usage report." : ""}`,
         children: [
           rate != null && Number.isFinite(rate) && rate >= 0 ? rate.toLocaleString("en-US", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : "\u2014",
           " tok/s"
