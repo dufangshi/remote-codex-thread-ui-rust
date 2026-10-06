@@ -52,9 +52,12 @@ export type PromptFileTransferAction =
       files?: File[];
     };
 
+export type ComposerSendShortcut = 'ctrlEnter' | 'enter';
+
 export type PromptKeyDownAction = {
   preventDefault: boolean;
   submit: boolean;
+  steer?: true;
 };
 
 export type ComposerSettingsUpdateDecision = {
@@ -320,19 +323,31 @@ export function derivePromptKeyDownAction({
   key,
   metaKey,
   ctrlKey,
+  shiftKey = false,
+  altKey = false,
+  sendShortcut = 'ctrlEnter',
   busy,
   disabled,
 }: {
   key: string;
   metaKey: boolean;
   ctrlKey: boolean;
+  shiftKey?: boolean;
+  altKey?: boolean;
+  sendShortcut?: ComposerSendShortcut;
   busy: boolean;
   disabled: boolean;
 }): PromptKeyDownAction {
-  const isSubmitShortcut = key === 'Enter' && (metaKey || ctrlKey);
+  const modifier = metaKey || ctrlKey;
+  const steer = modifier && (sendShortcut === 'enter' ? !shiftKey : shiftKey);
+  const send = sendShortcut === 'enter'
+    ? !modifier && !shiftKey
+    : modifier && !shiftKey;
+  const isSubmitShortcut = key === 'Enter' && !altKey && (send || steer);
   return {
     preventDefault: isSubmitShortcut,
     submit: isSubmitShortcut && !busy && !disabled,
+    ...(isSubmitShortcut && steer ? { steer: true } : {}),
   };
 }
 

@@ -727,7 +727,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           {workedLabel}
         </span>
         {interruptedLabel}
-        <TurnUsageInline turn={turn} />
+        <TurnUsageInline turn={turn} speedMode="average" />
         <span
           className="thread-graph-worked-rule h-px min-w-0 flex-1"
           aria-hidden="true"
@@ -777,7 +777,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           <ChevronRight className={`h-4 w-4 shrink-0 transition ${effectiveCollapsed ? '' : 'rotate-90'}`} />
           </button>
           <span className="thread-execution-step-count">{stepCount} steps</span>
-          <TurnUsageInline turn={turn} />
+          <TurnUsageInline turn={turn} speedMode="average" />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
             aria-hidden="true"

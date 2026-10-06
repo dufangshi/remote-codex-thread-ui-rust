@@ -234,13 +234,20 @@ function derivePromptKeyDownAction({
   key,
   metaKey,
   ctrlKey,
+  shiftKey = false,
+  altKey = false,
+  sendShortcut = "ctrlEnter",
   busy,
   disabled
 }) {
-  const isSubmitShortcut = key === "Enter" && (metaKey || ctrlKey);
+  const modifier = metaKey || ctrlKey;
+  const steer = modifier && (sendShortcut === "enter" ? !shiftKey : shiftKey);
+  const send = sendShortcut === "enter" ? !modifier && !shiftKey : modifier && !shiftKey;
+  const isSubmitShortcut = key === "Enter" && !altKey && (send || steer);
   return {
     preventDefault: isSubmitShortcut,
-    submit: isSubmitShortcut && !busy && !disabled
+    submit: isSubmitShortcut && !busy && !disabled,
+    ...isSubmitShortcut && steer ? { steer: true } : {}
   };
 }
 function deriveComposerSettingsUpdateDecision({
@@ -4924,6 +4931,7 @@ function useComposerToolbarProps({
 import { jsx as jsx23 } from "react/jsx-runtime";
 function ThreadComposer({
   activeView,
+  sendShortcut = "ctrlEnter",
   edgeToEdgeMobile = false,
   busy = false,
   settingsBusy = false,
@@ -5357,7 +5365,7 @@ function ThreadComposer({
       return;
     }
   }
-  async function submitPrompt() {
+  async function submitPrompt(delivery) {
     if (submitInFlightRef.current) {
       return;
     }
@@ -5378,7 +5386,10 @@ function ThreadComposer({
       if (!submitInput) {
         return;
       }
-      const submitted = await onSubmit(submitInput);
+      const submitted = await onSubmit({
+        ...submitInput,
+        ...!isShellView && delivery ? { delivery } : {}
+      });
       if (submitted === false) {
         return;
       }
@@ -5492,6 +5503,9 @@ function ThreadComposer({
       key: event.key,
       metaKey: event.metaKey,
       ctrlKey: event.ctrlKey,
+      shiftKey: event.shiftKey,
+      altKey: event.altKey,
+      sendShortcut: isShellView ? "ctrlEnter" : sendShortcut,
       busy,
       disabled
     });
@@ -5499,7 +5513,7 @@ function ThreadComposer({
       event.preventDefault();
     }
     if (keyAction.submit) {
-      void submitPrompt();
+      void submitPrompt(keyAction.steer ? "steer" : void 0);
     }
   }
   const {
@@ -12323,15 +12337,16 @@ function formatTurnRuntimeSummary(turn) {
   const effort = turn.reasoningEffort?.trim();
   return effort ? `${model} \xB7 ${effort}` : model;
 }
-function TurnUsageInline({ turn, readOnly = false }) {
+function TurnUsageInline({ turn, readOnly = false, speedMode = "recent" }) {
   const [detailsOpen, setDetailsOpen] = useState29(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
   const active = ["inProgress", "sending", "recovering"].includes(turn.status);
   const speed = turn.tokenUsage?.generationSpeed;
   const measured = speed?.latestOutputTokensPerSecond !== void 0;
-  const rate = active ? measured ? speed?.latestOutputTokensPerSecond : speed?.recentTokensPerSecond : speed?.averageOutputTokensPerSecond ?? speed?.averageTokensPerSecond;
-  const speedTitle = measured ? active ? `Latest confirmed response, ${((speed?.latestOutputTimeMs ?? 0) / 1e3).toLocaleString("en-US", { maximumFractionDigits: 1 })} seconds: actual output tokens (including reasoning and tool arguments) / LLM response time, including time to first output. Tool execution and user waits excluded. Updates when the harness reports tokens, not on each text chunk.${speed?.latestOutputMeasuredAt ? ` Measured at ${new Date(speed.latestOutputMeasuredAt).toLocaleTimeString()}.` : ""}` : "Whole-turn average of confirmed response intervals. Actual output tokens include reasoning and tool arguments; response latency is included. Tool execution, user waits and unreported idle tails are excluded. This is not instantaneous decoder speed." : `${active ? "Last 60 seconds, confirmed usage-report intervals only" : "Whole-turn average"}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
+  const recent = active && speedMode === "recent";
+  const rate = recent ? measured ? speed?.latestOutputTokensPerSecond : speed?.recentTokensPerSecond : speed?.averageOutputTokensPerSecond ?? speed?.averageTokensPerSecond;
+  const speedTitle = measured ? recent ? `Latest confirmed response, ${((speed?.latestOutputTimeMs ?? 0) / 1e3).toLocaleString("en-US", { maximumFractionDigits: 1 })} seconds: actual output tokens (including reasoning and tool arguments) / LLM response time, including time to first output. Tool execution and user waits excluded. Updates when the harness reports tokens, not on each text chunk.${speed?.latestOutputMeasuredAt ? ` Measured at ${new Date(speed.latestOutputMeasuredAt).toLocaleTimeString()}.` : ""}` : "Whole-turn average of confirmed response intervals. Actual output tokens include reasoning and tool arguments; response latency is included. Tool execution, user waits and unreported idle tails are excluded. This is not instantaneous decoder speed." : `${recent ? "Last 60 seconds, confirmed usage-report intervals only" : "Whole-turn average"}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
   const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
   const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
   const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
@@ -12412,7 +12427,7 @@ function TurnUsageInline({ turn, readOnly = false }) {
       {
         className: "thread-turn-token-speed",
         "data-testid": "turn-token-speed",
-        "aria-label": active ? measured ? "Latest confirmed output token speed" : "Recent output token speed" : "Average output token speed",
+        "aria-label": recent ? measured ? "Latest confirmed output token speed" : "Recent output token speed" : "Average output token speed",
         title: `${speedTitle}${rate == null ? " Waiting for the first output token usage report." : ""}`,
         children: [
           rate != null && Number.isFinite(rate) && rate >= 0 ? rate.toLocaleString("en-US", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : "\u2014",
@@ -13178,7 +13193,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
   const terminalWorkedNode = isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? /* @__PURE__ */ jsxs41("div", { className: "thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm", children: [
     /* @__PURE__ */ jsx51("span", { className: "thread-graph-worked-label shrink-0", children: workedLabel }),
     interruptedLabel,
-    /* @__PURE__ */ jsx51(TurnUsageInline, { turn }),
+    /* @__PURE__ */ jsx51(TurnUsageInline, { turn, speedMode: "average" }),
     /* @__PURE__ */ jsx51(
       "span",
       {
@@ -13222,7 +13237,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
         stepCount,
         " steps"
       ] }),
-      /* @__PURE__ */ jsx51(TurnUsageInline, { turn }),
+      /* @__PURE__ */ jsx51(TurnUsageInline, { turn, speedMode: "average" }),
       /* @__PURE__ */ jsx51(
         "span",
         {

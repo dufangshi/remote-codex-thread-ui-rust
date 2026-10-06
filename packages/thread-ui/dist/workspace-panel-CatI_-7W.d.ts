@@ -10,6 +10,7 @@ interface PromptAttachmentUpload extends PromptAttachmentManifestEntryDto {
 type SendPromptInput = {
     prompt: string;
     attachments?: PromptAttachmentUpload[];
+    delivery?: 'steer';
 };
 interface ThreadShellControlState {
     status: _remote_codex_shared.ShellStatusDto;

@@ -13,21 +13,22 @@ export function formatTurnRuntimeSummary(turn: TimelineTurn) {
   return effort ? `${model} · ${effort}` : model;
 }
 
-export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn; readOnly?: boolean }) {
+export function TurnUsageInline({ turn, readOnly = false, speedMode = 'recent' }: { turn: TimelineTurn; readOnly?: boolean; speedMode?: 'average' | 'recent' }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
   const active = ['inProgress', 'sending', 'recovering'].includes(turn.status);
   const speed = turn.tokenUsage?.generationSpeed;
   const measured = speed?.latestOutputTokensPerSecond !== undefined;
-  const rate = active
+  const recent = active && speedMode === 'recent';
+  const rate = recent
     ? measured ? speed?.latestOutputTokensPerSecond : speed?.recentTokensPerSecond
     : speed?.averageOutputTokensPerSecond ?? speed?.averageTokensPerSecond;
   const speedTitle = measured
-    ? active
+    ? recent
       ? `Latest confirmed response, ${((speed?.latestOutputTimeMs ?? 0) / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 })} seconds: actual output tokens (including reasoning and tool arguments) / LLM response time, including time to first output. Tool execution and user waits excluded. Updates when the harness reports tokens, not on each text chunk.${speed?.latestOutputMeasuredAt ? ` Measured at ${new Date(speed.latestOutputMeasuredAt).toLocaleTimeString()}.` : ''}`
       : 'Whole-turn average of confirmed response intervals. Actual output tokens include reasoning and tool arguments; response latency is included. Tool execution, user waits and unreported idle tails are excluded. This is not instantaneous decoder speed.'
-    : `${active ? 'Last 60 seconds, confirmed usage-report intervals only' : 'Whole-turn average'}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
+    : `${recent ? 'Last 60 seconds, confirmed usage-report intervals only' : 'Whole-turn average'}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
   const uncachedInput = usage ? Math.max(0, usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)) : 0;
   const reasoning = usage ? Math.min(usage.outputTokens, usage.reasoningOutputTokens ?? 0) : 0;
   const reasoningUsd = usage?.outputTokens && price ? price.outputUsd * reasoning / usage.outputTokens : 0;
@@ -96,7 +97,7 @@ export function TurnUsageInline({ turn, readOnly = false }: { turn: TimelineTurn
         </Tooltip>
       ) : null}
       {(active || speed) ? <span className="thread-turn-token-speed" data-testid="turn-token-speed"
-        aria-label={active ? measured ? 'Latest confirmed output token speed' : 'Recent output token speed' : 'Average output token speed'}
+        aria-label={recent ? measured ? 'Latest confirmed output token speed' : 'Recent output token speed' : 'Average output token speed'}
         title={`${speedTitle}${rate == null ? ' Waiting for the first output token usage report.' : ''}`}>
         {rate != null && Number.isFinite(rate) && rate >= 0 ? rate.toLocaleString('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : '—'} tok/s
       </span> : null}

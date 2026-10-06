@@ -23,6 +23,7 @@ export type {
 export {
   ThreadComposer,
   type ThreadComposerProps,
+  type ComposerSendShortcut,
 } from './components/ThreadComposer';
 export {
   ThreadCards,

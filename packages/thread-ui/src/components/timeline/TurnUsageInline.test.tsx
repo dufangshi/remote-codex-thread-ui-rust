@@ -48,6 +48,24 @@ const turn: ThreadTurnDto = {
 };
 
 describe('turn usage in the visible timeline', () => {
+  it.each([true, false])('shows whole-turn average above live activity and recent speed in the footer (measured=%s)', measured => {
+    const container = document.createElement('div');
+    const root = createRoot(container);
+    const liveTurn: ThreadTurnDto = { ...turn, status: 'inProgress', completedAt: null, tokenUsage: { ...turn.tokenUsage!, generationSpeed: {
+      ...turn.tokenUsage!.generationSpeed!, active: true,
+      ...(measured ? { averageOutputTokensPerSecond: 120, latestOutputTokensPerSecond: 150, latestOutputTimeMs: 10000 } : {}),
+    } } };
+    try {
+      flushSync(() => root.render(<ThreadTimeline turns={[liveTurn]} activeTurnId={turn.id} liveOutput="Working..." />));
+      const summary = container.querySelector('.thread-graph-worked-summary [data-testid="turn-token-speed"]');
+      const footer = container.querySelector('.thread-graph-turn-footer [data-testid="turn-token-speed"]');
+      expect(summary?.textContent).toBe(`${measured ? '120.0' : '100.0'} tok/s`);
+      expect(summary?.getAttribute('aria-label')).toBe('Average output token speed');
+      expect(summary?.getAttribute('title')).toContain('Whole-turn average');
+      expect(footer?.textContent).toBe(`${measured ? '150.0' : '80.0'} tok/s`);
+    } finally { flushSync(() => root.unmount()); }
+  });
+
   it('uses the trailing-minute speed live, rather than the completed whole-turn speed', () => {
     const container = document.createElement('div');
     const root = createRoot(container);

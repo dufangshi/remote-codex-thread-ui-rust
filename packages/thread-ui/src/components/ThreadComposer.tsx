@@ -54,7 +54,9 @@ import {
   normalizePromptText,
   tokenizePrompt,
   type ComposerAttachmentDraft,
+  type ComposerSendShortcut,
 } from './composer/composerUtils';
+export type { ComposerSendShortcut } from './composer/composerUtils';
 import {
   buildComposerClassNames,
   buildComposerControlState,
@@ -97,6 +99,7 @@ export type ThreadComposerAttachmentPicker = (input: {
 
 export interface ThreadComposerProps {
   activeView: 'chat' | 'shell';
+  sendShortcut?: ComposerSendShortcut;
   edgeToEdgeMobile?: boolean;
   busy?: boolean;
   settingsBusy?: boolean;
@@ -147,6 +150,7 @@ export interface ThreadComposerProps {
   onSubmit: (input: {
     prompt: string;
     attachments?: PromptAttachmentUpload[];
+    delivery?: 'steer';
   }) => Promise<boolean | void> | boolean | void;
   onInterrupt?: () => Promise<void> | void;
   onCompact?: () => Promise<void> | void;
@@ -204,6 +208,7 @@ export interface ThreadComposerProps {
 
 export function ThreadComposer({
   activeView,
+  sendShortcut = 'ctrlEnter',
   edgeToEdgeMobile = false,
   busy = false,
   settingsBusy = false,
@@ -685,7 +690,7 @@ export function ThreadComposer({
     }
   }
 
-  async function submitPrompt() {
+  async function submitPrompt(delivery?: 'steer') {
     if (submitInFlightRef.current) {
       return;
     }
@@ -710,7 +715,10 @@ export function ThreadComposer({
         return;
       }
 
-      const submitted = await onSubmit(submitInput);
+      const submitted = await onSubmit({
+        ...submitInput,
+        ...(!isShellView && delivery ? { delivery } : {}),
+      });
       if (submitted === false) {
         return;
       }
@@ -853,6 +861,9 @@ export function ThreadComposer({
       key: event.key,
       metaKey: event.metaKey,
       ctrlKey: event.ctrlKey,
+      shiftKey: event.shiftKey,
+      altKey: event.altKey,
+      sendShortcut: isShellView ? 'ctrlEnter' : sendShortcut,
       busy,
       disabled,
     });
@@ -861,7 +872,7 @@ export function ThreadComposer({
       event.preventDefault();
     }
     if (keyAction.submit) {
-      void submitPrompt();
+      void submitPrompt(keyAction.steer ? 'steer' : undefined);
     }
   }
 
