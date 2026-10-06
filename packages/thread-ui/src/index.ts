@@ -25,6 +25,7 @@ export {
   type ThreadComposerProps,
   type ComposerSendShortcut,
 } from './components/ThreadComposer';
+export { TokenUsageCost, type TokenUsageCostProps } from './components/timeline/TokenUsageCost';
 export {
   ThreadCards,
   ThreadWorkspaceLayout,

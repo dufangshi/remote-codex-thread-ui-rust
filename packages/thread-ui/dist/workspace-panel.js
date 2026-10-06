@@ -32,7 +32,7 @@ import {
   relativeWorkspacePath,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-ENXGHAYD.js";
+} from "./chunk-Z7YAWDU5.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect9, useMemo as useMemo9, useState as useState11 } from "react";

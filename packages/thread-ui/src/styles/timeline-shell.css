@@ -136,7 +136,8 @@
   color: var(--theme-fg-soft);
 }
 
-.thread-ui-shell .thread-turn-usage-price {
+.thread-ui-shell .thread-turn-usage-price,
+.thread-usage-cost .thread-turn-usage-price {
   white-space: nowrap;
   border: 1px solid var(--theme-border);
   border-radius: 0.4rem;
@@ -145,7 +146,8 @@
   background: var(--theme-panel);
 }
 
-.thread-ui-shell .thread-turn-usage-unavailable {
+.thread-ui-shell .thread-turn-usage-unavailable,
+.thread-usage-cost .thread-turn-usage-unavailable {
   color: var(--theme-fg-muted);
 }
 

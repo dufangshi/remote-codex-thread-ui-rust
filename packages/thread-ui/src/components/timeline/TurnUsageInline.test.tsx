@@ -100,6 +100,26 @@ describe('turn usage in the visible timeline', () => {
       expect(document.querySelector('[aria-label="Reasoning: 800 tokens"]')).not.toBeNull();
     } finally { flushSync(() => root.unmount()); container.remove(); vi.unstubAllGlobals(); }
   });
+  it('opens on the first touch even when focus arrives before click, then closes on the next press', () => {
+    vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
+    const container = document.createElement('div');
+    document.body.append(container);
+    const root = createRoot(container);
+    try {
+      flushSync(() => root.render(<TurnUsageInline turn={turn} />));
+      const button = container.querySelector<HTMLButtonElement>('.thread-turn-usage-price')!;
+      flushSync(() => button.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true })));
+      document.dispatchEvent(new MouseEvent('pointerup', { bubbles: true }));
+      flushSync(() => button.focus());
+      expect(button.getAttribute('aria-expanded')).toBe('true');
+      flushSync(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, detail: 1 })));
+      expect(button.getAttribute('aria-expanded')).toBe('true');
+      flushSync(() => button.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true })));
+      document.dispatchEvent(new MouseEvent('pointerup', { bubbles: true }));
+      flushSync(() => button.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, detail: 1 })));
+      expect(button.getAttribute('aria-expanded')).toBe('false');
+    } finally { flushSync(() => root.unmount()); container.remove(); vi.unstubAllGlobals(); }
+  });
   it.each([true, false])(
     'keeps usage on the Worked row when collapsed=%s',
     (collapsed) => {

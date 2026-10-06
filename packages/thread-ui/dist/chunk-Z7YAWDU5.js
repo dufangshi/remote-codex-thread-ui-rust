@@ -105,10 +105,59 @@ function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
+// src/components/graph-ui/Tooltip.tsx
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+function TooltipProvider({
+  delayDuration = 0,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx2(
+    TooltipPrimitive.Provider,
+    {
+      "data-slot": "tooltip-provider",
+      delayDuration,
+      ...props
+    }
+  );
+}
+function Tooltip({ ...props }) {
+  return /* @__PURE__ */ jsx2(TooltipProvider, { children: /* @__PURE__ */ jsx2(TooltipPrimitive.Root, { "data-slot": "tooltip", ...props }) });
+}
+function TooltipTrigger({
+  ...props
+}) {
+  return /* @__PURE__ */ jsx2(TooltipPrimitive.Trigger, { "data-slot": "tooltip-trigger", ...props });
+}
+function TooltipContent({
+  children,
+  className,
+  sideOffset = 0,
+  arrowStyle,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx2(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs2(
+    TooltipPrimitive.Content,
+    {
+      "data-slot": "tooltip-content",
+      sideOffset,
+      className: cn(
+        "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md bg-foreground px-3 py-1.5 text-balance text-xs text-background animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
+        className
+      ),
+      ...props,
+      children: [
+        children,
+        /* @__PURE__ */ jsx2(TooltipPrimitive.Arrow, { "data-slot": "tooltip-arrow", width: 10, height: 5, className: "fill-foreground", style: arrowStyle })
+      ]
+    }
+  ) });
+}
+
 // src/components/RenameDialog.tsx
 import { useEffect as useEffect2 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
-import { jsx as jsx2, jsxs as jsxs2 } from "react/jsx-runtime";
+import { jsx as jsx3, jsxs as jsxs3 } from "react/jsx-runtime";
 function RenameDialog({
   open,
   title,
@@ -142,8 +191,8 @@ function RenameDialog({
     void onSubmit();
   }
   return createPortal2(
-    /* @__PURE__ */ jsxs2("div", { className: "fixed inset-0 z-[95] flex items-center justify-center p-4 sm:p-6", children: [
-      /* @__PURE__ */ jsx2(
+    /* @__PURE__ */ jsxs3("div", { className: "fixed inset-0 z-[95] flex items-center justify-center p-4 sm:p-6", children: [
+      /* @__PURE__ */ jsx3(
         "button",
         {
           type: "button",
@@ -153,7 +202,7 @@ function RenameDialog({
           className: "absolute inset-0 bg-[var(--overlay-scrim)] backdrop-blur-sm disabled:cursor-not-allowed"
         }
       ),
-      /* @__PURE__ */ jsxs2(
+      /* @__PURE__ */ jsxs3(
         "form",
         {
           role: "dialog",
@@ -162,12 +211,12 @@ function RenameDialog({
           onSubmit: handleSubmit,
           className: "relative z-[1] w-full max-w-md rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-5 text-[var(--theme-fg)] shadow-[var(--theme-shadow)] sm:p-6",
           children: [
-            /* @__PURE__ */ jsxs2("div", { className: "flex items-start justify-between gap-3", children: [
-              /* @__PURE__ */ jsxs2("div", { className: "min-w-0 flex-1", children: [
-                /* @__PURE__ */ jsx2("p", { className: "text-sm font-medium", children: title }),
-                /* @__PURE__ */ jsx2("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: "Changes are saved only after confirmation." })
+            /* @__PURE__ */ jsxs3("div", { className: "flex items-start justify-between gap-3", children: [
+              /* @__PURE__ */ jsxs3("div", { className: "min-w-0 flex-1", children: [
+                /* @__PURE__ */ jsx3("p", { className: "text-sm font-medium", children: title }),
+                /* @__PURE__ */ jsx3("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: "Changes are saved only after confirmation." })
               ] }),
-              /* @__PURE__ */ jsx2(
+              /* @__PURE__ */ jsx3(
                 "button",
                 {
                   type: "button",
@@ -175,13 +224,13 @@ function RenameDialog({
                   onClick: onCancel,
                   disabled: busy,
                   className: "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[var(--theme-border)] text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60",
-                  children: /* @__PURE__ */ jsx2("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-4 w-4 fill-current", children: /* @__PURE__ */ jsx2("path", { d: "M3.22 2.47 8 7.25l4.78-4.78 1.06 1.06L9.06 8.31l4.78 4.78-1.06 1.06L8 9.37l-4.78 4.78-1.06-1.06 4.78-4.78-4.78-4.78 1.06-1.06Z" }) })
+                  children: /* @__PURE__ */ jsx3("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-4 w-4 fill-current", children: /* @__PURE__ */ jsx3("path", { d: "M3.22 2.47 8 7.25l4.78-4.78 1.06 1.06L9.06 8.31l4.78 4.78-1.06 1.06L8 9.37l-4.78 4.78-1.06-1.06 4.78-4.78-4.78-4.78 1.06-1.06Z" }) })
                 }
               )
             ] }),
-            /* @__PURE__ */ jsxs2("div", { className: "mt-5", children: [
-              /* @__PURE__ */ jsx2("label", { htmlFor: "rename-dialog-input", className: "text-sm font-medium", children: label }),
-              /* @__PURE__ */ jsx2(
+            /* @__PURE__ */ jsxs3("div", { className: "mt-5", children: [
+              /* @__PURE__ */ jsx3("label", { htmlFor: "rename-dialog-input", className: "text-sm font-medium", children: label }),
+              /* @__PURE__ */ jsx3(
                 "input",
                 {
                   id: "rename-dialog-input",
@@ -193,9 +242,9 @@ function RenameDialog({
                 }
               )
             ] }),
-            /* @__PURE__ */ jsxs2("div", { className: "mt-5 flex items-center justify-end gap-2", children: [
-              error ? /* @__PURE__ */ jsx2("p", { role: "alert", className: "text-sm text-rose-500", children: error }) : null,
-              /* @__PURE__ */ jsx2(
+            /* @__PURE__ */ jsxs3("div", { className: "mt-5 flex items-center justify-end gap-2", children: [
+              error ? /* @__PURE__ */ jsx3("p", { role: "alert", className: "text-sm text-rose-500", children: error }) : null,
+              /* @__PURE__ */ jsx3(
                 "button",
                 {
                   type: "button",
@@ -205,7 +254,7 @@ function RenameDialog({
                   children: "Cancel"
                 }
               ),
-              /* @__PURE__ */ jsx2(
+              /* @__PURE__ */ jsx3(
                 "button",
                 {
                   type: "submit",
@@ -226,7 +275,7 @@ function RenameDialog({
 // src/components/graph-workspace/GraphResizablePanels.tsx
 import { GripVerticalIcon } from "lucide-react";
 import * as ResizablePrimitive from "react-resizable-panels";
-import { jsx as jsx3 } from "react/jsx-runtime";
+import { jsx as jsx4 } from "react/jsx-runtime";
 function classNames(...values) {
   return values.filter(Boolean).join(" ");
 }
@@ -234,7 +283,7 @@ function ResizablePanelGroup({
   className,
   ...props
 }) {
-  return /* @__PURE__ */ jsx3(
+  return /* @__PURE__ */ jsx4(
     ResizablePrimitive.PanelGroup,
     {
       "data-slot": "resizable-panel-group",
@@ -249,14 +298,14 @@ function ResizablePanelGroup({
 function ResizablePanel({
   ...props
 }) {
-  return /* @__PURE__ */ jsx3(ResizablePrimitive.Panel, { "data-slot": "resizable-panel", ...props });
+  return /* @__PURE__ */ jsx4(ResizablePrimitive.Panel, { "data-slot": "resizable-panel", ...props });
 }
 function ResizableHandle({
   withHandle,
   className,
   ...props
 }) {
-  return /* @__PURE__ */ jsx3(
+  return /* @__PURE__ */ jsx4(
     ResizablePrimitive.PanelResizeHandle,
     {
       "data-slot": "resizable-handle",
@@ -265,58 +314,9 @@ function ResizableHandle({
         className
       ),
       ...props,
-      children: withHandle ? /* @__PURE__ */ jsx3("div", { className: "bg-border z-10 flex h-4 w-3 items-center justify-center rounded-xs border", children: /* @__PURE__ */ jsx3(GripVerticalIcon, { className: "size-2.5" }) }) : null
+      children: withHandle ? /* @__PURE__ */ jsx4("div", { className: "bg-border z-10 flex h-4 w-3 items-center justify-center rounded-xs border", children: /* @__PURE__ */ jsx4(GripVerticalIcon, { className: "size-2.5" }) }) : null
     }
   );
-}
-
-// src/components/graph-ui/Tooltip.tsx
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
-function TooltipProvider({
-  delayDuration = 0,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx4(
-    TooltipPrimitive.Provider,
-    {
-      "data-slot": "tooltip-provider",
-      delayDuration,
-      ...props
-    }
-  );
-}
-function Tooltip({ ...props }) {
-  return /* @__PURE__ */ jsx4(TooltipProvider, { children: /* @__PURE__ */ jsx4(TooltipPrimitive.Root, { "data-slot": "tooltip", ...props }) });
-}
-function TooltipTrigger({
-  ...props
-}) {
-  return /* @__PURE__ */ jsx4(TooltipPrimitive.Trigger, { "data-slot": "tooltip-trigger", ...props });
-}
-function TooltipContent({
-  children,
-  className,
-  sideOffset = 0,
-  arrowStyle,
-  ...props
-}) {
-  return /* @__PURE__ */ jsx4(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsxs3(
-    TooltipPrimitive.Content,
-    {
-      "data-slot": "tooltip-content",
-      sideOffset,
-      className: cn(
-        "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md bg-foreground px-3 py-1.5 text-balance text-xs text-background animate-in fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
-        className
-      ),
-      ...props,
-      children: [
-        children,
-        /* @__PURE__ */ jsx4(TooltipPrimitive.Arrow, { "data-slot": "tooltip-arrow", width: 10, height: 5, className: "fill-foreground", style: arrowStyle })
-      ]
-    }
-  ) });
 }
 
 // src/components/workspacePaths.ts
@@ -1142,13 +1142,13 @@ export {
   Button,
   GraphWorkspaceImageLightbox,
   ZoomableImage,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
   RenameDialog,
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
   getGraphChatHighlighter,
   normalizeFileSystemPath,
   localFileHref,
