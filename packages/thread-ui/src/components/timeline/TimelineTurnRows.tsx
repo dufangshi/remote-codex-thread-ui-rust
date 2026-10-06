@@ -395,6 +395,7 @@ interface ThreadTurnRowProps {
   liveActivityAt?: string | null;
   liveOutput: string;
   forceActive?: boolean;
+  backgroundAgentCount?: number;
   onToggleCollapse: (turn: TimelineTurn, currentCollapsed: boolean) => void;
   deferredItemsLoading?: boolean;
   deferredItemsError?: string | undefined;
@@ -555,6 +556,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   liveActivityAt = null,
   liveOutput,
   forceActive = false,
+  backgroundAgentCount = 0,
   onToggleCollapse,
   deferredItemsLoading = false,
   deferredItemsError,
@@ -698,6 +700,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       turn={activeFooterTurn}
       variant="footer"
       lastActivityAt={lastActivityAt}
+      backgroundAgentCount={backgroundAgentCount}
     />
   ) : null;
   const collapsedSummary = useMemo(

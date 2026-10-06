@@ -804,6 +804,7 @@ export interface ThreadSubagentDto {
   startedAt: string | null;
   completedAt: string | null;
   parentToolCallId: string | null;
+  isBackground?: boolean;
 }
 
 export interface ThreadLiveItemsDto {

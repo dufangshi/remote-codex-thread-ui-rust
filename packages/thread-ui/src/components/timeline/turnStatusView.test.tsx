@@ -21,6 +21,23 @@ function activeTurn(overrides: Partial<TimelineTurn> = {}): TimelineTurn {
 }
 
 describe('TurnStatusBar footer', () => {
+  it('explains background work after a reply and clears the label when the turn ends', () => {
+    const html = renderToStaticMarkup(
+      <TurnStatusBar turn={activeTurn()} variant="footer" backgroundAgentCount={1} />,
+    );
+    expect(html).toContain('1 background agent running');
+    expect(html).not.toContain('animate-pulse');
+    expect(html).toContain('gpt-5.4 · medium');
+    const done = renderToStaticMarkup(
+      <TurnStatusBar turn={activeTurn({ status: 'completed' })} variant="footer" backgroundAgentCount={1} />,
+    );
+    expect(done).not.toContain('background agent');
+    const confirming = renderToStaticMarkup(
+      <TurnStatusBar turn={activeTurn({ status: 'recovering' })} variant="footer" backgroundAgentCount={1} />,
+    );
+    expect(confirming).not.toContain('background agent');
+  });
+
   it('renders a compact transparent summary without unavailable cost or tokens', () => {
     const now = Date.now();
     const html = renderToStaticMarkup(

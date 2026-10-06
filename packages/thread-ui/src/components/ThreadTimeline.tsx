@@ -47,6 +47,7 @@ export interface ThreadTimelineProps {
   pendingRequests?: ThreadActionRequestDto[];
   activeTurnId?: string | null;
   threadRunning?: boolean;
+  backgroundAgentCount?: number;
   livePlan?: {
     turnId: string;
     explanation: string | null;
@@ -155,6 +156,7 @@ function ThreadTimelineComponent({
   pendingRequests = [],
   activeTurnId = null,
   threadRunning = false,
+  backgroundAgentCount = 0,
   pendingSteers = [],
   livePlan = null,
   liveItems = null,
@@ -703,6 +705,7 @@ function ThreadTimelineComponent({
                     threadId={threadId}
                     {...(adapter ? { adapter } : {})}
                     turn={displayTurn}
+                    backgroundAgentCount={backgroundAgentCount}
                     absoluteIndex={visibleTurnAbsoluteOffset + visibleIndex + 1}
                     isCollapsed={rowCollapsed}
                     livePlan={rowLivePlan}
@@ -787,6 +790,7 @@ function ThreadTimelineComponent({
                     threadId={threadId}
                     {...(adapter ? { adapter } : {})}
                     turn={optimisticTurn}
+                    backgroundAgentCount={backgroundAgentCount}
                     absoluteIndex={optimisticAbsoluteIndex}
                     isCollapsed={rowCollapsed}
                     livePlan={null}
@@ -900,6 +904,7 @@ function ThreadTimelineComponent({
               threadId={threadId}
               {...(adapter ? { adapter } : {})}
               turn={unattachedLiveTurn}
+              backgroundAgentCount={backgroundAgentCount}
               absoluteIndex={unattachedLiveTurnIndex}
               isCollapsed={collapsedTurnOverrides[unattachedLiveTurn.id] ?? false}
               livePlan={livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null}

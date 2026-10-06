@@ -268,10 +268,12 @@ export function TurnStatusBar({
   turn,
   variant = 'header',
   lastActivityAt = null,
+  backgroundAgentCount = 0,
 }: {
   turn: TimelineTurn;
   variant?: 'header' | 'footer';
   lastActivityAt?: string | null;
+  backgroundAgentCount?: number;
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
@@ -289,8 +291,12 @@ export function TurnStatusBar({
   if (variant === 'footer') {
     return (
       <div className="thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs">
-        <div className="thread-graph-turn-footer-runtime flex min-w-0 items-center gap-2">
-          <TurnStatusIndicator status={turn.status} />
+        <div className="thread-graph-turn-footer-runtime flex min-w-0 flex-wrap items-center gap-2">
+          {active && turn.status !== 'recovering' && backgroundAgentCount > 0 ? (
+            <span className="thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]" role="status">
+              {backgroundAgentCount} background agent{backgroundAgentCount === 1 ? '' : 's'} running
+            </span>
+          ) : <TurnStatusIndicator status={turn.status} />}
           <TurnUsageInline turn={turn} />
         </div>
         <div className="thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap">

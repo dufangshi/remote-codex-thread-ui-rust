@@ -12747,7 +12747,8 @@ function TurnStatusIndicator({
 function TurnStatusBar({
   turn,
   variant = "header",
-  lastActivityAt = null
+  lastActivityAt = null,
+  backgroundAgentCount = 0
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
@@ -12758,8 +12759,13 @@ function TurnStatusBar({
   const toneClassName = turn.status === "failed" ? "border-rose-300/20 bg-rose-300/[0.06] text-rose-100" : active ? "border-sky-300/22 bg-sky-300/[0.08] text-sky-100" : "border-stone-700/90 bg-stone-900/70 text-stone-200";
   if (variant === "footer") {
     return /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs", children: [
-      /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer-runtime flex min-w-0 items-center gap-2", children: [
-        /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
+      /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer-runtime flex min-w-0 flex-wrap items-center gap-2", children: [
+        active && turn.status !== "recovering" && backgroundAgentCount > 0 ? /* @__PURE__ */ jsxs41("span", { className: "thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]", role: "status", children: [
+          backgroundAgentCount,
+          " background agent",
+          backgroundAgentCount === 1 ? "" : "s",
+          " running"
+        ] }) : /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
         /* @__PURE__ */ jsx50(TurnUsageInline, { turn })
       ] }),
       /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap", children: [
@@ -13165,6 +13171,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
   liveActivityAt = null,
   liveOutput,
   forceActive = false,
+  backgroundAgentCount = 0,
   onToggleCollapse,
   deferredItemsLoading = false,
   deferredItemsError,
@@ -13290,7 +13297,8 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     {
       turn: activeFooterTurn,
       variant: "footer",
-      lastActivityAt
+      lastActivityAt,
+      backgroundAgentCount
     }
   ) : null;
   const collapsedSummary = useMemo8(
@@ -14175,6 +14183,7 @@ function ThreadTimelineComponent({
   pendingRequests = [],
   activeTurnId = null,
   threadRunning = false,
+  backgroundAgentCount = 0,
   pendingSteers = [],
   livePlan = null,
   liveItems = null,
@@ -14623,6 +14632,7 @@ function ThreadTimelineComponent({
                     threadId,
                     ...adapter ? { adapter } : {},
                     turn: displayTurn,
+                    backgroundAgentCount,
                     absoluteIndex: visibleTurnAbsoluteOffset + visibleIndex + 1,
                     isCollapsed: rowCollapsed,
                     livePlan: rowLivePlan,
@@ -14697,6 +14707,7 @@ function ThreadTimelineComponent({
                     threadId,
                     ...adapter ? { adapter } : {},
                     turn: optimisticTurn,
+                    backgroundAgentCount,
                     absoluteIndex: optimisticAbsoluteIndex,
                     isCollapsed: rowCollapsed,
                     livePlan: null,
@@ -14798,6 +14809,7 @@ function ThreadTimelineComponent({
               threadId,
               ...adapter ? { adapter } : {},
               turn: unattachedLiveTurn,
+              backgroundAgentCount,
               absoluteIndex: unattachedLiveTurnIndex,
               isCollapsed: collapsedTurnOverrides[unattachedLiveTurn.id] ?? false,
               livePlan: livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null,
