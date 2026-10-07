@@ -2,11 +2,36 @@
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import { describe, expect, it, vi } from 'vitest';
-import { GroupedThreadTabs, groupThreads } from './GroupedThreadTabs';
+import { GroupedThreadTabs, groupThreads, threadGroupActivity } from './GroupedThreadTabs';
 import type { WorkbenchThread } from './MatterWorkbench';
 const thread = (key: string, rootKey?: string): WorkbenchThread => ({key, rootKey, title: key, href: `/threads/${key}`, status: 'running', subtitle: '', favorite: false});
 
 describe('agent thread groups', () => {
+  it('distinguishes idle parents with running descendants and preserves their own execution and error states', () => {
+    const children = [thread('child', 'root'), { ...thread('grandchild', 'root'), parentKey: 'child' }];
+    for (const status of ['idle', 'unread']) {
+      const parent = { ...thread('root'), status };
+      expect(threadGroupActivity(parent, children)).toMatchObject({ status: 'agents-running', label: expect.stringContaining('2 agent threads running') });
+      expect(parent.status).toBe(status);
+      expect(threadGroupActivity(parent, children.map(child => ({ ...child, status: 'idle' })))).toMatchObject({ status });
+    }
+    for (const status of ['running', 'failed', 'interrupted', 'unknown']) {
+      expect(threadGroupActivity({ ...thread('root'), status }, children).status).toBe(status);
+    }
+  });
+  it('updates a group indicator when its last running child finishes without changing the parent link', () => {
+    const container = document.createElement('nav'); document.body.append(container);
+    const root = createRoot(container);
+    const parent = { ...thread('root'), status: 'idle' };
+    try {
+      flushSync(() => root.render(<GroupedThreadTabs threads={[parent, thread('child', 'root')]} currentKey="root" onNavigate={vi.fn()} />));
+      expect(container.querySelector('[role="img"]')?.getAttribute('data-status')).toBe('agents-running');
+      expect(container.querySelector('[role="img"]')?.getAttribute('aria-label')).toBe('Idle, read · 1 agent thread running');
+      expect(container.querySelector('a')?.getAttribute('href')).toBe('/threads/root');
+      flushSync(() => root.render(<GroupedThreadTabs threads={[parent, { ...thread('child', 'root'), status: 'idle' }]} currentKey="root" onNavigate={vi.fn()} />));
+      expect(container.querySelector('[role="img"]')?.getAttribute('data-status')).toBe('idle');
+    } finally { flushSync(() => root.unmount()); container.remove(); }
+  });
   it('groups children and grandchildren by the device-scoped root while preserving unrelated and missing-root threads', () => {
     const groups = groupThreads([thread('mac:child', 'mac:root'), thread('mac:root'), thread('mac:grandchild', 'mac:root'), thread('wsl:root'), thread('wsl:orphan', 'wsl:missing')]);
     expect(groups.map(g => g.root.key)).toEqual(['mac:root', 'wsl:root', 'wsl:orphan']);

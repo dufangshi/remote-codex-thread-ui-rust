@@ -3,6 +3,24 @@ import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 import type { WorkbenchThread } from './MatterWorkbench';
 
+const statusLabels: Record<string, string> = {
+  running: 'Running', unread: 'Completed, unread', idle: 'Idle, read',
+  failed: 'Failed', interrupted: 'Interrupted', unknown: 'Status unavailable',
+};
+
+// This is a navigation indicator. The parent's own execution state stays intact.
+export function threadGroupActivity(root: WorkbenchThread, children: WorkbenchThread[] = []) {
+  const running = children.filter(child => child.status === 'running').length;
+  const label = statusLabels[root.status] ?? root.status;
+  if (running && (root.status === 'idle' || root.status === 'unread')) {
+    return {
+      status: 'agents-running',
+      label: `${label} · ${running} agent thread${running === 1 ? '' : 's'} running`,
+    };
+  }
+  return { status: root.status, label };
+}
+
 export function groupThreads(threads: WorkbenchThread[]) {
   const keys = new Set(threads.map(t => t.key));
   const groups = threads.filter(t => !t.rootKey || t.rootKey === t.key || !keys.has(t.rootKey))
@@ -38,11 +56,12 @@ export function GroupedThreadTabs({ threads, currentKey, onNavigate }: {
     {groups.map(({ root, children }) => {
       const selected = children.find(child => child.key === currentKey);
       const active = root.key === currentKey || !!selected;
+      const activity = threadGroupActivity(root, children);
       return <div key={root.key} className="matter-thread-group" style={{ display: 'flex', flexShrink: 0, minWidth: 0 }}>
         <a className="matter-group-tab" href={root.href} aria-current={active ? 'page' : undefined}
-          title={selected ? `${root.title} · ${selected.title}` : root.title}
+          title={`${selected ? `${root.title} · ${selected.title}` : root.title}\n${activity.label}`}
           onClick={event => { event.preventDefault(); onNavigate(root.href); }}>
-          <span className="matter-status-dot" role="img" aria-label={selected?.status ?? root.status} data-status={selected?.status ?? (children.some(child => child.status === 'running') ? 'running' : root.status)} />
+          <span className="matter-status-dot" role="img" aria-label={activity.label} data-status={activity.status} />
           <span>{root.title}{selected ? ` · ${selected.title}` : ''}</span>
         </a>
         {children.length > 0 && <button className="matter-group-toggle" aria-label={`${root.title}: ${children.length} agent threads`}
@@ -54,13 +73,15 @@ export function GroupedThreadTabs({ threads, currentKey, onNavigate }: {
     })}
     {menu && activeMenu && createPortal(<div ref={popup} id="matter-agent-threads" role="region" aria-label={`${activeMenu.root.title} agent threads`}
       style={{ position: 'fixed', left: menu.left, top: menu.top, zIndex: 1000, width: 'min(280px, calc(100vw - 16px))', maxHeight: 'min(420px, 65dvh)', overflowY: 'auto', background: 'var(--theme-surface)', color: 'var(--theme-fg)', border: '1px solid var(--theme-border)', borderRadius: 8, padding: 6, boxShadow: '0 8px 24px #0004' }}>
-      {[activeMenu.root, ...activeMenu.children].map(thread => <a key={thread.key} href={thread.href}
+      {[activeMenu.root, ...activeMenu.children].map(thread => {
+        const activity = threadGroupActivity(thread, thread.key === activeMenu.root.key ? activeMenu.children : []);
+        return <a key={thread.key} href={thread.href}
         aria-current={thread.key === currentKey ? 'page' : undefined}
         style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', borderRadius: 4, background: thread.key === currentKey ? 'var(--theme-hover)' : undefined, color: 'inherit' }}
         onClick={event => { event.preventDefault(); setMenu(null); onNavigate(thread.href); }}>
-        <span className="matter-status-dot" data-status={thread.status} />
+        <span className="matter-status-dot" role="img" aria-label={activity.label} data-status={activity.status} />
         <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{thread.title}</span>
-      </a>)}
+      </a>; })}
     </div>, document.body)}
   </>;
 }

@@ -434,6 +434,17 @@
   border-color: oklch(0.8 0.12 245);
   border-top-color: transparent;
 }
+.matter-status-dot[data-status='agents-running'] {
+  width: 10px;
+  height: 10px;
+  border-color: #8066cd;
+  background: radial-gradient(circle, #8066cd 0 2px, transparent 2.5px);
+  animation: matter-agents-running 1.8s ease-in-out infinite;
+}
+.thread-ui-shell[data-theme-effective='dark'] .matter-status-dot[data-status='agents-running'] {
+  border-color: #b39af2;
+  background: radial-gradient(circle, #b39af2 0 2px, transparent 2.5px);
+}
 .matter-status-dot[data-status='unread'] {
   background: var(--theme-accent-solid);
   border-color: var(--theme-accent-solid);
@@ -448,7 +459,8 @@
 .matter-status-dot[data-status='unknown'] { border-style: dotted; opacity: .6; }
 .matter-status-dot[data-status='interrupted'] { border-color: #b88b48; border-radius: 2px; }
 @keyframes matter-running { to { transform: rotate(360deg); } }
-@media (prefers-reduced-motion: reduce) { .matter-status-dot[data-status='running'] { animation: none; } }
+@keyframes matter-agents-running { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .matter-status-dot:is([data-status='running'], [data-status='agents-running']) { animation: none; } }
 .matter-sidebar-footer {
   margin-top: auto;
   padding: 20px 8px 0;

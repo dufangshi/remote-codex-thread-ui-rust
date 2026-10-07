@@ -18,12 +18,7 @@ import {
 } from 'lucide-react';
 import { WorkbenchContext } from './WorkbenchContext';
 import { WorkbenchPath } from './WorkbenchPath';
-import { GroupedThreadTabs, groupThreads } from './GroupedThreadTabs';
-
-const statusLabels: Record<string, string> = {
-  running: 'Running', unread: 'Completed, unread', idle: 'Idle, read',
-  failed: 'Failed', interrupted: 'Interrupted', unknown: 'Status unavailable',
-};
+import { GroupedThreadTabs, groupThreads, threadGroupActivity } from './GroupedThreadTabs';
 
 export interface WorkbenchThread {
   key: string;
@@ -138,7 +133,7 @@ export function MatterWorkbench({
     setBellOpen(false);
     o.onNavigate(href);
   };
-  const renderThread = (thread: WorkbenchThread) => (
+  const renderThread = (thread: WorkbenchThread, activity = threadGroupActivity(thread)) => (
     <div key={thread.key} className="matter-thread-entry">
     <a
       href={thread.href}
@@ -148,13 +143,13 @@ export function MatterWorkbench({
       }}
       className="matter-thread-row"
       aria-current={thread.key === o.currentKey ? 'page' : undefined}
-      title={`${thread.title}\n${thread.subtitle} · ${statusLabels[thread.status] ?? thread.status}`}
+      title={`${thread.title}\n${thread.subtitle} · ${activity.label}`}
     >
       <span
         className="matter-status-dot"
-        data-status={thread.status}
+        data-status={activity.status}
         role="img"
-        aria-label={statusLabels[thread.status] ?? thread.status}
+        aria-label={activity.label}
       />
       <span className="matter-thread-copy">
         <span>{thread.title}</span>
@@ -166,10 +161,10 @@ export function MatterWorkbench({
   );
   const renderThreadGroups = (threads: WorkbenchThread[]) => groupThreads(threads).map(({ root, children }) => (
     <div key={root.key}>
-      {renderThread(root)}
+      {renderThread(root, threadGroupActivity(root, children))}
       {children.length > 0 && <details open={children.some(child => child.key === o.currentKey) || undefined} style={{ margin: '0 0 6px 14px' }}>
         <summary style={{ padding: '4px 8px', fontSize: 12, cursor: 'pointer', color: 'var(--theme-fg-soft)' }}>{children.length} agent threads</summary>
-        {children.map(renderThread)}
+        {children.map(child => renderThread(child))}
       </details>}
     </div>
   ));
@@ -314,7 +309,9 @@ export function MatterWorkbench({
         </button>
         {shortcutsOpen && (
           <div className="matter-thread-section" data-testid="shortcuts">
-            {o.threads.filter((t) => t.favorite).map(renderThread)}
+            {o.threads.filter((t) => t.favorite).map(thread => renderThread(
+              thread, threadGroupActivity(thread, o.threads.filter(child => child.rootKey === thread.key && child.key !== thread.key)),
+            ))}
             {!o.threads.some((t) => t.favorite) && (
               <p className="matter-sidebar-hint">
                 Star a thread to keep it close.
