@@ -889,11 +889,6 @@ function textFromClipboardHtml(value) {
   container.innerHTML = value;
   return serializePromptContent(container, false);
 }
-function editorContainsStyledRichText(editor) {
-  return Array.from(editor.querySelectorAll("[style], font")).some(
-    (node) => !node.closest('[data-segment-type="attachment"][contenteditable="false"]')
-  );
-}
 var BLOCK_PROMPT_TAGS = /* @__PURE__ */ new Set(["DIV", "LI", "P"]);
 function serializePromptNode(node, currentText) {
   if (node.nodeType === Node.TEXT_NODE) {
@@ -925,80 +920,20 @@ function serializePromptContent(root, normalizeNbsp = true) {
   }
   return normalizeNbsp ? text.replace(/\u00a0/g, " ") : text;
 }
-function segmentNodeText(child) {
-  if (child instanceof HTMLElement && child.dataset.segmentType === "attachment" && child.dataset.placeholder) {
-    return child.dataset.placeholder;
-  }
-  return serializePromptNode(child, "");
-}
 function serializeEditorPrompt(editor) {
   return serializePromptContent(editor);
 }
 function measureSelectionOffset(root, container, offset) {
-  let resolvedChild = null;
-  let offsetWithinChild = offset;
-  if (container === root) {
-    const childNodes2 = Array.from(root.childNodes);
-    let total2 = 0;
-    for (let index = 0; index < Math.min(offset, childNodes2.length); index += 1) {
-      const child = childNodes2[index];
-      if (child) {
-        total2 += segmentNodeText(child).length;
-      }
-    }
-    return total2;
+  const range = document.createRange();
+  range.selectNodeContents(root);
+  try {
+    range.setEnd(container, offset);
+  } catch {
+    return serializeEditorPrompt(root).length;
   }
-  if (container.nodeType === Node.TEXT_NODE) {
-    resolvedChild = container;
-  } else {
-    const nearestChild = Array.from(root.childNodes).find(
-      (child) => child.contains(container)
-    );
-    if (!nearestChild) {
-      return serializeEditorPrompt(root).length;
-    }
-    resolvedChild = nearestChild;
-    if (nearestChild instanceof HTMLElement && nearestChild.dataset.segmentType === "attachment") {
-      const range = document.createRange();
-      range.selectNodeContents(nearestChild);
-      const placeholderLength = segmentNodeText(nearestChild).length;
-      try {
-        range.setEnd(container, offset);
-        const visibleOffset = range.toString().length;
-        const attachmentTextLength = nearestChild.textContent?.length ?? 0;
-        if (attachmentTextLength === 0) {
-          offsetWithinChild = placeholderLength;
-        } else {
-          offsetWithinChild = Math.round(
-            Math.min(1, visibleOffset / attachmentTextLength) * placeholderLength
-          );
-        }
-      } catch {
-        offsetWithinChild = placeholderLength;
-      }
-    } else {
-      const range = document.createRange();
-      range.selectNodeContents(nearestChild);
-      try {
-        range.setEnd(container, offset);
-        offsetWithinChild = range.toString().length;
-      } catch {
-        offsetWithinChild = segmentNodeText(nearestChild).length;
-      }
-    }
-  }
-  const childNodes = Array.from(root.childNodes);
-  let total = 0;
-  for (const child of childNodes) {
-    if (child === resolvedChild) {
-      if (child.nodeType === Node.TEXT_NODE) {
-        return total + offsetWithinChild;
-      }
-      return total + Math.min(offsetWithinChild, segmentNodeText(child).length);
-    }
-    total += segmentNodeText(child).length;
-  }
-  return total;
+  const prefix = document.createElement("div");
+  prefix.append(range.cloneContents());
+  return serializePromptContent(prefix).length;
 }
 function snapshotEditorSelection(editor) {
   const selection = window.getSelection();
@@ -1019,56 +954,40 @@ function snapshotEditorSelection(editor) {
   };
 }
 function resolveOffsetToDomPosition(root, targetOffset) {
-  let remaining = Math.max(0, targetOffset);
-  const childNodes = Array.from(root.childNodes);
-  for (const [index, child] of childNodes.entries()) {
-    const childText = segmentNodeText(child);
-    const childLength = childText.length;
-    if (child.nodeType === Node.TEXT_NODE) {
-      if (remaining <= childLength) {
-        return {
-          node: child,
-          offset: remaining
-        };
-      }
-      remaining -= childLength;
-      continue;
-    }
-    if (child instanceof HTMLElement && child.dataset.segmentType === "attachment") {
-      if (remaining === 0) {
-        return {
-          node: root,
-          offset: index
-        };
-      }
-      if (remaining <= childLength) {
-        const nextChild = childNodes[index + 1];
-        if (remaining === childLength && nextChild?.nodeType === Node.TEXT_NODE) {
-          return {
-            node: nextChild,
-            offset: 0
-          };
+  const target = Math.max(0, targetOffset);
+  let text = "";
+  function visit(parent) {
+    const children = Array.from(parent.childNodes);
+    for (const [index, child] of children.entries()) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const end = text.length + (child.textContent?.length ?? 0);
+        if (target <= end) return { node: child, offset: target - text.length };
+        text += child.textContent ?? "";
+      } else if (child instanceof HTMLElement) {
+        if (child.dataset.segmentType === "attachment" && child.dataset.placeholder) {
+          if (target === text.length) return { node: parent, offset: index };
+          text += child.dataset.placeholder;
+          if (target <= text.length) {
+            const next = children[index + 1];
+            return target === text.length && next?.nodeType === Node.TEXT_NODE ? { node: next, offset: 0 } : { node: parent, offset: index + 1 };
+          }
+        } else if (child.tagName === "BR") {
+          if (target === text.length) return { node: parent, offset: index };
+          text += "\n";
+          if (target === text.length) return { node: parent, offset: index + 1 };
+        } else {
+          if (BLOCK_PROMPT_TAGS.has(child.tagName) && text.length > 0 && !text.endsWith("\n")) {
+            text += "\n";
+            if (target <= text.length) return { node: child, offset: 0 };
+          }
+          const position = visit(child);
+          if (position) return position;
         }
-        return {
-          node: root,
-          offset: index + 1
-        };
       }
-      remaining -= childLength;
-      continue;
     }
-    if (remaining <= childLength) {
-      return {
-        node: root,
-        offset: index + 1
-      };
-    }
-    remaining -= childLength;
+    return null;
   }
-  return {
-    node: root,
-    offset: root.childNodes.length
-  };
+  return visit(root) ?? { node: root, offset: root.childNodes.length };
 }
 function restoreEditorSelection(editor, selection) {
   const startPosition = resolveOffsetToDomPosition(editor, selection.start);
@@ -3375,6 +3294,7 @@ function useComposerDraft({
   const draftSyncTimerRef = useRef4(null);
   const latestLocalDraftRef = useRef4(localControlledDraft);
   const lastSentDraftSignatureRef = useRef4(draftSignature(localControlledDraft));
+  const pendingHostEchoesRef = useRef4(/* @__PURE__ */ new Set());
   const isDraftControlled = !isShellView && draftPrompt !== void 0 && draftAttachments !== void 0 && typeof onDraftChange === "function";
   const controlledPropsSignature = isDraftControlled ? draftSignature(toComposerDraft(draftPrompt, draftAttachments)) : "";
   const lastRenderedControlledPropsSignatureRef = useRef4(
@@ -3383,6 +3303,7 @@ function useComposerDraft({
   useLayoutEffect2(() => {
     if (!isDraftControlled) {
       lastRenderedControlledPropsSignatureRef.current = "";
+      pendingHostEchoesRef.current.clear();
       return;
     }
     const hostDraft = toComposerDraft(draftPrompt, draftAttachments);
@@ -3391,6 +3312,8 @@ function useComposerDraft({
       return;
     }
     lastRenderedControlledPropsSignatureRef.current = hostSignature;
+    if (pendingHostEchoesRef.current.delete(hostSignature)) return;
+    pendingHostEchoesRef.current.clear();
     lastSentDraftSignatureRef.current = hostSignature;
     latestLocalDraftRef.current = hostDraft;
     if (draftSyncTimerRef.current !== null) {
@@ -3408,6 +3331,10 @@ function useComposerDraft({
       return;
     }
     lastSentDraftSignatureRef.current = signature;
+    pendingHostEchoesRef.current.add(signature);
+    if (pendingHostEchoesRef.current.size > 32) {
+      pendingHostEchoesRef.current.delete(pendingHostEchoesRef.current.values().next().value);
+    }
     onDraftChange(() => ({
       prompt: nextDraft.prompt,
       attachments: nextDraft.attachments
@@ -4222,12 +4149,10 @@ function useComposerPromptDomSync({
   promptSegments,
   attachmentPreviewUrls,
   previewSignature,
-  editorSanitizeNonce,
   pendingSelectionRef,
   pendingInsertedAttachmentIdsRef,
   selectionSnapshotRef,
   renderedPreviewSignatureRef,
-  renderedSanitizeNonceRef,
   serializeEditorPrompt: serializeEditorPrompt2,
   restoreSelection
 }) {
@@ -4237,14 +4162,21 @@ function useComposerPromptDomSync({
       return;
     }
     const pendingSelection = pendingSelectionRef.current;
-    const shouldSyncDom = serializeEditorPrompt2() !== prompt || renderedPreviewSignatureRef.current !== previewSignature || renderedSanitizeNonceRef.current !== editorSanitizeNonce;
+    const shouldSyncDom = serializeEditorPrompt2() !== prompt;
     if (shouldSyncDom) {
       editor.replaceChildren(
         buildPromptFragment(promptSegments, attachmentPreviewUrls)
       );
-      renderedPreviewSignatureRef.current = previewSignature;
-      renderedSanitizeNonceRef.current = editorSanitizeNonce;
+    } else if (renderedPreviewSignatureRef.current !== previewSignature) {
+      const attachments = new Map(promptSegments.flatMap(
+        (segment) => segment.type === "attachment" ? [[segment.attachment.clientId, segment]] : []
+      ));
+      for (const token of editor.querySelectorAll('[data-segment-type="attachment"]')) {
+        const segment = attachments.get(token.dataset.clientId ?? "");
+        if (segment) token.replaceWith(createPromptAttachmentToken(segment, attachmentPreviewUrls));
+      }
     }
+    renderedPreviewSignatureRef.current = previewSignature;
     if (pendingSelection !== null) {
       editor.focus();
       if (!restoreSelectionAfterInsertedAttachments(
@@ -4261,7 +4193,6 @@ function useComposerPromptDomSync({
     pendingInsertedAttachmentIdsRef.current = [];
   }, [
     attachmentPreviewUrls,
-    editorSanitizeNonce,
     isShellView,
     previewSignature,
     prompt,
@@ -4270,7 +4201,6 @@ function useComposerPromptDomSync({
     pendingInsertedAttachmentIdsRef,
     pendingSelectionRef,
     renderedPreviewSignatureRef,
-    renderedSanitizeNonceRef,
     restoreSelection,
     selectionSnapshotRef,
     serializeEditorPrompt2
@@ -4371,7 +4301,7 @@ function ComposerPromptEditor({
               role: "textbox",
               "aria-label": "Prompt",
               "aria-multiline": "true",
-              contentEditable: !disabled,
+              contentEditable: disabled ? false : "plaintext-only",
               inputMode: "text",
               suppressContentEditableWarning: true,
               onClick: (event) => {
@@ -5065,7 +4995,6 @@ function ThreadComposer({
     null
   );
   const renderedPreviewSignatureRef = useRef7("");
-  const renderedSanitizeNonceRef = useRef7(0);
   const isShellView = activeView === "shell";
   const canToggleShellView = shellAvailable || isShellView;
   const isMobileShell = Boolean(
@@ -5073,7 +5002,6 @@ function ThreadComposer({
   );
   const shellPromptLabel = shellControlState?.promptLabel ?? null;
   const [isDragTargetActive, setIsDragTargetActive] = useState13(false);
-  const [editorSanitizeNonce, setEditorSanitizeNonce] = useState13(0);
   const {
     prompt,
     attachments,
@@ -5337,12 +5265,10 @@ function ThreadComposer({
     promptSegments,
     attachmentPreviewUrls,
     previewSignature,
-    editorSanitizeNonce,
     pendingSelectionRef,
     pendingInsertedAttachmentIdsRef,
     selectionSnapshotRef,
     renderedPreviewSignatureRef,
-    renderedSanitizeNonceRef,
     serializeEditorPrompt: serializeEditorPrompt2,
     restoreSelection
   });
@@ -5410,12 +5336,6 @@ function ThreadComposer({
     const nextPrompt = serializeEditorPrompt2();
     const nextSelection = snapshotSelection();
     selectionSnapshotRef.current = nextSelection;
-    const editor = promptRef.current;
-    const needsPlainTextDomSync = editor ? editorContainsStyledRichText(editor) : false;
-    if (needsPlainTextDomSync) {
-      pendingSelectionRef.current = nextSelection;
-      setEditorSanitizeNonce((current) => current + 1);
-    }
     updateDraft((current) => ({
       prompt: nextPrompt,
       attachments: current.attachments.filter(

@@ -66,7 +66,6 @@ import {
   toolboxItemActionDecision,
 } from './composer/composerToolbox';
 import {
-  editorContainsStyledRichText,
   restoreEditorSelection,
   serializeEditorPrompt as serializePromptEditor,
   snapshotEditorSelection,
@@ -346,7 +345,6 @@ export function ThreadComposer({
     null,
   );
   const renderedPreviewSignatureRef = useRef('');
-  const renderedSanitizeNonceRef = useRef(0);
   const isShellView = activeView === 'shell';
   const canToggleShellView = shellAvailable || isShellView;
   const isMobileShell = Boolean(
@@ -354,7 +352,6 @@ export function ThreadComposer({
   );
   const shellPromptLabel = shellControlState?.promptLabel ?? null;
   const [isDragTargetActive, setIsDragTargetActive] = useState(false);
-  const [editorSanitizeNonce, setEditorSanitizeNonce] = useState(0);
   const {
     prompt,
     attachments,
@@ -654,12 +651,10 @@ export function ThreadComposer({
     promptSegments,
     attachmentPreviewUrls,
     previewSignature,
-    editorSanitizeNonce,
     pendingSelectionRef,
     pendingInsertedAttachmentIdsRef,
     selectionSnapshotRef,
     renderedPreviewSignatureRef,
-    renderedSanitizeNonceRef,
     serializeEditorPrompt,
     restoreSelection,
   });
@@ -742,16 +737,6 @@ export function ThreadComposer({
     const nextPrompt = serializeEditorPrompt();
     const nextSelection = snapshotSelection();
     selectionSnapshotRef.current = nextSelection;
-    const editor = promptRef.current;
-    const needsPlainTextDomSync = editor
-      ? editorContainsStyledRichText(editor)
-      : false;
-
-    if (needsPlainTextDomSync) {
-      pendingSelectionRef.current = nextSelection;
-      setEditorSanitizeNonce((current) => current + 1);
-    }
-
     updateDraft((current) => ({
       prompt: nextPrompt,
       attachments: current.attachments.filter((attachment) =>
