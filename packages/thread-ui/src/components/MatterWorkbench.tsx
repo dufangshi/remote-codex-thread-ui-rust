@@ -76,6 +76,7 @@ export function MatterWorkbench({
   actions,
   threadMenu,
   connection,
+  deviceMonitor,
   explorer,
   revealExplorer,
   children,
@@ -88,6 +89,7 @@ export function MatterWorkbench({
   actions: ReactNode;
   threadMenu: ReactNode;
   connection: ReactNode;
+  deviceMonitor?: ReactNode;
   explorer: ReactNode;
   revealExplorer: number;
   children: ReactNode;
@@ -254,6 +256,7 @@ export function MatterWorkbench({
           <span>Search conversation</span>
         </button>
         <div className="matter-topbar-end">
+          {mobile && deviceMonitor}
           {mobile && <>
             <button aria-label="Chat" aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
             {o.terminalEnabled && <button aria-label="Terminal" aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
@@ -336,6 +339,7 @@ export function MatterWorkbench({
           </div>
         )}
         <div className="matter-sidebar-footer">
+          {!mobile && deviceMonitor}
           Your conversations, together.
         </div>
       </aside>

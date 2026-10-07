@@ -48,6 +48,7 @@ export interface ThreadTimelineProps {
   activeTurnId?: string | null;
   threadRunning?: boolean;
   backgroundAgentCount?: number;
+  backendProgress?: { turnId: string; receivedAt: string } | null;
   livePlan?: {
     turnId: string;
     explanation: string | null;
@@ -160,6 +161,7 @@ function ThreadTimelineComponent({
   pendingSteers = [],
   livePlan = null,
   liveItems = null,
+  backendProgress = null,
   respondingRequestId = null,
   onRespondToRequest,
   liveOutput,
@@ -681,6 +683,7 @@ function ThreadTimelineComponent({
                     const rowLiveOutput =
                       liveOutputTargetTurnId === turn.id ? liveOutput : '';
                     const rowLiveActivityAt = latestTimestamp(
+                      backendProgress?.turnId === turn.id ? backendProgress.receivedAt : null,
                       rowLivePlan?.updatedAt,
                       liveItemsTargetTurnId === turn.id ? liveItems?.updatedAt : null,
                       rowLiveOutput ? liveOutputActivityAt : null,
@@ -766,6 +769,7 @@ function ThreadTimelineComponent({
                   {(() => {
                     const rowLiveOutput = liveOutputAttachedToOptimisticTurn ? liveOutput : '';
                     const rowLiveActivityAt = latestTimestamp(
+                      backendProgress?.turnId === optimisticTurn.id ? backendProgress.receivedAt : null,
                       liveItemsTargetTurnId === optimisticTurn.id
                         ? liveItems?.updatedAt
                         : null,
@@ -910,6 +914,7 @@ function ThreadTimelineComponent({
               livePlan={livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null}
               liveItems={unattachedLiveItems}
               liveActivityAt={latestTimestamp(
+                backendProgress?.turnId === unattachedLiveTurn.id ? backendProgress.receivedAt : null,
                 livePlan?.turnId === unattachedLiveTurn.id ? livePlan.updatedAt : null,
                 liveItems?.turnId === unattachedLiveTurn.id ? liveItems.updatedAt : null,
               )}

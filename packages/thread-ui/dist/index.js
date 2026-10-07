@@ -6686,6 +6686,7 @@ function MatterWorkbench({
   actions,
   threadMenu,
   connection,
+  deviceMonitor,
   explorer,
   revealExplorer,
   children
@@ -6874,6 +6875,7 @@ ${thread.subtitle} \xB7 ${statusLabels[thread.status] ?? thread.status}`,
             }
           ),
           /* @__PURE__ */ jsxs24("div", { className: "matter-topbar-end", children: [
+            mobile && deviceMonitor,
             mobile && /* @__PURE__ */ jsxs24(Fragment6, { children: [
               /* @__PURE__ */ jsx29("button", { "aria-label": "Chat", "aria-pressed": o.activeView === "chat", onClick: () => o.onViewChange("chat"), children: /* @__PURE__ */ jsx29(MessageSquare, {}) }),
               o.terminalEnabled && /* @__PURE__ */ jsx29("button", { "aria-label": "Terminal", "aria-pressed": o.activeView === "shell", onClick: () => o.onViewChange("shell"), children: /* @__PURE__ */ jsx29(Terminal, {}) }),
@@ -6963,7 +6965,10 @@ ${thread.subtitle} \xB7 ${statusLabels[thread.status] ?? thread.status}`,
                 }
               ),
               recentsOpen && /* @__PURE__ */ jsx29("div", { className: "matter-thread-section", "data-testid": "recent-chats", children: renderThreadGroups(o.threads) }),
-              /* @__PURE__ */ jsx29("div", { className: "matter-sidebar-footer", children: "Your conversations, together." })
+              /* @__PURE__ */ jsxs24("div", { className: "matter-sidebar-footer", children: [
+                !mobile && deviceMonitor,
+                "Your conversations, together."
+              ] })
             ]
           }
         ),
@@ -7539,6 +7544,7 @@ function ThreadWorkspaceLayout({
   usageLabel = null,
   threadActionsButton,
   topbarActions,
+  deviceMonitor,
   metaContent,
   settingsContent,
   globalSettingsContent,
@@ -8047,6 +8053,7 @@ function ThreadWorkspaceLayout({
           newThread: renderNewThreadDialogButton("matter-new-thread", true),
           actions: threadActionsButton,
           connection: topbarActions ?? mobileHeaderAction,
+          deviceMonitor,
           threadMenu: /* @__PURE__ */ jsxs26("details", { className: "matter-thread-menu", children: [
             /* @__PURE__ */ jsx32("summary", { "aria-label": "Thread actions", title: "Thread actions", children: /* @__PURE__ */ jsx32(MoreHorizontal, { size: 16 }) }),
             /* @__PURE__ */ jsxs26("div", { children: [
@@ -12671,9 +12678,7 @@ function TurnStatusBar({
   turn,
   variant = "header",
   lastActivityAt = null,
-  backgroundAgentCount = 0,
-  hasReply = false,
-  hasRunningTools = false
+  backgroundAgentCount = 0
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
@@ -12681,7 +12686,7 @@ function TurnStatusBar({
   const now = useSecondClock(active && variant === "footer");
   const elapsedLabel2 = active ? formatElapsedDuration(turn.startedAt, now) : null;
   const effectiveLastActivityAt = lastActivityAt ?? turn.startedAt;
-  const waitingForFinish = hasReply && !hasRunningTools && effectiveLastActivityAt != null && now - Date.parse(effectiveLastActivityAt) >= 1e4;
+  const progressAge = effectiveLastActivityAt ? Math.max(0, Math.floor((now - Date.parse(effectiveLastActivityAt)) / 1e3)) : null;
   const toneClassName = turn.status === "failed" ? "border-rose-300/20 bg-rose-300/[0.06] text-rose-100" : active ? "border-sky-300/22 bg-sky-300/[0.08] text-sky-100" : "border-stone-700/90 bg-stone-900/70 text-stone-200";
   if (variant === "footer") {
     return /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs", children: [
@@ -12691,15 +12696,19 @@ function TurnStatusBar({
           " background agent",
           backgroundAgentCount === 1 ? "" : "s",
           " running"
-        ] }) : active && turn.status !== "recovering" && waitingForFinish ? /* @__PURE__ */ jsx50(
+        ] }) : /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
+        active && turn.status !== "recovering" && progressAge !== null && Number.isFinite(progressAge) && /* @__PURE__ */ jsxs41(
           "span",
           {
-            className: "thread-waiting-for-finish min-w-0 text-[var(--theme-fg-muted)]",
-            role: "status",
-            title: "A reply has arrived, but this turn has not finished.",
-            children: "Waiting for turn to finish"
+            className: "thread-progress-age text-[10px] text-[var(--theme-fg-muted)]",
+            title: "Time since the last turn progress update. Connection heartbeats do not count.",
+            children: [
+              "Last progress \xB7 ",
+              progressAge,
+              "s ago"
+            ]
           }
-        ) : /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
+        ),
         /* @__PURE__ */ jsx50(TurnUsageInline, { turn })
       ] }),
       /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap", children: [
@@ -13232,9 +13241,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
       turn: activeFooterTurn,
       variant: "footer",
       lastActivityAt,
-      backgroundAgentCount,
-      hasReply: mergedItems.some((item) => item.kind === "agentMessage" && Boolean(item.text?.trim())) || Boolean(visibleLiveOutput),
-      hasRunningTools: mergedItems.some((item) => !["agentMessage", "reasoning", "userMessage"].includes(item.kind) && ["running", "inProgress", "pending"].includes(item.status ?? ""))
+      backgroundAgentCount
     }
   ) : null;
   const collapsedSummary = useMemo8(
@@ -14123,6 +14130,7 @@ function ThreadTimelineComponent({
   pendingSteers = [],
   livePlan = null,
   liveItems = null,
+  backendProgress = null,
   respondingRequestId = null,
   onRespondToRequest,
   liveOutput,
@@ -14552,6 +14560,7 @@ function ThreadTimelineComponent({
                 const rowLiveItems = liveItemsTargetTurnId === turn.id ? liveItems?.items ?? null : null;
                 const rowLiveOutput = liveOutputTargetTurnId === turn.id ? liveOutput : "";
                 const rowLiveActivityAt = latestTimestamp(
+                  backendProgress?.turnId === turn.id ? backendProgress.receivedAt : null,
                   rowLivePlan?.updatedAt,
                   liveItemsTargetTurnId === turn.id ? liveItems?.updatedAt : null,
                   rowLiveOutput ? liveOutputActivityAt : null
@@ -14628,6 +14637,7 @@ function ThreadTimelineComponent({
               (() => {
                 const rowLiveOutput = liveOutputAttachedToOptimisticTurn ? liveOutput : "";
                 const rowLiveActivityAt = latestTimestamp(
+                  backendProgress?.turnId === optimisticTurn.id ? backendProgress.receivedAt : null,
                   liveItemsTargetTurnId === optimisticTurn.id ? liveItems?.updatedAt : null,
                   rowLiveOutput ? liveOutputActivityAt : null
                 );
@@ -14751,6 +14761,7 @@ function ThreadTimelineComponent({
               livePlan: livePlan?.turnId === unattachedLiveTurn.id ? livePlan : null,
               liveItems: unattachedLiveItems,
               liveActivityAt: latestTimestamp(
+                backendProgress?.turnId === unattachedLiveTurn.id ? backendProgress.receivedAt : null,
                 livePlan?.turnId === unattachedLiveTurn.id ? livePlan.updatedAt : null,
                 liveItems?.turnId === unattachedLiveTurn.id ? liveItems.updatedAt : null
               ),
@@ -18839,6 +18850,7 @@ function ThreadDetailSurface({
   threadActionsButton,
   surfaceActions,
   workbench,
+  deviceMonitor,
   floatingPanel,
   workspaceContent,
   workspaceTitle,
@@ -19015,6 +19027,7 @@ function ThreadDetailSurface({
   const surface = /* @__PURE__ */ jsx61(
     ThreadWorkspaceLayout,
     {
+      deviceMonitor,
       ...workbench ? { workbench } : {},
       threads,
       status,

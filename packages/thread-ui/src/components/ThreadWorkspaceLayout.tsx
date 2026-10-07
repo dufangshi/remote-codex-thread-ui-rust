@@ -97,6 +97,7 @@ interface ThreadWorkspaceLayoutProps {
   usageLabel?: string | null | undefined;
   threadActionsButton?: ReactNode;
   topbarActions?: ReactNode;
+  deviceMonitor?: ReactNode;
   workspaceLabels?: Record<string, string>;
   metaContent?: ReactNode;
   settingsContent?: ReactNode;
@@ -427,6 +428,7 @@ export function ThreadWorkspaceLayout({
   usageLabel = null,
   threadActionsButton,
   topbarActions,
+  deviceMonitor,
   metaContent,
   settingsContent,
   globalSettingsContent,
@@ -1038,7 +1040,7 @@ export function ThreadWorkspaceLayout({
     return <GraphChatShellRoot effectiveTheme={effectiveTheme} layoutMode={layoutMode} themeMode={themeMode} viewportConstrained={viewportConstrained}>
       <MatterWorkbench options={workbench} title={currentThreadLabel ?? 'New thread'} homeHref={workspaceReturnHref ?? '/workspaces'}
         settings={renderSettingsDialog()} newThread={renderNewThreadDialogButton('matter-new-thread', true)}
-        actions={threadActionsButton} connection={topbarActions ?? mobileHeaderAction}
+        actions={threadActionsButton} connection={topbarActions ?? mobileHeaderAction} deviceMonitor={deviceMonitor}
         threadMenu={<details className="matter-thread-menu">
           <summary aria-label="Thread actions" title="Thread actions"><MoreHorizontal size={16} /></summary>
           <div>

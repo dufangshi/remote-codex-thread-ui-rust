@@ -175,6 +175,7 @@ export interface ThreadDetailSurfaceProps {
   threadActionsButton?: ReactNode;
   surfaceActions?: ReactNode;
   workbench?: MatterWorkbenchOptions;
+  deviceMonitor?: ReactNode;
   floatingPanel?: ReactNode;
   workspaceContent?: ReactNode;
   workspaceTitle?: string;
@@ -253,6 +254,7 @@ export function ThreadDetailSurface({
   threadActionsButton,
   surfaceActions,
   workbench,
+  deviceMonitor,
   floatingPanel,
   workspaceContent,
   workspaceTitle,
@@ -493,6 +495,7 @@ export function ThreadDetailSurface({
 
   const surface = (
     <ThreadWorkspaceLayout
+      deviceMonitor={deviceMonitor}
       {...(workbench ? { workbench } : {})}
       threads={threads}
       status={status}

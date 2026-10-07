@@ -21,18 +21,16 @@ function activeTurn(overrides: Partial<TimelineTurn> = {}): TimelineTurn {
 }
 
 describe('TurnStatusBar footer', () => {
-  it('explains an idle reply awaiting completion without claiming background work', () => {
+  it('keeps the three running dots and shows elapsed time since actual progress', () => {
     const render = (props = {}) => renderToStaticMarkup(<TurnStatusBar turn={activeTurn()}
-      variant="footer" hasReply lastActivityAt={new Date(Date.now() - 20_000).toISOString()} {...props} />);
-    expect(render()).toContain('Waiting for turn to finish');
-    expect(render()).not.toContain('background agent');
-    expect(render({ hasRunningTools: true })).not.toContain('Waiting for turn to finish');
-    expect(render({ hasReply: false })).not.toContain('Waiting for turn to finish');
-    expect(render({ lastActivityAt: new Date().toISOString() })).not.toContain('Waiting for turn to finish');
+      variant="footer" lastActivityAt={new Date(Date.now() - 20_000).toISOString()} {...props} />);
+    expect(render()).toContain('Last progress · 20s ago');
+    expect(render().match(/animate-pulse/g)).toHaveLength(3);
+    expect(render()).not.toContain('Waiting for turn to finish');
+    expect(render({ lastActivityAt: new Date().toISOString() })).toContain('Last progress · 0s ago');
     expect(render({ backgroundAgentCount: 1 })).toContain('1 background agent running');
-    expect(render({ backgroundAgentCount: 1 })).not.toContain('Waiting for turn to finish');
-    expect(render({ turn: activeTurn({ status: 'completed' }) })).not.toContain('Waiting for turn to finish');
-    expect(render({ turn: activeTurn({ status: 'recovering' }) })).not.toContain('Waiting for turn to finish');
+    expect(render({ turn: activeTurn({ status: 'completed' }) })).not.toContain('Last progress');
+    expect(render({ turn: activeTurn({ status: 'recovering' }) })).not.toContain('Last progress');
   });
   it('explains background work after a reply and clears the label when the turn ends', () => {
     const html = renderToStaticMarkup(
@@ -68,7 +66,7 @@ describe('TurnStatusBar footer', () => {
     expect(html).toContain('1m 12s');
     expect(html.match(/animate-pulse/g)).toHaveLength(3);
     expect(html).not.toContain('token-badge');
-    expect(html).not.toContain('--');
+    expect(html).not.toContain('>--<');
   });
 
   it('shows reported cost, including a real zero estimate', () => {

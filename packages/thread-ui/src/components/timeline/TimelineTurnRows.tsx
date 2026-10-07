@@ -701,8 +701,6 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       variant="footer"
       lastActivityAt={lastActivityAt}
       backgroundAgentCount={backgroundAgentCount}
-      hasReply={mergedItems.some(item => item.kind === 'agentMessage' && Boolean(item.text?.trim())) || Boolean(visibleLiveOutput)}
-      hasRunningTools={mergedItems.some(item => !['agentMessage', 'reasoning', 'userMessage'].includes(item.kind) && ['running', 'inProgress', 'pending'].includes(item.status ?? ''))}
     />
   ) : null;
   const collapsedSummary = useMemo(

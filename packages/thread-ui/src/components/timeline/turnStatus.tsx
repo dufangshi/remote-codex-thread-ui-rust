@@ -269,15 +269,11 @@ export function TurnStatusBar({
   variant = 'header',
   lastActivityAt = null,
   backgroundAgentCount = 0,
-  hasReply = false,
-  hasRunningTools = false,
 }: {
   turn: TimelineTurn;
   variant?: 'header' | 'footer';
   lastActivityAt?: string | null;
   backgroundAgentCount?: number;
-  hasReply?: boolean;
-  hasRunningTools?: boolean;
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
@@ -285,8 +281,7 @@ export function TurnStatusBar({
   const now = useSecondClock(active && variant === 'footer');
   const elapsedLabel = active ? formatElapsedDuration(turn.startedAt, now) : null;
   const effectiveLastActivityAt = lastActivityAt ?? turn.startedAt;
-  const waitingForFinish = hasReply && !hasRunningTools && effectiveLastActivityAt != null
-    && now - Date.parse(effectiveLastActivityAt) >= 10_000;
+  const progressAge = effectiveLastActivityAt ? Math.max(0, Math.floor((now - Date.parse(effectiveLastActivityAt)) / 1000)) : null;
   const toneClassName =
     turn.status === 'failed'
       ? 'border-rose-300/20 bg-rose-300/[0.06] text-rose-100'
@@ -302,12 +297,13 @@ export function TurnStatusBar({
             <span className="thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]" role="status">
               {backgroundAgentCount} background agent{backgroundAgentCount === 1 ? '' : 's'} running
             </span>
-          ) : active && turn.status !== 'recovering' && waitingForFinish ? (
-            <span className="thread-waiting-for-finish min-w-0 text-[var(--theme-fg-muted)]" role="status"
-              title="A reply has arrived, but this turn has not finished.">
-              Waiting for turn to finish
-            </span>
           ) : <TurnStatusIndicator status={turn.status} />}
+          {active && turn.status !== 'recovering' && progressAge !== null && Number.isFinite(progressAge) && (
+            <span className="thread-progress-age text-[10px] text-[var(--theme-fg-muted)]"
+              title="Time since the last turn progress update. Connection heartbeats do not count.">
+              Last progress · {progressAge}s ago
+            </span>
+          )}
           <TurnUsageInline turn={turn} />
         </div>
         <div className="thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap">
