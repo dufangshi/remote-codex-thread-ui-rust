@@ -590,8 +590,8 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [liveItems, turn.items],
   );
   const stepCount = useMemo(
-    () => countTurnSteps({ hasDeferredItems: turn.hasDeferredItems, deferredItemCount: turn.deferredItemCount }, mergedItems),
-    [mergedItems, turn.hasDeferredItems, turn.deferredItemCount],
+    () => countTurnSteps({ hasDeferredItems: turn.hasDeferredItems, deferredItemCount: turn.deferredItemCount }, mergedItems, turn.items),
+    [mergedItems, turn.items, turn.hasDeferredItems, turn.deferredItemCount],
   );
   const lastActivityAt = useMemo(
     () => latestActivityTimestamp(turn.startedAt, mergedItems, liveActivityAt),
@@ -701,6 +701,8 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       variant="footer"
       lastActivityAt={lastActivityAt}
       backgroundAgentCount={backgroundAgentCount}
+      hasReply={mergedItems.some(item => item.kind === 'agentMessage' && Boolean(item.text?.trim())) || Boolean(visibleLiveOutput)}
+      hasRunningTools={mergedItems.some(item => !['agentMessage', 'reasoning', 'userMessage'].includes(item.kind) && ['running', 'inProgress', 'pending'].includes(item.status ?? ''))}
     />
   ) : null;
   const collapsedSummary = useMemo(

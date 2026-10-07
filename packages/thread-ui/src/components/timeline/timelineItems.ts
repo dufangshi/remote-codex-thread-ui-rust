@@ -106,15 +106,22 @@ function renderableHistoryItems(
 }
 
 // Count recorded work items before display grouping or reasoning preferences.
-// Deferred items are only the missing part of a summary, never the total.
+// Deferred items are missing from the persisted summary, but can already be
+// present in its live overlay. Keep the snapshot and merged counts separate.
 export function countTurnSteps(
   turn: Pick<ThreadTurnDto, 'hasDeferredItems' | 'deferredItemCount'>,
   items: ThreadHistoryItemDto[],
+  summaryItems: ThreadHistoryItemDto[] = items,
 ) {
   const recorded = renderableHistoryItems([...new Map(items.map(item => [item.id, item])).values()]);
   const latestReply = recorded.findLast(item => item.kind === 'agentMessage');
-  const loaded = recorded.filter(item => item.kind !== 'userMessage' && item.id !== latestReply?.id).length;
-  return loaded + (turn.hasDeferredItems ? turn.deferredItemCount ?? 0 : 0);
+  const count = (entries: ThreadHistoryItemDto[]) => entries.filter(item => item.kind !== 'userMessage' && item.id !== latestReply?.id).length;
+  const loaded = count(recorded);
+  if (!turn.hasDeferredItems) return loaded;
+  const snapshot = renderableHistoryItems([...new Map(summaryItems.map(item => [item.id, item])).values()]);
+  // Neither source identifies the hidden IDs. Taking the larger known count
+  // avoids counting a persisted operation again when its event is also live.
+  return Math.max(count(snapshot) + (turn.deferredItemCount ?? 0), loaded);
 }
 
 function decodeXmlEntities(value: string) {

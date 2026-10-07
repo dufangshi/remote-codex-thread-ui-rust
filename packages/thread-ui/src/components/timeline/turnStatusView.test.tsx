@@ -21,6 +21,19 @@ function activeTurn(overrides: Partial<TimelineTurn> = {}): TimelineTurn {
 }
 
 describe('TurnStatusBar footer', () => {
+  it('explains an idle reply awaiting completion without claiming background work', () => {
+    const render = (props = {}) => renderToStaticMarkup(<TurnStatusBar turn={activeTurn()}
+      variant="footer" hasReply lastActivityAt={new Date(Date.now() - 20_000).toISOString()} {...props} />);
+    expect(render()).toContain('Waiting for turn to finish');
+    expect(render()).not.toContain('background agent');
+    expect(render({ hasRunningTools: true })).not.toContain('Waiting for turn to finish');
+    expect(render({ hasReply: false })).not.toContain('Waiting for turn to finish');
+    expect(render({ lastActivityAt: new Date().toISOString() })).not.toContain('Waiting for turn to finish');
+    expect(render({ backgroundAgentCount: 1 })).toContain('1 background agent running');
+    expect(render({ backgroundAgentCount: 1 })).not.toContain('Waiting for turn to finish');
+    expect(render({ turn: activeTurn({ status: 'completed' }) })).not.toContain('Waiting for turn to finish');
+    expect(render({ turn: activeTurn({ status: 'recovering' }) })).not.toContain('Waiting for turn to finish');
+  });
   it('explains background work after a reply and clears the label when the turn ends', () => {
     const html = renderToStaticMarkup(
       <TurnStatusBar turn={activeTurn()} variant="footer" backgroundAgentCount={1} />,

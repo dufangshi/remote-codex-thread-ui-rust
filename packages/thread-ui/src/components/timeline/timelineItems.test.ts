@@ -40,6 +40,22 @@ describe("timeline item utilities", () => {
       item('command','commandExecution',{status:'completed'}), item('empty','reasoning',{text:' '}), item('answer','agentMessage')];
     expect(countTurnSteps({hasDeferredItems:false,deferredItemCount:9},items)).toBe(1);
   });
+
+  it('does not add live operations already covered by a deferred summary', () => {
+    const summary = [item('prompt', 'userMessage'), item('reply', 'agentMessage')];
+    const live = [item('command', 'commandExecution')];
+    expect(countTurnSteps({hasDeferredItems:true,deferredItemCount:1}, mergeLiveTurnItems(summary, live), summary)).toBe(1);
+    live.push(item('another-command', 'commandExecution'));
+    expect(countTurnSteps({hasDeferredItems:true,deferredItemCount:1}, mergeLiveTurnItems(summary, live), summary)).toBe(2);
+    expect(countTurnSteps({hasDeferredItems:true,deferredItemCount:2}, mergeLiveTurnItems(summary, live), summary)).toBe(2);
+    expect(countTurnSteps({hasDeferredItems:false,deferredItemCount:0}, mergeLiveTurnItems([...summary, ...live], live))).toBe(2);
+  });
+
+  it('counts a former reply as a checkpoint when the live overlay adds a new reply', () => {
+    const summary = [item('prompt', 'userMessage'), item('checkpoint', 'agentMessage')];
+    const live = [item('command', 'commandExecution'), item('reply', 'agentMessage')];
+    expect(countTurnSteps({hasDeferredItems:true,deferredItemCount:4}, mergeLiveTurnItems(summary, live), summary)).toBe(5);
+  });
   it("keeps leading unsequenced user messages before sequenced history", () => {
     const leadingUser = item("user-1", "userMessage");
     const later = item("later", "agentMessage", { sequence: 20 });

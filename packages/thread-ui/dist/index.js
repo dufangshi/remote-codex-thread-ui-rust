@@ -10119,11 +10119,14 @@ function isRenderableHistoryItem(item) {
 function renderableHistoryItems(items) {
   return items.filter(isRenderableHistoryItem);
 }
-function countTurnSteps(turn, items) {
+function countTurnSteps(turn, items, summaryItems = items) {
   const recorded = renderableHistoryItems([...new Map(items.map((item) => [item.id, item])).values()]);
   const latestReply = recorded.findLast((item) => item.kind === "agentMessage");
-  const loaded = recorded.filter((item) => item.kind !== "userMessage" && item.id !== latestReply?.id).length;
-  return loaded + (turn.hasDeferredItems ? turn.deferredItemCount ?? 0 : 0);
+  const count = (entries) => entries.filter((item) => item.kind !== "userMessage" && item.id !== latestReply?.id).length;
+  const loaded = count(recorded);
+  if (!turn.hasDeferredItems) return loaded;
+  const snapshot = renderableHistoryItems([...new Map(summaryItems.map((item) => [item.id, item])).values()]);
+  return Math.max(count(snapshot) + (turn.deferredItemCount ?? 0), loaded);
 }
 function decodeXmlEntities(value) {
   return value.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&amp;/g, "&");
@@ -12748,7 +12751,9 @@ function TurnStatusBar({
   turn,
   variant = "header",
   lastActivityAt = null,
-  backgroundAgentCount = 0
+  backgroundAgentCount = 0,
+  hasReply = false,
+  hasRunningTools = false
 }) {
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
@@ -12756,6 +12761,7 @@ function TurnStatusBar({
   const now = useSecondClock(active && variant === "footer");
   const elapsedLabel2 = active ? formatElapsedDuration(turn.startedAt, now) : null;
   const effectiveLastActivityAt = lastActivityAt ?? turn.startedAt;
+  const waitingForFinish = hasReply && !hasRunningTools && effectiveLastActivityAt != null && now - Date.parse(effectiveLastActivityAt) >= 1e4;
   const toneClassName = turn.status === "failed" ? "border-rose-300/20 bg-rose-300/[0.06] text-rose-100" : active ? "border-sky-300/22 bg-sky-300/[0.08] text-sky-100" : "border-stone-700/90 bg-stone-900/70 text-stone-200";
   if (variant === "footer") {
     return /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs", children: [
@@ -12765,7 +12771,15 @@ function TurnStatusBar({
           " background agent",
           backgroundAgentCount === 1 ? "" : "s",
           " running"
-        ] }) : /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
+        ] }) : active && turn.status !== "recovering" && waitingForFinish ? /* @__PURE__ */ jsx50(
+          "span",
+          {
+            className: "thread-waiting-for-finish min-w-0 text-[var(--theme-fg-muted)]",
+            role: "status",
+            title: "A reply has arrived, but this turn has not finished.",
+            children: "Waiting for turn to finish"
+          }
+        ) : /* @__PURE__ */ jsx50(TurnStatusIndicator, { status: turn.status }),
         /* @__PURE__ */ jsx50(TurnUsageInline, { turn })
       ] }),
       /* @__PURE__ */ jsxs41("div", { className: "thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap", children: [
@@ -13196,8 +13210,8 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     [liveItems, turn.items]
   );
   const stepCount = useMemo8(
-    () => countTurnSteps({ hasDeferredItems: turn.hasDeferredItems, deferredItemCount: turn.deferredItemCount }, mergedItems),
-    [mergedItems, turn.hasDeferredItems, turn.deferredItemCount]
+    () => countTurnSteps({ hasDeferredItems: turn.hasDeferredItems, deferredItemCount: turn.deferredItemCount }, mergedItems, turn.items),
+    [mergedItems, turn.items, turn.hasDeferredItems, turn.deferredItemCount]
   );
   const lastActivityAt = useMemo8(
     () => latestActivityTimestamp(turn.startedAt, mergedItems, liveActivityAt),
@@ -13298,7 +13312,9 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
       turn: activeFooterTurn,
       variant: "footer",
       lastActivityAt,
-      backgroundAgentCount
+      backgroundAgentCount,
+      hasReply: mergedItems.some((item) => item.kind === "agentMessage" && Boolean(item.text?.trim())) || Boolean(visibleLiveOutput),
+      hasRunningTools: mergedItems.some((item) => !["agentMessage", "reasoning", "userMessage"].includes(item.kind) && ["running", "inProgress", "pending"].includes(item.status ?? ""))
     }
   ) : null;
   const collapsedSummary = useMemo8(

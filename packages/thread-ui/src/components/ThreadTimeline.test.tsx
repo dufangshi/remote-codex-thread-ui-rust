@@ -180,6 +180,37 @@ describe('ThreadTimeline', () => {
     expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('4 steps');
   });
 
+  it('keeps overlapping live and deferred steps stable through repeated expansion and summary refreshes', async () => {
+    const summary: ThreadTurnDto = {
+      ...completedTurn([{ id: 'prompt', kind: 'userMessage', text: 'Check progress' }]),
+      status: 'inProgress', hasDeferredItems: true, deferredItemCount: 1,
+    };
+    const command = { id: 'command', kind: 'commandExecution' as const, text: 'Check inbox', status: 'completed' };
+    const full = { ...summary, hasDeferredItems: false, deferredItemCount: 0, items: [...summary.items, command] };
+    const onLoadTurnDetail = vi.fn().mockResolvedValue(full);
+    const props = { threadRunning: true, activeTurnId: summary.id, liveOutput: '', onLoadTurnDetail };
+    const element = render(<ThreadTimeline {...props} turns={[summary]} liveItems={{ turnId: summary.id, items: [command] }} />);
+    const count = () => element.querySelector('.thread-execution-step-count')?.textContent;
+    const toggle = (label: string) => flushSync(() => element.querySelector<HTMLButtonElement>(`[aria-label*="${label} turn 1"]`)!.click());
+    expect(count()).toBe('1 steps');
+    toggle('Expand');
+    await vi.waitFor(() => expect(element.querySelector('[aria-label*="Collapse turn 1"]')).not.toBeNull());
+    expect(count()).toBe('1 steps');
+    toggle('Collapse');
+    const nextCommand = { ...command, id: 'next-command', text: 'Read report' };
+    flushSync(() => root?.render(<ThreadTimeline {...props} turns={[{ ...summary, deferredItemCount: 2 }]}
+      liveItems={{ turnId: summary.id, items: [command, nextCommand] }} />));
+    expect(count()).toBe('2 steps');
+    onLoadTurnDetail.mockResolvedValue({ ...full, items: [...full.items, nextCommand] });
+    toggle('Expand');
+    expect(onLoadTurnDetail).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => expect(element.querySelector('[aria-label*="Collapse turn 1"]')).not.toBeNull());
+    expect(count()).toBe('2 steps');
+    flushSync(() => root?.render(<ThreadTimeline {...props} turns={[{ ...summary, deferredItemCount: 2 }]}
+      liveItems={{ turnId: summary.id, items: [{ ...nextCommand, status: 'completed' }] }} />));
+    expect(count()).toBe('2 steps');
+  });
+
   it('defers running operations until expansion and merges later summary messages', async () => {
     const summary: ThreadTurnDto = {
       ...completedTurn([{ id: 'prompt', kind: 'userMessage', text: 'Live prompt' },
