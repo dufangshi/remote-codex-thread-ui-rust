@@ -222,7 +222,7 @@ export function MatterWorkbench({
         )}
         <button aria-label="Toggle Explorer" aria-pressed={explorerOpen} aria-expanded={explorerOpen}
           title="Explorer" onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
-        <div className="matter-rail-bottom">{settings}</div>
+        <div className="matter-rail-bottom">{deviceMonitor}{settings}</div>
       </nav>}
       <header className="matter-topbar">
         <button
@@ -339,7 +339,6 @@ export function MatterWorkbench({
           </div>
         )}
         <div className="matter-sidebar-footer">
-          {!mobile && deviceMonitor}
           Your conversations, together.
         </div>
       </aside>
