@@ -2363,6 +2363,8 @@ declare const en: {
     readonly "automation.trigger": "Trigger";
     readonly "automation.interval": "Interval";
     readonly "automation.at": "Once at";
+    readonly "automation.threadEnded": "Other thread ended";
+    readonly "automation.threadEndedNote": "Runs once for each complete turn after registration. History is not replayed. Closing or deleting the source pauses this automation.";
     readonly "automation.turnEnded": "Exact turn ended";
     readonly "automation.taskEnded": "Task ended";
     readonly "automation.commandEnded": "Controlled command ended";
@@ -4794,6 +4796,8 @@ declare const zhCN: {
     "automation.trigger": "触发器";
     "automation.interval": "固定间隔";
     "automation.at": "指定时间一次";
+    "automation.threadEnded": "其它线程结束";
+    "automation.threadEndedNote": "注册后，来源线程每个完整轮次结束触发一次，不回放历史。来源关闭或删除时暂停此自动化。";
     "automation.turnEnded": "精确轮次结束";
     "automation.taskEnded": "任务结束";
     "automation.commandEnded": "受控命令结束";
@@ -7247,6 +7251,8 @@ declare const resources: {
         readonly "automation.trigger": "Trigger";
         readonly "automation.interval": "Interval";
         readonly "automation.at": "Once at";
+        readonly "automation.threadEnded": "Other thread ended";
+        readonly "automation.threadEndedNote": "Runs once for each complete turn after registration. History is not replayed. Closing or deleting the source pauses this automation.";
         readonly "automation.turnEnded": "Exact turn ended";
         readonly "automation.taskEnded": "Task ended";
         readonly "automation.commandEnded": "Controlled command ended";
@@ -9677,6 +9683,8 @@ declare const resources: {
         "automation.trigger": "触发器";
         "automation.interval": "固定间隔";
         "automation.at": "指定时间一次";
+        "automation.threadEnded": "其它线程结束";
+        "automation.threadEndedNote": "注册后，来源线程每个完整轮次结束触发一次，不回放历史。来源关闭或删除时暂停此自动化。";
         "automation.turnEnded": "精确轮次结束";
         "automation.taskEnded": "任务结束";
         "automation.commandEnded": "受控命令结束";
