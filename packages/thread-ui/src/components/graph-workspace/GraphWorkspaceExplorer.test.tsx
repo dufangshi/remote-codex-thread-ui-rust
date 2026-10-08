@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import { setLocale } from '../../i18n';
 import { act, type ReactNode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -164,6 +165,7 @@ function buttonNamed(name: string) {
 
 describe('GraphWorkspaceExplorer', () => {
   beforeEach(() => {
+    setLocale('en', false);
     mobileViewport = false;
     (
       globalThis as typeof globalThis & {
@@ -199,9 +201,23 @@ describe('GraphWorkspaceExplorer', () => {
     root = null;
     host?.remove();
     host = null;
+    setLocale('en', false);
     window.localStorage.clear();
     vi.useRealTimers();
     vi.restoreAllMocks();
+  });
+
+  it('refreshes the linked-files memo label without refetching or replacing adapter props', async () => {
+    const { adapter, listTree } = createAdapter();
+    const statLinkedFile = vi.fn(async () => file('/outside/notes.txt'));
+    await renderExplorer({ ...adapter, statLinkedFile }, { path: '/outside/notes.txt', requestId: 1 });
+    await vi.waitFor(() => expect(host?.textContent).toContain('Linked files'));
+    const calls = listTree.mock.calls.length;
+    act(() => setLocale('zh-CN', false));
+    expect(host?.textContent).toContain('链接文件');
+    expect(host?.textContent).toContain('notes.txt');
+    expect(listTree).toHaveBeenCalledTimes(calls);
+    expect(statLinkedFile).toHaveBeenCalledTimes(1);
   });
 
   it('loads the root, previews the first file, and preserves expanded directories on refresh', async () => {

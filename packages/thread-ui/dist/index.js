@@ -17,7 +17,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-SN4I666Z.js";
+} from "./chunk-7DJHCK33.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -35,7 +35,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-4Q3ARP5S.js";
+} from "./chunk-OFUL6MFA.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -3869,7 +3869,7 @@ function useComposerHookConfig({
 // src/components/composer/useComposerMcpConfig.ts
 import { useCallback as useCallback6, useState as useState9 } from "react";
 var DEFAULT_RAW_MCP_BLOCK = '[mcp_servers.example_stdio]\ncommand = "npx"\nargs = ["-y", "your-mcp-server"]\n';
-var MCP_CONFIG_SUCCESS_MESSAGE = translate("chat.mCPEntryWrittenToProviderConfigRestart");
+var MCP_CONFIG_SUCCESS_MESSAGE_KEY = "chat.mCPEntryWrittenToProviderConfigRestart";
 function useComposerMcpConfig({
   hostConfigFilesAvailable,
   onReadProviderConfig,
@@ -3936,7 +3936,7 @@ function useComposerMcpConfig({
         renderHttpMcpBlock(name, url)
       );
       await writeMcpConfig(nextContent);
-      setMcpConfigSuccess(MCP_CONFIG_SUCCESS_MESSAGE);
+      setMcpConfigSuccess(translate(MCP_CONFIG_SUCCESS_MESSAGE_KEY));
       setMcpPanelMode("list");
       setMcpHttpName("");
       setMcpHttpUrl("");
@@ -3991,7 +3991,7 @@ function useComposerMcpConfig({
         mcpRawBlock
       );
       await writeMcpConfig(nextContent);
-      setMcpConfigSuccess(MCP_CONFIG_SUCCESS_MESSAGE);
+      setMcpConfigSuccess(translate(MCP_CONFIG_SUCCESS_MESSAGE_KEY));
       setMcpPanelMode("list");
       void onOpenMcp?.();
     } catch (error) {
@@ -13245,12 +13245,12 @@ function formatWorkedDuration(startedAt, completedAt, items) {
   const minutes = Math.floor(totalSeconds % 3600 / 60);
   const seconds = totalSeconds % 60;
   if (hours > 0) {
-    return `Worked for ${hours}h ${minutes}m`;
+    return translate("chat.workedForHours", { hours, minutes });
   }
   if (minutes > 0) {
-    return `Worked for ${minutes}m ${seconds}s`;
+    return translate("chat.workedForMinutes", { minutes, seconds });
   }
-  return `Worked for ${seconds}s`;
+  return translate("chat.workedForSeconds", { seconds });
 }
 function firstHistoryEntryTimestamp(entry) {
   if (entry.kind === "item") {
@@ -13359,7 +13359,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
   const turnTimeTitle = formatLongTimestamp(turn.startedAt);
   const visibleLiveHookPrompt = useMemo8(
     () => parseHookPromptText(visibleLiveOutput),
-    [visibleLiveOutput]
+    [visibleLiveOutput, i18nLocale]
   );
   const [expandedGroups, setExpandedGroups] = useState32(
     {}
@@ -13442,7 +13442,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
   );
   const workedLabel = useMemo8(
     () => turn.status === "recovering" ? translate("chat.confirmingStatus") : activeForRendering ? translate("chat.working") : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
-    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status]
+    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status, i18nLocale]
   );
   const interruptedLabel = turn.status === "interrupted" ? /* @__PURE__ */ jsx52("span", { className: "thread-graph-worked-interrupted shrink-0 text-[11px]", children: translate("chat.interrupted") }) : null;
   const hasCollapsedHiddenItems = collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
@@ -14353,7 +14353,7 @@ function ThreadTimelineComponent({
   adapter,
   autoCollapseCompletedTurns
 }) {
-  useI18n();
+  const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns = autoCollapseCompletedTurns ?? shellNav?.autoCollapseCompletedTurns ?? false;
   const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState35(
@@ -14550,7 +14550,7 @@ function ThreadTimelineComponent({
   );
   const unattachedLiveHookPromptItem = useMemo9(
     () => parseHookPromptText(liveOutput),
-    [liveOutput]
+    [liveOutput, i18nLocale]
   );
   const queuedSteers = [
     ...pendingSteers.filter((steer) => !turns.some(
@@ -15286,7 +15286,6 @@ var SHELL_ATTACH_RETRY_DELAY_MS = 120;
 var SHELL_RECONNECT_DELAY_MS = 800;
 var SHELL_ATTACH_TIMEOUT_MS = 4e3;
 var SHELL_RECONNECT_PROMISE_TIMEOUT_MS = 4500;
-var SHELL_ATTACH_TIMEOUT_MESSAGE = translate("workbench.shellConnectionTimedOutReconnecting");
 function deriveShellAttachTimeoutAction({
   isCurrentSocket,
   viewerId
@@ -15295,7 +15294,7 @@ function deriveShellAttachTimeoutAction({
     return null;
   }
   return {
-    connectionError: SHELL_ATTACH_TIMEOUT_MESSAGE,
+    connectionError: translate("workbench.shellConnectionTimedOutReconnecting"),
     isConnecting: false,
     settleAttachPromise: false,
     closeSocket: true
@@ -19110,7 +19109,7 @@ function ThreadDetailSurface({
   loadingContent,
   emptyContent
 }) {
-  useI18n();
+  const { locale } = useI18n();
   const detail = useMemo14(
     () => rawDetail ? sanitizeThreadDetailHistory(rawDetail) : null,
     [rawDetail]
@@ -19164,7 +19163,7 @@ function ThreadDetailSurface({
   );
   const topbarUsageLabel = useMemo14(
     () => formatTopbarUsageSummary(threadUsageSummary),
-    [threadUsageSummary]
+    [threadUsageSummary, locale]
   );
   const transcriptItemCount = useMemo14(
     () => detail ? detail.turns.reduce(

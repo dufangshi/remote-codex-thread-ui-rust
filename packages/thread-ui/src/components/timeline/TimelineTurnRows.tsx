@@ -477,12 +477,12 @@ export function formatWorkedDuration(
   const seconds = totalSeconds % 60;
 
   if (hours > 0) {
-    return `Worked for ${hours}h ${minutes}m`;
+    return translate("chat.workedForHours", { hours, minutes });
   }
   if (minutes > 0) {
-    return `Worked for ${minutes}m ${seconds}s`;
+    return translate("chat.workedForMinutes", { minutes, seconds });
   }
-  return `Worked for ${seconds}s`;
+  return translate("chat.workedForSeconds", { seconds });
 }
 
 import { TimelineTimeToggle } from './TimelineTimeToggle';
@@ -622,7 +622,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const turnTimeTitle = formatLongTimestamp(turn.startedAt);
   const visibleLiveHookPrompt = useMemo(
     () => parseHookPromptText(visibleLiveOutput),
-    [visibleLiveOutput],
+    [visibleLiveOutput, i18nLocale],
   );
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
     {},
@@ -712,7 +712,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   );
   const workedLabel = useMemo(
     () => turn.status === 'recovering' ? translate("chat.confirmingStatus") : activeForRendering ? translate("chat.working") : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
-    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status],
+    [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status, i18nLocale],
   );
   const interruptedLabel =
     turn.status === 'interrupted' ? (

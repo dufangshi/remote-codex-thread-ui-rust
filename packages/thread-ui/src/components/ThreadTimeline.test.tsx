@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+import { setLocale } from '../i18n';
 import type { ReactNode } from 'react';
 import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
@@ -39,6 +40,7 @@ afterEach(() => {
   root = null;
   container?.remove();
   container = null;
+  setLocale('en', false);
   vi.useRealTimers();
 });
 
@@ -53,6 +55,28 @@ function completedTurn(items: ThreadTurnDto['items']): ThreadTurnDto {
 }
 
 describe('ThreadTimeline', () => {
+  it.each([
+    ['inProgress', 'Working', '工作中'],
+    ['recovering', 'Confirming status', '正在确认状态'],
+    ['completed', 'Worked for 1m 12s', '工作了 1 分钟 12 秒'],
+  ] as const)('refreshes the %s worked label with identical memoized props', (status, english, chinese) => {
+    setLocale('en', false);
+    const turn = { ...completedTurn([
+      { id: 'prompt', kind: 'userMessage' as const, text: 'Keep this user message' },
+      { id: 'tool', kind: 'commandExecution' as const, text: 'pwd', status: 'completed' },
+      { id: 'reply', kind: 'agentMessage' as const, text: 'Keep this model reply' },
+    ]), status, completedAt: '2026-07-03T20:12:11Z' };
+    const element = render(<ThreadTimeline turns={[turn]} liveOutput="" autoCollapseCompletedTurns={false} />);
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe(english);
+    // Do not rerender or replace turn/props: the external locale subscription must update memo rows.
+    flushSync(() => setLocale('zh-CN', false));
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe(chinese);
+    expect(element.textContent).toContain('Keep this user message');
+    expect(element.textContent).toContain('Keep this model reply');
+    flushSync(() => setLocale('en', false));
+    expect(element.querySelector('.thread-graph-worked-label')?.textContent).toBe(english);
+  });
+
   it('lazy-loads a complete collapsed turn and keeps Worked below the user message', async () => {
     let resolveTurn!: (turn: ThreadTurnDto) => void;
     const onLoadTurnDetail = vi.fn(

@@ -2069,6 +2069,9 @@ declare const en: {
     readonly "chat.acceptedStatus": "Accepted";
     readonly "chat.steeringStatus": "Steering";
     readonly "chat.awaitingResponseStatus": "Awaiting response";
+    readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
+    readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
+    readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
     readonly "auth.connectingThread": "Connecting thread";
     readonly "auth.connectThread": "Connect thread";
     readonly "auth.closeConnectionInformation": "Close connection information";
@@ -4309,6 +4312,9 @@ declare const zhCN: {
     "chat.acceptedStatus": "已接受";
     "chat.steeringStatus": "正在引导";
     "chat.awaitingResponseStatus": "等待回复";
+    "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
+    "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
+    "chat.workedForSeconds": "工作了 {{seconds}} 秒";
     "auth.connectingThread": "正在连接线程";
     "auth.connectThread": "连接线程";
     "auth.closeConnectionInformation": "关闭连接信息";
@@ -6571,6 +6577,9 @@ declare const resources: {
         readonly "chat.acceptedStatus": "Accepted";
         readonly "chat.steeringStatus": "Steering";
         readonly "chat.awaitingResponseStatus": "Awaiting response";
+        readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
+        readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
+        readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
         readonly "auth.connectingThread": "Connecting thread";
         readonly "auth.connectThread": "Connect thread";
         readonly "auth.closeConnectionInformation": "Close connection information";
@@ -8810,6 +8819,9 @@ declare const resources: {
         "chat.acceptedStatus": "已接受";
         "chat.steeringStatus": "正在引导";
         "chat.awaitingResponseStatus": "等待回复";
+        "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
+        "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
+        "chat.workedForSeconds": "工作了 {{seconds}} 秒";
         "auth.connectingThread": "正在连接线程";
         "auth.connectThread": "连接线程";
         "auth.closeConnectionInformation": "关闭连接信息";

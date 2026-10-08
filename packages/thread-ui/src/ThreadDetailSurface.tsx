@@ -294,7 +294,7 @@ export function ThreadDetailSurface({
   loadingContent,
   emptyContent,
 }: ThreadDetailSurfaceProps) {
-  useI18n();
+  const { locale } = useI18n();
   const detail = useMemo(
     () => (rawDetail ? sanitizeThreadDetailHistory(rawDetail) : null),
     [rawDetail],
@@ -356,7 +356,7 @@ export function ThreadDetailSurface({
   );
   const topbarUsageLabel = useMemo(
     () => formatTopbarUsageSummary(threadUsageSummary),
-    [threadUsageSummary],
+    [threadUsageSummary, locale],
   );
   const transcriptItemCount = useMemo(
     () =>

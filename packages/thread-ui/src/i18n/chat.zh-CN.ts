@@ -421,4 +421,7 @@ export const chatZhCN = {
   "chat.acceptedStatus": "已接受",
   "chat.steeringStatus": "正在引导",
   "chat.awaitingResponseStatus": "等待回复",
+  "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟",
+  "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒",
+  "chat.workedForSeconds": "工作了 {{seconds}} 秒",
 } as const;

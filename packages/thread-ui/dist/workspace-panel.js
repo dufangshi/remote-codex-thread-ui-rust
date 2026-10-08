@@ -32,12 +32,12 @@ import {
   relativeWorkspacePath,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-SN4I666Z.js";
+} from "./chunk-7DJHCK33.js";
 import {
   getLocale,
   translate,
   useI18n
-} from "./chunk-4Q3ARP5S.js";
+} from "./chunk-OFUL6MFA.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect9, useMemo as useMemo10, useState as useState11 } from "react";
@@ -277,7 +277,7 @@ function useWorkspaceExplorerController({
   focusPathRequest = null,
   workspaceAdapter
 }) {
-  useI18n();
+  const { locale } = useI18n();
   const workspaceIdentity = useMemo2(
     () => ({
       threadId: detail.thread.id,
@@ -288,7 +288,7 @@ function useWorkspaceExplorerController({
   const persistence = useWorkspaceExplorerPersistence(workspaceIdentity);
   const fallbackTree = useMemo2(
     () => collectWorkspaceItems(detail, artifacts, status, activeView),
-    [activeView, artifacts, detail, status]
+    [activeView, artifacts, detail, status, locale]
   );
   const fallbackFirstSelectableNode = findFirstPreviewNode(fallbackTree);
   const initialPersistedState = useRef(persistence.read());
@@ -309,7 +309,7 @@ function useWorkspaceExplorerController({
       childrenLoaded: true,
       hasChildren: true
     }] } : root;
-  }, [adapterTree, fallbackTree, linkedFiles]);
+  }, [adapterTree, fallbackTree, linkedFiles, locale]);
   const nodeMap = useMemo2(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState(() => {
     const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;
@@ -3539,7 +3539,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-ZBROVSMX.js")
+  () => import("./GraphWorkspaceMonacoEditor-N62MN5IQ.js")
 );
 function DownloadFilePreview({ node, onDownload }) {
   const { locale: i18nLocale } = useI18n();
@@ -5234,11 +5234,11 @@ function ThreadGraphWorkspacePanel({
   const initialTab = firstEnabledWorkspaceTab(features, featureConfig?.defaultTab);
   const [activeTab, setActiveTab] = useState11(initialTab);
   const artifacts = useMemo10(() => collectArtifacts(detail), [detail]);
-  const toolEvents = useMemo10(() => collectToolEvents(detail), [detail]);
+  const toolEvents = useMemo10(() => collectToolEvents(detail), [detail, i18nLocale]);
   const threadPanels = plugins.getThreadPanels();
   const graphNodes = useMemo10(
     () => collectGraphNodes(detail, toolEvents),
-    [detail, toolEvents]
+    [detail, toolEvents, i18nLocale]
   );
   const primaryTabs = useMemo10(() => {
     const tabs = [];

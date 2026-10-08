@@ -63,7 +63,7 @@ export function useWorkspaceExplorerController({
   focusPathRequest = null,
   workspaceAdapter,
 }: UseWorkspaceExplorerControllerInput) {
-  useI18n();
+  const { locale } = useI18n();
   const workspaceIdentity = useMemo(
     () => ({
       threadId: detail.thread.id,
@@ -74,7 +74,7 @@ export function useWorkspaceExplorerController({
   const persistence = useWorkspaceExplorerPersistence(workspaceIdentity);
   const fallbackTree = useMemo(
     () => collectWorkspaceItems(detail, artifacts, status, activeView),
-    [activeView, artifacts, detail, status],
+    [activeView, artifacts, detail, status, locale],
   );
   const fallbackFirstSelectableNode = findFirstPreviewNode(fallbackTree);
   const initialPersistedState = useRef(persistence.read());
@@ -91,7 +91,7 @@ export function useWorkspaceExplorerController({
       id: 'linked-files', path: 'linked-files:', name: translate("files.linkedFiles"), kind: 'directory' as const,
       children: linkedFiles, childrenLoaded: true, hasChildren: true,
     }]} : root;
-  }, [adapterTree, fallbackTree, linkedFiles]);
+  }, [adapterTree, fallbackTree, linkedFiles, locale]);
   const nodeMap = useMemo(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(() => {
     const selectedPath = focusPathRequest ? workspaceRelativeFocusPath(focusPathRequest.path, detail.workspace.absPath) : initialPersistedState.current.selectedPath;

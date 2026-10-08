@@ -190,7 +190,7 @@ function ThreadTimelineComponent({
   adapter,
   autoCollapseCompletedTurns,
 }: ThreadTimelineProps) {
-  useI18n();
+  const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns =
     autoCollapseCompletedTurns ??
@@ -466,7 +466,7 @@ function ThreadTimelineComponent({
   );
   const unattachedLiveHookPromptItem = useMemo(
     () => parseHookPromptText(liveOutput),
-    [liveOutput],
+    [liveOutput, i18nLocale],
   );
   const queuedSteers = [
     ...pendingSteers.filter((steer) => !turns.some((turn) =>

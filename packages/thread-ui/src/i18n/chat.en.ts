@@ -421,4 +421,7 @@ export const chatEn = {
   "chat.acceptedStatus": "Accepted",
   "chat.steeringStatus": "Steering",
   "chat.awaitingResponseStatus": "Awaiting response",
+  "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m",
+  "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
+  "chat.workedForSeconds": "Worked for {{seconds}}s",
 } as const;

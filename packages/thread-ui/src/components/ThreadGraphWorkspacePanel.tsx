@@ -319,11 +319,11 @@ export function ThreadGraphWorkspacePanel({
   const initialTab = firstEnabledWorkspaceTab(features, featureConfig?.defaultTab);
   const [activeTab, setActiveTab] = useState<WorkspaceTab | null>(initialTab);
   const artifacts = useMemo(() => collectArtifacts(detail), [detail]);
-  const toolEvents = useMemo(() => collectToolEvents(detail), [detail]);
+  const toolEvents = useMemo(() => collectToolEvents(detail), [detail, i18nLocale]);
   const threadPanels = plugins.getThreadPanels();
   const graphNodes = useMemo(
     () => collectGraphNodes(detail, toolEvents),
-    [detail, toolEvents],
+    [detail, toolEvents, i18nLocale],
   );
   const primaryTabs = useMemo(() => {
     const tabs: PrimaryWorkspaceTab[] = [];

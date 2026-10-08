@@ -598,7 +598,10 @@ var chatEn = {
   "chat.searchAssistantRole": "Assistant",
   "chat.acceptedStatus": "Accepted",
   "chat.steeringStatus": "Steering",
-  "chat.awaitingResponseStatus": "Awaiting response"
+  "chat.awaitingResponseStatus": "Awaiting response",
+  "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m",
+  "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
+  "chat.workedForSeconds": "Worked for {{seconds}}s"
 };
 
 // src/i18n/common.en.ts
@@ -2879,7 +2882,10 @@ var chatZhCN = {
   "chat.searchAssistantRole": "\u52A9\u624B",
   "chat.acceptedStatus": "\u5DF2\u63A5\u53D7",
   "chat.steeringStatus": "\u6B63\u5728\u5F15\u5BFC",
-  "chat.awaitingResponseStatus": "\u7B49\u5F85\u56DE\u590D"
+  "chat.awaitingResponseStatus": "\u7B49\u5F85\u56DE\u590D",
+  "chat.workedForHours": "\u5DE5\u4F5C\u4E86 {{hours}} \u5C0F\u65F6 {{minutes}} \u5206\u949F",
+  "chat.workedForMinutes": "\u5DE5\u4F5C\u4E86 {{minutes}} \u5206\u949F {{seconds}} \u79D2",
+  "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2"
 };
 
 // src/i18n/common.zh-CN.ts

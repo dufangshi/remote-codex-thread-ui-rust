@@ -12,8 +12,8 @@ import type { McpPanelMode } from './types';
 
 const DEFAULT_RAW_MCP_BLOCK =
   '[mcp_servers.example_stdio]\ncommand = "npx"\nargs = ["-y", "your-mcp-server"]\n';
-const MCP_CONFIG_SUCCESS_MESSAGE =
-  translate("chat.mCPEntryWrittenToProviderConfigRestart");
+const MCP_CONFIG_SUCCESS_MESSAGE_KEY =
+  "chat.mCPEntryWrittenToProviderConfigRestart" as const;
 
 export interface UseComposerMcpConfigInput {
   hostConfigFilesAvailable: boolean;
@@ -118,7 +118,7 @@ export function useComposerMcpConfig({
         renderHttpMcpBlock(name, url),
       );
       await writeMcpConfig(nextContent);
-      setMcpConfigSuccess(MCP_CONFIG_SUCCESS_MESSAGE);
+      setMcpConfigSuccess(translate(MCP_CONFIG_SUCCESS_MESSAGE_KEY));
       setMcpPanelMode('list');
       setMcpHttpName('');
       setMcpHttpUrl('');
@@ -182,7 +182,7 @@ export function useComposerMcpConfig({
         mcpRawBlock,
       );
       await writeMcpConfig(nextContent);
-      setMcpConfigSuccess(MCP_CONFIG_SUCCESS_MESSAGE);
+      setMcpConfigSuccess(translate(MCP_CONFIG_SUCCESS_MESSAGE_KEY));
       setMcpPanelMode('list');
       void onOpenMcp?.();
     } catch (error) {

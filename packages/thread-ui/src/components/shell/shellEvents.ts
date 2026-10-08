@@ -166,8 +166,6 @@ export const SHELL_ATTACH_RETRY_DELAY_MS = 120;
 export const SHELL_RECONNECT_DELAY_MS = 800;
 export const SHELL_ATTACH_TIMEOUT_MS = 4000;
 export const SHELL_RECONNECT_PROMISE_TIMEOUT_MS = 4500;
-export const SHELL_ATTACH_TIMEOUT_MESSAGE =
-  translate("workbench.shellConnectionTimedOutReconnecting");
 
 export function deriveShellAttachTimeoutAction({
   isCurrentSocket,
@@ -181,7 +179,7 @@ export function deriveShellAttachTimeoutAction({
   }
 
   return {
-    connectionError: SHELL_ATTACH_TIMEOUT_MESSAGE,
+    connectionError: translate("workbench.shellConnectionTimedOutReconnecting"),
     isConnecting: false,
     settleAttachPromise: false,
     closeSocket: true,
