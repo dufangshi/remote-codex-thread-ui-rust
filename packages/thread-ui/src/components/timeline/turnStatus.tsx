@@ -1,5 +1,6 @@
 import { translate, useI18n } from '../../i18n';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../graph-ui/Tooltip';
 
 import type { ThreadHistoryItemDto } from '@remote-codex/shared';
 
@@ -17,8 +18,10 @@ import {
 
 function RunningDots({
   tone = 'amber',
+  color,
 }: {
   tone?: 'amber' | 'emerald' | 'sky';
+  color?: string;
 }) {
   const { locale: i18nLocale } = useI18n();
   const dotClassName =
@@ -34,10 +37,40 @@ function RunningDots({
         <span
           key={index}
           className={`h-1.5 w-1.5 rounded-full animate-pulse ${dotClassName}`}
-          style={{ animationDelay: `${index * 180}ms` }}
+          style={{ animationDelay: `${index * 180}ms`, backgroundColor: color, transition: 'background-color 300ms ease' }}
         />
       ))}
     </span>
+  );
+}
+
+function ProgressIndicator({ age, at }: { age: number | null; at: string | null }) {
+  const [open, setOpen] = useState(false);
+  const openAtPointerDown = useRef(false);
+  const validAge = age !== null && Number.isFinite(age);
+  const freshness = !validAge ? 'unknown' : age <= 5 ? 'recent' : age <= 20 ? 'quiet' : 'stale';
+  const color = { recent: '#10b981', quiet: '#eab308', stale: '#ef4444', unknown: '#94a3b8' }[freshness];
+  const ageLabel = validAge ? `${translate('chat.lastProgress')} ${age}${translate('chat.sAgo')}` : translate('chat.timeSinceTheLastTurnProgressUpdate');
+  const timeLabel = at && Number.isFinite(Date.parse(at)) ? translate('chat.lastActivity', { value1: formatLongTimestamp(at) }) : null;
+  return (
+    <Tooltip open={open} onOpenChange={setOpen}>
+      <TooltipTrigger asChild>
+        <button type="button" className="thread-progress-indicator inline-flex min-h-6 min-w-6 items-center justify-center rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+          data-progress-freshness={freshness} aria-label={[ageLabel, timeLabel].filter(Boolean).join(' · ')} aria-expanded={open}
+          onPointerDown={() => { openAtPointerDown.current = open; }}
+          onClick={event => {
+            event.preventDefault(); event.stopPropagation();
+            setOpen(current => !(event.detail !== 0 ? openAtPointerDown.current : current));
+          }}>
+          <RunningDots color={color} />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" sideOffset={6} collisionPadding={12}
+        style={{ background: 'var(--theme-panel)', color: 'var(--theme-fg)', border: '1px solid var(--theme-border)', zIndex: 100, maxWidth: 'calc(100vw - 24px)' }}>
+        <div>{ageLabel}</div>
+        {timeLabel && <div>{timeLabel}</div>}
+      </TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -301,12 +334,10 @@ export function TurnStatusBar({
           {active && turn.status !== 'recovering' && backgroundAgentCount > 0 ? (
             <span className="thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]" role="status">
               {backgroundAgentCount} {translate("chat.backgroundAgent")}{backgroundAgentCount === 1 ? '' : translate("chat.s")} {translate("chat.running_3c49d9")}</span>
-          ) : <TurnStatusIndicator status={turn.status} />}
-          {active && turn.status !== 'recovering' && progressAge !== null && Number.isFinite(progressAge) && (
-            <span className="thread-progress-age text-[10px] text-[var(--theme-fg-muted)]"
-              title={translate("chat.timeSinceTheLastTurnProgressUpdate")}>
-              {translate("chat.lastProgress")} {progressAge}{translate("chat.sAgo")}</span>
-          )}
+          ) : active && turn.status !== 'recovering'
+            ? <ProgressIndicator age={progressAge} at={effectiveLastActivityAt} />
+            : <TurnStatusIndicator status={turn.status} />}
+
           <TurnUsageInline turn={turn} />
         </div>
         <div className="thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap">

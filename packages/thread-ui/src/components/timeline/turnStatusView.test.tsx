@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { TimelineTurn } from './timelineItems';
 import { TurnStatusBar } from './turnStatus';
@@ -21,10 +21,18 @@ function activeTurn(overrides: Partial<TimelineTurn> = {}): TimelineTurn {
 }
 
 describe('TurnStatusBar footer', () => {
-  it('keeps the three running dots and shows elapsed time since actual progress', () => {
+  afterEach(() => vi.useRealTimers());
+  it('merges progress into accessible dots with precise freshness boundaries', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-10-08T18:00:00Z'));
     const render = (props = {}) => renderToStaticMarkup(<TurnStatusBar turn={activeTurn()}
       variant="footer" lastActivityAt={new Date(Date.now() - 20_000).toISOString()} {...props} />);
-    expect(render()).toContain('Last progress · 20s ago');
+    expect(render()).toContain('aria-label="Last progress · 20s ago');
+    expect(render()).not.toContain('thread-progress-age');
+    for (const [age, freshness] of [[0, 'recent'], [5, 'recent'], [6, 'quiet'], [20, 'quiet'], [21, 'stale']] as const) {
+      expect(render({ lastActivityAt: new Date(Date.now() - age * 1000).toISOString() })).toContain(`data-progress-freshness="${freshness}"`);
+    }
+    expect(render({ lastActivityAt: 'invalid' })).toContain('data-progress-freshness="unknown"');
     expect(render().match(/animate-pulse/g)).toHaveLength(3);
     expect(render()).not.toContain('Waiting for turn to finish');
     expect(render({ lastActivityAt: new Date().toISOString() })).toContain('Last progress · 0s ago');
