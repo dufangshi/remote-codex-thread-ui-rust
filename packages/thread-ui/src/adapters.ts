@@ -128,6 +128,8 @@ export interface ThreadWorkspaceAdapter {
     kind: 'file' | 'directory';
   }) => Promise<void> | void;
   renameNode?: (input: { threadId: string; workspaceId?: string | null; fromPath: string; toPath: string }) => Promise<void>;
+  /** Creates an empty file exclusively; an existing path must never be overwritten. */
+  createFile?: (input: { threadId: string; workspaceId?: string | null; path: string }) => Promise<{ path: string }>;
   deleteNode?: (input: { threadId: string; workspaceId?: string | null; path: string }) => Promise<void>;
   listGarbage?: (input: {
     threadId: string;

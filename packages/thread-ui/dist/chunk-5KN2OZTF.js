@@ -324,7 +324,7 @@ function GraphWorkspaceMonacoEditor({
     editorRef.current = editor2;
     const changeSubscription = model.onDidChangeContent(() => {
       if (!applyingContentRef.current) {
-        onChangeRef.current?.(model.getValue());
+        onChangeRef.current?.(model.getValue(editor.EndOfLinePreference.LF));
       }
     });
     editor2.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, () => {
@@ -343,7 +343,7 @@ function GraphWorkspaceMonacoEditor({
   }, [path, modelKey, retainModel]);
   useEffect(() => {
     const model = modelRef.current;
-    if (!model || model.getValue() === content) {
+    if (!model || model.getValue(editor.EndOfLinePreference.LF) === content) {
       return;
     }
     applyingContentRef.current = true;

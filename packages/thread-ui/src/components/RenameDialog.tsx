@@ -9,6 +9,8 @@ interface RenameDialogProps {
   value: string;
   busy?: boolean;
   error?: string | null;
+  description?: string;
+  submitLabel?: string;
   onChange: (value: string) => void;
   onCancel: () => void;
   onSubmit: () => void | Promise<void>;
@@ -21,6 +23,8 @@ export function RenameDialog({
   value,
   busy = false,
   error,
+  description,
+  submitLabel,
   onChange,
   onCancel,
   onSubmit,
@@ -66,13 +70,19 @@ export function RenameDialog({
         aria-modal="true"
         aria-label={title}
         onSubmit={handleSubmit}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            event.stopPropagation();
+            if (!busy) onCancel();
+          }
+        }}
         className="relative z-[1] w-full max-w-md rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-5 text-[var(--theme-fg)] shadow-[var(--theme-shadow)] sm:p-6"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium">{title}</p>
             <p className="mt-1 text-sm text-[var(--theme-fg-muted)]">
-              {translate("workbench.changesAreSavedOnlyAfterConfirmation")}</p>
+              {description ?? translate("workbench.changesAreSavedOnlyAfterConfirmation")}</p>
           </div>
           <button
             type="button"
@@ -115,7 +125,7 @@ export function RenameDialog({
             disabled={busy || !value.trim()}
             className="ui-action-success rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed"
           >
-            {translate("workbench.save")}</button>
+            {submitLabel ?? translate("workbench.save")}</button>
         </div>
       </form>
     </div>,

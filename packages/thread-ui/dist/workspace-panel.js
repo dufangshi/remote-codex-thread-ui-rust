@@ -3809,7 +3809,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-UKGKPYNU.js")
+  () => import("./GraphWorkspaceMonacoEditor-4HRDOOFZ.js")
 );
 function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
@@ -3853,7 +3853,7 @@ function translateReadOnly(reason) {
   const key = `files.safeReason.${reason}`;
   return Object.hasOwn(en, key) ? translate(key) : reason;
 }
-var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-PFNUWH3H.js"));
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-PHCBB73G.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -4620,7 +4620,10 @@ function GraphWorkspaceExplorer({
       await workspaceAdapter.createFile({ ...workspaceIdentity, path });
       created = true;
       if (createOwnerRef.current !== owner) return;
-      documents.discard(path);
+      const currentDraft = documents.documents.get(path);
+      if (currentDraft && isProtected(currentDraft) || !documents.discard(path)) {
+        throw new Error(translate("files.createHasDraft"));
+      }
       setNewFilePath(null);
       setFilterQuery("");
       await refreshWorkspaceTree(path);

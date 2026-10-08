@@ -2,6 +2,7 @@ import { useWorkspaceDocuments } from "./explorer/useWorkspaceDocuments";
 import { isProtected } from "./explorer/workspaceDocuments";
 import { translate, useI18n } from '../../i18n';
 import { relativeWorkspacePath } from '../workspacePaths';
+import { RenameDialog } from '../RenameDialog';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type {
@@ -89,6 +90,67 @@ export function GraphWorkspaceExplorer({
   const [focusedLine, setFocusedLine] = useState<number | null>(null);
   const [fileTabs, setFileTabs] = useState<WorkspaceFileTab[]>([]);
   const documents = useWorkspaceDocuments(workspaceAdapter, workspaceIdentity);
+  const [newFilePath, setNewFilePath] = useState<string | null>(null);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [creatingFile, setCreatingFile] = useState(false);
+  const createSource = JSON.stringify([workspaceAdapter?.resourceScopeKey, workspaceIdentity.workspaceId, workspaceIdentity.threadId]);
+  const createOwnerRef = useRef({ source: createSource, busy: false });
+  if (createOwnerRef.current.source !== createSource) createOwnerRef.current = { source: createSource, busy: false };
+  useEffect(() => { setNewFilePath(null); setCreateError(null); setCreatingFile(false); }, [createSource]);
+  function openCreateFile() {
+    const relative = activeNode ? relativeWorkspacePath(activeNode.path, detail.workspace.absPath) : null;
+    const directory = relative && !relative.startsWith('linked-files:')
+      ? activeNode?.kind === 'directory' ? relative : relative.slice(0, Math.max(0, relative.lastIndexOf('/')))
+      : '';
+    setNewFilePath(directory ? `${directory}/` : '');
+    setCreateError(null);
+  }
+  async function handleCreateFile() {
+    if (!workspaceAdapter?.createFile || newFilePath === null) return;
+    const owner = createOwnerRef.current;
+    if (owner.busy) return;
+    const path = newFilePath.trim();
+    if (!path || path.length > 4096 || /[\\\x00-\x1f\x7f]/.test(path) || /^[a-z]:/i.test(path) || path.split('/').some(part => !part || part === '.' || part === '..')) {
+      setCreateError(translate('files.invalidNewFilePath')); return;
+    }
+    if (dirtyFilePaths.has(path)) { setCreateError(translate('files.createHasDraft')); return; }
+    owner.busy = true; setCreatingFile(true); setCreateError(null);
+    let created = false;
+    try {
+      await workspaceAdapter.createFile({ ...workspaceIdentity, path });
+      created = true;
+      if (createOwnerRef.current !== owner) return;
+      // Another pane may edit an old cached draft while creation is in flight.
+      const currentDraft = documents.documents.get(path);
+      if ((currentDraft && isProtected(currentDraft)) || !documents.discard(path)) {
+        throw new Error(translate('files.createHasDraft'));
+      }
+      setNewFilePath(null);
+      setFilterQuery('');
+      await refreshWorkspaceTree(path);
+      if (createOwnerRef.current !== owner) return;
+      await focusWorkspacePath(path);
+      if (createOwnerRef.current !== owner) return;
+      const snapshot = await documents.load(path);
+      if (createOwnerRef.current !== owner) return;
+      if (snapshot && !snapshot.readOnlyReason && workspaceAdapter.saveDocument) documents.setEditing(path, true);
+      setFileTabs(tabs => [...tabs.filter(tab => tab.path !== path), { path, name: path.split('/').pop()!, pinned: true }]);
+      setCollapsedPanel(isMobileViewport ? 'explorer' : null);
+    } catch (error) {
+      if (createOwnerRef.current !== owner) return;
+      const message = error instanceof Error ? error.message : translate('files.fileOperationFailed');
+      if (created) setWorkspaceError(translate('files.createdButOpenFailed', { path, error: message }));
+      else setCreateError(message);
+    } finally {
+      owner.busy = false;
+      if (createOwnerRef.current === owner) setCreatingFile(false);
+    }
+  }
+  const createDialog = <RenameDialog open={newFilePath !== null} title={translate('files.newFile')}
+    label={translate('files.newFilePath')} description={translate('files.newFileDescription')}
+    submitLabel={translate('files.createFile')} value={newFilePath ?? ''}
+    onChange={setNewFilePath} onCancel={() => { if (!creatingFile) setNewFilePath(null); }}
+    onSubmit={handleCreateFile} busy={creatingFile} error={createError} />;
   const dirtyFilePaths = new Set([...documents.documents].filter(([,doc]) => isProtected(doc)).map(([path]) => path));
   const dirtyKey = [...dirtyFilePaths].join('\0');
   useEffect(() => {
@@ -322,6 +384,7 @@ export function GraphWorkspaceExplorer({
       ? { onRefresh: () => void refreshWorkspaceTree(activeNode?.path ?? null) }
       : {}),
     ...(workspaceAdapter?.uploadFile ? { onUpload: pickUploadFile } : {}),
+    ...(workspaceAdapter?.createFile ? { onCreateFile: openCreateFile } : {}),
   };
 
   const explorerPanel = (
@@ -364,7 +427,11 @@ export function GraphWorkspaceExplorer({
           setCollapsedPanel('explorer');
         }
       }}
-      onToggle={toggleDirectory}
+      onToggle={(path) => {
+        toggleDirectory(path);
+        setFocusedLine(null);
+        setSelectedNodeId(`workspace:${path}`);
+      }}
       selectedNodeId={activeNode?.id ?? null}
       revealRequestKey={focusPathRequest?.requestId}
       tree={tree}
@@ -430,6 +497,7 @@ export function GraphWorkspaceExplorer({
         className="relative h-full min-h-0 w-full overflow-hidden p-1"
       >
         {viewerPanel}
+        {createDialog}
       </div>
     );
   }
@@ -441,6 +509,7 @@ export function GraphWorkspaceExplorer({
         className="relative h-full min-h-0 w-full overflow-hidden p-1"
       >
         {explorerPanel}
+        {createDialog}
       </div>
     );
   }
@@ -500,6 +569,7 @@ export function GraphWorkspaceExplorer({
         className="hidden"
         onChange={(event) => void handleUpload(event)}
       />
+      {createDialog}
     </div>
   );
 }

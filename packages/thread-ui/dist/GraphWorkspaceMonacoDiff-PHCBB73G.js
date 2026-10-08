@@ -1,4 +1,4 @@
-import "./chunk-7WCKMZ32.js";
+import "./chunk-5KN2OZTF.js";
 import {
   translate
 } from "./chunk-IFNWVAHZ.js";

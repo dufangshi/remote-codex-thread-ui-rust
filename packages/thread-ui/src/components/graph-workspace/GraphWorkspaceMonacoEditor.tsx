@@ -195,7 +195,9 @@ export default function GraphWorkspaceMonacoEditor({
     editorRef.current = editor;
     const changeSubscription = model.onDidChangeContent(() => {
       if (!applyingContentRef.current) {
-        onChangeRef.current?.(model.getValue());
+        // Document drafts use LF; the save API restores the disk's EOL.
+        // Empty Monaco models may otherwise default to CRLF on first input.
+        onChangeRef.current?.(model.getValue(monaco.editor.EndOfLinePreference.LF));
       }
     });
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
@@ -215,7 +217,7 @@ export default function GraphWorkspaceMonacoEditor({
 
   useEffect(() => {
     const model = modelRef.current;
-    if (!model || model.getValue() === content) {
+    if (!model || model.getValue(monaco.editor.EndOfLinePreference.LF) === content) {
       return;
     }
     applyingContentRef.current = true;

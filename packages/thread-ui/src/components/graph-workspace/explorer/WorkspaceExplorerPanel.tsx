@@ -1,6 +1,7 @@
 import { translate, useI18n } from '../../../i18n';
 import {
   FileCode2,
+  FilePlus2,
   ListCollapse,
   MoreHorizontal,
   RefreshCw,
@@ -59,6 +60,7 @@ export function WorkspaceExplorerPanel({
   onSelectNode,
   onToggle,
   onUpload,
+  onCreateFile,
   explorerScrollTopRef,
   explorerScrollerRef,
   selectedNodeId,
@@ -92,6 +94,7 @@ export function WorkspaceExplorerPanel({
   onSelectNode?: (node: WorkspaceTreeNode) => void;
   onToggle: (path: string) => void;
   onUpload?: () => void;
+  onCreateFile?: () => void;
   explorerScrollTopRef: MutableRefObject<number>;
   explorerScrollerRef: MutableRefObject<HTMLDivElement | null>;
   selectedNodeId: string | null;
@@ -137,6 +140,11 @@ export function WorkspaceExplorerPanel({
         <h2 className="text-[11px] font-semibold uppercase text-slate-600 dark:text-slate-300">
           {translate("files.explorer")}</h2>
         <div className="thread-graph-explorer-toolbar flex items-center gap-1">
+          {onCreateFile && <button type="button" onClick={onCreateFile}
+            className={iconButtonClassName} title={translate('files.newFile')}
+            aria-label={translate('files.newFile')}>
+            <FilePlus2 className="h-4 w-4" />
+          </button>}
           <button
             type="button"
             onClick={openFilter}
