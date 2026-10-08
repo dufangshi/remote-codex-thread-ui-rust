@@ -1,3 +1,4 @@
+import { searchEn } from './search.en';
 import { authEn } from './auth.en';
 import { chatEn } from './chat.en';
 import { commonEn } from './common.en';
@@ -15,4 +16,5 @@ export const en = {
   ...settingsEn,
   ...sharingEn,
   ...workbenchEn,
+  ...searchEn,
 } as const;

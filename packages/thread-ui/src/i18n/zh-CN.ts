@@ -1,3 +1,4 @@
+import { searchZhCN } from './search.zh-CN';
 import type { en } from './en';
 import { authZhCN } from './auth.zh-CN';
 import { chatZhCN } from './chat.zh-CN';
@@ -16,4 +17,5 @@ export const zhCN = {
   ...settingsZhCN,
   ...sharingZhCN,
   ...workbenchZhCN,
+  ...searchZhCN,
 } satisfies Record<keyof typeof en, string | { readonly one: string; readonly other: string }>;

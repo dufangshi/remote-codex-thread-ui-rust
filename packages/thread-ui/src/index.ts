@@ -107,3 +107,8 @@ export { SettingsPanels, type SettingsSection } from './components/SettingsPanel
 
 export { I18nProvider, LanguageSwitcher, useI18n, initializeI18n, getLocale, setLocale, translate, t, formatDate, formatNumber, normalizeLocale, detectLocale, LOCALE_STORAGE_KEY, LOCALE_OPTIONS, SUPPORTED_LOCALES, DEFAULT_LOCALE } from './i18n';
 export type { Locale, TranslationKey, TranslationValues } from './i18n';
+export {
+  ConversationSearchScopePicker,
+  ConversationSearchExcerpt,
+  type ConversationSearchScope,
+} from './components/ConversationSearchControls';
