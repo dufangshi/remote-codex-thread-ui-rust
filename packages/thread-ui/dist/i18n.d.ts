@@ -420,6 +420,9 @@ declare const en: {
     readonly "workbench.identityUnverified": "The device encryption identity could not be verified.";
     readonly "workbench.identityChangedRetry": "The device identity changed. Verify its fingerprint before trusting it again.";
     readonly "workbench.threadUpdateFallback": "A thread has an update.";
+    readonly "workbench.splitSession": "Split conversation…";
+    readonly "workbench.replyToSession": "Reply to: {{title}}";
+    readonly "workbench.secondaryToolsHint": "Make primary for advanced tools";
     readonly "workbench.referenceArea": "Reference area";
     readonly "workbench.referenceFiles": "Workspace files";
     readonly "workbench.collaboration": "Collaboration";
@@ -2763,6 +2766,9 @@ declare const zhCN: {
     "workbench.identityUnverified": "无法验证设备加密身份。";
     "workbench.identityChangedRetry": "设备身份已更改。请验证其指纹后再信任。";
     "workbench.threadUpdateFallback": "线程有新动态。";
+    "workbench.splitSession": "双会话分屏…";
+    "workbench.replyToSession": "回复：{{title}}";
+    "workbench.secondaryToolsHint": "高级工具可设为主会话使用";
     "workbench.referenceArea": "参考区";
     "workbench.referenceFiles": "工作区文件";
     "workbench.collaboration": "协作进度";
@@ -5128,6 +5134,9 @@ declare const resources: {
         readonly "workbench.identityUnverified": "The device encryption identity could not be verified.";
         readonly "workbench.identityChangedRetry": "The device identity changed. Verify its fingerprint before trusting it again.";
         readonly "workbench.threadUpdateFallback": "A thread has an update.";
+        readonly "workbench.splitSession": "Split conversation…";
+        readonly "workbench.replyToSession": "Reply to: {{title}}";
+        readonly "workbench.secondaryToolsHint": "Make primary for advanced tools";
         readonly "workbench.referenceArea": "Reference area";
         readonly "workbench.referenceFiles": "Workspace files";
         readonly "workbench.collaboration": "Collaboration";
@@ -7470,6 +7479,9 @@ declare const resources: {
         "workbench.identityUnverified": "无法验证设备加密身份。";
         "workbench.identityChangedRetry": "设备身份已更改。请验证其指纹后再信任。";
         "workbench.threadUpdateFallback": "线程有新动态。";
+        "workbench.splitSession": "双会话分屏…";
+        "workbench.replyToSession": "回复：{{title}}";
+        "workbench.secondaryToolsHint": "高级工具可设为主会话使用";
         "workbench.referenceArea": "参考区";
         "workbench.referenceFiles": "工作区文件";
         "workbench.collaboration": "协作进度";

@@ -84,7 +84,7 @@ export function WorkbenchPanels({
     referenceTrigger.current?.focus();
   };
   const showReference = mode !== 'focus';
-  // A phone reference is a view, not navigation. Back returns to the composer target.
+  // Phone panes are views, not route navigation. Back returns to the left conversation.
   useEffect(() => {
     if (!compact || mobileView !== 'reference' || mode === 'focus') return;
     const marker = `workbench-reference-${Date.now()}`;
@@ -100,8 +100,7 @@ export function WorkbenchPanels({
     };
   }, [compact, mobileView, showReference]);
   const selectMode = (next: 'thread' | 'files' | 'collaboration') => {
-    // File mode includes both a tree and an editor; give it more initial room
-    // than a read-only conversation so the inner toolbar stays usable.
+    // File mode includes both a tree and an editor; give its toolbar more room.
     o.onPresentationChange({ mode: next, ...(next === 'files' ? { ratio: 35 } : {}) });
     setPickerOpen(false);
     setMobileView('reference');
@@ -121,6 +120,30 @@ export function WorkbenchPanels({
         <span className="workbench-source-device">{o.deviceLabel}</span>
         <span aria-hidden="true">/</span>
         <strong>{o.workspaceLabel}</strong>
+        <label className="workbench-split-picker">
+          <Columns2 size={15} aria-hidden="true" />
+          <select
+            aria-label={t('workbench.compareSession')}
+            value={referenceId ?? ''}
+            onChange={(event) => {
+              if (event.target.value) {
+                o.onPresentationChange({
+                  referenceId: event.target.value,
+                  mode: 'thread',
+                });
+                setMobileView('reference');
+                setPickerOpen(false);
+              }
+            }}
+          >
+            <option value="">{t('workbench.splitSession')}</option>
+            {o.candidates.map((thread) => (
+              <option key={thread.id} value={thread.id}>
+                {thread.title}
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="workbench-reference-picker">
           <button
             ref={referenceTrigger}
@@ -149,30 +172,6 @@ export function WorkbenchPanels({
                 <Users size={15} />
                 {t('workbench.collaboration')}
               </button>
-              <label>
-                {t('workbench.compareSession')}
-                <select
-                  aria-label={t('workbench.compareSession')}
-                  value={referenceId ?? ''}
-                  onChange={(event) => {
-                    if (event.target.value) {
-                      o.onPresentationChange({
-                        referenceId: event.target.value,
-                        mode: 'thread',
-                      });
-                      setMobileView('reference');
-                      setPickerOpen(false);
-                    }
-                  }}
-                >
-                  <option value="">{t('workbench.chooseSession')}</option>
-                  {o.candidates.map((thread) => (
-                    <option key={thread.id} value={thread.id}>
-                      {thread.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
               {referenceId && (
                 <button onClick={() => selectMode('thread')}>
                   {t('workbench.restoreComparison')}
@@ -208,13 +207,13 @@ export function WorkbenchPanels({
             aria-pressed={mobileView === 'primary'}
             onClick={() => setMobileView('primary')}
           >
-            {t('workbench.primarySession')}
+            {o.primaryTitle}
           </button>
           <button
             aria-pressed={mobileView === 'reference'}
             onClick={() => setMobileView('reference')}
           >
-            {t('workbench.referenceArea')}
+            {mode === 'thread' ? o.referenceTitle : mode === 'files' ? t('workbench.referenceFiles') : t('workbench.collaboration')}
           </button>
         </nav>
       )}
@@ -226,17 +225,6 @@ export function WorkbenchPanels({
           data-testid="primary-pane"
           hidden={compact && showReference && mobileView !== 'primary'}
         >
-          <header className="workbench-pane-heading">
-            <div>
-              <span className="workbench-pane-eyebrow">
-                {t('workbench.sendTarget')}
-              </span>
-              <strong title={o.primaryTitle}>{o.primaryTitle}</strong>
-            </div>
-            <span className="workbench-pane-meta">
-              {o.primaryHarness} · {o.primaryStatus}
-            </span>
-          </header>
           <div className="workbench-pane-body">{children}</div>
         </section>
         {showReference && (
@@ -305,11 +293,6 @@ export function WorkbenchPanels({
         >
           <header className="workbench-pane-heading">
             <div>
-              <span className="workbench-pane-eyebrow">
-                {mode === 'thread'
-                  ? t('workbench.readOnlyReference')
-                  : t('workbench.referenceArea')}
-              </span>
               <strong>
                 {mode === 'thread'
                   ? (o.referenceTitle ?? t('workbench.loadingThreadDetail'))
