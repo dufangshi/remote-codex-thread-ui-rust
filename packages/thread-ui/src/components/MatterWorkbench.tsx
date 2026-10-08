@@ -56,6 +56,8 @@ export interface MatterWorkbenchOptions {
   onToggleFavorite: () => void;
   onNavigate: (href: string) => void;
   onSearch: () => void;
+  search?: ReactNode;
+  searchOpen?: boolean;
   notifications: WorkbenchNotification[];
   unreadCount: number;
   onReadNotifications: () => void;
@@ -219,7 +221,7 @@ export function MatterWorkbench({
           title="Explorer" onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
         <div className="matter-rail-bottom">{deviceMonitor}{settings}</div>
       </nav>}
-      <header className="matter-topbar">
+      <header className={`matter-topbar ${o.searchOpen ? 'is-search-open' : ''}`}>
         <button
           aria-label="Toggle shortcuts sidebar"
           aria-expanded={mobile ? sidebarOpen : !sidebarHidden}
@@ -241,7 +243,7 @@ export function MatterWorkbench({
         <a href={homeHref} aria-label="Back to workspaces" title="Workspaces">
           <Home />
         </a>
-        <button
+        <div className="matter-topbar-search">{o.search ?? <button
           className="matter-search-trigger"
           aria-label="Search conversation"
           disabled={o.emptyWorkspace}
@@ -249,7 +251,7 @@ export function MatterWorkbench({
         >
           <Search />
           <span>Search conversation</span>
-        </button>
+        </button>}</div>
         <div className="matter-topbar-end">
           {mobile && deviceMonitor}
           {mobile && <>

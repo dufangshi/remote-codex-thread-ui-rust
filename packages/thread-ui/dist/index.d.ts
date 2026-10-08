@@ -173,6 +173,8 @@ interface MatterWorkbenchOptions {
     onToggleFavorite: () => void;
     onNavigate: (href: string) => void;
     onSearch: () => void;
+    search?: ReactNode;
+    searchOpen?: boolean;
     notifications: WorkbenchNotification[];
     unreadCount: number;
     onReadNotifications: () => void;

@@ -6862,7 +6862,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
             settings
           ] })
         ] }),
-        /* @__PURE__ */ jsxs24("header", { className: "matter-topbar", children: [
+        /* @__PURE__ */ jsxs24("header", { className: `matter-topbar ${o.searchOpen ? "is-search-open" : ""}`, children: [
           /* @__PURE__ */ jsx29(
             "button",
             {
@@ -6880,7 +6880,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
           /* @__PURE__ */ jsx29("button", { "aria-label": "Go back", onClick: () => history.back(), children: /* @__PURE__ */ jsx29(ArrowLeft, {}) }),
           /* @__PURE__ */ jsx29("button", { "aria-label": "Go forward", onClick: () => history.forward(), children: /* @__PURE__ */ jsx29(ArrowRight, {}) }),
           /* @__PURE__ */ jsx29("a", { href: homeHref, "aria-label": "Back to workspaces", title: "Workspaces", children: /* @__PURE__ */ jsx29(Home, {}) }),
-          /* @__PURE__ */ jsxs24(
+          /* @__PURE__ */ jsx29("div", { className: "matter-topbar-search", children: o.search ?? /* @__PURE__ */ jsxs24(
             "button",
             {
               className: "matter-search-trigger",
@@ -6892,7 +6892,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
                 /* @__PURE__ */ jsx29("span", { children: "Search conversation" })
               ]
             }
-          ),
+          ) }),
           /* @__PURE__ */ jsxs24("div", { className: "matter-topbar-end", children: [
             mobile && deviceMonitor,
             mobile && /* @__PURE__ */ jsxs24(Fragment6, { children: [
