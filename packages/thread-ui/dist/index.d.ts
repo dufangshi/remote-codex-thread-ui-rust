@@ -70,7 +70,7 @@ interface ThreadComposerProps {
     onCompact?: () => Promise<void> | void;
     onOpenSkills?: () => Promise<void> | void;
     onOpenMcp?: () => Promise<void> | void;
-    onOpenHarness?: () => Promise<void> | void;
+    onOpenHarness?: (composerFocusOwner?: string) => Promise<void> | void;
     onOpenHooks?: () => Promise<void> | void;
     onCreateHook?: (input: CreateThreadHookInput) => Promise<void> | void;
     onUpdateHook?: (input: UpdateThreadHookInput) => Promise<void> | void;
@@ -141,6 +141,8 @@ declare function SettingsPanels({ sections, initialId }: {
 type ReferenceMode = 'focus' | 'thread' | 'files' | 'collaboration';
 interface WorkbenchPresentation {
     referenceId: string | null;
+    /** Null (and legacy absence) resolves to the host device. */
+    referenceDeviceId?: string | null;
     mode: ReferenceMode;
     ratio: number;
 }
@@ -158,7 +160,7 @@ interface WorkbenchPanelsOptions {
     primaryStatus: string;
     primaryHarness: string;
     presentation: WorkbenchPresentation;
-    onPresentationChange: (patch: Partial<WorkbenchPresentation>) => void;
+    onPresentationChange: (patch: Partial<WorkbenchPresentation>) => boolean | void;
     candidates: Array<{
         id: string;
         title: string;
@@ -168,6 +170,13 @@ interface WorkbenchPanelsOptions {
     collaborationContent?: ReactNode;
     onMakePrimary: () => void;
     storageFailed?: boolean;
+    focusedPane?: 'primary' | 'reference';
+    onFocusPane?: (pane: 'primary' | 'reference') => boolean | void;
+    toolContent?: ReactNode;
+    toolTitle?: string;
+    toolsTargetLabel?: string;
+    toolsOpen?: boolean;
+    onCloseTools?: () => void;
 }
 
 interface WorkbenchThread {

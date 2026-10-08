@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-4MBRLCQH.js";
+} from "./chunk-JRM5WYX6.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-C3TGJMOC.js";
+} from "./chunk-EEMBST6M.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -60,17 +60,17 @@ styleInject(".thread-ui-shell .timeline-soft-text,\n.thread-ui-shell .thread-mes
 styleInject('.thread-export-dialog-root {\n  --export-bg: rgb(248 250 252);\n  --export-panel: rgb(255 255 255);\n  --export-surface: rgb(241 245 249);\n  --export-surface-strong: rgb(226 232 240);\n  --export-border: rgb(203 213 225);\n  --export-fg: rgb(15 23 42);\n  --export-fg-soft: rgb(51 65 85);\n  --export-fg-muted: rgb(100 116 139);\n  --export-accent: rgb(217 119 6);\n  --export-accent-bg: rgb(254 243 199);\n  --export-accent-border: rgb(251 191 36);\n  --export-shadow: rgb(15 23 42 / 0.16);\n  color: var(--export-fg);\n  position: fixed;\n  inset: 0;\n  z-index: 96;\n  display: flex;\n  align-items: flex-end;\n  justify-content: center;\n  overflow: hidden;\n  padding: 0;\n}\n.thread-export-dialog-root.thread-ui-theme-dark,\n.thread-export-dialog-root[data-theme-effective=dark] {\n  --export-bg: #12151c;\n  --export-panel: #181d25;\n  --export-surface: #1d222c;\n  --export-surface-strong: #262c38;\n  --export-border: #343b48;\n  --export-fg: rgb(241 245 249);\n  --export-fg-soft: rgb(203 213 225);\n  --export-fg-muted: rgb(148 163 184);\n  --export-accent: rgb(245 158 11);\n  --export-accent-bg: rgb(245 158 11 / 0.16);\n  --export-accent-border: rgb(245 158 11 / 0.34);\n  --export-shadow: rgb(0 0 0 / 0.36);\n}\n.thread-export-dialog-backdrop {\n  background: color-mix(in oklch, var(--export-bg) 68%, transparent);\n}\n.thread-export-dialog-root.thread-ui-theme-dark .thread-export-dialog-backdrop,\n.thread-export-dialog-root[data-theme-effective=dark] .thread-export-dialog-backdrop {\n  background: rgb(2 6 23 / 0.74);\n}\n.thread-export-dialog-panel {\n  position: relative;\n  z-index: 1;\n  display: flex;\n  width: 100%;\n  max-width: 42rem;\n  flex-direction: column;\n  border-color: var(--export-border);\n  background: var(--export-panel);\n  box-shadow: 0 26px 80px var(--export-shadow);\n  max-height: calc(100% - max(env(safe-area-inset-top), var(--android-safe-area-top, 0px)) - max(0.75rem, env(safe-area-inset-bottom), var(--android-safe-area-bottom, 0px)));\n}\n.thread-export-dialog-header,\n.thread-export-dialog-footer,\n.thread-export-dialog-box-header {\n  border-color: var(--export-border);\n}\n.thread-export-dialog-title,\n.thread-export-dialog-strong,\n.thread-export-dialog-body-text {\n  color: var(--export-fg);\n}\n.thread-export-dialog-subtitle,\n.thread-export-dialog-status-pill {\n  color: var(--export-fg-muted);\n}\n.thread-export-dialog-icon-button,\n.thread-export-dialog-secondary-button,\n.thread-export-dialog-segment,\n.thread-export-dialog-box,\n.thread-export-dialog-status-pill {\n  border-color: var(--export-border);\n  background: var(--export-surface);\n}\n.thread-export-dialog-segment,\n.thread-export-dialog-box {\n  background: color-mix(in oklch, var(--export-surface) 72%, var(--export-panel));\n}\n.thread-export-dialog-icon-button,\n.thread-export-dialog-secondary-button {\n  color: var(--export-fg-soft);\n}\n.thread-export-dialog-icon-button:hover:not(:disabled),\n.thread-export-dialog-secondary-button:hover:not(:disabled),\n.thread-export-dialog-turn-row:hover {\n  background: var(--export-surface-strong);\n  color: var(--export-fg);\n}\n.thread-export-dialog-muted-action {\n  color: var(--export-fg-muted);\n}\n.thread-export-dialog-muted-action:hover {\n  color: var(--export-fg);\n}\n.thread-export-dialog-root .ui-status-warning {\n  border: 1px solid var(--export-accent-border);\n  background: var(--export-accent-bg);\n  color: color-mix(in oklch, var(--export-accent) 72%, var(--export-fg));\n}\n.thread-export-dialog-checkbox {\n  accent-color: var(--export-accent);\n}\n.thread-export-dialog-turn-row {\n  color: var(--export-fg-soft);\n}\n@media (max-width: 639px) {\n  .thread-export-dialog-panel {\n    position: fixed;\n    right: 0;\n    bottom: 0;\n    left: 0;\n    width: 100%;\n    max-width: none;\n    border-bottom-right-radius: 0;\n    border-bottom-left-radius: 0;\n    transform: translateZ(0);\n  }\n}\n@media (min-width: 640px) {\n  .thread-export-dialog-root {\n    align-items: center;\n    padding: 1.5rem;\n  }\n}\n.thread-export-dialog-root.thread-ui-theme-dark,\n.thread-export-dialog-root[data-theme-effective=dark] {\n  --export-bg: #12110c;\n  --export-panel: #1e1d17;\n  --export-surface: #25241e;\n  --export-surface-strong: #302f27;\n  --export-border: #3c3a30;\n  --export-fg: #e9e7df;\n  --export-fg-soft: #ccc9bc;\n  --export-fg-muted: #999587;\n}\n.thread-export-dialog-segment {\n  display: flex;\n  flex-wrap: wrap;\n  border: 0;\n  gap: 4px;\n  border-radius: 8px;\n}\n.thread-export-dialog-panel {\n  border-radius: 16px;\n}\n.thread-export-dialog-box,\n.thread-export-dialog-box-header {\n  border-radius: 8px;\n}\n.public-transcript {\n  min-height: 100vh;\n  background: var(--theme-bg);\n  color: var(--theme-fg);\n  font-family: var(--font-sans,ui-sans-serif,system-ui,sans-serif);\n}\n.public-transcript-content {\n  max-width: 56rem;\n  margin: 0 auto;\n  padding: 24px 20px 48px;\n}\n.public-transcript-header {\n  padding-bottom: 20px;\n  margin-bottom: 20px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.public-transcript-header h1 {\n  font-size: 20px;\n  font-weight: 600;\n  line-height: 1.4;\n  overflow-wrap: anywhere;\n}\n.public-transcript-header p {\n  margin-top: 6px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.public-transcript-turn {\n  padding: 8px 0 20px;\n}\n.public-transcript-turn > .thread-graph-message + .thread-graph-message {\n  margin-top: 12px;\n}\n.public-transcript .thread-graph-message-stack.is-assistant {\n  width: 100%;\n}\n.public-transcript img {\n  max-width: 100%;\n  object-fit: contain;\n}\n.public-transcript .thread-graph-code-block {\n  overflow-wrap: anywhere;\n}\n.public-transcript .thread-graph-code-block pre {\n  white-space: pre-wrap;\n}\n@media (max-width: 639px) {\n  .public-transcript-content {\n    padding: 16px 12px 32px;\n  }\n}\n@media print {\n  @page {\n    size: A4;\n    margin: 12mm 10mm;\n  }\n  html,\n  body {\n    height: auto !important;\n    overflow: visible !important;\n  }\n  .public-transcript {\n    min-height: 0;\n    print-color-adjust: exact;\n    -webkit-print-color-adjust: exact;\n  }\n  .public-transcript-content {\n    max-width: none;\n    padding: 0;\n  }\n  .public-transcript-turn,\n  .public-transcript .thread-graph-message,\n  .public-transcript .thread-graph-message-bubble {\n    break-inside: auto;\n  }\n  .public-transcript .thread-graph-worked-summary,\n  .public-transcript .thread-graph-message-time-row,\n  .public-transcript h1,\n  .public-transcript h2,\n  .public-transcript h3 {\n    break-after: avoid;\n  }\n  .public-transcript p,\n  .public-transcript li {\n    orphans: 3;\n    widows: 3;\n  }\n  .public-transcript img,\n  .public-transcript tr {\n    break-inside: avoid;\n  }\n  .public-transcript .thread-graph-code-block {\n    box-decoration-break: clone;\n  }\n}\n.thread-export-dialog-root.matter-actions-dialog {\n  --export-bg: oklch(0.915 0.007 145);\n  --export-panel: oklch(0.946 0.006 145);\n  --export-surface: oklch(0.929 0.006 145);\n  --export-surface-strong: oklch(0.875 0.008 145);\n  --export-border: oklch(0.83 0.008 145);\n  --export-fg: #121416;\n  --export-fg-soft: #5b6269;\n  --export-fg-muted: #5d6972;\n  --export-accent: #007a49;\n  --export-accent-bg: #e5f8f0;\n  --export-accent-border: #bee9d8;\n  --theme-bg: var(--export-panel);\n  --theme-border: var(--export-border);\n  font-family:\n    "DM Sans",\n    ui-sans-serif,\n    system-ui,\n    sans-serif;\n}\n.thread-export-dialog-root.matter-actions-dialog[data-theme-effective=dark] {\n  --export-bg: #0c0f11;\n  --export-panel: #0f1317;\n  --export-surface: #141a1f;\n  --export-surface-strong: #202a30;\n  --export-border: #263038;\n  --export-fg: #f4f7f6;\n  --export-fg-soft: #a7b0b7;\n  --export-fg-muted: #a7b3bc;\n  --export-accent: #00cc76;\n  --export-accent-bg: #102b23;\n  --export-accent-border: #215240;\n  color-scheme: dark;\n}\n.matter-actions-dialog .thread-export-dialog-panel {\n  max-width: 540px;\n  border-radius: 14px;\n  overflow: hidden;\n}\n.thread-export-dialog-root.matter-actions-dialog .thread-export-dialog-panel {\n  background: var(--export-panel);\n  color: var(--export-fg);\n}\n.thread-export-dialog-root.matter-actions-dialog :is(.thread-export-dialog-box, .thread-export-dialog-box-header, .thread-export-dialog-secondary-button) {\n  background: var(--export-surface);\n  border-color: var(--export-border);\n  color: var(--export-fg);\n}\n.matter-share-scope {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  padding: 12px 0;\n  border-bottom: 1px solid var(--export-border);\n  font-size: 13px;\n}\n.matter-share-scope input {\n  margin-top: 3px;\n  width: 16px;\n  height: 16px;\n}\n.matter-share-scope small {\n  display: block;\n  margin-top: 4px;\n  color: var(--export-fg-soft);\n  line-height: 1.5;\n}\n.matter-actions-dialog .thread-export-dialog-backdrop {\n  background: rgb(12 18 22 / 32%);\n  backdrop-filter: blur(3px);\n}\n.matter-actions-dialog .thread-export-dialog-header {\n  padding: 20px 22px 16px;\n}\n.matter-actions-dialog .thread-export-dialog-title {\n  font-size: 16px;\n  font-weight: 600;\n  letter-spacing: -.02em;\n}\n.matter-actions-dialog .thread-export-dialog-subtitle {\n  font-size: 12px;\n  line-height: 1.6;\n}\n.matter-actions-dialog .thread-export-dialog-icon-button {\n  width: 28px;\n  height: 28px;\n  border: 0;\n  border-radius: 7px;\n  background: transparent;\n}\n.matter-actions-dialog .thread-export-dialog-footer {\n  padding: 14px 22px;\n  background: var(--export-surface);\n}\n.matter-actions-dialog :is(.thread-export-dialog-secondary-button, .matter-dialog-primary) {\n  border-radius: 7px;\n  font-size: 12px;\n  padding: 8px 12px;\n}\n.matter-actions-dialog .matter-dialog-primary {\n  border: 1px solid var(--export-accent);\n  background: var(--export-accent);\n  color: #fdfdfd;\n}\n.matter-actions-dialog[data-theme-effective=dark] .matter-dialog-primary {\n  color: #082016;\n}\n.matter-actions-dialog :is(input:not([type=checkbox]):not([type=radio]), select) {\n  background: var(--export-panel);\n  border: 1px solid var(--export-border);\n  border-radius: 7px;\n  color: var(--export-fg);\n  min-height: 36px;\n  font-size: 13px;\n}\n.matter-actions-dialog :is(input[type=radio], input[type=checkbox]) {\n  accent-color: var(--export-accent);\n}\n.matter-actions-dialog :is(button, input, select):focus-visible {\n  outline: 2px solid var(--export-accent);\n  outline-offset: 2px;\n}\n.matter-actions-dialog button:disabled {\n  opacity: .5;\n}\n.matter-export-options {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  font-size: 13px;\n}\n.matter-export-options > p {\n  border: 0;\n  background: transparent;\n  padding: 0 2px;\n}\n.matter-sharing-unavailable {\n  display: flex;\n  align-items: flex-start;\n  gap: 12px;\n  padding: 18px 0;\n  font-size: 13px;\n  line-height: 1.7;\n  color: var(--export-fg-soft);\n}\n.matter-sharing-unavailable svg {\n  flex-shrink: 0;\n  margin-top: 2px;\n  color: var(--export-fg-muted);\n}\n.matter-actions-dialog .thread-public-links {\n  font-size: 13px;\n}\n.matter-actions-dialog .thread-public-link-create {\n  background: var(--export-accent);\n  border-color: var(--export-accent);\n  color: #fdfdfd;\n}\n.matter-actions-dialog[data-theme-effective=dark] .thread-public-link-create {\n  color: #082016;\n}\n.matter-actions-dialog .thread-public-link-create:hover:not(:disabled) {\n  background: var(--export-accent);\n  filter: brightness(.95);\n  color: #fdfdfd;\n}\n.matter-actions-dialog[data-theme-effective=dark] .thread-public-link-create:hover:not(:disabled) {\n  color: #082016;\n}\n.matter-actions-dialog .thread-public-link-create:disabled {\n  background: var(--export-surface-strong);\n  color: var(--export-fg-soft);\n  border-color: var(--export-border);\n  opacity: 1;\n}\n.thread-public-link-options {\n  min-width: 0;\n  border: 0;\n  padding: 0;\n  margin: 0;\n  color: var(--export-fg);\n}\n.thread-public-link-options legend {\n  font-size: 13px;\n  font-weight: 600;\n  margin-bottom: 10px;\n}\n.thread-public-link-scope {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 10px 20px;\n  font-size: 13px;\n}\n.thread-public-link-scope label,\n.thread-public-link-turns > label,\n.thread-public-link-live {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  cursor: pointer;\n}\n.thread-public-link-options input {\n  accent-color: var(--export-accent);\n  margin: 3px 0 0;\n  flex-shrink: 0;\n}\n.thread-public-link-turns {\n  margin-top: 12px;\n  max-height: 230px;\n  overflow: auto;\n  border-block: 1px solid var(--export-border);\n}\n.thread-public-link-selection {\n  display: flex;\n  justify-content: space-between;\n  padding: 9px 0;\n  font-size: 12px;\n  color: var(--export-fg-soft);\n}\n.thread-public-link-selection button {\n  color: var(--export-accent);\n}\n.thread-public-link-turns > label {\n  padding: 9px 4px;\n  border-radius: 6px;\n  font-size: 12px;\n}\n.thread-public-link-turns > label:hover {\n  background: var(--export-surface-strong);\n}\n.thread-public-link-turns > label > span {\n  min-width: 0;\n}\n.thread-public-link-turns strong {\n  font-weight: 500;\n}\n.thread-public-link-turns label span span {\n  display: block;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  color: var(--export-fg-soft);\n  margin-top: 3px;\n}\n.thread-public-link-live {\n  margin-top: 18px;\n  padding-top: 14px;\n  border-top: 1px solid var(--export-border);\n  font-size: 13px;\n}\n.thread-public-link-live strong {\n  display: block;\n  font-weight: 500;\n}\n.thread-public-link-live span span {\n  display: block;\n  margin-top: 5px;\n  font-size: 12px;\n  line-height: 1.6;\n  color: var(--export-fg-soft);\n}\n@media (max-width: 639px) {\n  .matter-actions-dialog .thread-export-dialog-panel {\n    max-width: none;\n    border-radius: 14px 14px 0 0;\n  }\n  .matter-actions-dialog .thread-export-dialog-footer {\n    padding-bottom: max(16px, env(safe-area-inset-bottom));\n  }\n}\n');
 
 // src/styles/matter-workbench.css
-styleInject('.matter-thread-menu {\n  position: relative;\n}\n.matter-thread-menu > summary {\n  list-style: none;\n  display: grid;\n  place-items: center;\n  width: 30px;\n  height: 30px;\n  border-radius: 8px;\n  cursor: pointer;\n}\n.matter-thread-menu > summary::-webkit-details-marker {\n  display: none;\n}\n.matter-thread-menu > summary:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-menu > div {\n  position: absolute;\n  top: 34px;\n  right: 0;\n  width: min(270px, calc(100vw - 24px));\n  z-index: 80;\n  padding: 6px;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .matter-thread-menu > div > button {\n  display: flex;\n  width: 100%;\n  height: 36px;\n  gap: 10px;\n  justify-content: flex-start;\n  padding: 0 9px;\n  font-size: 12px;\n}\n.thread-execution-step-count {\n  display: none;\n}\n.matter-workbench .thread-execution-step-count {\n  display: inline;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell.thread-ui-shell,\n.thread-graph-dialog.matter-settings-dialog {\n  padding: 0;\n  background: var(--matter-chrome);\n  --thread-gc-bg: oklch(0.915 0.007 145);\n  --thread-gc-panel: oklch(0.946 0.006 145);\n  --thread-gc-workspace: oklch(0.895 0.008 145);\n  --thread-gc-surface: oklch(0.929 0.006 145);\n  --thread-gc-muted: oklch(0.875 0.008 145);\n  --thread-gc-hover: oklch(0.865 0.009 145);\n  --thread-gc-border: oklch(0.83 0.008 145);\n  --thread-gc-border-strong: oklch(0.76 0.009 145);\n  --thread-gc-border-contrast: #828a92;\n  --thread-gc-fg: #121416;\n  --thread-gc-fg-soft: #5b6269;\n  --thread-gc-fg-muted: oklch(0.47 0.013 155);\n  --thread-gc-primary: #00a764;\n  --thread-gc-primary-hover: #00975a;\n  --thread-gc-primary-fg: #fff;\n  --thread-gc-accent-soft: #e5f8f0;\n  --thread-gc-accent-strong: #008b53;\n  --thread-gc-accent-border: #bee9d8;\n  --matter-chrome: oklch(0.885 0.008 145);\n  --matter-composer-shadow: 0 18px 44px rgb(25 40 33 / 19%), 0 4px 12px rgb(25 40 33 / 10%);\n  --matter-glass-highlight: oklch(0.98 0.005 145 / 75%);\n  font-family:\n    "DM Sans",\n    Inter,\n    ui-sans-serif,\n    system-ui,\n    sans-serif;\n}\n.thread-ui-shell.thread-ui-shell[data-theme-effective=dark],\n.thread-graph-dialog.matter-settings-dialog[data-theme-effective=dark] {\n  --thread-gc-bg: #0c0f11;\n  --thread-gc-panel: #0f1317;\n  --thread-gc-workspace: #141b20;\n  --thread-gc-surface: #1c242a;\n  --thread-gc-muted: #1c242a;\n  --thread-gc-hover: #202a30;\n  --thread-gc-border: #263038;\n  --thread-gc-border-strong: #36434d;\n  --thread-gc-border-contrast: #737f87;\n  --thread-gc-fg: #f4f7f6;\n  --thread-gc-fg-soft: #c1cad1;\n  --thread-gc-fg-muted: #a2afb9;\n  --thread-gc-primary: #00cc76;\n  --thread-gc-primary-hover: #16de89;\n  --thread-gc-primary-fg: #082016;\n  --thread-gc-accent-soft: #102b23;\n  --thread-gc-accent-strong: #00cc76;\n  --thread-gc-accent-border: #215240;\n  --matter-chrome: #141a1f;\n  --matter-composer-shadow: 0 22px 52px rgb(3 8 6 / 48%), 0 4px 14px rgb(3 8 6 / 30%);\n  --matter-glass-highlight: oklch(0.8 0.014 155 / 15%);\n}\n.thread-ui-shell .matter-workbench {\n  display: grid;\n  height: 100%;\n  min-height: 0;\n  grid-template-columns: 49px 236px minmax(0, 1fr);\n  grid-template-rows: 40px minmax(0, 1fr);\n  background: var(--matter-chrome);\n  font-size: 13px;\n}\n.thread-ui-shell .matter-workbench svg {\n  stroke-width: 1.65;\n}\n.thread-ui-shell .matter-workbench :where(button, a):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n.thread-ui-shell .matter-workbench :where(button, a) {\n  -webkit-tap-highlight-color: transparent;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a),\n.matter-new-thread {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  justify-content: center;\n  width: 30px;\n  height: 30px;\n  border: 0;\n  border-radius: 8px;\n  background: transparent;\n  color: var(--theme-fg-soft);\n  box-shadow: none;\n  transition: background 120ms, color 120ms;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a):hover,\n.matter-new-thread:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-rail {\n  grid-row: 1 / -1;\n  border-right: 1px solid var(--theme-border);\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  gap: 8px;\n  padding: 4px 0 10px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > .matter-brand {\n  height: 32px;\n  margin-bottom: 12px;\n  font-size: 22px;\n  font-weight: 700;\n  letter-spacing: -3px;\n  color: var(--theme-fg);\n}\n.matter-brand span {\n  color: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .matter-rail > button {\n  width: 35px;\n  height: 35px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-rail-bottom {\n  margin-top: auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 8px;\n}\n.matter-watches-toggle {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  padding: 0 8px;\n  flex-shrink: 0;\n  height: 34px;\n  color: var(--theme-fg-muted);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-watches-toggle:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n@media (min-width: 640px) {\n  .matter-explorer .thread-graph-workspace-resizable > [data-panel]:has(> .thread-graph-workspace-explorer-pane) {\n    min-width: 144px !important;\n  }\n}\n.matter-topbar {\n  grid-column: 2 / -1;\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  padding: 0 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-topbar-brand {\n  font-weight: 600;\n  font-size: 12px;\n  margin: 0 10px;\n}\n.matter-topbar-separator {\n  height: 15px;\n  width: 1px;\n  background: var(--theme-border-strong);\n  margin-right: 7px;\n}\n.thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n  width: auto;\n  gap: 8px;\n  padding: 0 10px;\n  margin-left: 8px;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.matter-topbar-end {\n  margin-left: auto;\n  display: flex;\n  align-items: center;\n  gap: 7px;\n}\n.matter-topbar-end > button {\n  position: relative;\n}\n.matter-connection > * {\n  display: flex;\n  align-items: center;\n}\n.matter-connection .device-connection-button {\n  width: 28px;\n  height: 28px;\n}\n.matter-connection .device-connection-button > svg {\n  width: 17px;\n  height: 17px;\n}\n.matter-unread {\n  position: absolute;\n  width: 5px;\n  height: 5px;\n  right: 5px;\n  top: 5px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.matter-sidebar {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 14px 12px 10px;\n  border-right: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-sidebar-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  height: 30px;\n  margin-bottom: 17px;\n  padding: 0 8px;\n  font-weight: 600;\n}\n.matter-section-heading {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  height: 34px;\n  flex-shrink: 0;\n  width: 100%;\n  padding: 0 8px;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  text-align: left;\n}\n.matter-section-heading svg {\n  width: 13px;\n  height: 13px;\n}\n.matter-section-heading svg:last-child,\n.matter-section-count {\n  margin-left: auto;\n  color: var(--theme-fg-muted);\n}\n.matter-thread-section {\n  margin-bottom: 14px;\n}\n.matter-sidebar-hint,\n.matter-sidebar-error {\n  padding: 8px 12px;\n  font-size: 12px;\n  line-height: 1.6;\n  color: var(--theme-fg-muted);\n}\n.matter-sidebar-error {\n  color: #c0544b;\n}\n.matter-thread-row {\n  display: flex;\n  align-items: center;\n  gap: 9px;\n  padding: 7px 10px;\n  margin: 2px 0;\n  border: 1px solid transparent;\n  border-radius: 7px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms, border-color 150ms;\n}\n.matter-thread-row:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-row[aria-current=page] {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n  box-shadow: 0 1px 2px rgb(18 24 32 / 3%);\n  color: var(--theme-fg);\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row {\n  color: #c1cad1;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row:hover {\n  background: #202a32;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] {\n  background: #2a3943;\n  border-color: #536977;\n  color: #f4f7f6;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] small {\n  color: #c1ced6;\n}\n.matter-copy-notice {\n  padding: 7px 9px;\n  font-size: 11px;\n  line-height: 1.5;\n  color: var(--theme-fg-muted);\n}\n.thread-graph-dialog.matter-settings-dialog {\n  width: min(640px, calc(100vw - 32px));\n  max-width: min(640px, calc(100vw - 32px));\n  max-height: calc(100dvh - 32px);\n  padding: 22px;\n  border-radius: 14px;\n  background: var(--theme-panel);\n  border-color: var(--theme-border-strong);\n  box-shadow: 0 24px 72px rgb(0 0 0 / 24%);\n  --action-primary-bg: var(--theme-accent-solid);\n  --action-primary-bg-hover: var(--theme-accent-solid-hover);\n  --action-primary-fg: var(--theme-accent-solid-fg);\n  --theme-accent: var(--theme-accent-solid);\n  --theme-accent-fg: var(--theme-accent-solid-fg);\n}\n.matter-settings-overlay {\n  background: rgb(12 18 22 / 40%);\n  backdrop-filter: blur(3px);\n}\n.matter-settings-dialog [data-slot=dialog-header] {\n  gap: 7px;\n  text-align: left;\n  padding-bottom: 4px;\n}\n.matter-settings-dialog [data-slot=dialog-title] {\n  font-size: 16px;\n  font-weight: 600;\n  letter-spacing: -.02em;\n}\n.matter-settings-dialog [data-slot=dialog-description] {\n  font-size: 12px;\n  line-height: 1.6;\n}\n.matter-settings-dialog [data-slot=dialog-close] {\n  display: grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  right: 16px;\n  top: 16px;\n  border-radius: 7px;\n}\n.matter-settings-dialog [data-slot=dialog-close]:hover {\n  background: var(--theme-hover);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-card {\n  padding: 12px 14px;\n  background: var(--theme-panel);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-group, .thread-graph-settings-tabs) {\n  background: var(--theme-surface);\n  border: 1px solid var(--theme-border);\n  padding: 3px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button, .thread-graph-settings-tab-button) {\n  font-size: 12px;\n  min-height: 32px;\n  padding: 6px 12px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button.is-selected, .thread-graph-settings-tab-button.is-active) {\n  background: var(--theme-panel);\n  color: var(--theme-accent-strong);\n  box-shadow: 0 1px 3px rgb(0 0 0 / 12%);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n  display: grid;\n  grid-template-columns: 110px minmax(0, 1fr);\n  column-gap: 12px;\n  padding-block: 9px;\n  margin: 0;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n  line-height: 1.6;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div:last-child {\n  border-bottom: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dd {\n  margin-top: 0;\n  min-width: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(input, select, textarea) {\n  accent-color: var(--theme-accent-solid);\n  border-color: var(--theme-border-strong);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(button, input, select, textarea):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n@media (max-width: 639px) {\n  .thread-graph-dialog.matter-settings-dialog {\n    padding: 18px;\n  }\n  .thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n    grid-template-columns: 80px minmax(0, 1fr);\n  }\n}\n.matter-thread-copy {\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n  min-width: 0;\n  line-height: 18px;\n  font-size: 12px;\n}\n.matter-thread-copy > * {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.matter-thread-copy small {\n  font-size: 10.5px;\n  color: var(--theme-fg-muted);\n}\n.matter-status-dot {\n  flex-shrink: 0;\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  border: 1.5px solid var(--theme-border-contrast);\n  background: transparent;\n}\n.matter-status-dot[data-status=running] {\n  width: 12px;\n  height: 12px;\n  border-width: 2.5px;\n  border-color: oklch(0.48 0.19 255);\n  border-top-color: transparent;\n  animation: matter-running 1s linear infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=running] {\n  border-color: oklch(0.8 0.12 245);\n  border-top-color: transparent;\n}\n.matter-status-dot[data-status=agents-running] {\n  width: 10px;\n  height: 10px;\n  border-color: #8066cd;\n  background:\n    radial-gradient(\n      circle,\n      #8066cd 0 2px,\n      transparent 2.5px);\n  animation: matter-agents-running 1.8s ease-in-out infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=agents-running] {\n  border-color: #b39af2;\n  background:\n    radial-gradient(\n      circle,\n      #b39af2 0 2px,\n      transparent 2.5px);\n}\n.matter-status-dot[data-status=unread] {\n  background: var(--theme-accent-solid);\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent-solid) 12%, transparent);\n}\n.matter-status-dot:is([data-status=failed], [data-status=error]) {\n  background: #d56b62;\n  border-color: #d56b62;\n  border-radius: 2px;\n  transform: rotate(45deg);\n}\n.matter-status-dot[data-status=unknown] {\n  border-style: dotted;\n  opacity: .6;\n}\n.matter-status-dot[data-status=interrupted] {\n  border-color: #b88b48;\n  border-radius: 2px;\n}\n@keyframes matter-running {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes matter-agents-running {\n  50% {\n    opacity: .45;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-status-dot:is([data-status=running], [data-status=agents-running]) {\n    animation: none;\n  }\n}\n.matter-sidebar-footer {\n  margin-top: auto;\n  padding: 20px 8px 0;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.matter-main {\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  background: var(--theme-bg);\n}\n.matter-tabs-row {\n  position: relative;\n  display: flex;\n  min-width: 0;\n  flex-shrink: 0;\n  background: var(--theme-surface);\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle {\n  flex-shrink: 0;\n  width: 36px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--theme-fg-soft);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-toolbar-toggle:active {\n  background: var(--theme-hover);\n}\n.matter-thread-tabs {\n  flex: 1;\n  min-width: 0;\n  height: 34px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: stretch;\n  overflow-x: auto;\n  overflow-y: hidden;\n  background: var(--theme-surface);\n  scrollbar-width: thin;\n}\n.matter-thread-tabs > a,\n.matter-group-tab {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  gap: 9px;\n  min-width: 76px;\n  max-width: 180px;\n  padding: 0 10px;\n  border-right: 1px solid var(--theme-border);\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.matter-thread-tabs > a > span:last-child,\n.matter-group-tab > span:last-child {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.matter-thread-tabs > a[aria-current=page],\n.matter-group-tab[aria-current=page] {\n  background: var(--theme-bg);\n  color: var(--theme-fg);\n  box-shadow: inset 0 -2px var(--theme-accent-solid);\n}\n.matter-group-toggle {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  flex-shrink: 0;\n  padding: 0 8px;\n  border-right: 1px solid var(--theme-border);\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.matter-group-toggle:hover {\n  background: var(--theme-hover);\n}\n.matter-new-thread {\n  align-self: center;\n  margin: 0 6px;\n}\n.matter-new-thread svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-breadcrumb {\n  position: absolute;\n  top: 100%;\n  inset-inline: 0;\n  z-index: 40;\n  background: var(--theme-surface);\n  box-shadow: 0 4px 12px #0002;\n  display: flex;\n  align-items: center;\n  height: 40px;\n  flex-shrink: 0;\n  gap: 8px;\n  padding: 0 16px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 11.5px;\n  color: var(--theme-fg-soft);\n}\n.matter-workspace-path {\n  flex: 0 1 45%;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-family: ui-monospace, monospace;\n}\n.matter-current-title {\n  flex: 0 1 auto;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.matter-breadcrumb > svg {\n  flex-shrink: 0;\n  width: 12px !important;\n}\n.matter-breadcrumb button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n}\n@media (hover: none) {\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):not(:active) {\n    background: transparent;\n    box-shadow: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):active {\n    background: var(--theme-hover);\n  }\n}\n.matter-thread-actions {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  margin-left: auto;\n  flex-shrink: 0;\n}\n.matter-thread-actions > div {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n}\n.matter-content {\n  display: flex;\n  flex: 1;\n  min-height: 0;\n  position: relative;\n}\n.matter-chat {\n  --matter-reading-width: max(880px, 78%);\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.matter-content.has-explorer .matter-chat {\n  --matter-reading-width: 100%;\n}\n.matter-chat > div {\n  height: 100%;\n}\n.matter-explorer {\n  position: relative;\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: column;\n  width: min(var(--explorer-width, 360px), max(260px, calc(100% - 320px)));\n  min-height: 0;\n  border-left: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-explorer-resize {\n  position: absolute;\n  z-index: 5;\n  left: -4px;\n  top: 0;\n  bottom: 0;\n  width: 8px;\n  cursor: col-resize;\n  touch-action: none;\n}\n.matter-explorer-resize:hover,\n.matter-explorer-resize:focus-visible {\n  background: color-mix(in srgb, var(--theme-accent-solid) 30%, transparent);\n  outline: none;\n}\n.matter-notification-summary {\n  margin: 5px 0;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  line-height: 1.5;\n  display: -webkit-box;\n  -webkit-line-clamp: 3;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-time-row .thread-graph-message-time {\n  opacity: 1;\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .animate-pulse.rounded-full {\n  background: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button {\n  right: 0 !important;\n  top: 0 !important;\n  width: 32px !important;\n  height: 32px !important;\n  border-radius: 50%;\n  background: color-mix(in srgb, #c83b42 12%, var(--theme-panel));\n  color: #b62f38;\n  border: 1px solid color-mix(in srgb, #c83b42 30%, var(--theme-border)) !important;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-workbench .thread-graph-composer-stop-button {\n  color: #ff9b9f;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button:hover {\n  background: color-mix(in srgb, #c83b42 22%, var(--theme-panel));\n}\n.thread-ui-shell .matter-workbench :is(.thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n  min-width: 32px !important;\n  min-height: 32px !important;\n}\n.matter-explorer > :last-child {\n  flex: 1;\n  min-height: 0;\n}\n.matter-explorer-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 5px 12px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n}\n.matter-workbench.is-sidebar-hidden {\n  grid-template-columns: 49px 0 minmax(0, 1fr);\n}\n.matter-workbench.is-sidebar-hidden .matter-sidebar {\n  visibility: hidden;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .matter-mobile-close,\n.matter-sidebar-scrim {\n  display: none;\n}\n.matter-popover-scrim {\n  position: fixed;\n  inset: 0;\n  z-index: 69;\n  cursor: default;\n}\n.matter-notifications {\n  position: absolute;\n  top: 44px;\n  right: 12px;\n  z-index: 70;\n  width: min(360px, calc(100vw - 24px));\n  max-height: 70vh;\n  overflow: auto;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 12px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.matter-notifications-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 14px;\n  border-bottom: 1px solid var(--theme-border);\n  font-weight: 600;\n}\n.matter-notifications > p {\n  padding: 24px 18px;\n  font-size: 13px;\n  color: var(--theme-fg-muted);\n  line-height: 1.6;\n}\n.matter-notifications > a {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 14px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-notifications small {\n  display: block;\n  margin-top: 5px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-host {\n  position: absolute;\n  inset: auto 0 16px;\n  z-index: 30;\n  pointer-events: none;\n  background: transparent;\n  border: 0;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  margin: 0 auto;\n  padding: 0 28px;\n  background: transparent;\n  border: 0;\n  pointer-events: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer > * {\n  pointer-events: auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-form {\n  padding: 0;\n  border: 0;\n  background: transparent;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 22px;\n  background: color-mix(in srgb, var(--theme-panel) 86%, transparent);\n  backdrop-filter: blur(24px) saturate(135%);\n  -webkit-backdrop-filter: blur(24px) saturate(135%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), var(--matter-composer-shadow);\n  padding: 12px 14px 10px;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n  height: 30px;\n  padding: 3px;\n  gap: 2px;\n  border: 0;\n  border-radius: 999px;\n  background: color-mix(in srgb, var(--theme-panel) 48%, transparent);\n  color: var(--theme-fg-soft);\n  backdrop-filter: blur(18px) saturate(130%);\n  -webkit-backdrop-filter: blur(18px) saturate(130%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 4px 16px rgb(18 32 25 / 18%);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n  border-radius: 999px;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button:hover:not(:disabled) {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge.is-active > button[data-action=jump-latest] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-thread-entry {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  position: relative;\n}\n.matter-thread-entry > .matter-thread-row {\n  flex: 1;\n  min-width: 0;\n  padding-right: 32px;\n}\n.matter-thread-entry > .recent-thread-actions {\n  position: absolute;\n  right: 3px;\n}\n@media (prefers-reduced-transparency: reduce) {\n  .thread-ui-shell .matter-workbench :is(.thread-graph-composer-shell, .thread-jump-latest-badge) {\n    background: var(--theme-panel);\n    backdrop-filter: none;\n  }\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell:focus-within {\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent-solid) 10%, transparent), var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input-group {\n  border: 0;\n  padding: 0;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input {\n  min-height: 64px;\n  max-height: 200px;\n  padding: 3px 42px 8px 2px;\n  font-size: 15px;\n  line-height: 1.5;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-prompt-region {\n  padding: 0;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n  padding: 5px 0 0;\n  margin: 0;\n  border: 0;\n  gap: 5px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-icon-button {\n  background: var(--theme-surface-strong);\n  border: 0;\n  width: 32px;\n  height: 32px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-chip-button {\n  background: transparent;\n  border: 0;\n  font-size: 12px;\n  font-weight: 500;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button {\n  width: 32px;\n  height: 32px;\n  border: 0;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  color: var(--theme-accent-solid-fg);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button:disabled {\n  background: var(--theme-surface-strong);\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar [data-action=switch-to-shell] {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-chat-usage-footer {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-timeline-surface {\n  background: var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group {\n  padding: 6px 0;\n  border: 0;\n  border-radius: 0;\n  background: transparent;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-card {\n  border: 0;\n  background: transparent;\n  box-shadow: none;\n  padding: 2px 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span {\n  width: 18px;\n  height: 24px;\n  background: transparent;\n  border: 0;\n  color: var(--theme-fg-muted);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-summary > span {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  letter-spacing: 0;\n  text-transform: none;\n  border: 0;\n  background: transparent;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list {\n  margin-top: 2px;\n  padding: 0;\n  margin-left: -28px;\n  border-top: 0;\n  border-left: 0;\n  border-radius: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row {\n  position: relative;\n  border: 0;\n  border-radius: 6px;\n  background: transparent;\n  padding: 6px 8px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row::before {\n  content: none;\n  position: absolute;\n  top: 17px;\n  left: -18px;\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row:hover {\n  background: var(--theme-surface);\n}\n.thread-ui-shell .matter-workbench .thread-graph-chat-panel,\n.thread-ui-shell .matter-workbench .thread-graph-scroll-container {\n  background: var(--theme-bg);\n}\n.thread-ui-shell[data-theme-effective=light] .matter-workbench .thread-graph-code-block {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-list {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  padding-inline: 28px;\n  margin: 0 auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-turn {\n  padding-inline: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-summary {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-rule {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-label {\n  font-size: 12px;\n  font-weight: 500;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline {\n  position: relative;\n  margin: 2px 0 12px 7px;\n  padding-left: 14px;\n  border-left: 1px solid var(--theme-border-strong);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > * {\n  position: relative;\n  margin-top: 0;\n  margin-bottom: 4px;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > *::before {\n  content: "";\n  position: absolute;\n  left: -18px;\n  top: 14px;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline .thread-graph-message-bubble {\n  font-size: 13px;\n  line-height: 1.6;\n  padding-block: 2px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-toggle {\n  padding-block: 5px;\n  min-height: 28px;\n}\n.thread-ui-shell .matter-workbench .matter-command-step {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  width: 100%;\n  min-width: 0;\n  min-height: 32px;\n  padding: 5px 7px;\n  border-radius: 5px;\n  text-align: left;\n  line-height: 20px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms;\n}\n.matter-command-step:hover {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list > .matter-command-step {\n  margin-block: 0;\n}\n.matter-step-number {\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-title {\n  min-width: 0;\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--theme-fg);\n}\n.matter-step-status {\n  display: flex;\n  flex-shrink: 0;\n}\n.matter-step-status.is-completed {\n  color: var(--theme-accent-strong);\n}\n.matter-step-status.is-failed {\n  color: #d56b62;\n}\n.matter-step-status.is-pending {\n  color: #418ad4;\n}\n.matter-step-time {\n  flex-shrink: 0;\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-chevron {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n  opacity: 0;\n}\n.thread-diff {\n  font: 12px/1.7 ui-monospace, monospace;\n  min-width: max-content;\n}\n.thread-diff-line {\n  display: flex;\n  min-height: 1.7em;\n  padding-right: 12px;\n}\n.thread-diff-number {\n  width: 4ch;\n  text-align: right;\n  margin-right: 1ch;\n  color: var(--theme-fg-muted);\n  user-select: none;\n}\n.thread-diff-sign {\n  width: 2ch;\n  flex-shrink: 0;\n}\n.thread-diff-line.is-add {\n  background: light-dark(oklch(91% .045 150), oklch(29% .05 150));\n}\n.thread-diff-line.is-remove {\n  background: light-dark(oklch(91% .04 25), oklch(29% .05 25));\n}\n.thread-diff-line.is-add .thread-diff-sign {\n  color: light-dark(oklch(40% .12 150), oklch(77% .14 150));\n}\n.thread-diff-line.is-remove .thread-diff-sign {\n  color: light-dark(oklch(43% .16 25), oklch(77% .12 25));\n}\n.thread-diff-line.is-meta {\n  color: var(--theme-fg-muted);\n}\n.thread-history-direct-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  padding: 3px 0;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.thread-history-direct-action {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: 1;\n  min-width: 0;\n  text-align: left;\n  border-radius: 6px;\n  padding: 4px 2px;\n}\n.thread-history-direct-action:hover {\n  background: var(--theme-hover);\n}\n.thread-history-direct-action:focus-visible {\n  outline: 2px solid var(--theme-accent-border);\n}\n.thread-history-direct-action .thread-graph-history-tool-icon {\n  display: flex;\n  flex-shrink: 0;\n  width: 18px;\n}\n.thread-history-direct-preview {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.thread-history-direct-preview.is-path {\n  direction: rtl;\n  text-align: left;\n}\n.thread-history-direct-preview.is-expanded {\n  direction: ltr;\n  white-space: pre-wrap;\n  overflow-wrap: anywhere;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon {\n  margin-top: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-verb {\n  font-weight: 500;\n}\n.matter-command-step:is(:hover, :focus-visible) .matter-step-chevron {\n  opacity: 1;\n}\n@media (max-width: 1000px) and (min-width: 640px) {\n  .thread-ui-shell .matter-workbench {\n    grid-template-columns: 43px 200px minmax(0, 1fr);\n  }\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: 43px 0 minmax(0, 1fr);\n  }\n  .matter-topbar-brand {\n    display: none;\n  }\n  .matter-workspace-path {\n    max-width: 25%;\n  }\n  .matter-current-title {\n    display: none;\n  }\n}\n@media (max-width: 639px) {\n  .thread-ui-shell .matter-workbench,\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: minmax(0, 1fr);\n    grid-template-rows: calc(44px + env(safe-area-inset-top)) minmax(0, 1fr);\n  }\n  .matter-topbar {\n    grid-column: 1;\n    padding: env(safe-area-inset-top) 4px 0;\n    gap: 0;\n  }\n  .matter-topbar-brand,\n  .matter-topbar-separator,\n  .matter-search-trigger span,\n  .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n    width: 36px;\n    padding: 0;\n    margin: 0;\n  }\n  .matter-rail {\n    padding-top: env(safe-area-inset-top);\n  }\n  .matter-main {\n    grid-column: 1;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar {\n    position: fixed;\n    top: 44px;\n    bottom: 0;\n    left: 0;\n    width: min(270px, calc(100vw - 56px));\n    z-index: 65;\n    visibility: hidden;\n    transform: translateX(-120%);\n    transition: transform 160ms;\n    padding: 12px;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar.is-open {\n    visibility: visible;\n    transform: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-mobile-close {\n    display: inline-flex;\n  }\n  .matter-sidebar-scrim {\n    display: block;\n    position: fixed;\n    inset: 44px 0 0 0;\n    background: rgb(0 0 0 / 25%);\n    z-index: 64;\n  }\n  .matter-thread-tabs {\n    scrollbar-width: none;\n    height: 36px;\n  }\n  .matter-thread-tabs > a,\n  .matter-group-tab {\n    min-width: 64px;\n    max-width: 140px;\n    padding: 0 8px;\n  }\n  .matter-thread-tabs::-webkit-scrollbar {\n    display: none;\n  }\n  .matter-breadcrumb {\n    height: 42px;\n    padding: 0 5px;\n    gap: 1px;\n  }\n  .matter-current-title,\n  .matter-breadcrumb > svg {\n    display: none;\n  }\n  .matter-workspace-path {\n    flex: 1;\n    max-width: none;\n    font-size: 10px;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb button {\n    width: 32px;\n    height: 36px;\n  }\n  .matter-thread-actions,\n  .matter-thread-actions > div {\n    gap: 0;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-host {\n    bottom: max(8px, env(safe-area-inset-bottom), var(--thread-composer-keyboard-inset, 0px));\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n    padding: 0 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-form {\n    padding-top: 0 !important;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n    height: 18px;\n    min-width: 72px;\n    padding: 1.8px;\n    gap: 1.2px;\n    bottom: 1px;\n    background: color-mix(in srgb, var(--theme-panel) 36%, transparent);\n    box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 2px 8px rgb(18 32 25 / 12%);\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n    width: 24px;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge svg {\n    width: 8.4px;\n    height: 8.4px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-message-list {\n    padding-inline: 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n    padding: 10px;\n    border-radius: 18px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-input {\n    font-size: 16px;\n    min-height: 54px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n    flex-wrap: wrap;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar > div:last-child {\n    gap: 1px;\n  }\n  .matter-explorer {\n    position: absolute;\n    inset: 0;\n    width: 100%;\n    z-index: 40;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-workbench *,\n  .matter-workbench *::before {\n    transition: none !important;\n    animation: none !important;\n  }\n}\n.workbench-panels {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-context {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  min-height: 44px;\n  padding: 6px 16px;\n  border-bottom: 1px solid var(--theme-border);\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.workbench-context > strong {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workbench-source-device {\n  max-width: 30%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workbench-reference-picker {\n  position: relative;\n  flex-shrink: 0;\n}\n.workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n  display: inline-flex;\n  justify-content: center;\n  align-items: center;\n  gap: 6px;\n  min-height: 32px;\n  padding: 5px 9px;\n  border-radius: 7px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button:hover {\n  background: var(--theme-hover);\n}\n.workbench-reference-menu {\n  position: absolute;\n  right: 0;\n  top: 38px;\n  z-index: 95;\n  width: min(290px, calc(100vw - 32px));\n  padding: 8px;\n  background: var(--theme-panel);\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  box-shadow: var(--matter-composer-shadow);\n}\n.workbench-reference-menu button {\n  width: 100%;\n  justify-content: flex-start;\n}\n.workbench-reference-menu label {\n  display: block;\n  padding: 9px;\n  font-size: 11px;\n}\n.workbench-reference-menu select {\n  display: block;\n  margin-top: 7px;\n  width: 100%;\n  min-height: 36px;\n  padding: 5px;\n  border: 1px solid var(--theme-border);\n  border-radius: 6px;\n  background: var(--theme-surface);\n  color: var(--theme-fg);\n}\n.workbench-pane-grid {\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.workbench-primary,\n.workbench-reference {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n  flex: 1;\n}\n.workbench-pane-grid.has-reference > .workbench-primary {\n  flex: 0 0 clamp(360px, var(--primary-ratio), calc(100% - 365px));\n  --matter-reading-width: 100%;\n}\n.workbench-reference {\n  background: var(--theme-surface);\n  --matter-reading-width: 100%;\n}\n.workbench-pane-heading {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  min-height: 40px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-pane-heading > div {\n  flex: 1;\n  min-width: 0;\n}\n.workbench-pane-heading strong {\n  display: block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 13px;\n  font-weight: 600;\n  color: var(--theme-fg);\n}\n.workbench-pane-eyebrow {\n  display: block;\n  margin-bottom: 4px;\n  font-size: 10px;\n  color: var(--theme-accent-strong);\n}\n.workbench-pane-meta {\n  max-width: 35%;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  text-align: right;\n}\n.workbench-pane-body {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-pane-body > .thread-detail-surface {\n  height: 100%;\n}\n.workbench-pane-resize {\n  width: 5px;\n  flex-shrink: 0;\n  cursor: col-resize;\n  touch-action: none;\n  background: var(--theme-border);\n}\n.workbench-pane-resize:hover,\n.workbench-pane-resize:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.workbench-panels [hidden] {\n  display: none !important;\n}\n.workbench-mobile-views {\n  display: flex;\n  gap: 4px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-mobile-views button {\n  flex: 1;\n}\n.workbench-mobile-views button[aria-pressed=true] {\n  background: var(--theme-accent-soft);\n  color: var(--theme-accent-strong);\n}\n.workbench-panels.is-compact .workbench-primary {\n  flex: 1;\n}\n.workbench-panels.is-compact .workbench-pane-resize {\n  display: none;\n}\n.workbench-panels.is-compact .workbench-context {\n  padding-inline: 12px;\n  gap: 6px;\n}\n.workbench-panels.is-compact .workbench-pane-heading {\n  padding-inline: 12px;\n}\n.workbench-collaboration {\n  overflow-y: auto;\n  padding: 18px;\n  gap: 18px;\n}\n.workbench-collaboration h3 {\n  font-size: 12px;\n  font-weight: 600;\n  margin-bottom: 10px;\n}\n.workbench-collaboration p {\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n  line-height: 1.7;\n}\n.workbench-collaboration article {\n  padding: 12px;\n  margin-bottom: 8px;\n  border: 1px solid var(--theme-border);\n  border-radius: 10px;\n  background: var(--theme-panel);\n}\n.workbench-collaboration article header {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  justify-content: space-between;\n  font-size: 12px;\n}\n.workbench-collaboration article strong {\n  overflow-wrap: anywhere;\n}\n.workbench-collaboration article footer {\n  display: flex;\n  gap: 5px;\n  margin-top: 8px;\n}\n.workbench-collaboration [data-status=failed] {\n  color: #d1555f;\n}\n.workbench-collaboration [data-status=running] {\n  color: var(--theme-accent-strong);\n}\n.workbench-reference-status,\n.workbench-persistence-notice {\n  padding: 10px 16px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.workbench-reference .thread-graph-message-list {\n  padding-bottom: 32px;\n}\n.workbench-files .thread-graph-explorer-header h2 {\n  display: none;\n}\n@media (max-width: 639px) {\n  .workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n    min-height: 44px;\n  }\n  .workbench-reference-menu {\n    top: 48px;\n  }\n  .workbench-pane-heading {\n    min-height: 48px;\n  }\n}\n.workbench-split-picker {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  margin-left: auto;\n  flex-shrink: 0;\n  color: var(--theme-accent-strong);\n}\n.workbench-split-picker select {\n  max-width: 190px;\n  min-height: 32px;\n  border: 1px solid var(--theme-border);\n  border-radius: 7px;\n  background: var(--theme-panel);\n  color: var(--theme-fg);\n  padding: 4px 7px;\n  font-size: 12px;\n}\n.workbench-composer-target {\n  display: flex;\n  gap: 8px;\n  justify-content: space-between;\n  padding: 3px 12px;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.workbench-composer-target span {\n  font-size: 10px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.workbench-mobile-views button {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n@media (max-width: 639px) {\n  .workbench-split-picker {\n    gap: 3px;\n  }\n  .workbench-split-picker select {\n    max-width: 112px;\n    min-height: 44px;\n    padding-inline: 3px;\n  }\n  .workbench-composer-target span {\n    display: none;\n  }\n}\n');
+styleInject('.matter-thread-menu {\n  position: relative;\n}\n.matter-thread-menu > summary {\n  list-style: none;\n  display: grid;\n  place-items: center;\n  width: 30px;\n  height: 30px;\n  border-radius: 8px;\n  cursor: pointer;\n}\n.matter-thread-menu > summary::-webkit-details-marker {\n  display: none;\n}\n.matter-thread-menu > summary:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-menu > div {\n  position: absolute;\n  top: 34px;\n  right: 0;\n  width: min(270px, calc(100vw - 24px));\n  z-index: 80;\n  padding: 6px;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .matter-thread-menu > div > button {\n  display: flex;\n  width: 100%;\n  height: 36px;\n  gap: 10px;\n  justify-content: flex-start;\n  padding: 0 9px;\n  font-size: 12px;\n}\n.thread-execution-step-count {\n  display: none;\n}\n.matter-workbench .thread-execution-step-count {\n  display: inline;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell.thread-ui-shell,\n.thread-graph-dialog.matter-settings-dialog {\n  padding: 0;\n  background: var(--matter-chrome);\n  --thread-gc-bg: oklch(0.915 0.007 145);\n  --thread-gc-panel: oklch(0.946 0.006 145);\n  --thread-gc-workspace: oklch(0.895 0.008 145);\n  --thread-gc-surface: oklch(0.929 0.006 145);\n  --thread-gc-muted: oklch(0.875 0.008 145);\n  --thread-gc-hover: oklch(0.865 0.009 145);\n  --thread-gc-border: oklch(0.83 0.008 145);\n  --thread-gc-border-strong: oklch(0.76 0.009 145);\n  --thread-gc-border-contrast: #828a92;\n  --thread-gc-fg: #121416;\n  --thread-gc-fg-soft: #5b6269;\n  --thread-gc-fg-muted: oklch(0.47 0.013 155);\n  --thread-gc-primary: #00a764;\n  --thread-gc-primary-hover: #00975a;\n  --thread-gc-primary-fg: #fff;\n  --thread-gc-accent-soft: #e5f8f0;\n  --thread-gc-accent-strong: #008b53;\n  --thread-gc-accent-border: #bee9d8;\n  --matter-chrome: oklch(0.885 0.008 145);\n  --matter-composer-shadow: 0 18px 44px rgb(25 40 33 / 19%), 0 4px 12px rgb(25 40 33 / 10%);\n  --matter-glass-highlight: oklch(0.98 0.005 145 / 75%);\n  font-family:\n    "DM Sans",\n    Inter,\n    ui-sans-serif,\n    system-ui,\n    sans-serif;\n}\n.thread-ui-shell.thread-ui-shell[data-theme-effective=dark],\n.thread-graph-dialog.matter-settings-dialog[data-theme-effective=dark] {\n  --thread-gc-bg: #0c0f11;\n  --thread-gc-panel: #0f1317;\n  --thread-gc-workspace: #141b20;\n  --thread-gc-surface: #1c242a;\n  --thread-gc-muted: #1c242a;\n  --thread-gc-hover: #202a30;\n  --thread-gc-border: #263038;\n  --thread-gc-border-strong: #36434d;\n  --thread-gc-border-contrast: #737f87;\n  --thread-gc-fg: #f4f7f6;\n  --thread-gc-fg-soft: #c1cad1;\n  --thread-gc-fg-muted: #a2afb9;\n  --thread-gc-primary: #00cc76;\n  --thread-gc-primary-hover: #16de89;\n  --thread-gc-primary-fg: #082016;\n  --thread-gc-accent-soft: #102b23;\n  --thread-gc-accent-strong: #00cc76;\n  --thread-gc-accent-border: #215240;\n  --matter-chrome: #141a1f;\n  --matter-composer-shadow: 0 22px 52px rgb(3 8 6 / 48%), 0 4px 14px rgb(3 8 6 / 30%);\n  --matter-glass-highlight: oklch(0.8 0.014 155 / 15%);\n}\n.thread-ui-shell .matter-workbench {\n  display: grid;\n  height: 100%;\n  min-height: 0;\n  grid-template-columns: 49px 236px minmax(0, 1fr);\n  grid-template-rows: 40px minmax(0, 1fr);\n  background: var(--matter-chrome);\n  font-size: 13px;\n}\n.thread-ui-shell .matter-workbench svg {\n  stroke-width: 1.65;\n}\n.thread-ui-shell .matter-workbench :where(button, a):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n.thread-ui-shell .matter-workbench :where(button, a) {\n  -webkit-tap-highlight-color: transparent;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a),\n.matter-new-thread {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  justify-content: center;\n  width: 30px;\n  height: 30px;\n  border: 0;\n  border-radius: 8px;\n  background: transparent;\n  color: var(--theme-fg-soft);\n  box-shadow: none;\n  transition: background 120ms, color 120ms;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a):hover,\n.matter-new-thread:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-rail {\n  grid-row: 1 / -1;\n  border-right: 1px solid var(--theme-border);\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  gap: 8px;\n  padding: 4px 0 10px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > .matter-brand {\n  height: 32px;\n  margin-bottom: 12px;\n  font-size: 22px;\n  font-weight: 700;\n  letter-spacing: -3px;\n  color: var(--theme-fg);\n}\n.matter-brand span {\n  color: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .matter-rail > button {\n  width: 35px;\n  height: 35px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-rail-bottom {\n  margin-top: auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 8px;\n}\n.matter-watches-toggle {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  padding: 0 8px;\n  flex-shrink: 0;\n  height: 34px;\n  color: var(--theme-fg-muted);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-watches-toggle:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n@media (min-width: 640px) {\n  .matter-explorer .thread-graph-workspace-resizable > [data-panel]:has(> .thread-graph-workspace-explorer-pane) {\n    min-width: 144px !important;\n  }\n}\n.matter-topbar {\n  grid-column: 2 / -1;\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  padding: 0 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-topbar-brand {\n  font-weight: 600;\n  font-size: 12px;\n  margin: 0 10px;\n}\n.matter-topbar-separator {\n  height: 15px;\n  width: 1px;\n  background: var(--theme-border-strong);\n  margin-right: 7px;\n}\n.thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n  width: auto;\n  gap: 8px;\n  padding: 0 10px;\n  margin-left: 8px;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.matter-topbar-end {\n  margin-left: auto;\n  display: flex;\n  align-items: center;\n  gap: 7px;\n}\n.matter-topbar-end > button {\n  position: relative;\n}\n.matter-connection > * {\n  display: flex;\n  align-items: center;\n}\n.matter-connection .device-connection-button {\n  width: 28px;\n  height: 28px;\n}\n.matter-connection .device-connection-button > svg {\n  width: 17px;\n  height: 17px;\n}\n.matter-unread {\n  position: absolute;\n  width: 5px;\n  height: 5px;\n  right: 5px;\n  top: 5px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.matter-sidebar {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 14px 12px 10px;\n  border-right: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-sidebar-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  height: 30px;\n  margin-bottom: 17px;\n  padding: 0 8px;\n  font-weight: 600;\n}\n.matter-section-heading {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  height: 34px;\n  flex-shrink: 0;\n  width: 100%;\n  padding: 0 8px;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  text-align: left;\n}\n.matter-section-heading svg {\n  width: 13px;\n  height: 13px;\n}\n.matter-section-heading svg:last-child,\n.matter-section-count {\n  margin-left: auto;\n  color: var(--theme-fg-muted);\n}\n.matter-thread-section {\n  margin-bottom: 14px;\n}\n.matter-sidebar-hint,\n.matter-sidebar-error {\n  padding: 8px 12px;\n  font-size: 12px;\n  line-height: 1.6;\n  color: var(--theme-fg-muted);\n}\n.matter-sidebar-error {\n  color: #c0544b;\n}\n.matter-thread-row {\n  display: flex;\n  align-items: center;\n  gap: 9px;\n  padding: 7px 10px;\n  margin: 2px 0;\n  border: 1px solid transparent;\n  border-radius: 7px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms, border-color 150ms;\n}\n.matter-thread-row:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-row[aria-current=page] {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n  box-shadow: 0 1px 2px rgb(18 24 32 / 3%);\n  color: var(--theme-fg);\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row {\n  color: #c1cad1;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row:hover {\n  background: #202a32;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] {\n  background: #2a3943;\n  border-color: #536977;\n  color: #f4f7f6;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] small {\n  color: #c1ced6;\n}\n.matter-copy-notice {\n  padding: 7px 9px;\n  font-size: 11px;\n  line-height: 1.5;\n  color: var(--theme-fg-muted);\n}\n.thread-graph-dialog.matter-settings-dialog {\n  width: min(640px, calc(100vw - 32px));\n  max-width: min(640px, calc(100vw - 32px));\n  max-height: calc(100dvh - 32px);\n  padding: 22px;\n  border-radius: 14px;\n  background: var(--theme-panel);\n  border-color: var(--theme-border-strong);\n  box-shadow: 0 24px 72px rgb(0 0 0 / 24%);\n  --action-primary-bg: var(--theme-accent-solid);\n  --action-primary-bg-hover: var(--theme-accent-solid-hover);\n  --action-primary-fg: var(--theme-accent-solid-fg);\n  --theme-accent: var(--theme-accent-solid);\n  --theme-accent-fg: var(--theme-accent-solid-fg);\n}\n.matter-settings-overlay {\n  background: rgb(12 18 22 / 40%);\n  backdrop-filter: blur(3px);\n}\n.matter-settings-dialog [data-slot=dialog-header] {\n  gap: 7px;\n  text-align: left;\n  padding-bottom: 4px;\n}\n.matter-settings-dialog [data-slot=dialog-title] {\n  font-size: 16px;\n  font-weight: 600;\n  letter-spacing: -.02em;\n}\n.matter-settings-dialog [data-slot=dialog-description] {\n  font-size: 12px;\n  line-height: 1.6;\n}\n.matter-settings-dialog [data-slot=dialog-close] {\n  display: grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  right: 16px;\n  top: 16px;\n  border-radius: 7px;\n}\n.matter-settings-dialog [data-slot=dialog-close]:hover {\n  background: var(--theme-hover);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-card {\n  padding: 12px 14px;\n  background: var(--theme-panel);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-group, .thread-graph-settings-tabs) {\n  background: var(--theme-surface);\n  border: 1px solid var(--theme-border);\n  padding: 3px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button, .thread-graph-settings-tab-button) {\n  font-size: 12px;\n  min-height: 32px;\n  padding: 6px 12px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button.is-selected, .thread-graph-settings-tab-button.is-active) {\n  background: var(--theme-panel);\n  color: var(--theme-accent-strong);\n  box-shadow: 0 1px 3px rgb(0 0 0 / 12%);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n  display: grid;\n  grid-template-columns: 110px minmax(0, 1fr);\n  column-gap: 12px;\n  padding-block: 9px;\n  margin: 0;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n  line-height: 1.6;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div:last-child {\n  border-bottom: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dd {\n  margin-top: 0;\n  min-width: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(input, select, textarea) {\n  accent-color: var(--theme-accent-solid);\n  border-color: var(--theme-border-strong);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(button, input, select, textarea):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n@media (max-width: 639px) {\n  .thread-graph-dialog.matter-settings-dialog {\n    padding: 18px;\n  }\n  .thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n    grid-template-columns: 80px minmax(0, 1fr);\n  }\n}\n.matter-thread-copy {\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n  min-width: 0;\n  line-height: 18px;\n  font-size: 12px;\n}\n.matter-thread-copy > * {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.matter-thread-copy small {\n  font-size: 10.5px;\n  color: var(--theme-fg-muted);\n}\n.matter-status-dot {\n  flex-shrink: 0;\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  border: 1.5px solid var(--theme-border-contrast);\n  background: transparent;\n}\n.matter-status-dot[data-status=running] {\n  width: 12px;\n  height: 12px;\n  border-width: 2.5px;\n  border-color: oklch(0.48 0.19 255);\n  border-top-color: transparent;\n  animation: matter-running 1s linear infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=running] {\n  border-color: oklch(0.8 0.12 245);\n  border-top-color: transparent;\n}\n.matter-status-dot[data-status=agents-running] {\n  width: 10px;\n  height: 10px;\n  border-color: #8066cd;\n  background:\n    radial-gradient(\n      circle,\n      #8066cd 0 2px,\n      transparent 2.5px);\n  animation: matter-agents-running 1.8s ease-in-out infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=agents-running] {\n  border-color: #b39af2;\n  background:\n    radial-gradient(\n      circle,\n      #b39af2 0 2px,\n      transparent 2.5px);\n}\n.matter-status-dot[data-status=unread] {\n  background: var(--theme-accent-solid);\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent-solid) 12%, transparent);\n}\n.matter-status-dot:is([data-status=failed], [data-status=error]) {\n  background: #d56b62;\n  border-color: #d56b62;\n  border-radius: 2px;\n  transform: rotate(45deg);\n}\n.matter-status-dot[data-status=unknown] {\n  border-style: dotted;\n  opacity: .6;\n}\n.matter-status-dot[data-status=interrupted] {\n  border-color: #b88b48;\n  border-radius: 2px;\n}\n@keyframes matter-running {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes matter-agents-running {\n  50% {\n    opacity: .45;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-status-dot:is([data-status=running], [data-status=agents-running]) {\n    animation: none;\n  }\n}\n.matter-sidebar-footer {\n  margin-top: auto;\n  padding: 20px 8px 0;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.matter-main {\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  background: var(--theme-bg);\n}\n.matter-tabs-row {\n  position: relative;\n  display: flex;\n  min-width: 0;\n  flex-shrink: 0;\n  background: var(--theme-surface);\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle {\n  flex-shrink: 0;\n  width: 36px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--theme-fg-soft);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-toolbar-toggle:active {\n  background: var(--theme-hover);\n}\n.matter-thread-tabs {\n  flex: 1;\n  min-width: 0;\n  height: 34px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: stretch;\n  overflow-x: auto;\n  overflow-y: hidden;\n  background: var(--theme-surface);\n  scrollbar-width: thin;\n}\n.matter-thread-tabs > a,\n.matter-group-tab {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  gap: 9px;\n  min-width: 76px;\n  max-width: 180px;\n  padding: 0 10px;\n  border-right: 1px solid var(--theme-border);\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.matter-thread-tabs > a > span:last-child,\n.matter-group-tab > span:last-child {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.matter-thread-tabs > a[aria-current=page],\n.matter-group-tab[aria-current=page] {\n  background: var(--theme-bg);\n  color: var(--theme-fg);\n  box-shadow: inset 0 -2px var(--theme-accent-solid);\n}\n.matter-group-toggle {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  flex-shrink: 0;\n  padding: 0 8px;\n  border-right: 1px solid var(--theme-border);\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.matter-group-toggle:hover {\n  background: var(--theme-hover);\n}\n.matter-new-thread {\n  align-self: center;\n  margin: 0 6px;\n}\n.matter-new-thread svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-breadcrumb {\n  position: absolute;\n  top: 100%;\n  inset-inline: 0;\n  z-index: 40;\n  background: var(--theme-surface);\n  box-shadow: 0 4px 12px #0002;\n  display: flex;\n  align-items: center;\n  height: 40px;\n  flex-shrink: 0;\n  gap: 8px;\n  padding: 0 16px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 11.5px;\n  color: var(--theme-fg-soft);\n}\n.matter-workspace-path {\n  flex: 0 1 45%;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-family: ui-monospace, monospace;\n}\n.matter-current-title {\n  flex: 0 1 auto;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.matter-breadcrumb > svg {\n  flex-shrink: 0;\n  width: 12px !important;\n}\n.matter-breadcrumb button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n}\n@media (hover: none) {\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):not(:active) {\n    background: transparent;\n    box-shadow: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):active {\n    background: var(--theme-hover);\n  }\n}\n.matter-thread-actions {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  margin-left: auto;\n  flex-shrink: 0;\n}\n.matter-thread-actions > div {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n}\n.matter-content {\n  display: flex;\n  flex: 1;\n  min-height: 0;\n  position: relative;\n}\n.matter-chat {\n  --matter-reading-width: max(880px, 78%);\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.matter-content.has-explorer .matter-chat {\n  --matter-reading-width: 100%;\n}\n.matter-chat > div {\n  height: 100%;\n}\n.matter-explorer {\n  position: relative;\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: column;\n  width: min(var(--explorer-width, 360px), max(260px, calc(100% - 320px)));\n  min-height: 0;\n  border-left: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-explorer-resize {\n  position: absolute;\n  z-index: 5;\n  left: -4px;\n  top: 0;\n  bottom: 0;\n  width: 8px;\n  cursor: col-resize;\n  touch-action: none;\n}\n.matter-explorer-resize:hover,\n.matter-explorer-resize:focus-visible {\n  background: color-mix(in srgb, var(--theme-accent-solid) 30%, transparent);\n  outline: none;\n}\n.matter-notification-summary {\n  margin: 5px 0;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  line-height: 1.5;\n  display: -webkit-box;\n  -webkit-line-clamp: 3;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-time-row .thread-graph-message-time {\n  opacity: 1;\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .animate-pulse.rounded-full {\n  background: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button {\n  right: 0 !important;\n  top: 0 !important;\n  width: 32px !important;\n  height: 32px !important;\n  border-radius: 50%;\n  background: color-mix(in srgb, #c83b42 12%, var(--theme-panel));\n  color: #b62f38;\n  border: 1px solid color-mix(in srgb, #c83b42 30%, var(--theme-border)) !important;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-workbench .thread-graph-composer-stop-button {\n  color: #ff9b9f;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button:hover {\n  background: color-mix(in srgb, #c83b42 22%, var(--theme-panel));\n}\n.thread-ui-shell .matter-workbench :is(.thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n  min-width: 32px !important;\n  min-height: 32px !important;\n}\n.matter-explorer > :last-child {\n  flex: 1;\n  min-height: 0;\n}\n.matter-explorer-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 5px 12px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n}\n.matter-workbench.is-sidebar-hidden {\n  grid-template-columns: 49px 0 minmax(0, 1fr);\n}\n.matter-workbench.is-sidebar-hidden .matter-sidebar {\n  visibility: hidden;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .matter-mobile-close,\n.matter-sidebar-scrim {\n  display: none;\n}\n.matter-popover-scrim {\n  position: fixed;\n  inset: 0;\n  z-index: 69;\n  cursor: default;\n}\n.matter-notifications {\n  position: absolute;\n  top: 44px;\n  right: 12px;\n  z-index: 70;\n  width: min(360px, calc(100vw - 24px));\n  max-height: 70vh;\n  overflow: auto;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 12px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.matter-notifications-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 14px;\n  border-bottom: 1px solid var(--theme-border);\n  font-weight: 600;\n}\n.matter-notifications > p {\n  padding: 24px 18px;\n  font-size: 13px;\n  color: var(--theme-fg-muted);\n  line-height: 1.6;\n}\n.matter-notifications > a {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 14px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-notifications small {\n  display: block;\n  margin-top: 5px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-host {\n  position: absolute;\n  inset: auto 0 16px;\n  z-index: 30;\n  pointer-events: none;\n  background: transparent;\n  border: 0;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  margin: 0 auto;\n  padding: 0 28px;\n  background: transparent;\n  border: 0;\n  pointer-events: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer > * {\n  pointer-events: auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-form {\n  padding: 0;\n  border: 0;\n  background: transparent;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 22px;\n  background: color-mix(in srgb, var(--theme-panel) 86%, transparent);\n  backdrop-filter: blur(24px) saturate(135%);\n  -webkit-backdrop-filter: blur(24px) saturate(135%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), var(--matter-composer-shadow);\n  padding: 12px 14px 10px;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n  height: 30px;\n  padding: 3px;\n  gap: 2px;\n  border: 0;\n  border-radius: 999px;\n  background: color-mix(in srgb, var(--theme-panel) 48%, transparent);\n  color: var(--theme-fg-soft);\n  backdrop-filter: blur(18px) saturate(130%);\n  -webkit-backdrop-filter: blur(18px) saturate(130%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 4px 16px rgb(18 32 25 / 18%);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n  border-radius: 999px;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button:hover:not(:disabled) {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge.is-active > button[data-action=jump-latest] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-thread-entry {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  position: relative;\n}\n.matter-thread-entry > .matter-thread-row {\n  flex: 1;\n  min-width: 0;\n  padding-right: 32px;\n}\n.matter-thread-entry > .recent-thread-actions {\n  position: absolute;\n  right: 3px;\n}\n@media (prefers-reduced-transparency: reduce) {\n  .thread-ui-shell .matter-workbench :is(.thread-graph-composer-shell, .thread-jump-latest-badge) {\n    background: var(--theme-panel);\n    backdrop-filter: none;\n  }\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell:focus-within {\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent-solid) 10%, transparent), var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input-group {\n  border: 0;\n  padding: 0;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input {\n  min-height: 64px;\n  max-height: 200px;\n  padding: 3px 42px 8px 2px;\n  font-size: 15px;\n  line-height: 1.5;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-prompt-region {\n  padding: 0;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n  padding: 5px 0 0;\n  margin: 0;\n  border: 0;\n  gap: 5px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-icon-button {\n  background: var(--theme-surface-strong);\n  border: 0;\n  width: 32px;\n  height: 32px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-chip-button {\n  background: transparent;\n  border: 0;\n  font-size: 12px;\n  font-weight: 500;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button {\n  width: 32px;\n  height: 32px;\n  border: 0;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  color: var(--theme-accent-solid-fg);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button:disabled {\n  background: var(--theme-surface-strong);\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar [data-action=switch-to-shell] {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-chat-usage-footer {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-timeline-surface {\n  background: var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group {\n  padding: 6px 0;\n  border: 0;\n  border-radius: 0;\n  background: transparent;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-card {\n  border: 0;\n  background: transparent;\n  box-shadow: none;\n  padding: 2px 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span {\n  width: 18px;\n  height: 24px;\n  background: transparent;\n  border: 0;\n  color: var(--theme-fg-muted);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-summary > span {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  letter-spacing: 0;\n  text-transform: none;\n  border: 0;\n  background: transparent;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list {\n  margin-top: 2px;\n  padding: 0;\n  margin-left: -28px;\n  border-top: 0;\n  border-left: 0;\n  border-radius: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row {\n  position: relative;\n  border: 0;\n  border-radius: 6px;\n  background: transparent;\n  padding: 6px 8px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row::before {\n  content: none;\n  position: absolute;\n  top: 17px;\n  left: -18px;\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row:hover {\n  background: var(--theme-surface);\n}\n.thread-ui-shell .matter-workbench .thread-graph-chat-panel,\n.thread-ui-shell .matter-workbench .thread-graph-scroll-container {\n  background: var(--theme-bg);\n}\n.thread-ui-shell[data-theme-effective=light] .matter-workbench .thread-graph-code-block {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-list {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  padding-inline: 28px;\n  margin: 0 auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-turn {\n  padding-inline: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-summary {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-rule {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-label {\n  font-size: 12px;\n  font-weight: 500;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline {\n  position: relative;\n  margin: 2px 0 12px 7px;\n  padding-left: 14px;\n  border-left: 1px solid var(--theme-border-strong);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > * {\n  position: relative;\n  margin-top: 0;\n  margin-bottom: 4px;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > *::before {\n  content: "";\n  position: absolute;\n  left: -18px;\n  top: 14px;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline .thread-graph-message-bubble {\n  font-size: 13px;\n  line-height: 1.6;\n  padding-block: 2px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-toggle {\n  padding-block: 5px;\n  min-height: 28px;\n}\n.thread-ui-shell .matter-workbench .matter-command-step {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  width: 100%;\n  min-width: 0;\n  min-height: 32px;\n  padding: 5px 7px;\n  border-radius: 5px;\n  text-align: left;\n  line-height: 20px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms;\n}\n.matter-command-step:hover {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list > .matter-command-step {\n  margin-block: 0;\n}\n.matter-step-number {\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-title {\n  min-width: 0;\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--theme-fg);\n}\n.matter-step-status {\n  display: flex;\n  flex-shrink: 0;\n}\n.matter-step-status.is-completed {\n  color: var(--theme-accent-strong);\n}\n.matter-step-status.is-failed {\n  color: #d56b62;\n}\n.matter-step-status.is-pending {\n  color: #418ad4;\n}\n.matter-step-time {\n  flex-shrink: 0;\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-chevron {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n  opacity: 0;\n}\n.thread-diff {\n  font: 12px/1.7 ui-monospace, monospace;\n  min-width: max-content;\n}\n.thread-diff-line {\n  display: flex;\n  min-height: 1.7em;\n  padding-right: 12px;\n}\n.thread-diff-number {\n  width: 4ch;\n  text-align: right;\n  margin-right: 1ch;\n  color: var(--theme-fg-muted);\n  user-select: none;\n}\n.thread-diff-sign {\n  width: 2ch;\n  flex-shrink: 0;\n}\n.thread-diff-line.is-add {\n  background: light-dark(oklch(91% .045 150), oklch(29% .05 150));\n}\n.thread-diff-line.is-remove {\n  background: light-dark(oklch(91% .04 25), oklch(29% .05 25));\n}\n.thread-diff-line.is-add .thread-diff-sign {\n  color: light-dark(oklch(40% .12 150), oklch(77% .14 150));\n}\n.thread-diff-line.is-remove .thread-diff-sign {\n  color: light-dark(oklch(43% .16 25), oklch(77% .12 25));\n}\n.thread-diff-line.is-meta {\n  color: var(--theme-fg-muted);\n}\n.thread-history-direct-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  padding: 3px 0;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.thread-history-direct-action {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: 1;\n  min-width: 0;\n  text-align: left;\n  border-radius: 6px;\n  padding: 4px 2px;\n}\n.thread-history-direct-action:hover {\n  background: var(--theme-hover);\n}\n.thread-history-direct-action:focus-visible {\n  outline: 2px solid var(--theme-accent-border);\n}\n.thread-history-direct-action .thread-graph-history-tool-icon {\n  display: flex;\n  flex-shrink: 0;\n  width: 18px;\n}\n.thread-history-direct-preview {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.thread-history-direct-preview.is-path {\n  direction: rtl;\n  text-align: left;\n}\n.thread-history-direct-preview.is-expanded {\n  direction: ltr;\n  white-space: pre-wrap;\n  overflow-wrap: anywhere;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon {\n  margin-top: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-verb {\n  font-weight: 500;\n}\n.matter-command-step:is(:hover, :focus-visible) .matter-step-chevron {\n  opacity: 1;\n}\n@media (max-width: 1000px) and (min-width: 640px) {\n  .thread-ui-shell .matter-workbench {\n    grid-template-columns: 43px 200px minmax(0, 1fr);\n  }\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: 43px 0 minmax(0, 1fr);\n  }\n  .matter-topbar-brand {\n    display: none;\n  }\n  .matter-workspace-path {\n    max-width: 25%;\n  }\n  .matter-current-title {\n    display: none;\n  }\n}\n@media (max-width: 639px) {\n  .thread-ui-shell .matter-workbench,\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: minmax(0, 1fr);\n    grid-template-rows: calc(44px + env(safe-area-inset-top)) minmax(0, 1fr);\n  }\n  .matter-topbar {\n    grid-column: 1;\n    padding: env(safe-area-inset-top) 4px 0;\n    gap: 0;\n  }\n  .matter-topbar-brand,\n  .matter-topbar-separator,\n  .matter-search-trigger span,\n  .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n    width: 36px;\n    padding: 0;\n    margin: 0;\n  }\n  .matter-rail {\n    padding-top: env(safe-area-inset-top);\n  }\n  .matter-main {\n    grid-column: 1;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar {\n    position: fixed;\n    top: 44px;\n    bottom: 0;\n    left: 0;\n    width: min(270px, calc(100vw - 56px));\n    z-index: 65;\n    visibility: hidden;\n    transform: translateX(-120%);\n    transition: transform 160ms;\n    padding: 12px;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar.is-open {\n    visibility: visible;\n    transform: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-mobile-close {\n    display: inline-flex;\n  }\n  .matter-sidebar-scrim {\n    display: block;\n    position: fixed;\n    inset: 44px 0 0 0;\n    background: rgb(0 0 0 / 25%);\n    z-index: 64;\n  }\n  .matter-thread-tabs {\n    scrollbar-width: none;\n    height: 36px;\n  }\n  .matter-thread-tabs > a,\n  .matter-group-tab {\n    min-width: 64px;\n    max-width: 140px;\n    padding: 0 8px;\n  }\n  .matter-thread-tabs::-webkit-scrollbar {\n    display: none;\n  }\n  .matter-breadcrumb {\n    height: 42px;\n    padding: 0 5px;\n    gap: 1px;\n  }\n  .matter-current-title,\n  .matter-breadcrumb > svg {\n    display: none;\n  }\n  .matter-workspace-path {\n    flex: 1;\n    max-width: none;\n    font-size: 10px;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb button {\n    width: 32px;\n    height: 36px;\n  }\n  .matter-thread-actions,\n  .matter-thread-actions > div {\n    gap: 0;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-host {\n    bottom: max(8px, env(safe-area-inset-bottom), var(--thread-composer-keyboard-inset, 0px));\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n    padding: 0 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-form {\n    padding-top: 0 !important;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n    height: 18px;\n    min-width: 72px;\n    padding: 1.8px;\n    gap: 1.2px;\n    bottom: 1px;\n    background: color-mix(in srgb, var(--theme-panel) 36%, transparent);\n    box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 2px 8px rgb(18 32 25 / 12%);\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n    width: 24px;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge svg {\n    width: 8.4px;\n    height: 8.4px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-message-list {\n    padding-inline: 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n    padding: 10px;\n    border-radius: 18px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-input {\n    font-size: 16px;\n    min-height: 54px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n    flex-wrap: wrap;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar > div:last-child {\n    gap: 1px;\n  }\n  .matter-explorer {\n    position: absolute;\n    inset: 0;\n    width: 100%;\n    z-index: 40;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-workbench *,\n  .matter-workbench *::before {\n    transition: none !important;\n    animation: none !important;\n  }\n}\n.workbench-panels {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n  display: inline-flex;\n  justify-content: center;\n  align-items: center;\n  gap: 6px;\n  min-height: 32px;\n  padding: 5px 9px;\n  border-radius: 7px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button:hover {\n  background: var(--theme-hover);\n}\n.workbench-pane-grid {\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.workbench-primary,\n.workbench-reference {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n  flex: 1;\n}\n.workbench-pane-grid.has-reference > .workbench-primary {\n  flex: 0 0 clamp(360px, var(--primary-ratio), calc(100% - 365px));\n  --matter-reading-width: 100%;\n}\n.workbench-reference {\n  background: var(--theme-surface);\n  --matter-reading-width: 100%;\n}\n.workbench-pane-heading {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  min-height: 40px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-pane-heading > div {\n  flex: 1;\n  min-width: 0;\n}\n.workbench-pane-heading strong {\n  display: block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 13px;\n  font-weight: 600;\n  color: var(--theme-fg);\n}\n.workbench-pane-eyebrow {\n  display: block;\n  margin-bottom: 4px;\n  font-size: 10px;\n  color: var(--theme-accent-strong);\n}\n.workbench-pane-meta {\n  max-width: 35%;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  text-align: right;\n}\n.workbench-pane-body {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-pane-body > .thread-detail-surface {\n  height: 100%;\n}\n.workbench-pane-resize {\n  width: 5px;\n  flex-shrink: 0;\n  cursor: col-resize;\n  touch-action: none;\n  background: var(--theme-border);\n}\n.workbench-pane-resize:hover,\n.workbench-pane-resize:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.workbench-panels [hidden] {\n  display: none !important;\n}\n.workbench-mobile-views {\n  display: flex;\n  gap: 4px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-mobile-views button {\n  flex: 1;\n}\n.workbench-mobile-views button[aria-pressed=true] {\n  background: var(--theme-accent-soft);\n  color: var(--theme-accent-strong);\n}\n.workbench-panels.is-compact .workbench-primary {\n  flex: 1;\n}\n.workbench-panels.is-compact .workbench-pane-resize {\n  display: none;\n}\n.workbench-panels.is-compact .workbench-pane-heading {\n  padding-inline: 12px;\n}\n.workbench-collaboration {\n  overflow-y: auto;\n  padding: 18px;\n  gap: 18px;\n}\n.workbench-collaboration h3 {\n  font-size: 12px;\n  font-weight: 600;\n  margin-bottom: 10px;\n}\n.workbench-collaboration p {\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n  line-height: 1.7;\n}\n.workbench-collaboration article {\n  padding: 12px;\n  margin-bottom: 8px;\n  border: 1px solid var(--theme-border);\n  border-radius: 10px;\n  background: var(--theme-panel);\n}\n.workbench-collaboration article header {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  justify-content: space-between;\n  font-size: 12px;\n}\n.workbench-collaboration article strong {\n  overflow-wrap: anywhere;\n}\n.workbench-collaboration article footer {\n  display: flex;\n  gap: 5px;\n  margin-top: 8px;\n}\n.workbench-collaboration [data-status=failed] {\n  color: #d1555f;\n}\n.workbench-collaboration [data-status=running] {\n  color: var(--theme-accent-strong);\n}\n.workbench-reference-status,\n.workbench-persistence-notice {\n  padding: 10px 16px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.workbench-reference .thread-graph-message-list {\n  padding-bottom: 32px;\n}\n.workbench-files .thread-graph-explorer-header h2 {\n  display: none;\n}\n@media (max-width: 639px) {\n  .workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n    min-height: 44px;\n  }\n  .workbench-pane-heading {\n    min-height: 48px;\n  }\n}\n.workbench-composer-target {\n  display: flex;\n  gap: 8px;\n  justify-content: space-between;\n  padding: 3px 12px;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.workbench-composer-target span {\n  font-size: 10px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.workbench-mobile-views button {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n@media (max-width: 639px) {\n  .workbench-composer-target span {\n    display: none;\n  }\n}\n.workbench-thread-picker-actions {\n  display: inline-flex;\n  align-items: center;\n  gap: 2px;\n}\n.workbench-thread-picker-trigger {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 auto;\n  width: 30px;\n  height: 30px;\n  border: 1px solid transparent;\n  border-radius: 7px;\n  background: transparent;\n  color: var(--theme-fg-muted);\n  cursor: pointer;\n}\n.workbench-thread-picker-trigger:hover,\n.workbench-thread-picker-trigger[aria-expanded=true] {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.workbench-thread-picker-trigger.is-active {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.workbench-thread-picker-trigger:disabled {\n  opacity: .45;\n  cursor: default;\n}\n.workbench-thread-picker-popover {\n  position: fixed;\n  z-index: 250;\n  display: flex;\n  flex-direction: column;\n  width: min(372px, calc(100vw - 24px));\n  min-height: 0;\n  overflow: hidden;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 14px;\n  background: var(--theme-panel);\n  color: var(--theme-fg);\n  box-shadow: 0 18px 56px rgb(0 0 0 / .2), 0 3px 10px rgb(0 0 0 / .08);\n  font-family: inherit;\n  animation: workbench-picker-enter .12s ease-out;\n}\n.workbench-thread-picker-popover button {\n  border: 0;\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  cursor: pointer;\n}\n.workbench-thread-picker-popover button:focus-visible,\n.workbench-thread-picker-trigger:focus-visible {\n  outline: 2px solid var(--theme-accent-strong);\n  outline-offset: -2px;\n}\n.workbench-thread-picker-heading {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  flex-shrink: 0;\n  padding: 14px 14px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-thread-picker-heading > svg {\n  color: var(--theme-accent-strong);\n}\n.workbench-thread-picker-heading > div {\n  flex: 1;\n  min-width: 0;\n}\n.workbench-thread-picker-heading strong {\n  display: block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 13px;\n  font-weight: 600;\n}\n.workbench-thread-picker-heading small {\n  display: block;\n  margin-top: 3px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.workbench-thread-picker-heading button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 28px;\n  height: 28px;\n  border-radius: 6px;\n  color: var(--theme-fg-muted);\n}\n.workbench-thread-picker-heading button:hover {\n  background: var(--theme-hover);\n}\n.workbench-thread-picker-scroll {\n  min-height: 0;\n  overflow-y: auto;\n  overscroll-behavior: contain;\n  padding: 5px 6px 10px;\n  scrollbar-width: thin;\n}\n.workbench-thread-picker-section-label {\n  padding: 13px 9px 6px;\n  font-size: 10px;\n  line-height: 1.4;\n  font-weight: 600;\n  letter-spacing: .045em;\n  color: var(--theme-fg-muted);\n}\n.workbench-thread-picker-popover .workbench-thread-picker-row {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  width: 100%;\n  min-height: 49px;\n  padding: 8px 9px;\n  border-radius: 8px;\n  text-align: left;\n}\n.workbench-thread-picker-row:hover,\n.workbench-thread-picker-row:focus-visible {\n  background: var(--theme-hover);\n}\n.workbench-thread-picker-row[aria-current=true] {\n  background: var(--theme-accent-soft);\n}\n.workbench-thread-picker-row > svg {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n}\n.workbench-thread-picker-row-icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 30px;\n  height: 30px;\n  border: 1px solid var(--theme-border);\n  border-radius: 8px;\n  color: var(--theme-fg-muted);\n  background: var(--theme-surface);\n}\n.workbench-thread-picker-row-icon.is-favorite,\n.workbench-thread-picker-row > .workbench-thread-picker-favorite {\n  color: var(--theme-accent-strong);\n}\n.workbench-thread-picker-row-label {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  gap: 4px;\n  min-width: 0;\n}\n.workbench-thread-picker-row-label strong {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 12px;\n  font-weight: 500;\n}\n.workbench-thread-picker-row-label small {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--theme-fg-muted);\n  font-size: 10px;\n}\n.workbench-thread-picker-row > .workbench-thread-picker-check {\n  color: var(--theme-accent-strong);\n}\n.workbench-split-status {\n  width: 5px;\n  height: 5px;\n  flex-shrink: 0;\n  border-radius: 50%;\n  background: var(--theme-fg-muted);\n  opacity: .55;\n}\n.workbench-split-status:is(.is-running, .is-recovering, .is-connected) {\n  background: var(--theme-accent-strong);\n  opacity: 1;\n}\n.workbench-split-status:is(.is-failed, .is-error) {\n  background: #d1555f;\n  opacity: 1;\n}\n.workbench-thread-picker-state {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  padding: 11px 10px;\n  margin: 0;\n  font-size: 11px;\n  line-height: 1.5;\n  color: var(--theme-fg-muted);\n}\n.workbench-thread-picker-error {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  padding: 10px;\n  color: var(--theme-fg-soft);\n  font-size: 11px;\n}\n.workbench-thread-picker-error span {\n  flex: 1;\n  min-width: 100px;\n  overflow-wrap: anywhere;\n}\n.workbench-thread-picker-error button {\n  display: inline-flex;\n  align-items: center;\n  gap: 5px;\n  padding: 6px 8px;\n  border-radius: 6px;\n  background: var(--theme-hover);\n}\n.workbench-thread-picker-popover footer {\n  flex-shrink: 0;\n  padding: 6px;\n  border-top: 1px solid var(--theme-border);\n}\n.workbench-thread-picker-popover footer button {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  padding: 9px;\n  border-radius: 7px;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.workbench-thread-picker-popover footer button svg:last-child {\n  margin-left: auto;\n}\n.workbench-thread-picker-popover footer button:hover {\n  background: var(--theme-hover);\n}\n.workbench-thread-picker-popover .is-spinning {\n  animation: workbench-picker-spin .9s linear infinite;\n}\n@keyframes workbench-picker-enter {\n  from {\n    opacity: 0;\n    transform: translateY(-3px);\n  }\n  to {\n    opacity: 1;\n    transform: translateY(0);\n  }\n}\n@keyframes workbench-picker-spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n.workbench-panels {\n  position: relative;\n}\n.workbench-tool-drawer {\n  position: absolute;\n  inset: 0 0 0 auto;\n  z-index: 90;\n  display: flex;\n  flex-direction: column;\n  width: min(560px, 100%);\n  min-height: 0;\n  border-left: 1px solid var(--theme-border-strong);\n  background: var(--theme-panel);\n  box-shadow: -12px 0 36px rgb(0 0 0 / .12);\n}\n.workbench-tool-drawer > header {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  min-height: 42px;\n  padding: 5px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-tool-drawer > header strong {\n  flex: 1;\n  font-size: 12px;\n  font-weight: 600;\n}\n.workbench-tool-drawer > header button {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 32px;\n  height: 32px;\n  border-radius: 7px;\n  color: var(--theme-fg-muted);\n}\n.workbench-tool-drawer > header button:hover {\n  background: var(--theme-hover);\n}\n.workbench-primary[data-focused=true],\n.workbench-reference[data-focused=true] {\n  box-shadow: inset 0 2px 0 var(--theme-accent-soft);\n}\n@media (max-width: 639px) {\n  .workbench-thread-picker-trigger {\n    width: 34px;\n    min-height: 36px;\n  }\n  .workbench-thread-picker-popover .workbench-thread-picker-row {\n    min-height: 54px;\n  }\n  .workbench-thread-picker-heading button {\n    width: 34px;\n    height: 34px;\n  }\n  .workbench-tool-drawer > header {\n    min-height: 48px;\n  }\n  .workbench-tool-drawer > header button {\n    width: 40px;\n    height: 40px;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .workbench-thread-picker-popover,\n  .workbench-thread-picker-popover .is-spinning {\n    animation: none;\n  }\n}\n.workbench-tool-drawer > header > div {\n  flex: 1;\n  min-width: 0;\n}\n.workbench-tool-drawer > header small {\n  display: block;\n  margin-top: 3px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 10px;\n  color: var(--theme-fg-muted);\n}\n');
 
 // src/styles/composer-compact.css
-styleInject("[data-composer-layout] {\n  container-type: inline-size;\n}\n[data-composer-layout] .thread-graph-composer-input-group,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input-group {\n  display: grid;\n  grid-template-columns: minmax(0, 1fr) max-content;\n  align-items: end;\n  column-gap: 8px;\n  height: auto;\n  padding: 0;\n  overflow: visible;\n}\n[data-composer-layout] .thread-graph-composer-prompt-region {\n  min-width: 0;\n  width: auto;\n  grid-column: 1;\n  grid-row: 1;\n  align-self: center;\n}\n[data-composer-layout] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n  grid-column: 2;\n  grid-row: 1;\n  width: max-content;\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-wrap: nowrap;\n  justify-content: flex-end;\n  align-items: center;\n  padding: 0;\n  gap: 4px;\n  margin: 0;\n}\n[data-composer-layout] :is(.composer-tools, .composer-settings),\n.thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n  flex: 0 0 auto;\n  display: flex;\n  flex-wrap: nowrap;\n  gap: 4px;\n  align-items: center;\n}\n[data-composer-layout] .thread-graph-composer-input,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input {\n  min-height: 0 !important;\n  max-height: none !important;\n  width: 100%;\n  padding: 0 !important;\n  line-height: 24px;\n  overflow: visible;\n  transition: none;\n}\n[data-composer-layout] .thread-graph-composer-input > [role=textbox] {\n  min-height: 24px !important;\n  max-height: 24px;\n  line-height: 24px;\n  padding: 0;\n  overflow: hidden;\n  scrollbar-width: none;\n}\n[data-composer-layout=expanded] .thread-graph-composer-prompt-region {\n  grid-column: 1 / -1;\n}\n[data-composer-layout=expanded] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout=expanded] .thread-graph-composer-toolbar {\n  grid-row: 2;\n  padding-top: 6px;\n}\n[data-composer-layout=expanded] .thread-graph-composer-input > [role=textbox] {\n  max-height: min(240px, 30dvh);\n  overflow-y: auto;\n  scrollbar-width: thin;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] {\n  max-height: 24px;\n  vertical-align: middle;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] img {\n  max-height: 20px;\n  width: auto;\n}\n[data-composer-layout] .composer-model-control > button {\n  max-width: clamp(48px, 16cqi, 150px) !important;\n  padding-inline: 4px !important;\n}\n[data-composer-layout] .composer-sandbox-control > button {\n  padding-inline: 4px !important;\n}\n[data-composer-layout] .thread-graph-composer-stop-button {\n  position: static;\n}\n[data-composer-layout] .thread-graph-composer-shell,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-shell {\n  padding: 9px 12px;\n}\n@container (max-width: 480px) {\n  [data-composer-layout] .composer-model-control > button {\n    max-width: 54px !important;\n  }\n  [data-composer-layout] :is(.composer-tools, .composer-settings),\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n    gap: 2px;\n  }\n  [data-composer-layout] .thread-graph-composer-toolbar,\n  .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n    gap: 2px;\n  }\n  [data-composer-layout] .composer-sandbox-control > button {\n    font-size: 10px;\n    padding-inline: 2px !important;\n  }\n}\n[data-composer-layout] .thread-graph-composer-input > span {\n  inset: 0;\n}\n@container (max-width: 300px) {\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.thread-graph-composer-icon-button, .thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n    width: 24px !important;\n    height: 24px !important;\n    min-width: 24px !important;\n    min-height: 24px !important;\n  }\n  [data-composer-layout] .composer-model-control > button {\n    max-width: 42px !important;\n  }\n}\n");
+styleInject("[data-composer-layout] {\n  container-type: inline-size;\n}\n[data-composer-layout] .thread-graph-composer-input-group,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input-group {\n  display: grid;\n  grid-template-columns: minmax(0, 1fr) max-content;\n  align-items: end;\n  column-gap: 8px;\n  height: auto;\n  padding: 0;\n  overflow: visible;\n}\n[data-composer-layout] .thread-graph-composer-prompt-region {\n  min-width: 0;\n  width: auto;\n  grid-column: 1;\n  grid-row: 1;\n  align-self: center;\n}\n[data-composer-layout] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n  grid-column: 2;\n  grid-row: 1;\n  width: max-content;\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-wrap: nowrap;\n  justify-content: flex-end;\n  align-items: center;\n  padding: 0;\n  gap: 4px;\n  margin: 0;\n}\n[data-composer-layout] :is(.composer-tools, .composer-settings),\n.thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n  flex: 0 0 auto;\n  display: flex;\n  flex-wrap: nowrap;\n  gap: 4px;\n  align-items: center;\n}\n[data-composer-layout] .thread-graph-composer-input,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input {\n  min-height: 0 !important;\n  max-height: none !important;\n  width: 100%;\n  padding: 0 !important;\n  line-height: 24px;\n  overflow: visible;\n  transition: none;\n}\n[data-composer-layout] .thread-graph-composer-input > [role=textbox] {\n  min-height: 24px !important;\n  max-height: 24px;\n  line-height: 24px;\n  padding: 0;\n  overflow: hidden;\n  scrollbar-width: none;\n}\n[data-composer-layout=expanded] .thread-graph-composer-prompt-region {\n  grid-column: 1 / -1;\n}\n[data-composer-layout=expanded] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout=expanded] .thread-graph-composer-toolbar {\n  grid-row: 2;\n  padding-top: 6px;\n}\n[data-composer-layout=expanded] .thread-graph-composer-input > [role=textbox] {\n  max-height: min(240px, 30dvh);\n  overflow-y: auto;\n  scrollbar-width: thin;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] {\n  max-height: 24px;\n  vertical-align: middle;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] img {\n  max-height: 20px;\n  width: auto;\n}\n[data-composer-layout] .composer-model-label {\n  max-width: min(24rem, max(4rem, calc(100cqi - 11rem)));\n}\n[data-composer-layout] .thread-graph-composer-stop-button {\n  position: static;\n}\n[data-composer-layout] .thread-graph-composer-shell,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-shell {\n  padding: 9px 12px;\n}\n@container (max-width: 480px) {\n  [data-composer-layout] :is(.composer-tools, .composer-settings),\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n    gap: 2px;\n  }\n  [data-composer-layout] .thread-graph-composer-toolbar,\n  .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n    gap: 2px;\n  }\n}\n[data-composer-layout] .thread-graph-composer-input > span {\n  inset: 0;\n}\n@container (max-width: 300px) {\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.thread-graph-composer-icon-button, .thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n    width: 24px !important;\n    height: 24px !important;\n    min-width: 24px !important;\n    min-height: 24px !important;\n  }\n}\n");
 
 // src/components/ThreadComposer.tsx
 import {
   useCallback as useCallback9,
   useMemo as useMemo2,
-  useRef as useRef7,
-  useState as useState14
+  useRef as useRef8,
+  useState as useState13
 } from "react";
 
 // src/components/composer/composerUtils.ts
@@ -1060,10 +1060,16 @@ function restoreSelectionAfterInsertedAttachments(editor, insertedClientIds) {
 }
 
 // src/components/composer/useCompactComposer.ts
-import { useLayoutEffect, useState } from "react";
+import {
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState
+} from "react";
 function promptExceedsCompactLine(editor, group, toolbar) {
   const text = serializeEditorPrompt(editor);
-  if (!text.trim() && !editor.querySelector('[data-segment-type="attachment"]')) return false;
+  if (!text.trim() && !editor.querySelector('[data-segment-type="attachment"]'))
+    return false;
   if (/[\r\n]/.test(text)) return true;
   const groupStyle = getComputedStyle(group);
   const scale = group.offsetWidth ? group.getBoundingClientRect().width / group.offsetWidth : 1;
@@ -1105,20 +1111,39 @@ function promptExceedsCompactLine(editor, group, toolbar) {
 }
 function useCompactComposer(formRef, enabled) {
   const [expanded, setExpanded] = useState(false);
+  const focusOwner = useId();
+  const ownedEvents = useRef(/* @__PURE__ */ new WeakSet());
+  const captureOwnedEvent = (event) => {
+    ownedEvents.current.add(event.nativeEvent);
+  };
   useLayoutEffect(() => {
     const form = formRef.current;
-    const editor = form?.querySelector('[role="textbox"][contenteditable]');
+    const editor = form?.querySelector(
+      '[role="textbox"][contenteditable]'
+    );
     const group = form?.querySelector('[data-slot="input-group"]');
-    const toolbar = form?.querySelector('[data-slot="input-group-addon"]');
+    const toolbar = form?.querySelector(
+      '[data-slot="input-group-addon"]'
+    );
     if (!enabled || !form || !editor || !group || !toolbar) {
       setExpanded(false);
       return;
     }
     let frame = 0;
     let alive = true;
+    const ownsTarget = (target) => target instanceof Node && (form.contains(target) || target instanceof Element && target.closest("[data-composer-focus-owner]")?.getAttribute("data-composer-focus-owner") === focusOwner);
+    const ownsEvent = (event) => ownedEvents.current.has(event) || ownsTarget(event.target);
+    let focusWithin = ownsTarget(document.activeElement);
+    let pointerWithin = false;
+    let pendingPointerEvent = null;
     const measure = () => {
       if (!alive || editor.dataset.imeComposing === "true") return;
-      const focused = document.activeElement === editor;
+      if (pendingPointerEvent) {
+        pointerWithin = ownsEvent(pendingPointerEvent);
+        focusWithin = pointerWithin;
+        pendingPointerEvent = null;
+      }
+      const focused = focusWithin;
       const next = focused && promptExceedsCompactLine(editor, group, toolbar);
       setExpanded((current) => current === next ? current : next);
       if (!focused) {
@@ -1130,13 +1155,44 @@ function useCompactComposer(formRef, enabled) {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(measure);
     };
-    form.addEventListener("focusin", schedule);
-    form.addEventListener("focusout", schedule);
+    const onPointerDown = (event) => {
+      pendingPointerEvent = event;
+      schedule();
+    };
+    const onFocusIn = (event) => {
+      focusWithin = ownsEvent(event);
+      schedule();
+    };
+    const onFocusOut = (event) => {
+      if (!ownsEvent(event)) return;
+      focusWithin = ownsTarget(event.relatedTarget) || !event.relatedTarget && pointerWithin;
+      schedule();
+    };
+    const onKeyDown = () => {
+      pointerWithin = false;
+      pendingPointerEvent = null;
+    };
+    const onWindowBlur = () => {
+      focusWithin = false;
+      pendingPointerEvent = null;
+      schedule();
+    };
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("focusin", onFocusIn);
+    document.addEventListener("focusout", onFocusOut);
+    document.addEventListener("keydown", onKeyDown, true);
+    window.addEventListener("blur", onWindowBlur);
     editor.addEventListener("input", schedule);
     editor.addEventListener("compositionend", schedule);
     editor.addEventListener("load", schedule, true);
     const mutation = new MutationObserver(schedule);
-    mutation.observe(editor, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["data-ime-composing"] });
+    mutation.observe(editor, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ["data-ime-composing"]
+    });
     const resize = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
     resize?.observe(group);
     resize?.observe(toolbar);
@@ -1149,8 +1205,11 @@ function useCompactComposer(formRef, enabled) {
       cancelAnimationFrame(frame);
       mutation.disconnect();
       resize?.disconnect();
-      form.removeEventListener("focusin", schedule);
-      form.removeEventListener("focusout", schedule);
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
+      document.removeEventListener("keydown", onKeyDown, true);
+      window.removeEventListener("blur", onWindowBlur);
       editor.removeEventListener("input", schedule);
       editor.removeEventListener("compositionend", schedule);
       editor.removeEventListener("load", schedule, true);
@@ -1158,8 +1217,14 @@ function useCompactComposer(formRef, enabled) {
       window.visualViewport?.removeEventListener("resize", schedule);
       document.fonts?.removeEventListener("loadingdone", schedule);
     };
-  }, [enabled, formRef]);
-  return expanded;
+  }, [enabled, focusOwner, formRef]);
+  return {
+    expanded,
+    focusOwner,
+    onFocusCapture: captureOwnedEvent,
+    onBlurCapture: captureOwnedEvent,
+    onPointerDownCapture: captureOwnedEvent
+  };
 }
 
 // src/components/graph-ui/InputGroup.tsx
@@ -1306,7 +1371,7 @@ function ComposerHiddenAttachmentInputs({
 }
 
 // src/components/composer/ComposerSubscriptionUsage.tsx
-import { useEffect, useRef, useState as useState2 } from "react";
+import { useEffect, useRef as useRef2, useState as useState2 } from "react";
 import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 function resetLabel(value) {
   if (!value) return translate("chat.resetTimeUnavailable");
@@ -1318,7 +1383,7 @@ function ComposerSubscriptionUsage({
 }) {
   useI18n();
   const [detailsVisible, setDetailsVisible] = useState2(false);
-  const ref = useRef(null);
+  const ref = useRef2(null);
   useEffect(() => {
     if (!detailsVisible) return;
     const outside = (event) => {
@@ -1512,7 +1577,7 @@ function ComposerFrame({
   goalSlot,
   shellPromptSlot
 }) {
-  const expanded = useCompactComposer(formRef, activeView === "chat");
+  const { expanded, focusOwner, ...focusEvents } = useCompactComposer(formRef, activeView === "chat");
   return /* @__PURE__ */ jsxs5("div", { className: layerClassName, children: [
     /* @__PURE__ */ jsx6(
       ComposerHiddenAttachmentInputs,
@@ -1540,6 +1605,8 @@ function ComposerFrame({
       "form",
       {
         ref: formRef,
+        ...focusEvents,
+        "data-composer-focus-owner": focusOwner,
         "data-composer-layout": activeView === "chat" ? expanded ? "expanded" : "collapsed" : void 0,
         "data-testid": activeView === "chat" ? "chat-composer" : void 0,
         onSubmit,
@@ -1677,7 +1744,7 @@ function ComposerPendingQueue({
 }
 
 // src/components/composer/ComposerMenuSurface.tsx
-import { useLayoutEffect as useLayoutEffect2, useRef as useRef2 } from "react";
+import { useLayoutEffect as useLayoutEffect2, useRef as useRef3 } from "react";
 import { jsx as jsx8 } from "react/jsx-runtime";
 function ComposerMenuSurface({
   align = "start",
@@ -1685,7 +1752,7 @@ function ComposerMenuSurface({
   className = "",
   ...props
 }) {
-  const menuRef = useRef2(null);
+  const menuRef = useRef3(null);
   useLayoutEffect2(() => {
     const menu = menuRef.current;
     const trigger = menu?.parentElement?.querySelector(
@@ -1822,232 +1889,37 @@ function ComposerAttachmentMenu({
 }
 
 // src/components/composer/ComposerSettingsToolbar.tsx
-import { Check, ChevronRight } from "lucide-react";
-import { useState as useState4 } from "react";
 import { Fragment as Fragment3, jsx as jsx10, jsxs as jsxs8 } from "react/jsx-runtime";
-var sandboxOptions = [
-  { mode: "read-only", get label() {
-    return translate("chat.readOnly");
-  } },
-  { mode: "workspace-write", get label() {
-    return translate("chat.workspaceWrite");
-  } },
-  { mode: "danger-full-access", get label() {
-    return translate("chat.danger");
-  } }
-];
-function formatSandboxModeLabel(mode) {
-  return sandboxOptions.find(
-    (entry) => entry.mode === (mode ?? "danger-full-access")
-  )?.label ?? translate("chat.danger");
-}
-function formatSandboxModeCompactLabel(mode) {
-  switch (mode) {
-    case "read-only":
-      return "RO";
-    case "workspace-write":
-      return "WW";
-    case "danger-full-access":
-      return translate("chat.full");
-    default:
-      return translate("chat.full");
-  }
-}
 function ComposerSettingsToolbar({
-  openMenu,
   model,
   modelOptions,
   modelContextTitle,
   contextUsage,
   reasoningEffort,
-  supportedEfforts,
-  sandboxMode,
-  sandboxModeAvailable,
-  settingsBusy,
   goalComposeMode,
   goalBusy,
   activeView,
   disabled,
-  fastMode,
   sendButtonLabel,
   sendButtonClassName,
-  modelControlsDisabled,
-  effortControlsDisabled,
-  effortControlTitle,
-  inlineToggleClassName,
-  menuItemClassName: menuItemClassName2,
   sendButtonBaseClassName,
-  beforeSend,
-  onSetOpenMenu,
-  onUpdateSettings
+  beforeSend
 }) {
   useI18n();
-  const [settingsSection, setSettingsSection] = useState4(null);
-  const selectedModelLabel = (modelOptions.find((entry) => entry.model === model)?.displayName || model || translate("chat.selectModel")).replace(/\s+\([^)]+\)\s*$/, "");
+  const selectedModelLabel = modelOptions.find((entry) => entry.model === model)?.displayName || model || translate("chat.selectModel");
   return /* @__PURE__ */ jsxs8(Fragment3, { children: [
     /* @__PURE__ */ jsxs8("div", { className: "composer-model-control relative min-w-0", children: [
       /* @__PURE__ */ jsx10(
-        InputGroupButton,
+        "span",
         {
-          type: "button",
-          variant: "ghost",
-          size: "xs",
-          "data-composer-menu-trigger": "true",
-          "aria-haspopup": "menu",
-          "aria-expanded": openMenu === "model",
-          "aria-label": translate("chat.modelAndEffort", { value1: selectedModelLabel, value2: formatReasoningEffortLabel(reasoningEffort) }),
-          disabled: modelControlsDisabled || modelOptions.length === 0,
-          onClick: () => {
-            setSettingsSection(null);
-            onSetOpenMenu((current) => current === "model" ? null : "model");
-          },
-          title: fastMode ? translate("chat.fastModeIsOnTurnItOff", { value1: modelContextTitle }) : modelContextTitle,
-          className: `${inlineToggleClassName} relative min-w-0 max-w-[10rem] overflow-hidden rounded-full px-2.5 text-left text-stone-300 disabled:cursor-not-allowed disabled:text-stone-600 sm:max-w-[14rem]`,
-          children: /* @__PURE__ */ jsxs8("span", { className: "relative z-[1] block min-w-0 truncate whitespace-nowrap", children: [
-            selectedModelLabel,
-            " \xB7 ",
-            formatReasoningEffortLabel(reasoningEffort)
-          ] })
+          "data-testid": "composer-model-label",
+          title: `${selectedModelLabel} \xB7 ${formatReasoningEffortLabel(reasoningEffort)}
+${modelContextTitle}`,
+          className: "composer-model-label block truncate whitespace-nowrap px-1 text-xs text-stone-400",
+          children: selectedModelLabel
         }
       ),
-      model ? /* @__PURE__ */ jsx10(ContextProgressBar, { contextUsage }) : null,
-      openMenu === "model" && /* @__PURE__ */ jsxs8(
-        ComposerMenuSurface,
-        {
-          align: "end",
-          className: "w-[13.5rem] rounded-xl border border-stone-700 bg-stone-900 p-1.5 shadow-2xl shadow-stone-950/40",
-          children: [
-            /* @__PURE__ */ jsxs8(
-              "button",
-              {
-                type: "button",
-                onClick: () => setSettingsSection("model"),
-                className: `${menuItemClassName2} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-stone-300`,
-                children: [
-                  /* @__PURE__ */ jsx10("span", { children: translate("chat.model") }),
-                  /* @__PURE__ */ jsxs8("span", { className: "flex min-w-0 items-center gap-1 text-stone-500", children: [
-                    /* @__PURE__ */ jsx10("span", { className: "max-w-[7rem] truncate", children: selectedModelLabel }),
-                    /* @__PURE__ */ jsx10(ChevronRight, { className: "h-3.5 w-3.5 shrink-0" })
-                  ] })
-                ]
-              }
-            ),
-            /* @__PURE__ */ jsxs8(
-              "button",
-              {
-                type: "button",
-                disabled: effortControlsDisabled,
-                title: effortControlTitle,
-                onClick: () => setSettingsSection("effort"),
-                className: `${menuItemClassName2} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-stone-300 disabled:cursor-not-allowed disabled:text-stone-600`,
-                children: [
-                  /* @__PURE__ */ jsx10("span", { children: translate("chat.effort") }),
-                  /* @__PURE__ */ jsxs8("span", { className: "flex items-center gap-1 text-stone-500", children: [
-                    formatReasoningEffortLabel(reasoningEffort),
-                    /* @__PURE__ */ jsx10(ChevronRight, { className: "h-3.5 w-3.5" })
-                  ] })
-                ]
-              }
-            ),
-            settingsSection === "model" ? /* @__PURE__ */ jsxs8("div", { className: "mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5", children: [
-              /* @__PURE__ */ jsx10("p", { className: "px-3 py-1.5 text-xs text-stone-500", children: translate("chat.model") }),
-              /* @__PURE__ */ jsx10("div", { className: "max-h-72 overflow-auto", children: modelOptions.map((entry) => {
-                const selected = entry.model === model;
-                return /* @__PURE__ */ jsxs8(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: () => {
-                      const nextEffort = reasoningEffort && entry.supportedReasoningEfforts.some(
-                        (effort) => effort.reasoningEffort === reasoningEffort
-                      ) ? reasoningEffort : entry.defaultReasoningEffort;
-                      onUpdateSettings({
-                        model: entry.model,
-                        reasoningEffort: nextEffort
-                      });
-                      onSetOpenMenu(() => null);
-                    },
-                    className: `${menuItemClassName2} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left ${selected ? "ui-status-warning" : "text-stone-300"}`,
-                    children: [
-                      /* @__PURE__ */ jsx10("span", { className: "truncate text-sm font-medium", children: entry.displayName || entry.model }),
-                      selected ? /* @__PURE__ */ jsx10(Check, { className: "h-3.5 w-3.5 shrink-0" }) : null
-                    ]
-                  },
-                  entry.id
-                );
-              }) })
-            ] }) : null,
-            settingsSection === "effort" ? /* @__PURE__ */ jsxs8("div", { className: "mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5", children: [
-              /* @__PURE__ */ jsx10("p", { className: "px-3 py-1.5 text-xs text-stone-500", children: translate("chat.effort") }),
-              supportedEfforts.map((entry) => {
-                const selected = entry.reasoningEffort === reasoningEffort;
-                return /* @__PURE__ */ jsxs8(
-                  "button",
-                  {
-                    type: "button",
-                    onClick: () => {
-                      onUpdateSettings({
-                        reasoningEffort: entry.reasoningEffort
-                      });
-                      onSetOpenMenu(() => null);
-                    },
-                    className: `${menuItemClassName2} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left ${selected ? "ui-status-warning" : "text-stone-300"}`,
-                    children: [
-                      /* @__PURE__ */ jsx10("span", { className: "text-sm font-medium", children: formatReasoningEffortLabel(entry.reasoningEffort) }),
-                      selected ? /* @__PURE__ */ jsx10(Check, { className: "h-3.5 w-3.5" }) : null
-                    ]
-                  },
-                  entry.reasoningEffort
-                );
-              }),
-              supportedEfforts.some(
-                (entry) => entry.reasoningEffort === "ultra"
-              ) ? /* @__PURE__ */ jsx10("p", { className: "px-3 pb-1 pt-2 text-xs leading-4 text-stone-500", children: translate("chat.higherEffortCanConsumeUsageLimitsFaster") }) : null
-            ] }) : null,
-            /* @__PURE__ */ jsx10("div", { className: "mt-1 border-t border-[var(--theme-border)] px-3 py-2 text-xs leading-5 text-[var(--theme-fg-muted)]", "aria-label": translate("chat.contextUsage"), children: modelContextTitle })
-          ]
-        }
-      )
-    ] }),
-    sandboxModeAvailable && /* @__PURE__ */ jsxs8("div", { className: "composer-sandbox-control relative", children: [
-      /* @__PURE__ */ jsx10(
-        InputGroupButton,
-        {
-          type: "button",
-          variant: "ghost",
-          size: "xs",
-          "data-composer-menu-trigger": "true",
-          "aria-haspopup": "menu",
-          "aria-expanded": openMenu === "sandbox",
-          "aria-label": translate("chat.sandbox", { value1: formatSandboxModeLabel(sandboxMode) }),
-          disabled: settingsBusy,
-          onClick: () => onSetOpenMenu(
-            (current) => current === "sandbox" ? null : "sandbox"
-          ),
-          title: translate("chat.sandbox", { value1: formatSandboxModeLabel(sandboxMode) }),
-          className: `${inlineToggleClassName} rounded-full px-2.5 text-stone-300 disabled:cursor-not-allowed disabled:text-stone-700`,
-          children: formatSandboxModeCompactLabel(sandboxMode)
-        }
-      ),
-      openMenu === "sandbox" && /* @__PURE__ */ jsx10(
-        ComposerMenuSurface,
-        {
-          align: "end",
-          className: "w-max min-w-[9rem] rounded-2xl border border-stone-700 bg-stone-900 shadow-2xl shadow-stone-950/40",
-          children: /* @__PURE__ */ jsx10("div", { className: "max-h-72 overflow-auto p-2", children: sandboxOptions.map((entry) => /* @__PURE__ */ jsx10(
-            "button",
-            {
-              type: "button",
-              onClick: () => onUpdateSettings({
-                sandboxMode: entry.mode
-              }),
-              className: `block w-full rounded-xl px-3 py-2 text-left transition ${entry.mode === (sandboxMode ?? "danger-full-access") ? "ui-status-warning" : `${menuItemClassName2} text-stone-300`}`,
-              children: /* @__PURE__ */ jsx10("p", { className: "text-sm font-medium", children: entry.label })
-            },
-            entry.mode
-          )) })
-        }
-      )
+      model ? /* @__PURE__ */ jsx10(ContextProgressBar, { contextUsage }) : null
     ] }),
     beforeSend,
     /* @__PURE__ */ jsx10(
@@ -3399,7 +3271,7 @@ function useComposerAttachments({
 }
 
 // src/components/composer/useAttachmentPreviewUrls.ts
-import { useEffect as useEffect2, useRef as useRef3, useState as useState5 } from "react";
+import { useEffect as useEffect2, useRef as useRef4, useState as useState4 } from "react";
 function revokeCachedPreviewUrls(previewUrlCache) {
   for (const previewUrl of previewUrlCache.values()) {
     URL.revokeObjectURL(previewUrl);
@@ -3410,8 +3282,8 @@ function useAttachmentPreviewUrls({
   attachments,
   isShellView
 }) {
-  const previewUrlCacheRef = useRef3(/* @__PURE__ */ new Map());
-  const [attachmentPreviewUrls, setAttachmentPreviewUrls] = useState5({});
+  const previewUrlCacheRef = useRef4(/* @__PURE__ */ new Map());
+  const [attachmentPreviewUrls, setAttachmentPreviewUrls] = useState4({});
   useEffect2(() => {
     const previewUrlCache = previewUrlCacheRef.current;
     if (isShellView) {
@@ -3456,8 +3328,8 @@ import {
   useCallback as useCallback2,
   useEffect as useEffect3,
   useLayoutEffect as useLayoutEffect3,
-  useRef as useRef4,
-  useState as useState6
+  useRef as useRef5,
+  useState as useState5
 } from "react";
 var DRAFT_SYNC_DELAY_MS = 180;
 function toComposerDraft(prompt, attachments) {
@@ -3472,19 +3344,19 @@ function useComposerDraft({
   draftAttachments,
   onDraftChange
 }) {
-  const [internalDraft, setInternalDraft] = useState6({
+  const [internalDraft, setInternalDraft] = useState5({
     prompt: "",
     attachments: []
   });
-  const [localControlledDraft, setLocalControlledDraft] = useState6(() => toComposerDraft(draftPrompt, draftAttachments));
-  const submittedClearRef = useRef4(null);
-  const draftSyncTimerRef = useRef4(null);
-  const latestLocalDraftRef = useRef4(localControlledDraft);
-  const lastSentDraftSignatureRef = useRef4(draftSignature(localControlledDraft));
-  const pendingHostEchoesRef = useRef4(/* @__PURE__ */ new Set());
+  const [localControlledDraft, setLocalControlledDraft] = useState5(() => toComposerDraft(draftPrompt, draftAttachments));
+  const submittedClearRef = useRef5(null);
+  const draftSyncTimerRef = useRef5(null);
+  const latestLocalDraftRef = useRef5(localControlledDraft);
+  const lastSentDraftSignatureRef = useRef5(draftSignature(localControlledDraft));
+  const pendingHostEchoesRef = useRef5(/* @__PURE__ */ new Set());
   const isDraftControlled = !isShellView && draftPrompt !== void 0 && draftAttachments !== void 0 && typeof onDraftChange === "function";
   const controlledPropsSignature = isDraftControlled ? draftSignature(toComposerDraft(draftPrompt, draftAttachments)) : "";
-  const lastRenderedControlledPropsSignatureRef = useRef4(
+  const lastRenderedControlledPropsSignatureRef = useRef5(
     controlledPropsSignature
   );
   useLayoutEffect3(() => {
@@ -3602,7 +3474,7 @@ function useComposerDraft({
 }
 
 // src/components/composer/useComposerForkActions.ts
-import { useCallback as useCallback3, useEffect as useEffect4, useRef as useRef5, useState as useState7 } from "react";
+import { useCallback as useCallback3, useEffect as useEffect4, useRef as useRef6, useState as useState6 } from "react";
 function useComposerForkActions({
   slashPanelView,
   onForkLatest,
@@ -3610,9 +3482,9 @@ function useComposerForkActions({
   closeMenu
 }) {
   useI18n();
-  const [forkBusy, setForkBusy] = useState7(false);
-  const [forkError, setForkError] = useState7(null);
-  const inFlight = useRef5(false);
+  const [forkBusy, setForkBusy] = useState6(false);
+  const [forkError, setForkError] = useState6(null);
+  const inFlight = useRef6(false);
   useEffect4(() => {
     setForkError(null);
   }, [slashPanelView]);
@@ -3668,7 +3540,7 @@ function useComposerForkActions({
 // src/components/composer/useComposerGoal.ts
 import {
   useCallback as useCallback4,
-  useState as useState8
+  useState as useState7
 } from "react";
 function useComposerGoal({
   prompt,
@@ -3682,10 +3554,10 @@ function useComposerGoal({
   resetSlashPanel
 }) {
   useI18n();
-  const [goalComposeMode, setGoalComposeMode] = useState8(false);
-  const [goalTokenBudget, setGoalTokenBudget] = useState8("");
-  const [goalBusy, setGoalBusy] = useState8(false);
-  const [goalLocalError, setGoalLocalError] = useState8(null);
+  const [goalComposeMode, setGoalComposeMode] = useState7(false);
+  const [goalTokenBudget, setGoalTokenBudget] = useState7("");
+  const [goalBusy, setGoalBusy] = useState7(false);
+  const [goalLocalError, setGoalLocalError] = useState7(null);
   const submitGoal = useCallback4(async () => {
     const objective = prompt.trim();
     if (!objective) {
@@ -3775,7 +3647,7 @@ import {
   useCallback as useCallback5,
   useEffect as useEffect5,
   useMemo,
-  useState as useState9
+  useState as useState8
 } from "react";
 var FALLBACK_HOOK_COMMAND = `node -e "process.stdin.resume(); process.stdin.on('end', () => console.error('hook ran'))"`;
 function buildHookCommandTemplateMap(hookCommandTemplates) {
@@ -3794,17 +3666,17 @@ function useComposerHookConfig({
   onUntrustHook
 }) {
   useI18n();
-  const [hooksPanelMode, setHooksPanelMode] = useState9("list");
-  const [hookScope, setHookScope] = useState9("project");
-  const [hookEventName, setHookEventName] = useState9("preToolUse");
-  const [hookMatcher, setHookMatcher] = useState9("Bash");
-  const [hookCommand, setHookCommand] = useState9(FALLBACK_HOOK_COMMAND);
-  const [hookTimeoutSec, setHookTimeoutSec] = useState9("30");
-  const [hookStatusMessage, setHookStatusMessage] = useState9("Running hook");
-  const [editingHookTarget, setEditingHookTarget] = useState9(null);
-  const [hookConfigBusy, setHookConfigBusy] = useState9(false);
-  const [hookConfigError, setHookConfigError] = useState9(null);
-  const [hookConfigSuccess, setHookConfigSuccess] = useState9(
+  const [hooksPanelMode, setHooksPanelMode] = useState8("list");
+  const [hookScope, setHookScope] = useState8("project");
+  const [hookEventName, setHookEventName] = useState8("preToolUse");
+  const [hookMatcher, setHookMatcher] = useState8("Bash");
+  const [hookCommand, setHookCommand] = useState8(FALLBACK_HOOK_COMMAND);
+  const [hookTimeoutSec, setHookTimeoutSec] = useState8("30");
+  const [hookStatusMessage, setHookStatusMessage] = useState8("Running hook");
+  const [editingHookTarget, setEditingHookTarget] = useState8(null);
+  const [hookConfigBusy, setHookConfigBusy] = useState8(false);
+  const [hookConfigError, setHookConfigError] = useState8(null);
+  const [hookConfigSuccess, setHookConfigSuccess] = useState8(
     null
   );
   const hookCommandTemplateByEvent = useMemo(
@@ -4022,7 +3894,7 @@ function useComposerHookConfig({
 }
 
 // src/components/composer/useComposerMcpConfig.ts
-import { useCallback as useCallback6, useState as useState10 } from "react";
+import { useCallback as useCallback6, useState as useState9 } from "react";
 var DEFAULT_RAW_MCP_BLOCK = '[mcp_servers.example_stdio]\ncommand = "npx"\nargs = ["-y", "your-mcp-server"]\n';
 var MCP_CONFIG_SUCCESS_MESSAGE_KEY = "chat.mCPEntryWrittenToProviderConfigRestart";
 function useComposerMcpConfig({
@@ -4033,13 +3905,13 @@ function useComposerMcpConfig({
   onOpenMcp
 }) {
   useI18n();
-  const [mcpHttpName, setMcpHttpName] = useState10("");
-  const [mcpHttpUrl, setMcpHttpUrl] = useState10("");
-  const [mcpRawBlock, setMcpRawBlock] = useState10("");
-  const [mcpConfigPath, setMcpConfigPath] = useState10(null);
-  const [mcpConfigBusy, setMcpConfigBusy] = useState10(false);
-  const [mcpConfigError, setMcpConfigError] = useState10(null);
-  const [mcpConfigSuccess, setMcpConfigSuccess] = useState10(null);
+  const [mcpHttpName, setMcpHttpName] = useState9("");
+  const [mcpHttpUrl, setMcpHttpUrl] = useState9("");
+  const [mcpRawBlock, setMcpRawBlock] = useState9("");
+  const [mcpConfigPath, setMcpConfigPath] = useState9(null);
+  const [mcpConfigBusy, setMcpConfigBusy] = useState9(false);
+  const [mcpConfigError, setMcpConfigError] = useState9(null);
+  const [mcpConfigSuccess, setMcpConfigSuccess] = useState9(null);
   const clearMcpConfigStatus = useCallback6(() => {
     setMcpConfigError(null);
     setMcpConfigSuccess(null);
@@ -4185,7 +4057,7 @@ function useComposerMcpConfig({
 import {
   useCallback as useCallback7,
   useEffect as useEffect6,
-  useState as useState11
+  useState as useState10
 } from "react";
 function useComposerMenuLifecycle({
   openMenu,
@@ -4196,7 +4068,7 @@ function useComposerMenuLifecycle({
   clearMcpConfigStatus,
   clearHookConfigStatus
 }) {
-  const [copiedSkillName, setCopiedSkillName] = useState11(null);
+  const [copiedSkillName, setCopiedSkillName] = useState10(null);
   useEffect6(() => {
     if (openMenu !== "slash") {
       setSlashPanelView("root");
@@ -4245,6 +4117,8 @@ function useComposerMenuLifecycle({
     }
     function handleKeyDown(event) {
       if (event.key === "Escape") {
+        const surface = document.activeElement?.closest("[data-composer-menu-surface]");
+        surface?.parentElement?.querySelector('[data-composer-menu-trigger="true"]')?.focus({ preventScroll: true });
         setOpenMenu(null);
       }
     }
@@ -4461,7 +4335,7 @@ function ComposerGoalComposeCard({
 }
 
 // src/components/composer/ComposerPromptEditor.tsx
-import { useRef as useRef6, useState as useState12 } from "react";
+import { useRef as useRef7, useState as useState11 } from "react";
 import { jsx as jsx20, jsxs as jsxs18 } from "react/jsx-runtime";
 function hasIOSNativeBridge() {
   const nativeWindow = window;
@@ -4487,8 +4361,8 @@ function ComposerPromptEditor({
   onDrop
 }) {
   useI18n();
-  const previewTrigger = useRef6(null);
-  const [preview, setPreview] = useState12(null);
+  const previewTrigger = useRef7(null);
+  const [preview, setPreview] = useState11(null);
   function attachmentImage(target) {
     const chip = target instanceof Element ? target.closest('[data-segment-type="attachment"]') : null;
     if (chip?.querySelector("img")) previewTrigger.current = chip;
@@ -4735,13 +4609,13 @@ function useComposerPromptSlots({
 }
 
 // src/components/composer/useComposerSettingsActions.ts
-import { useCallback as useCallback8, useEffect as useEffect7, useState as useState13 } from "react";
+import { useCallback as useCallback8, useEffect as useEffect7, useState as useState12 } from "react";
 function useComposerSettingsActions({
   collaborationMode,
   onUpdateSettings,
   closeMenu
 }) {
-  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState13(null);
+  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState12(null);
   const displayedCollaborationMode = optimisticCollaborationMode ?? collaborationMode;
   useEffect7(() => {
     setOptimisticCollaborationMode(null);
@@ -5143,10 +5017,10 @@ function ThreadComposer({
   onCancelPendingPrompt
 }) {
   useI18n();
-  const [openMenu, setOpenMenu] = useState14(null);
-  const [slashPanelView, setSlashPanelView] = useState14("root");
-  const submitInFlightRef = useRef7(false);
-  const [mcpPanelMode, setMcpPanelMode] = useState14("list");
+  const [openMenu, setOpenMenu] = useState13(null);
+  const [slashPanelView, setSlashPanelView] = useState13("root");
+  const submitInFlightRef = useRef8(false);
+  const [mcpPanelMode, setMcpPanelMode] = useState13("list");
   const slashCapabilities = useMemo2(
     () => ({
       fast: capabilities?.controls.performanceMode ?? false,
@@ -5177,25 +5051,25 @@ function ThreadComposer({
     () => filterToolboxItemsForCapabilities(toolboxItems, slashCapabilities),
     [slashCapabilities, toolboxItems]
   );
-  const menuRef = useRef7(null);
-  const promptRef = useRef7(null);
-  const photoInputRef = useRef7(null);
-  const fileInputRef = useRef7(null);
-  const pendingSelectionRef = useRef7(
+  const menuRef = useRef8(null);
+  const promptRef = useRef8(null);
+  const photoInputRef = useRef8(null);
+  const fileInputRef = useRef8(null);
+  const pendingSelectionRef = useRef8(
     null
   );
-  const pendingInsertedAttachmentIdsRef = useRef7([]);
-  const selectionSnapshotRef = useRef7(
+  const pendingInsertedAttachmentIdsRef = useRef8([]);
+  const selectionSnapshotRef = useRef8(
     null
   );
-  const renderedPreviewSignatureRef = useRef7("");
+  const renderedPreviewSignatureRef = useRef8("");
   const isShellView = activeView === "shell";
   const canToggleShellView = shellAvailable || isShellView;
   const isMobileShell = Boolean(
     isShellView && shellControlState?.isMobileShell
   );
   const shellPromptLabel = shellControlState?.promptLabel ?? null;
-  const [isDragTargetActive, setIsDragTargetActive] = useState14(false);
+  const [isDragTargetActive, setIsDragTargetActive] = useState13(false);
   const {
     prompt,
     attachments,
@@ -5381,7 +5255,7 @@ function ThreadComposer({
         break;
       case "openHarness":
         setOpenMenu(null);
-        void onOpenHarness?.();
+        void onOpenHarness?.(menuRef.current?.dataset.composerFocusOwner);
         break;
       case "noop":
         break;
@@ -5899,7 +5773,7 @@ function ThreadComposer({
 }
 
 // src/components/timeline/TokenUsageCost.tsx
-import { useRef as useRef9, useState as useState16 } from "react";
+import { useRef as useRef10, useState as useState15 } from "react";
 import {
   DollarSign,
   ArrowDownToLine,
@@ -5913,8 +5787,8 @@ import {
 import {
   useEffect as useEffect8,
   useLayoutEffect as useLayoutEffect5,
-  useRef as useRef8,
-  useState as useState15
+  useRef as useRef9,
+  useState as useState14
 } from "react";
 import { Fragment as Fragment4, jsx as jsx24, jsxs as jsxs20 } from "react/jsx-runtime";
 function TokenInIcon() {
@@ -6150,12 +6024,12 @@ function TurnTokenSummary({ turn }) {
   const { locale: i18nLocale } = useI18n();
   const details = buildTurnTokenDetails(turn);
   const priceBadge = buildTurnPriceBadge(turn);
-  const [isMobileOpen, setIsMobileOpen] = useState15(false);
-  const [isDesktopOpen, setIsDesktopOpen] = useState15(false);
-  const [mobilePopoverShift, setMobilePopoverShift] = useState15(0);
-  const containerRef = useRef8(null);
-  const desktopPriceRef = useRef8(null);
-  const mobilePopoverRef = useRef8(null);
+  const [isMobileOpen, setIsMobileOpen] = useState14(false);
+  const [isDesktopOpen, setIsDesktopOpen] = useState14(false);
+  const [mobilePopoverShift, setMobilePopoverShift] = useState14(0);
+  const containerRef = useRef9(null);
+  const desktopPriceRef = useRef9(null);
+  const mobilePopoverRef = useRef9(null);
   useLayoutEffect5(() => {
     if (!isMobileOpen || details.length === 0) {
       setMobilePopoverShift(0);
@@ -6306,8 +6180,8 @@ function TokenUsageCost({
   tooltipZIndex = 80
 }) {
   useI18n();
-  const [detailsOpen, setDetailsOpen] = useState16(false);
-  const openAtPointerDown = useRef9(false);
+  const [detailsOpen, setDetailsOpen] = useState15(false);
+  const openAtPointerDown = useRef10(false);
   const uncachedInput = usage ? Math.max(
     0,
     usage.inputTokens - usage.cachedInputTokens - (usage.cacheWriteInputTokens ?? 0)
@@ -6437,12 +6311,12 @@ function TokenUsageCost({
 }
 
 // src/components/SettingsPanels.tsx
-import { useId, useState as useState17 } from "react";
+import { useId as useId2, useState as useState16 } from "react";
 import { jsx as jsx26, jsxs as jsxs22 } from "react/jsx-runtime";
 function SettingsPanels({ sections, initialId }) {
   useI18n();
-  const [selected, setSelected] = useState17(initialId ?? sections[0]?.id);
-  const scope = useId();
+  const [selected, setSelected] = useState16(initialId ?? sections[0]?.id);
+  const scope = useId2();
   const active = sections.find((section) => section.id === selected) ?? sections[0];
   if (!active) return null;
   return /* @__PURE__ */ jsxs22("div", { className: "settings-workspace", children: [
@@ -6482,12 +6356,12 @@ function SettingsPanels({ sections, initialId }) {
 }
 
 // src/components/ThreadWorkspaceLayout.tsx
-import { useEffect as useEffect12, useMemo as useMemo3, useRef as useRef14, useState as useState22 } from "react";
+import { useEffect as useEffect12, useMemo as useMemo3, useRef as useRef15, useState as useState21 } from "react";
 import {
   ArrowLeft as ArrowLeft2,
   ChevronsLeft,
   ChevronsRight,
-  Check as Check2,
+  Check,
   Copy,
   Folder,
   MessageSquare as MessageSquare2,
@@ -6690,10 +6564,10 @@ function historyItemLabel(kind) {
 // src/components/workbench/WorkbenchPanels.tsx
 import {
   useEffect as useEffect9,
-  useRef as useRef10,
-  useState as useState18
+  useRef as useRef11,
+  useState as useState17
 } from "react";
-import { Columns2, FolderOpen, Users, X as X2, RotateCcw } from "lucide-react";
+import { FolderOpen, X as X2 } from "lucide-react";
 import { jsx as jsx27, jsxs as jsxs23 } from "react/jsx-runtime";
 function WorkbenchPanels({
   options: o,
@@ -6703,29 +6577,29 @@ function WorkbenchPanels({
 }) {
   useI18n();
   const { mode, referenceId, ratio } = o.presentation;
-  const root = useRef10(null);
-  const referenceTrigger = useRef10(null);
-  const [compact, setCompact] = useState18(() => window.innerWidth < 1e3);
-  const [mobileView, setMobileView] = useState18(
+  const root = useRef11(null);
+  const [compact, setCompact] = useState17(() => window.innerWidth < 1e3);
+  const [mobileView, setMobileView] = useState17(
     "primary"
   );
-  const [pickerOpen, setPickerOpen] = useState18(false);
-  const previousMode = useRef10(mode);
+  const previousMode = useRef11(mode);
   useEffect9(() => {
     if (previousMode.current !== mode) {
+      const before = previousMode.current;
       previousMode.current = mode;
-      if (mode !== "focus") setMobileView("reference");
+      if (mode === "collaboration") setMobileView("reference");
+      else if (mode === "thread" && before === "focus" && (!compact || o.onFocusPane?.("reference") !== false))
+        setMobileView("reference");
     }
-  }, [mode]);
-  const [filesVisited, setFilesVisited] = useState18(mode === "files");
-  const drag = useRef10(null);
-  const [lastReveal, setLastReveal] = useState18(revealExplorer);
+  }, [mode, compact, o.onFocusPane]);
+  const [filesVisited, setFilesVisited] = useState17(mode === "files");
+  const drag = useRef11(null);
+  const [lastReveal, setLastReveal] = useState17(revealExplorer);
   useEffect9(() => {
     if (lastReveal !== revealExplorer) {
       setLastReveal(revealExplorer);
       if (revealExplorer > 0) {
-        o.onPresentationChange({ mode: "files", ratio: 35 });
-        setMobileView("reference");
+        o.onPresentationChange({ mode: "files" });
       }
     }
   }, [revealExplorer, lastReveal, o.onPresentationChange]);
@@ -6742,19 +6616,48 @@ function WorkbenchPanels({
   }, []);
   useEffect9(() => {
     setMobileView("primary");
-    setPickerOpen(false);
   }, [o.primaryTitle]);
   const close = () => {
-    o.onPresentationChange({ mode: "focus" });
+    if (o.onPresentationChange({ mode: "focus" }) === false) return;
     setMobileView("primary");
-    referenceTrigger.current?.focus();
   };
-  const showReference = mode !== "focus";
+  const showThread = Boolean(referenceId) && (mode === "thread" || mode === "files");
+  const showReference = showThread || mode === "collaboration";
+  const closeFiles = () => o.onPresentationChange({ mode: referenceId ? "thread" : "focus" });
+  const historyHandlers = useRef11({
+    onFocusPane: o.onFocusPane,
+    onPresentationChange: o.onPresentationChange,
+    onCloseTools: o.onCloseTools
+  });
+  historyHandlers.current = {
+    onFocusPane: o.onFocusPane,
+    onPresentationChange: o.onPresentationChange,
+    onCloseTools: o.onCloseTools
+  };
   useEffect9(() => {
-    if (!compact || mobileView !== "reference" || mode === "focus") return;
+    const drawerOpen = mode === "files" || o.toolsOpen;
+    if (!compact || !drawerOpen && (!showReference || mobileView !== "reference"))
+      return;
     const marker = `workbench-reference-${Date.now()}`;
     history.pushState({ ...history.state, workbenchReference: marker }, "");
-    const back = () => setMobileView("primary");
+    const back = () => {
+      const handlers = historyHandlers.current;
+      if (o.toolsOpen) handlers.onCloseTools?.();
+      else if (mode === "files")
+        handlers.onPresentationChange({
+          mode: referenceId ? "thread" : "focus"
+        });
+      else {
+        if (handlers.onFocusPane?.("primary") === false) {
+          history.pushState(
+            { ...history.state, workbenchReference: marker },
+            ""
+          );
+          return;
+        }
+        setMobileView("primary");
+      }
+    };
     window.addEventListener("popstate", back);
     return () => {
       window.removeEventListener("popstate", back);
@@ -6763,12 +6666,7 @@ function WorkbenchPanels({
         history.replaceState(state, "");
       }
     };
-  }, [compact, mobileView, showReference]);
-  const selectMode = (next) => {
-    o.onPresentationChange({ mode: next, ...next === "files" ? { ratio: 35 } : {} });
-    setPickerOpen(false);
-    setMobileView("reference");
-  };
+  }, [compact, mobileView, showReference, mode, referenceId, o.toolsOpen]);
   return /* @__PURE__ */ jsxs23(
     "div",
     {
@@ -6778,96 +6676,6 @@ function WorkbenchPanels({
       "data-mode": mode,
       style: { "--primary-ratio": `${ratio}%` },
       children: [
-        /* @__PURE__ */ jsxs23(
-          "header",
-          {
-            className: "workbench-context",
-            title: `${o.deviceLabel} / ${o.workspaceLabel}`,
-            children: [
-              /* @__PURE__ */ jsx27("span", { className: "workbench-source-device", children: o.deviceLabel }),
-              /* @__PURE__ */ jsx27("span", { "aria-hidden": "true", children: "/" }),
-              /* @__PURE__ */ jsx27("strong", { children: o.workspaceLabel }),
-              /* @__PURE__ */ jsxs23("label", { className: "workbench-split-picker", children: [
-                /* @__PURE__ */ jsx27(Columns2, { size: 15, "aria-hidden": "true" }),
-                /* @__PURE__ */ jsxs23(
-                  "select",
-                  {
-                    "aria-label": translate("workbench.compareSession"),
-                    value: referenceId ?? "",
-                    onChange: (event) => {
-                      if (event.target.value) {
-                        o.onPresentationChange({
-                          referenceId: event.target.value,
-                          mode: "thread"
-                        });
-                        setMobileView("reference");
-                        setPickerOpen(false);
-                      }
-                    },
-                    children: [
-                      /* @__PURE__ */ jsx27("option", { value: "", children: translate("workbench.splitSession") }),
-                      o.candidates.map((thread) => /* @__PURE__ */ jsx27("option", { value: thread.id, children: thread.title }, thread.id))
-                    ]
-                  }
-                )
-              ] }),
-              /* @__PURE__ */ jsxs23("div", { className: "workbench-reference-picker", children: [
-                /* @__PURE__ */ jsxs23(
-                  "button",
-                  {
-                    ref: referenceTrigger,
-                    "aria-expanded": pickerOpen,
-                    onClick: () => setPickerOpen((open) => !open),
-                    "data-testid": "reference-picker",
-                    children: [
-                      /* @__PURE__ */ jsx27(Columns2, { size: 15 }),
-                      translate("workbench.referenceArea")
-                    ]
-                  }
-                ),
-                pickerOpen && /* @__PURE__ */ jsxs23(
-                  "div",
-                  {
-                    className: "workbench-reference-menu",
-                    onKeyDown: (event) => {
-                      if (event.key === "Escape") {
-                        setPickerOpen(false);
-                        referenceTrigger.current?.focus();
-                      }
-                    },
-                    children: [
-                      /* @__PURE__ */ jsxs23("button", { onClick: () => selectMode("files"), children: [
-                        /* @__PURE__ */ jsx27(FolderOpen, { size: 15 }),
-                        translate("workbench.referenceFiles")
-                      ] }),
-                      /* @__PURE__ */ jsxs23("button", { onClick: () => selectMode("collaboration"), children: [
-                        /* @__PURE__ */ jsx27(Users, { size: 15 }),
-                        translate("workbench.collaboration")
-                      ] }),
-                      referenceId && /* @__PURE__ */ jsx27("button", { onClick: () => selectMode("thread"), children: translate("workbench.restoreComparison") }),
-                      /* @__PURE__ */ jsxs23(
-                        "button",
-                        {
-                          onClick: () => {
-                            o.onPresentationChange({
-                              ratio: 55,
-                              mode: referenceId ? "thread" : "focus"
-                            });
-                            setPickerOpen(false);
-                          },
-                          children: [
-                            /* @__PURE__ */ jsx27(RotateCcw, { size: 15 }),
-                            translate("workbench.resetLayout")
-                          ]
-                        }
-                      )
-                    ]
-                  }
-                )
-              ] })
-            ]
-          }
-        ),
         o.storageFailed && /* @__PURE__ */ jsx27("p", { role: "status", className: "workbench-persistence-notice", children: translate("workbench.layoutSessionOnly") }),
         compact && showReference && /* @__PURE__ */ jsxs23(
           "nav",
@@ -6879,7 +6687,10 @@ function WorkbenchPanels({
                 "button",
                 {
                   "aria-pressed": mobileView === "primary",
-                  onClick: () => setMobileView("primary"),
+                  onClick: () => {
+                    if (o.onFocusPane?.("primary") !== false)
+                      setMobileView("primary");
+                  },
                   children: o.primaryTitle
                 }
               ),
@@ -6887,8 +6698,11 @@ function WorkbenchPanels({
                 "button",
                 {
                   "aria-pressed": mobileView === "reference",
-                  onClick: () => setMobileView("reference"),
-                  children: mode === "thread" ? o.referenceTitle : mode === "files" ? translate("workbench.referenceFiles") : translate("workbench.collaboration")
+                  onClick: () => {
+                    if (!showThread || o.onFocusPane?.("reference") !== false)
+                      setMobileView("reference");
+                  },
+                  children: showThread ? o.referenceTitle : translate("workbench.collaboration")
                 }
               )
             ]
@@ -6904,6 +6718,15 @@ function WorkbenchPanels({
                 {
                   className: "workbench-primary matter-chat",
                   "data-testid": "primary-pane",
+                  "data-focused": o.focusedPane === "primary",
+                  onPointerDownCapture: (event) => {
+                    if (o.onFocusPane?.("primary") === false)
+                      event.preventDefault();
+                  },
+                  onFocusCapture: (event) => {
+                    if (o.onFocusPane?.("primary") === false)
+                      event.relatedTarget?.focus();
+                  },
                   hidden: compact && showReference && mobileView !== "primary",
                   children: /* @__PURE__ */ jsx27("div", { className: "workbench-pane-body", children })
                 }
@@ -6965,37 +6788,46 @@ function WorkbenchPanels({
                 {
                   className: "workbench-reference",
                   "data-testid": "reference-pane",
+                  "data-focused": o.focusedPane === "reference",
+                  onPointerDownCapture: (event) => {
+                    if (showThread && o.onFocusPane?.("reference") === false)
+                      event.preventDefault();
+                  },
+                  onFocusCapture: (event) => {
+                    if (showThread && o.onFocusPane?.("reference") === false)
+                      event.relatedTarget?.focus();
+                  },
                   hidden: !showReference || compact && mobileView !== "reference",
                   onKeyDown: (e) => {
-                    if (e.key === "Escape") {
+                    if (e.key === "Escape" && !e.defaultPrevented) {
                       e.preventDefault();
                       close();
                     }
                   },
                   children: [
                     /* @__PURE__ */ jsxs23("header", { className: "workbench-pane-heading", children: [
-                      /* @__PURE__ */ jsx27("div", { children: /* @__PURE__ */ jsx27("strong", { children: mode === "thread" ? o.referenceTitle ?? translate("workbench.loadingThreadDetail") : mode === "files" ? translate("workbench.referenceFiles") : translate("workbench.collaboration") }) }),
-                      mode === "thread" && /* @__PURE__ */ jsx27("button", { onClick: o.onMakePrimary, "data-testid": "make-primary", children: translate("workbench.makePrimary") }),
+                      /* @__PURE__ */ jsx27("div", { children: /* @__PURE__ */ jsx27("strong", { children: showThread ? o.referenceTitle ?? translate("workbench.loadingThreadDetail") : translate("workbench.collaboration") }) }),
+                      mode !== "files" && /* @__PURE__ */ jsx27(
+                        "button",
+                        {
+                          "aria-label": translate("workbench.referenceFiles"),
+                          title: translate("workbench.referenceFiles"),
+                          onClick: () => o.onPresentationChange({ mode: "files" }),
+                          children: /* @__PURE__ */ jsx27(FolderOpen, { size: 16 })
+                        }
+                      ),
+                      showThread && /* @__PURE__ */ jsx27("button", { onClick: o.onMakePrimary, "data-testid": "make-primary", children: translate("workbench.makePrimary") }),
                       /* @__PURE__ */ jsx27(
                         "button",
                         {
                           onClick: close,
-                          "aria-label": translate("workbench.closeReference"),
-                          title: translate("workbench.closeReferenceContinues"),
+                          "aria-label": translate("workbench.closeSplit"),
+                          title: translate("workbench.closeSplitContinues"),
                           children: /* @__PURE__ */ jsx27(X2, { size: 17 })
                         }
                       )
                     ] }),
-                    /* @__PURE__ */ jsx27("div", { className: "workbench-pane-body", hidden: mode !== "thread", children: o.referenceContent }),
-                    filesVisited && /* @__PURE__ */ jsx27(
-                      "aside",
-                      {
-                        "aria-label": translate("workbench.explorer"),
-                        className: "workbench-pane-body workbench-files",
-                        hidden: mode !== "files",
-                        children: explorer
-                      }
-                    ),
+                    /* @__PURE__ */ jsx27("div", { className: "workbench-pane-body", hidden: !showThread, children: o.referenceContent }),
                     /* @__PURE__ */ jsx27(
                       "div",
                       {
@@ -7009,6 +6841,74 @@ function WorkbenchPanels({
               )
             ]
           }
+        ),
+        filesVisited && /* @__PURE__ */ jsxs23(
+          "aside",
+          {
+            role: "region",
+            "aria-label": translate("workbench.referenceFiles"),
+            className: "workbench-tool-drawer",
+            hidden: mode !== "files",
+            onKeyDown: (event) => {
+              if (event.key === "Escape" && !event.defaultPrevented) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeFiles();
+              }
+            },
+            children: [
+              /* @__PURE__ */ jsxs23("header", { children: [
+                /* @__PURE__ */ jsxs23("div", { children: [
+                  /* @__PURE__ */ jsx27("strong", { children: translate("workbench.referenceFiles") }),
+                  o.toolsTargetLabel && /* @__PURE__ */ jsx27("small", { children: o.toolsTargetLabel })
+                ] }),
+                /* @__PURE__ */ jsx27(
+                  "button",
+                  {
+                    "data-testid": "workbench-close-files",
+                    "aria-label": translate("workbench.closeFiles"),
+                    onClick: closeFiles,
+                    children: /* @__PURE__ */ jsx27(X2, { size: 17 })
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsx27("div", { className: "workbench-pane-body workbench-files", children: explorer })
+            ]
+          }
+        ),
+        o.toolContent && /* @__PURE__ */ jsxs23(
+          "aside",
+          {
+            role: "region",
+            "aria-label": o.toolTitle ?? translate("workbench.terminal"),
+            className: "workbench-tool-drawer",
+            hidden: !o.toolsOpen,
+            onKeyDown: (event) => {
+              if (event.key === "Escape" && !event.defaultPrevented) {
+                event.preventDefault();
+                event.stopPropagation();
+                o.onCloseTools?.();
+              }
+            },
+            children: [
+              /* @__PURE__ */ jsxs23("header", { children: [
+                /* @__PURE__ */ jsxs23("div", { children: [
+                  /* @__PURE__ */ jsx27("strong", { children: o.toolTitle ?? translate("workbench.terminal") }),
+                  o.toolsTargetLabel && /* @__PURE__ */ jsx27("small", { children: o.toolsTargetLabel })
+                ] }),
+                /* @__PURE__ */ jsx27(
+                  "button",
+                  {
+                    "data-testid": "workbench-close-tools",
+                    "aria-label": translate("workbench.closeTools"),
+                    onClick: o.onCloseTools,
+                    children: /* @__PURE__ */ jsx27(X2, { size: 17 })
+                  }
+                )
+              ] }),
+              /* @__PURE__ */ jsx27("div", { className: "workbench-pane-body", children: o.toolContent })
+            ]
+          }
         )
       ]
     }
@@ -7016,13 +6916,13 @@ function WorkbenchPanels({
 }
 
 // src/components/MatterWorkbench.tsx
-import { useEffect as useEffect11, useState as useState21, useRef as useRef13 } from "react";
+import { useEffect as useEffect11, useState as useState20, useRef as useRef14 } from "react";
 import {
   ArrowLeft,
   ArrowRight,
   Bell,
   ChevronDown as ChevronDown2,
-  ChevronRight as ChevronRight2,
+  ChevronRight,
   Home,
   FolderOpen as FolderOpen2,
   MessageSquare,
@@ -7040,11 +6940,11 @@ import { createContext as createContext2 } from "react";
 var WorkbenchContext = createContext2(false);
 
 // src/components/WorkbenchPath.tsx
-import { useLayoutEffect as useLayoutEffect6, useRef as useRef11, useState as useState19 } from "react";
+import { useLayoutEffect as useLayoutEffect6, useRef as useRef12, useState as useState18 } from "react";
 import { jsx as jsx28 } from "react/jsx-runtime";
 function WorkbenchPath({ path }) {
-  const ref = useRef11(null);
-  const [label, setLabel] = useState19(path);
+  const ref = useRef12(null);
+  const [label, setLabel] = useState18(path);
   useLayoutEffect6(() => {
     const node = ref.current;
     if (!node) return;
@@ -7093,7 +6993,7 @@ function WorkbenchPath({ path }) {
 }
 
 // src/components/GroupedThreadTabs.tsx
-import { useEffect as useEffect10, useRef as useRef12, useState as useState20 } from "react";
+import { useEffect as useEffect10, useRef as useRef13, useState as useState19 } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 import { Fragment as Fragment5, jsx as jsx29, jsxs as jsxs24 } from "react/jsx-runtime";
@@ -7135,9 +7035,9 @@ function groupThreads(threads) {
 }
 function GroupedThreadTabs({ threads, currentKey, onNavigate }) {
   useI18n();
-  const [menu, setMenu] = useState20(null);
-  const trigger = useRef12(null);
-  const popup = useRef12(null);
+  const [menu, setMenu] = useState19(null);
+  const trigger = useRef13(null);
+  const popup = useRef13(null);
   useEffect10(() => {
     setMenu(null);
   }, [currentKey]);
@@ -7264,13 +7164,13 @@ function MatterWorkbench({
 }) {
   useI18n();
   const tabs = o.workspaceThreads ?? o.threads.filter((thread) => thread.key === o.currentKey);
-  const tabsRef = useRef13(null);
+  const tabsRef = useRef14(null);
   useEffect11(() => {
     tabsRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [o.currentKey, tabs.length]);
-  const [sidebarOpen, setSidebarOpen] = useState21(false);
-  const [sidebarHidden, setSidebarHidden] = useState21(false);
-  const [mobile, setMobile] = useState21(
+  const [sidebarOpen, setSidebarOpen] = useState20(false);
+  const [sidebarHidden, setSidebarHidden] = useState20(false);
+  const [mobile, setMobile] = useState20(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches
   );
   useEffect11(() => {
@@ -7279,26 +7179,26 @@ function MatterWorkbench({
     query.addEventListener("change", change);
     return () => query.removeEventListener("change", change);
   }, []);
-  const [shortcutsOpen, setShortcutsOpen] = useState21(true);
-  const [recentsOpen, setRecentsOpen] = useState21(true);
-  const [bellOpen, setBellOpen] = useState21(false);
-  const [toolbarOpen, setToolbarOpen] = useState21(false);
-  const [legacyExplorerOpen, setLegacyExplorerOpen] = useState21(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState20(true);
+  const [recentsOpen, setRecentsOpen] = useState20(true);
+  const [bellOpen, setBellOpen] = useState20(false);
+  const [toolbarOpen, setToolbarOpen] = useState20(false);
+  const [legacyExplorerOpen, setLegacyExplorerOpen] = useState20(false);
   const explorerOpen = o.panels ? o.panels.presentation.mode === "files" : legacyExplorerOpen;
   const setExplorerOpen = (value) => {
     const next = typeof value === "function" ? value(explorerOpen) : value;
-    if (o.panels) o.panels.onPresentationChange({ mode: next ? "files" : "focus", ...next ? { ratio: 35 } : {} });
+    if (o.panels) o.panels.onPresentationChange({ mode: next ? "files" : o.panels.presentation.referenceId ? "thread" : "focus" });
     else setLegacyExplorerOpen(next);
   };
-  const [explorerWidth, setExplorerWidth] = useState21(() => {
+  const [explorerWidth, setExplorerWidth] = useState20(() => {
     try {
       return Math.max(260, Math.min(800, Number(localStorage.getItem("remote-codex.explorer-width")) || 360));
     } catch {
       return 360;
     }
   });
-  const contentRef = useRef13(null);
-  const resizeOrigin = useRef13(null);
+  const contentRef = useRef14(null);
+  const resizeOrigin = useRef14(null);
   const resizeExplorer = (width) => {
     const max = Math.max(260, (contentRef.current?.clientWidth ?? 1e3) - 320);
     const next = Math.round(Math.max(260, Math.min(max, width)));
@@ -7308,7 +7208,7 @@ function MatterWorkbench({
     } catch {
     }
   };
-  const [lastReveal, setLastReveal] = useState21(revealExplorer);
+  const [lastReveal, setLastReveal] = useState20(revealExplorer);
   if (lastReveal !== revealExplorer) {
     setLastReveal(revealExplorer);
     if (revealExplorer > 0 && !o.panels) setLegacyExplorerOpen(true);
@@ -7519,7 +7419,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
                   "aria-expanded": shortcutsOpen,
                   onClick: () => setShortcutsOpen(!shortcutsOpen),
                   children: [
-                    shortcutsOpen ? /* @__PURE__ */ jsx30(ChevronDown2, {}) : /* @__PURE__ */ jsx30(ChevronRight2, {}),
+                    shortcutsOpen ? /* @__PURE__ */ jsx30(ChevronDown2, {}) : /* @__PURE__ */ jsx30(ChevronRight, {}),
                     /* @__PURE__ */ jsx30("span", { children: translate("workbench.shortcuts") }),
                     /* @__PURE__ */ jsx30(Star, {})
                   ]
@@ -7543,7 +7443,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
                   "aria-expanded": recentsOpen,
                   onClick: () => setRecentsOpen(!recentsOpen),
                   children: [
-                    recentsOpen ? /* @__PURE__ */ jsx30(ChevronDown2, {}) : /* @__PURE__ */ jsx30(ChevronRight2, {}),
+                    recentsOpen ? /* @__PURE__ */ jsx30(ChevronDown2, {}) : /* @__PURE__ */ jsx30(ChevronRight, {}),
                     /* @__PURE__ */ jsx30("span", { children: translate("workbench.recentChats") }),
                     /* @__PURE__ */ jsx30("span", { className: "matter-section-count", title: translate("workbench.conversationsGroups", { value1: o.threads.length, value2: groupThreads(o.threads).length }), children: groupThreads(o.threads).length })
                   ]
@@ -7564,7 +7464,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
             o.statusActions,
             toolbarOpen && /* @__PURE__ */ jsxs25("div", { className: "matter-breadcrumb", id: "matter-thread-tools", children: [
               /* @__PURE__ */ jsx30(WorkbenchPath, { path: o.workspacePath }),
-              /* @__PURE__ */ jsx30(ChevronRight2, {}),
+              /* @__PURE__ */ jsx30(ChevronRight, {}),
               /* @__PURE__ */ jsx30("span", { className: "matter-current-title", title, children: title }),
               /* @__PURE__ */ jsx30(
                 "button",
@@ -7917,10 +7817,10 @@ function ThreadCard({
   collapsed = false
 }) {
   const { locale: i18nLocale } = useI18n();
-  const [copyState, setCopyState] = useState22(
+  const [copyState, setCopyState] = useState21(
     "idle"
   );
-  const resetTimerRef = useRef14(null);
+  const resetTimerRef = useRef15(null);
   const workspaceLabel = workspaceLabels[thread.workspaceId];
   const roomMetaLabel = workspaceLabel && !currentWorkspaceId ? workspaceLabel : null;
   const isCurrentThread = currentThreadId === thread.id;
@@ -8009,7 +7909,7 @@ function ThreadCard({
                   void handleCopySessionId();
                 },
                 className: "thread-card-quiet-button thread-card-session-copy-button inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition",
-                children: copyState === "copied" ? /* @__PURE__ */ jsx33(Check2, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx33(Copy, { className: "h-3.5 w-3.5" })
+                children: copyState === "copied" ? /* @__PURE__ */ jsx33(Check, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx33(Copy, { className: "h-3.5 w-3.5" })
               }
             ) : null
           ] }),
@@ -8172,37 +8072,37 @@ function ThreadWorkspaceLayout({
   const shellNav = useAppShellNav();
   const initialShellMobileViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : layoutMode === "mobile";
   const initialWorkspaceFocusViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 1023px)").matches : layoutMode === "mobile";
-  const [systemPrefersDark, setSystemPrefersDark] = useState22(
+  const [systemPrefersDark, setSystemPrefersDark] = useState21(
     () => typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)").matches : false
   );
   const themeMode = themeModeProp ?? shellNav?.themeMode ?? "system";
   const effectiveTheme = effectiveThemeProp ?? shellNav?.effectiveTheme ?? (themeMode === "system" ? systemPrefersDark ? "dark" : "light" : themeMode);
-  const [mobileRoomsOpen, setMobileRoomsOpen] = useState22(false);
-  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState22(false);
-  const [workspaceCollapsed, setWorkspaceCollapsed] = useState22(
+  const [mobileRoomsOpen, setMobileRoomsOpen] = useState21(false);
+  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState21(false);
+  const [workspaceCollapsed, setWorkspaceCollapsed] = useState21(
     !initialWorkspaceFocusViewport
   );
-  const [isShellMobileViewport, setIsShellMobileViewport] = useState22(
+  const [isShellMobileViewport, setIsShellMobileViewport] = useState21(
     initialShellMobileViewport
   );
-  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState22(
+  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState21(
     initialWorkspaceFocusViewport
   );
-  const [mobileWorkspace, setMobileWorkspace] = useState22(
+  const [mobileWorkspace, setMobileWorkspace] = useState21(
     "chat"
   );
-  const [workspaceVisited, setWorkspaceVisited] = useState22(false);
+  const [workspaceVisited, setWorkspaceVisited] = useState21(false);
   useEffect12(() => {
     if (mobileWorkspace === "workspace") setWorkspaceVisited(true);
   }, [mobileWorkspace]);
-  const [editingThreadId, setEditingThreadId] = useState22(null);
-  const [draftTitle, setDraftTitle] = useState22("");
-  const [renamingThreadId, setRenamingThreadId] = useState22(null);
-  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState22(false);
-  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState22("");
-  const [creatingThread, setCreatingThread] = useState22(false);
-  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState22(false);
-  const [sessionCopyNotice, setSessionCopyNotice] = useState22("");
+  const [editingThreadId, setEditingThreadId] = useState21(null);
+  const [draftTitle, setDraftTitle] = useState21("");
+  const [renamingThreadId, setRenamingThreadId] = useState21(null);
+  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState21(false);
+  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState21("");
+  const [creatingThread, setCreatingThread] = useState21(false);
+  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState21(false);
+  const [sessionCopyNotice, setSessionCopyNotice] = useState21("");
   useEffect12(() => setSessionCopyNotice(""), [currentThreadId]);
   async function copySessionValue(value, label) {
     try {
@@ -8993,18 +8893,18 @@ function ThreadWorkspaceLayout({
 
 // src/components/ThreadTimeline.tsx
 import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@remote-codex/shared";
-import { memo as memo6, useCallback as useCallback14, useEffect as useEffect23, useMemo as useMemo9, useRef as useRef21, useState as useState37 } from "react";
+import { memo as memo6, useCallback as useCallback14, useEffect as useEffect23, useMemo as useMemo9, useRef as useRef22, useState as useState36 } from "react";
 
 // src/components/LongTextDialog.tsx
 import { useEffect as useEffect14 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
 
 // src/components/DiffDetail.tsx
-import { useEffect as useEffect13, useMemo as useMemo4, useState as useState23 } from "react";
+import { useEffect as useEffect13, useMemo as useMemo4, useState as useState22 } from "react";
 import { jsx as jsx34, jsxs as jsxs28 } from "react/jsx-runtime";
 function DiffDetail({ text }) {
   useI18n();
-  const [highlighter, setHighlighter] = useState23(null);
+  const [highlighter, setHighlighter] = useState22(null);
   const theme = useAppShellNav()?.effectiveTheme ?? (document.documentElement.dataset.themeEffective === "light" ? "light" : "dark");
   useEffect13(() => {
     let active = true;
@@ -9124,10 +9024,10 @@ function LongTextDialog({
 import {
   memo as memo3,
   useEffect as useEffect19,
-  useRef as useRef17,
-  useState as useState29
+  useRef as useRef18,
+  useState as useState28
 } from "react";
-import { Brain as Brain2, Check as Check4, Copy as Copy3 } from "lucide-react";
+import { Brain as Brain2, Check as Check3, Copy as Copy3 } from "lucide-react";
 
 // src/components/graph-chat/GraphChatMessageBody.tsx
 import { ChevronDown as ChevronDown3, ChevronUp } from "lucide-react";
@@ -9137,23 +9037,23 @@ import {
   useEffect as useEffect18,
   useLayoutEffect as useLayoutEffect7,
   useMemo as useMemo7,
-  useRef as useRef16,
-  useState as useState27
+  useRef as useRef17,
+  useState as useState26
 } from "react";
 
 // src/components/graph-chat/MessageExpansionScope.tsx
-import { createContext as createContext3, useContext as useContext2, useEffect as useEffect15, useState as useState24 } from "react";
+import { createContext as createContext3, useContext as useContext2, useEffect as useEffect15, useState as useState23 } from "react";
 import { jsx as jsx36 } from "react/jsx-runtime";
 var ExpansionContext = createContext3(null);
 function MessageExpansionScope({ children }) {
-  const [cache] = useState24(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
+  const [cache] = useState23(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
   return /* @__PURE__ */ jsx36(ExpansionContext.Provider, { value: cache, children });
 }
 function useMessageExpansion(messageId, text, streaming) {
   const cache = useContext2(ExpansionContext);
   const remembered = messageId ? cache?.messages.get(messageId) : void 0;
   const inherited = remembered ?? (cache?.live && text.startsWith(cache.live.text) ? cache.live.expanded : false);
-  const [choice, setChoice] = useState24({ messageId, expanded: inherited });
+  const [choice, setChoice] = useState23({ messageId, expanded: inherited });
   const expanded = choice.messageId === messageId ? choice.expanded : inherited;
   const setExpanded = (next) => {
     if (messageId) cache?.messages.set(messageId, next);
@@ -9208,10 +9108,10 @@ import {
   useEffect as useEffect17,
   isValidElement,
   useMemo as useMemo6,
-  useRef as useRef15,
-  useState as useState26
+  useRef as useRef16,
+  useState as useState25
 } from "react";
-import { Check as Check3, Copy as Copy2 } from "lucide-react";
+import { Check as Check2, Copy as Copy2 } from "lucide-react";
 import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -9406,7 +9306,7 @@ function usePlugins() {
 }
 
 // src/components/graph-chat/GraphChatToolCall.tsx
-import { useEffect as useEffect16, useMemo as useMemo5, useState as useState25 } from "react";
+import { useEffect as useEffect16, useMemo as useMemo5, useState as useState24 } from "react";
 import { CheckCircle2, Loader2 as Loader22, Wrench, XCircle } from "lucide-react";
 
 // src/components/graph-workspace/GraphAccordion.tsx
@@ -9553,7 +9453,7 @@ function GraphChatToolCall({
   );
   const shouldAutoOpen = status === "pending";
   const actionLabel = /(?:exec|command|shell|terminal)/i.test(toolName) ? translate("chat.ran") : translate("chat.used");
-  const [openItem, setOpenItem] = useState25(
+  const [openItem, setOpenItem] = useState24(
     shouldAutoOpen ? "item-1" : void 0
   );
   useEffect16(() => {
@@ -9836,12 +9736,12 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
   resolveHref
 }) {
   const { locale: i18nLocale } = useI18n();
-  const rootRef = useRef15(null);
+  const rootRef = useRef16(null);
   const plugins = usePlugins();
-  const [highlighter, setHighlighter] = useState26(null);
-  const [copyState, setCopyState] = useState26({});
-  const [touchCode, setTouchCode] = useState26(null);
-  const [dark, setDark] = useState26(false);
+  const [highlighter, setHighlighter] = useState25(null);
+  const [copyState, setCopyState] = useState25({});
+  const [touchCode, setTouchCode] = useState25(null);
+  const [dark, setDark] = useState25(false);
   const { processedContent, resultMap } = useMemo6(
     () => readOnly ? { processedContent: content, resultMap: /* @__PURE__ */ new Map() } : preprocessGraphChatToolBlocks(content),
     [content, readOnly]
@@ -10009,7 +9909,7 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
                 className: "thread-graph-code-copy absolute right-2 top-2 z-10 rounded-md p-1.5",
                 title: copyState[id] === "copied" ? translate("chat.copied") : copyState[id] === "failed" ? translate("chat.copyFailed") : translate("chat.copy"),
                 "aria-label": translate("chat.copyCode"),
-                children: copyState[id] === "copied" ? /* @__PURE__ */ jsx39(Check3, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx39(Copy2, { className: "h-3.5 w-3.5" })
+                children: copyState[id] === "copied" ? /* @__PURE__ */ jsx39(Check2, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx39(Copy2, { className: "h-3.5 w-3.5" })
               }
             ),
             html ? /* @__PURE__ */ jsx39("div", { dangerouslySetInnerHTML: { __html: html } }) : /* @__PURE__ */ jsx39("pre", { children: /* @__PURE__ */ jsx39("code", { className: "whitespace-pre", children: textContent }) })
@@ -10177,15 +10077,15 @@ var GraphChatMarkdownAwareBody = memo2(
     resolveHref
   }) {
     const { locale: i18nLocale } = useI18n();
-    const messageRef = useRef16(null);
-    const scrollAnchorRef = useRef16(null);
+    const messageRef = useRef17(null);
+    const scrollAnchorRef = useRef17(null);
     const [expanded, setExpanded] = useMessageExpansion(messageId, text, streaming);
     const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text);
     const isLargeText = !streaming && text.length > LARGE_MESSAGE_PREVIEW_CHARS;
     const displayText = isLargeText && !expanded ? `${text.slice(0, LARGE_MESSAGE_PREVIEW_CHARS).trimEnd()}
 
 ...` : text;
-    const [isActivated, setIsActivated] = useState27(
+    const [isActivated, setIsActivated] = useState26(
       streaming || typeof IntersectionObserver === "undefined"
     );
     const toggleExpanded = useCallback10(() => {
@@ -10366,7 +10266,7 @@ var GraphChatUserMessageBody = memo2(
 );
 
 // src/components/graph-chat/GraphChatMessageFrame.tsx
-import { useState as useState28 } from "react";
+import { useState as useState27 } from "react";
 import { CheckCircle2 as CheckCircle22, Circle, Loader2 as Loader23, XCircle as XCircle2 } from "lucide-react";
 import { jsx as jsx41, jsxs as jsxs34 } from "react/jsx-runtime";
 function GraphChatRunningDots() {
@@ -10420,7 +10320,7 @@ function GraphChatMessageFrame({
 }) {
   const { locale: i18nLocale } = useI18n();
   const isUser = kind === "userMessage";
-  const [touchActionsVisible, setTouchActionsVisible] = useState28(false);
+  const [touchActionsVisible, setTouchActionsVisible] = useState27(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? "";
   const showStatus = Boolean(
     status && normalizedStatus !== "complete" && normalizedStatus !== "completed"
@@ -10526,11 +10426,11 @@ var GraphChatCompactMessageItem = memo3(
     onBeforeMessageResize
   }) {
     const { locale: i18nLocale } = useI18n();
-    const [copyState, setCopyState] = useState29(
+    const [copyState, setCopyState] = useState28(
       "idle"
     );
-    const [reasoningOpen, setReasoningOpen] = useState29(false);
-    const resetTimerRef = useRef17(null);
+    const [reasoningOpen, setReasoningOpen] = useState28(false);
+    const resetTimerRef = useRef18(null);
     const reasoningItems = item.kind === "agentMessage" ? item.reasoningItems ?? [] : [];
     const reasoningText = reasoningItems.map((entry) => entry.text.trim()).filter(Boolean).join("\n\n");
     const queuedLikeStatus = item.kind === "userMessage" && (item.status === "Steering" || item.status === "Accepted" || item.status === "Awaiting response");
@@ -10576,7 +10476,7 @@ var GraphChatCompactMessageItem = memo3(
         title: copyState === "copied" ? translate("chat.copied") : copyState === "failed" ? translate("chat.copyFailed") : translate("chat.copy_6b0f10", { value1: copyLabel }),
         onClick: () => void handleCopy(),
         className: `thread-graph-message-copy inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition ${copyState === "copied" ? "ui-status-info" : copyState === "failed" ? "ui-status-danger" : ""}`,
-        children: copyState === "copied" ? /* @__PURE__ */ jsx42(Check4, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx42(Copy3, { className: "h-3.5 w-3.5" })
+        children: copyState === "copied" ? /* @__PURE__ */ jsx42(Check3, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx42(Copy3, { className: "h-3.5 w-3.5" })
       }
     );
     const hasRunningReasoning = reasoningItems.some(
@@ -11160,7 +11060,7 @@ function buildActivityNoteAnchors({
 }
 
 // src/components/timeline/TimelineRequestCards.tsx
-import { useState as useState30 } from "react";
+import { useState as useState29 } from "react";
 import { Fragment as Fragment10, jsx as jsx43, jsxs as jsxs36 } from "react/jsx-runtime";
 function PendingRequestCard({
   request,
@@ -11168,9 +11068,9 @@ function PendingRequestCard({
   onRespond
 }) {
   const { locale: i18nLocale } = useI18n();
-  const [answers, setAnswers] = useState30({});
-  const [customAnswers, setCustomAnswers] = useState30({});
-  const [selectedPlanDecision, setSelectedPlanDecision] = useState30(null);
+  const [answers, setAnswers] = useState29({});
+  const [customAnswers, setCustomAnswers] = useState29({});
+  const [selectedPlanDecision, setSelectedPlanDecision] = useState29(null);
   const primaryQuestion = request.questions[0] ?? null;
   const OTHER_SENTINEL = "__other__";
   const isPermissionRequest = request.kind === "permissionRequest";
@@ -11551,9 +11451,9 @@ import {
   useCallback as useCallback11,
   useContext as useContext5,
   useMemo as useMemo8,
-  useState as useState34
+  useState as useState33
 } from "react";
-import { ChevronRight as ChevronRight5 } from "lucide-react";
+import { ChevronRight as ChevronRight4 } from "lucide-react";
 
 // src/components/graph-chat/GraphChatHistoryEntries.tsx
 import { Fragment as Fragment11, jsx as jsx44 } from "react/jsx-runtime";
@@ -11622,15 +11522,15 @@ function GraphChatHistoryEntries({
 import {
   memo as memo4,
   useContext as useContext4,
-  useState as useState31
+  useState as useState30
 } from "react";
 import {
   Archive,
   Bot,
-  Check as Check5,
+  Check as Check4,
   CheckCircle2 as CheckCircle23,
   ChevronDown as ChevronDown5,
-  ChevronRight as ChevronRight4,
+  ChevronRight as ChevronRight3,
   ClipboardList,
   FilePenLine,
   FileText,
@@ -11647,7 +11547,7 @@ import {
 } from "lucide-react";
 
 // src/components/graph-chat/GraphChatHistoryGroupFrame.tsx
-import { ChevronDown as ChevronDown4, ChevronRight as ChevronRight3 } from "lucide-react";
+import { ChevronDown as ChevronDown4, ChevronRight as ChevronRight2 } from "lucide-react";
 import { jsx as jsx45, jsxs as jsxs37 } from "react/jsx-runtime";
 function GraphChatHistoryGroupFrame({
   children,
@@ -11709,7 +11609,7 @@ function GraphChatHistoryGroupFrame({
                   {
                     className: "thread-graph-history-group-chevron inline-flex shrink-0",
                     "aria-hidden": "true",
-                    children: expanded ? /* @__PURE__ */ jsx45(ChevronDown4, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx45(ChevronRight3, { className: "h-3.5 w-3.5" })
+                    children: expanded ? /* @__PURE__ */ jsx45(ChevronDown4, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx45(ChevronRight2, { className: "h-3.5 w-3.5" })
                   }
                 )
               ]
@@ -12111,7 +12011,7 @@ function GraphChatHistoryToolFrame({
 }) {
   const { locale: i18nLocale } = useI18n();
   const status = graphHistoryStatusConfig(item.status);
-  const [pathExpanded, setPathExpanded] = useState31(false);
+  const [pathExpanded, setPathExpanded] = useState30(false);
   const isRead = tone === "fileRead";
   return /* @__PURE__ */ jsx47("div", { className: `thread-graph-event thread-graph-history-tool ${graphHistoryToneClassName(tone)} ${className ?? ""}`, children: /* @__PURE__ */ jsxs38("div", { className: "thread-history-direct-row", children: [
     /* @__PURE__ */ jsxs38(
@@ -12491,7 +12391,7 @@ var GraphChatArtifactHistoryItem = memo4(
   }) {
     const { locale: i18nLocale } = useI18n();
     const plugins = usePlugins();
-    const [expanded, setExpanded] = useState31(false);
+    const [expanded, setExpanded] = useState30(false);
     const artifact = item.artifact;
     const rendered = artifact ? plugins.renderArtifact({
       artifact,
@@ -12529,7 +12429,7 @@ var GraphChatArtifactHistoryItem = memo4(
             children: [
               /* @__PURE__ */ jsx47("span", { className: "thread-graph-history-detail-text min-w-0 truncate text-sm", children: artifact?.title ?? item.text }),
               /* @__PURE__ */ jsx47("span", { className: "thread-graph-history-event-secondary min-w-0 truncate", children: artifact?.summaryText ?? item.previewText ?? artifact?.type ?? "" }),
-              /* @__PURE__ */ jsx47("span", { className: "thread-graph-history-group-chevron inline-flex shrink-0", "aria-hidden": "true", children: expanded ? /* @__PURE__ */ jsx47(ChevronDown5, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx47(ChevronRight4, { className: "h-3.5 w-3.5" }) })
+              /* @__PURE__ */ jsx47("span", { className: "thread-graph-history-group-chevron inline-flex shrink-0", "aria-hidden": "true", children: expanded ? /* @__PURE__ */ jsx47(ChevronDown5, { className: "h-3.5 w-3.5" }) : /* @__PURE__ */ jsx47(ChevronRight3, { className: "h-3.5 w-3.5" }) })
             ]
           }
         ),
@@ -12625,9 +12525,9 @@ var GraphChatCommandGroupItem = memo4(
               children: [
                 /* @__PURE__ */ jsx47("span", { className: "matter-step-number", "aria-label": translate("chat.step", { value1: index + 1 }), children: String(index + 1).padStart(2, "0") }),
                 /* @__PURE__ */ jsx47("span", { className: "matter-step-title", children: summary.firstLine }),
-                /* @__PURE__ */ jsx47("span", { className: `matter-step-status ${status.className}`, role: "img", "aria-label": status.label, title: status.label, children: status.className === "is-completed" ? /* @__PURE__ */ jsx47(Check5, { size: 13 }) : status.icon }),
+                /* @__PURE__ */ jsx47("span", { className: `matter-step-status ${status.className}`, role: "img", "aria-label": status.label, title: status.label, children: status.className === "is-completed" ? /* @__PURE__ */ jsx47(Check4, { size: 13 }) : status.icon }),
                 renderItemTime?.(item.createdAt),
-                /* @__PURE__ */ jsx47(ChevronRight4, { className: "matter-step-chevron", size: 12 })
+                /* @__PURE__ */ jsx47(ChevronRight3, { className: "matter-step-chevron", size: 12 })
               ]
             },
             item.id
@@ -13065,7 +12965,7 @@ function GraphChatTurnFrame({
 }
 
 // src/components/timeline/turnStatus.tsx
-import { useEffect as useEffect20, useRef as useRef18, useState as useState32 } from "react";
+import { useEffect as useEffect20, useRef as useRef19, useState as useState31 } from "react";
 
 // src/components/timeline/TurnUsageInline.tsx
 import { jsx as jsx50, jsxs as jsxs41 } from "react/jsx-runtime";
@@ -13161,8 +13061,8 @@ function RunningDots2({
   )) });
 }
 function ProgressIndicator({ age, at }) {
-  const [open, setOpen] = useState32(false);
-  const openAtPointerDown = useRef18(false);
+  const [open, setOpen] = useState31(false);
+  const openAtPointerDown = useRef19(false);
   const validAge = age !== null && Number.isFinite(age);
   const freshness = !validAge ? "unknown" : age <= 5 ? "recent" : age <= 20 ? "quiet" : "stale";
   const color = { recent: "#10b981", quiet: "#eab308", stale: "#ef4444", unknown: "#94a3b8" }[freshness];
@@ -13271,7 +13171,7 @@ function deriveDisplayedLivePlan(livePlan, items, turnStatus) {
 }
 function useSecondClock(enabled) {
   const { locale: i18nLocale } = useI18n();
-  const [now, setNow] = useState32(() => Date.now());
+  const [now, setNow] = useState31(() => Date.now());
   useEffect20(() => {
     if (!enabled) {
       return;
@@ -13439,7 +13339,7 @@ function TurnStatusBar({
 }
 
 // src/components/timeline/TimelineTimeToggle.tsx
-import { useState as useState33 } from "react";
+import { useState as useState32 } from "react";
 import { jsx as jsx52 } from "react/jsx-runtime";
 function formatRelativeTurnTime(startedAt, timestamp) {
   const startMillis = Date.parse(startedAt ?? "");
@@ -13470,7 +13370,7 @@ function TimelineTimeToggle({
   turnStartedAt
 }) {
   useI18n();
-  const [showAbsolute, setShowAbsolute] = useState33(false);
+  const [showAbsolute, setShowAbsolute] = useState32(false);
   if (!timestamp) {
     return null;
   }
@@ -13869,7 +13769,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     () => parseHookPromptText(visibleLiveOutput),
     [visibleLiveOutput, i18nLocale]
   );
-  const [expandedGroups, setExpandedGroups] = useState34(
+  const [expandedGroups, setExpandedGroups] = useState33(
     {}
   );
   const workbench = useContext5(WorkbenchContext);
@@ -13996,7 +13896,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
           children: [
             /* @__PURE__ */ jsx53("span", { className: "thread-graph-worked-label shrink-0", children: deferredItemsLoading ? translate("chat.loadingCompleteHistory") : deferredItemsError ? translate("chat.historyUnavailableRetry") : workedLabel }),
             interruptedLabel,
-            /* @__PURE__ */ jsx53(ChevronRight5, { className: `h-4 w-4 shrink-0 transition ${effectiveCollapsed ? "" : "rotate-90"}` })
+            /* @__PURE__ */ jsx53(ChevronRight4, { className: `h-4 w-4 shrink-0 transition ${effectiveCollapsed ? "" : "rotate-90"}` })
           ]
         }
       ),
@@ -14275,7 +14175,7 @@ function buildSyntheticLiveTurn(turnId, items) {
 }
 
 // src/components/timeline/useDeferredHistoryDetail.ts
-import { useCallback as useCallback12, useEffect as useEffect21, useRef as useRef19, useState as useState35 } from "react";
+import { useCallback as useCallback12, useEffect as useEffect21, useRef as useRef20, useState as useState34 } from "react";
 function inlineDetail(item, title, text) {
   return {
     id: item.id,
@@ -14289,11 +14189,11 @@ function useDeferredHistoryDetail({
   onSelectHistoryItemDetail
 }) {
   useI18n();
-  const requestIdRef = useRef19(0);
-  const detailCacheRef = useRef19(
+  const requestIdRef = useRef20(0);
+  const detailCacheRef = useRef20(
     /* @__PURE__ */ new Map()
   );
-  const [expandedText, setExpandedText] = useState35(
+  const [expandedText, setExpandedText] = useState34(
     null
   );
   useEffect21(() => {
@@ -14428,12 +14328,12 @@ import {
   useCallback as useCallback13,
   useEffect as useEffect22,
   useLayoutEffect as useLayoutEffect8,
-  useRef as useRef20,
-  useState as useState36
+  useRef as useRef21,
+  useState as useState35
 } from "react";
 function useChangeRevision(inputs) {
-  const previousInputsRef = useRef20(null);
-  const revisionRef = useRef20(0);
+  const previousInputsRef = useRef21(null);
+  const revisionRef = useRef21(0);
   const previousInputs = previousInputsRef.current;
   const changed = previousInputs === null || previousInputs.length !== inputs.length || inputs.some((input, index) => !Object.is(input, previousInputs[index]));
   if (changed) {
@@ -14453,28 +14353,28 @@ function useTimelineScroll({
   onTailVisibilityChange,
   contentRevisionInputs
 }) {
-  const scrollContainerRef = useRef20(null);
-  const scrollContentRef = useRef20(null);
-  const lastHandledScrollRequestKeyRef = useRef20(scrollRequestKey);
-  const previousContentRevisionRef = useRef20(null);
-  const previousBottomSpacerRef = useRef20(bottomSpacer);
-  const lastObservedScrollHeightRef = useRef20(0);
-  const lastScrollTopRef = useRef20(0);
-  const scrollIntentRevisionRef = useRef20(0);
-  const pendingPrependScrollRef = useRef20(null);
-  const tailSentinelRef = useRef20(null);
-  const topSentinelRef = useRef20(null);
-  const isTailVisibleRef = useRef20(true);
-  const shouldStickToBottomRef = useRef20(true);
-  const userScrolledAwayFromTailRef = useRef20(false);
-  const userScrolledHistoryRef = useRef20(false);
-  const autoLoadedEarlierRef = useRef20(false);
-  const topLoadArmedRef = useRef20(false);
-  const lastTouchYRef = useRef20(null);
-  const touchPullDistanceRef = useRef20(0);
-  const [visibleCount, setVisibleCount] = useState36(INITIAL_VISIBLE_TURNS);
-  const [loadMoreClicks, setLoadMoreClicks] = useState36(0);
-  const [isTailVisible, setIsTailVisible] = useState36(true);
+  const scrollContainerRef = useRef21(null);
+  const scrollContentRef = useRef21(null);
+  const lastHandledScrollRequestKeyRef = useRef21(scrollRequestKey);
+  const previousContentRevisionRef = useRef21(null);
+  const previousBottomSpacerRef = useRef21(bottomSpacer);
+  const lastObservedScrollHeightRef = useRef21(0);
+  const lastScrollTopRef = useRef21(0);
+  const scrollIntentRevisionRef = useRef21(0);
+  const pendingPrependScrollRef = useRef21(null);
+  const tailSentinelRef = useRef21(null);
+  const topSentinelRef = useRef21(null);
+  const isTailVisibleRef = useRef21(true);
+  const shouldStickToBottomRef = useRef21(true);
+  const userScrolledAwayFromTailRef = useRef21(false);
+  const userScrolledHistoryRef = useRef21(false);
+  const autoLoadedEarlierRef = useRef21(false);
+  const topLoadArmedRef = useRef21(false);
+  const lastTouchYRef = useRef21(null);
+  const touchPullDistanceRef = useRef21(0);
+  const [visibleCount, setVisibleCount] = useState35(INITIAL_VISIBLE_TURNS);
+  const [loadMoreClicks, setLoadMoreClicks] = useState35(0);
+  const [isTailVisible, setIsTailVisible] = useState35(true);
   const contentRevision = useChangeRevision(contentRevisionInputs);
   const serverManagedHistory = typeof onLoadEarlier === "function" || totalTurnCount !== void 0;
   const effectiveTotalTurnCount = totalTurnCount ?? turnsLength;
@@ -14864,24 +14764,24 @@ function ThreadTimelineComponent({
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns = autoCollapseCompletedTurns ?? shellNav?.autoCollapseCompletedTurns ?? false;
-  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState37(
+  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState36(
     {}
   );
-  const [cancelingSteerIds, setCancelingSteerIds] = useState37(
+  const [cancelingSteerIds, setCancelingSteerIds] = useState36(
     () => /* @__PURE__ */ new Set()
   );
-  const navigationTargetRef = useRef21(null);
-  const pendingPreviousNavigationRef = useRef21(false);
-  const navigationResetRef = useRef21({ threadId, scrollRequestKey, searchKey: searchTarget?.key });
-  const handledNavigationRef = useRef21({ previous: previousTurnScrollRequestKey, next: nextTurnScrollRequestKey });
-  const lastSearchKeyRef = useRef21(null);
+  const navigationTargetRef = useRef22(null);
+  const pendingPreviousNavigationRef = useRef22(false);
+  const navigationResetRef = useRef22({ threadId, scrollRequestKey, searchKey: searchTarget?.key });
+  const handledNavigationRef = useRef22({ previous: previousTurnScrollRequestKey, next: nextTurnScrollRequestKey });
+  const lastSearchKeyRef = useRef22(null);
   const loadHistoryItemDetail = adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
-  const [loadedTurnDetails, setLoadedTurnDetails] = useState37({});
-  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState37(
+  const [loadedTurnDetails, setLoadedTurnDetails] = useState36({});
+  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState36(
     () => /* @__PURE__ */ new Set()
   );
-  const [turnDetailErrors, setTurnDetailErrors] = useState37({});
+  const [turnDetailErrors, setTurnDetailErrors] = useState36({});
   const openLinkedThread = adapter?.onOpenLinkedThread;
   useEffect23(() => {
     if (searchTarget) setCollapsedTurnOverrides((current) => ({ ...current, [searchTarget.turnId]: false }));
@@ -15547,8 +15447,8 @@ import {
   useEffect as useEffect27,
   useImperativeHandle as useImperativeHandle2,
   useMemo as useMemo11,
-  useRef as useRef24,
-  useState as useState40
+  useRef as useRef25,
+  useState as useState39
 } from "react";
 
 // src/components/shell/ShellPane.tsx
@@ -15558,8 +15458,8 @@ import {
   useEffect as useEffect25,
   useImperativeHandle,
   useMemo as useMemo10,
-  useRef as useRef22,
-  useState as useState38
+  useRef as useRef23,
+  useState as useState37
 } from "react";
 import "xterm/css/xterm.css";
 
@@ -16903,51 +16803,51 @@ var ShellPane = forwardRef(
     onFeedback
   }, ref) {
     useI18n();
-    const transformRef = useRef22(inputTransform);
+    const transformRef = useRef23(inputTransform);
     transformRef.current = inputTransform;
-    const terminalRef = useRef22(null);
-    const fitAddonRef = useRef22(null);
-    const socketRef = useRef22(null);
-    const viewerIdRef = useRef22(null);
-    const shellIdRef = useRef22(null);
-    const reconnectTimerRef = useRef22(null);
-    const attachTimeoutRef = useRef22(null);
-    const attachRetryTimerRef = useRef22(null);
-    const intentionalDisconnectRef = useRef22(false);
-    const userDisconnectedShellIdRef = useRef22(null);
-    const shellSnapshotRef = useRef22("");
-    const pendingCommandRef = useRef22(null);
-    const lastCommandOutputRef = useRef22("");
-    const resizeObserverRef = useRef22(null);
-    const lastSentSizeRef = useRef22(null);
-    const snapshotCursorRef = useRef22({
+    const terminalRef = useRef23(null);
+    const fitAddonRef = useRef23(null);
+    const socketRef = useRef23(null);
+    const viewerIdRef = useRef23(null);
+    const shellIdRef = useRef23(null);
+    const reconnectTimerRef = useRef23(null);
+    const attachTimeoutRef = useRef23(null);
+    const attachRetryTimerRef = useRef23(null);
+    const intentionalDisconnectRef = useRef23(false);
+    const userDisconnectedShellIdRef = useRef23(null);
+    const shellSnapshotRef = useRef23("");
+    const pendingCommandRef = useRef23(null);
+    const lastCommandOutputRef = useRef23("");
+    const resizeObserverRef = useRef23(null);
+    const lastSentSizeRef = useRef23(null);
+    const snapshotCursorRef = useRef23({
       cursorX: void 0,
       cursorY: void 0,
       paneHeight: void 0
     });
-    const terminalInitializingRef = useRef22(false);
-    const terminalInputSubscriptionRef = useRef22(null);
-    const isVisibleRef = useRef22(isVisible);
-    const isMobileShellRef = useRef22(isMobileShell);
-    const sendShellInputRef = useRef22(() => false);
-    const syncTerminalSizeRef = useRef22(() => null);
-    const refreshTerminalLayoutRef = useRef22(() => {
+    const terminalInitializingRef = useRef23(false);
+    const terminalInputSubscriptionRef = useRef23(null);
+    const isVisibleRef = useRef23(isVisible);
+    const isMobileShellRef = useRef23(isMobileShell);
+    const sendShellInputRef = useRef23(() => false);
+    const syncTerminalSizeRef = useRef23(() => null);
+    const refreshTerminalLayoutRef = useRef23(() => {
     });
-    const attachPromiseControllerRef = useRef22(
+    const attachPromiseControllerRef = useRef23(
       createShellAttachPromiseController({
         clearTimeout: window.clearTimeout
       })
     );
-    const [terminalHostNode, setTerminalHostNode] = useState38(null);
-    const [terminalReady, setTerminalReady] = useState38(false);
-    const [viewerId, setViewerIdState] = useState38(null);
-    const [isConnecting, setIsConnecting] = useState38(false);
-    const [connectionError, setConnectionError] = useState38(null);
-    const [runtimePromptLabel, setRuntimePromptLabel] = useState38(
+    const [terminalHostNode, setTerminalHostNode] = useState37(null);
+    const [terminalReady, setTerminalReady] = useState37(false);
+    const [viewerId, setViewerIdState] = useState37(null);
+    const [isConnecting, setIsConnecting] = useState37(false);
+    const [connectionError, setConnectionError] = useState37(null);
+    const [runtimePromptLabel, setRuntimePromptLabel] = useState37(
       null
     );
-    const [isCommandRunning, setIsCommandRunning] = useState38(false);
-    const [reconnectKey, setReconnectKey] = useState38(0);
+    const [isCommandRunning, setIsCommandRunning] = useState37(false);
+    const [reconnectKey, setReconnectKey] = useState37(0);
     const shellStatus = shell?.status ?? "not_created";
     const canAttachShell = shellCanAttach({ shell, workspacePathMissing });
     const fallbackPromptLabel = useMemo10(
@@ -17477,13 +17377,13 @@ var ShellPane = forwardRef(
 );
 
 // src/components/shell/ShellTouchControls.tsx
-import { useEffect as useEffect26, useRef as useRef23, useState as useState39 } from "react";
+import { useEffect as useEffect26, useRef as useRef24, useState as useState38 } from "react";
 import { ArrowDown, ArrowLeft as ArrowLeft3, ArrowRight as ArrowRight2, ArrowUp, MessageSquare as MessageSquare3, PanelsTopLeft, Pencil as Pencil2, Trash2 as Trash22, Plus as Plus2 } from "lucide-react";
 import { Fragment as Fragment16, jsx as jsx57, jsxs as jsxs47 } from "react/jsx-runtime";
 function useShellKeyboardLayout(visible, mobile) {
   const { locale: i18nLocale } = useI18n();
-  const panelRef = useRef23(null);
-  const [layout, setLayout] = useState39({ height: 0, inset: 0 });
+  const panelRef = useRef24(null);
+  const [layout, setLayout] = useState38({ height: 0, inset: 0 });
   useEffect26(() => {
     const panel = panelRef.current;
     if (!visible || !mobile || !panel) {
@@ -17532,11 +17432,11 @@ function useShellKeyboardLayout(visible, mobile) {
 }
 function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, onChat, onRename, onKill, sessions, activeId, onSelect, onCreate, busy }) {
   const { locale: i18nLocale } = useI18n();
-  const [open, setOpen] = useState39(false);
-  const [editing, setEditing] = useState39(null);
-  const [name, setName] = useState39("");
-  const [saving, setSaving] = useState39(false);
-  const [error, setError] = useState39(null);
+  const [open, setOpen] = useState38(false);
+  const [editing, setEditing] = useState38(null);
+  const [name, setName] = useState38("");
+  const [saving, setSaving] = useState38(false);
+  const [error, setError] = useState38(null);
   async function rename(shell) {
     setSaving(true);
     setError(null);
@@ -17549,7 +17449,7 @@ function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, on
       setSaving(false);
     }
   }
-  const host = useRef23(null);
+  const host = useRef24(null);
   useEffect26(() => {
     if (!open) return;
     const outside = (event) => {
@@ -17647,39 +17547,39 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   onStateChange
 }, ref) {
   useI18n();
-  const primaryPaneRef = useRef24(null);
-  const secondaryPaneRef = useRef24(null);
-  const feedbackTimerRef = useRef24(null);
-  const terminalSplitHostRef = useRef24(null);
-  const dragFrameRef = useRef24(null);
-  const createShellInFlightRef = useRef24(false);
-  const [shellState, setShellState] = useState40(null);
-  const [loading, setLoading] = useState40(true);
-  const [busy, setBusy] = useState40(false);
-  const [error, setError] = useState40(null);
-  const [activePaneId, setActivePaneId] = useState40("primary");
-  const [primaryShellId, setPrimaryShellId] = useState40(null);
-  const [secondaryShellId, setSecondaryShellId] = useState40(null);
-  const [splitMode, setSplitMode] = useState40("single");
-  const [splitRatio, setSplitRatio] = useState40(50);
-  const [renamingShellId, setRenamingShellId] = useState40(null);
-  const [renameDraft, setRenameDraft] = useState40("");
-  const [isMobileShell, setIsMobileShell] = useState40(false);
+  const primaryPaneRef = useRef25(null);
+  const secondaryPaneRef = useRef25(null);
+  const feedbackTimerRef = useRef25(null);
+  const terminalSplitHostRef = useRef25(null);
+  const dragFrameRef = useRef25(null);
+  const createShellInFlightRef = useRef25(false);
+  const [shellState, setShellState] = useState39(null);
+  const [loading, setLoading] = useState39(true);
+  const [busy, setBusy] = useState39(false);
+  const [error, setError] = useState39(null);
+  const [activePaneId, setActivePaneId] = useState39("primary");
+  const [primaryShellId, setPrimaryShellId] = useState39(null);
+  const [secondaryShellId, setSecondaryShellId] = useState39(null);
+  const [splitMode, setSplitMode] = useState39("single");
+  const [splitRatio, setSplitRatio] = useState39(50);
+  const [renamingShellId, setRenamingShellId] = useState39(null);
+  const [renameDraft, setRenameDraft] = useState39("");
+  const [isMobileShell, setIsMobileShell] = useState39(false);
   const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(isVisible, isMobileShell);
-  const [ctrlPressed, setCtrlPressed] = useState40(false);
-  const ctrlRef = useRef24(false);
+  const [ctrlPressed, setCtrlPressed] = useState39(false);
+  const ctrlRef = useRef25(false);
   const transformInput = useCallback16((data) => {
     if (!ctrlRef.current) return data;
     ctrlRef.current = false;
     setCtrlPressed(false);
     return data.length === 1 ? controlSequenceForLetter(data) ?? data : data;
   }, []);
-  const [toolboxOpen, setToolboxOpen] = useState40(false);
-  const [paneRuntime, setPaneRuntime] = useState40({
+  const [toolboxOpen, setToolboxOpen] = useState39(false);
+  const [paneRuntime, setPaneRuntime] = useState39({
     primary: EMPTY_SHELL_PANE_RUNTIME_STATE,
     secondary: EMPTY_SHELL_PANE_RUNTIME_STATE
   });
-  const [toolboxFeedback, setToolboxFeedback] = useState40(null);
+  const [toolboxFeedback, setToolboxFeedback] = useState39(null);
   const status = shellState?.state ?? "not_created";
   const shells = useMemo11(() => shellState?.shells ?? [], [shellState?.shells]);
   const liveShells = useMemo11(
@@ -18625,8 +18525,8 @@ var MemoizedThreadGraphWorkspacePanel = memo7(
 );
 
 // src/components/ExportTranscriptDialog.tsx
-import { Users as Users2, Link2, FileCode, Pencil as Pencil3 } from "lucide-react";
-import { useEffect as useEffect28, useMemo as useMemo12, useState as useState41 } from "react";
+import { Users, Link2, FileCode, Pencil as Pencil3 } from "lucide-react";
+import { useEffect as useEffect28, useMemo as useMemo12, useState as useState40 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
 import { Fragment as Fragment18, jsx as jsx60, jsxs as jsxs49 } from "react/jsx-runtime";
 function formatTurnTime(value) {
@@ -18714,19 +18614,19 @@ function ThreadActionsDialog({
 }) {
   useI18n();
   const turns = useMemo12(() => turnsState.data?.turns ?? [], [turnsState.data?.turns]);
-  const [actionMode, setActionMode] = useState41(initialMode);
-  const [turnSelection, setTurnSelection] = useState41("latest-10");
-  const [selectedTurnIds, setSelectedTurnIds] = useState41(
+  const [actionMode, setActionMode] = useState40(initialMode);
+  const [turnSelection, setTurnSelection] = useState40("latest-10");
+  const [selectedTurnIds, setSelectedTurnIds] = useState40(
     () => /* @__PURE__ */ new Set()
   );
-  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState41(true);
-  const [targetIdentifier, setTargetIdentifier] = useState41("");
-  const [threadAccess, setThreadAccess] = useState41("read");
-  const [workspaceAccess, setWorkspaceAccess] = useState41("none");
-  const [shareLabel, setShareLabel] = useState41("");
-  const [shareDevice, setShareDevice] = useState41(false);
-  const [editingShare, setEditingShare] = useState41(null);
-  const [effectiveTheme, setEffectiveTheme] = useState41(
+  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState40(true);
+  const [targetIdentifier, setTargetIdentifier] = useState40("");
+  const [threadAccess, setThreadAccess] = useState40("read");
+  const [workspaceAccess, setWorkspaceAccess] = useState40("none");
+  const [shareLabel, setShareLabel] = useState40("");
+  const [shareDevice, setShareDevice] = useState40(false);
+  const [editingShare, setEditingShare] = useState40(null);
+  const [effectiveTheme, setEffectiveTheme] = useState40(
     () => typeof document !== "undefined" && !document.documentElement.classList.contains("dark") ? "light" : "dark"
   );
   useEffect28(() => {
@@ -18891,14 +18791,14 @@ function ThreadActionsDialog({
                       onClick: () => setActionMode(tab.mode),
                       className: `inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition ${actionMode === tab.mode ? "ui-status-warning" : "thread-export-dialog-muted-action"}`,
                       children: [
-                        tab.mode === "share" ? /* @__PURE__ */ jsx60(Users2, { size: 16 }) : tab.mode === "link" ? /* @__PURE__ */ jsx60(Link2, { size: 16 }) : /* @__PURE__ */ jsx60(FileCode, { size: 16 }),
+                        tab.mode === "share" ? /* @__PURE__ */ jsx60(Users, { size: 16 }) : tab.mode === "link" ? /* @__PURE__ */ jsx60(Link2, { size: 16 }) : /* @__PURE__ */ jsx60(FileCode, { size: 16 }),
                         /* @__PURE__ */ jsx60("span", { children: tab.label })
                       ]
                     },
                     tab.mode
                   )) }),
                   actionMode === "link" ? linkContent : actionMode === "share" && matter && !shareAvailable ? /* @__PURE__ */ jsxs49("p", { className: "matter-sharing-unavailable", role: "status", children: [
-                    /* @__PURE__ */ jsx60(Users2, { size: 20 }),
+                    /* @__PURE__ */ jsx60(Users, { size: 20 }),
                     shareUnavailableMessage
                   ] }) : actionMode === "share" ? /* @__PURE__ */ jsxs49("form", { id: "thread-actions-share-form", className: "mt-4 space-y-4", onSubmit: handleShare, children: [
                     /* @__PURE__ */ jsxs49("div", { className: "thread-export-dialog-box rounded-2xl border", children: [
@@ -19164,8 +19064,8 @@ import {
   useEffect as useEffect29,
   useLayoutEffect as useLayoutEffect9,
   useMemo as useMemo13,
-  useRef as useRef25,
-  useState as useState42
+  useRef as useRef26,
+  useState as useState41
 } from "react";
 import { jsx as jsx61, jsxs as jsxs50 } from "react/jsx-runtime";
 function GraphChatThreadChatPanel({
@@ -19184,12 +19084,12 @@ function GraphChatThreadChatPanel({
   composerHostRef
 }) {
   useI18n();
-  const [isMobileViewport, setIsMobileViewport] = useState42(false);
-  const [mobileComposerHeight, setMobileComposerHeight] = useState42(0);
-  const [mobileComposerOverlap, setMobileComposerOverlap] = useState42(0);
-  const [mobileKeyboardInset, setMobileKeyboardInset] = useState42(0);
-  const [mobilePromptFocused, setMobilePromptFocused] = useState42(false);
-  const internalComposerHostRef = useRef25(null);
+  const [isMobileViewport, setIsMobileViewport] = useState41(false);
+  const [mobileComposerHeight, setMobileComposerHeight] = useState41(0);
+  const [mobileComposerOverlap, setMobileComposerOverlap] = useState41(0);
+  const [mobileKeyboardInset, setMobileKeyboardInset] = useState41(0);
+  const [mobilePromptFocused, setMobilePromptFocused] = useState41(false);
+  const internalComposerHostRef = useRef26(null);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
   const queuedPrompts = useMemo13(() => {
@@ -19816,7 +19716,7 @@ import {
   useCallback as useCallback18,
   useEffect as useEffect30,
   useMemo as useMemo15,
-  useState as useState43
+  useState as useState42
 } from "react";
 import { jsx as jsx63 } from "react/jsx-runtime";
 var DEFAULT_PLUGIN_PROVIDER_ADAPTER = {};
@@ -19827,11 +19727,11 @@ function PluginProvider({
   children
 }) {
   useI18n();
-  const [plugins, setPlugins] = useState43(
+  const [plugins, setPlugins] = useState42(
     () => mergePluginState(builtinPlugins, [])
   );
-  const [loading, setLoading] = useState43(false);
-  const [error, setError] = useState43(null);
+  const [loading, setLoading] = useState42(false);
+  const [error, setError] = useState42(null);
   const refresh = useCallback18(async () => {
     setLoading(true);
     setError(null);
@@ -19987,7 +19887,7 @@ function PluginProvider({
 }
 
 // src/app-shell/AppShellNavigation.tsx
-import { useEffect as useEffect31, useRef as useRef26, useState as useState44 } from "react";
+import { useEffect as useEffect31, useRef as useRef27, useState as useState43 } from "react";
 import { jsx as jsx64, jsxs as jsxs52 } from "react/jsx-runtime";
 function MenuIcon() {
   const { locale: i18nLocale } = useI18n();
@@ -20056,7 +19956,7 @@ function AppShellNavigationMenu({
 }) {
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
-  const menuRef = useRef26(null);
+  const menuRef = useRef27(null);
   useEffect31(() => {
     if (!shellNav?.navOpen) {
       return;
@@ -20149,8 +20049,8 @@ function AppShellSettingsDialog({
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const plugins = usePlugins();
-  const [pluginImportDraft, setPluginImportDraft] = useState44("");
-  const [pluginImportState, setPluginImportState] = useState44({
+  const [pluginImportDraft, setPluginImportDraft] = useState43("");
+  const [pluginImportState, setPluginImportState] = useState43({
     busy: false,
     message: null,
     error: null
@@ -20411,7 +20311,7 @@ function AppShellSettingsDialog({
 }
 
 // src/components/PublicTranscript.tsx
-import { ChevronRight as ChevronRight6 } from "lucide-react";
+import { ChevronRight as ChevronRight5 } from "lucide-react";
 import { jsx as jsx65, jsxs as jsxs53 } from "react/jsx-runtime";
 function transcriptSnapshot(title, turns, theme) {
   return {
@@ -20467,7 +20367,7 @@ function PublicTranscript({ snapshot }) {
         turn.messages.filter((item) => item.role === "user").map(message),
         /* @__PURE__ */ jsxs53("div", { className: "thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm", "aria-label": translate("sharing.turnSummary"), children: [
           /* @__PURE__ */ jsx65("span", { className: "thread-graph-worked-label shrink-0", children: formatWorkedDuration(turn.startedAt, turn.completedAt, []) }),
-          /* @__PURE__ */ jsx65(ChevronRight6, { className: "h-4 w-4 shrink-0", "aria-hidden": "true" }),
+          /* @__PURE__ */ jsx65(ChevronRight5, { className: "h-4 w-4 shrink-0", "aria-hidden": "true" }),
           turn.model || turn.tokenUsage ? /* @__PURE__ */ jsx65(TurnUsageInline, { turn: displayTurn, readOnly: true }) : null,
           /* @__PURE__ */ jsx65("span", { className: "thread-graph-worked-rule h-px min-w-0 flex-1", "aria-hidden": "true" })
         ] }),
@@ -20527,7 +20427,7 @@ function ConversationSearchExcerpt({ text, query }) {
 }
 
 // src/components/workbench/presentation.ts
-import { useCallback as useCallback19, useEffect as useEffect32, useRef as useRef27, useState as useState45 } from "react";
+import { useCallback as useCallback19, useEffect as useEffect32, useRef as useRef28, useState as useState44 } from "react";
 var defaultPresentation = {
   referenceId: null,
   mode: "focus",
@@ -20541,6 +20441,9 @@ function normalizePresentation(members, arrangement) {
   const ratio = a?.schemaVersion === 1 && typeof a.ratio === "number" && Number.isFinite(a.ratio) ? Math.max(35, Math.min(65, a.ratio)) : 55;
   return {
     referenceId,
+    ...m && "referenceDeviceId" in m ? {
+      referenceDeviceId: referenceId && typeof m.referenceDeviceId === "string" && /^[a-zA-Z0-9_-]{1,128}$/.test(m.referenceDeviceId) ? m.referenceDeviceId : null
+    } : {},
     mode: mode === "thread" && !referenceId ? "focus" : mode,
     ratio
   };
@@ -20558,10 +20461,14 @@ function read(scope) {
 }
 function write(scope, value, patch) {
   try {
-    if ("referenceId" in patch)
+    if ("referenceId" in patch || "referenceDeviceId" in patch)
       localStorage.setItem(
         `${scope}.members`,
-        JSON.stringify({ schemaVersion: 1, referenceId: value.referenceId })
+        JSON.stringify({
+          schemaVersion: 1,
+          referenceId: value.referenceId,
+          referenceDeviceId: value.referenceDeviceId ?? null
+        })
       );
     localStorage.setItem(
       `${scope}.arrangement`,
@@ -20577,11 +20484,11 @@ function write(scope, value, patch) {
   }
 }
 function useWorkbenchPresentation(scope, contextKey = null) {
-  const owner = useRef27({ scope, contextKey });
+  const owner = useRef28({ scope, contextKey });
   if (owner.current.scope !== scope || owner.current.contextKey !== contextKey)
     owner.current = { scope, contextKey };
   const generation = owner.current;
-  const [stored, setStored] = useState45(() => ({
+  const [stored, setStored] = useState44(() => ({
     generation,
     value: read(scope),
     storageFailed: false,
