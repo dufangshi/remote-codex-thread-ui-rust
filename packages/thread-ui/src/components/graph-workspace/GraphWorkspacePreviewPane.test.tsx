@@ -277,7 +277,7 @@ it('renders draw.io in a sandbox by default and preserves source/preview switchi
   const frame = element.querySelector('iframe');
   expect(frame?.getAttribute('title')).toBe('Draw.io preview: architecture.drawio');
   expect(frame?.getAttribute('sandbox')).toBe('allow-scripts');
-  expect(frame?.getAttribute('srcdoc')).toContain('GraphViewer.createViewerForElement');
+  expect(frame?.getAttribute('srcdoc')).toContain('/vendor/drawio/bootstrap.v1.js');
   act(() => element.querySelector<HTMLButtonElement>('[aria-label="Diagram source"]')!.click());
   expect(element.querySelector('iframe')).toBeNull();
   expect(element.querySelector('[aria-label="Source code"]')).toBeTruthy();

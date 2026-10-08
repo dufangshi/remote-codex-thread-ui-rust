@@ -3366,27 +3366,17 @@ function GraphMoleculeViewer({
 import { useMemo as useMemo7 } from "react";
 import { jsx as jsx13 } from "react/jsx-runtime";
 var DRAWIO_VIEWER_PATH = "/vendor/drawio/viewer-static.v32.3.0.min.js";
+var DRAWIO_BOOTSTRAP_PATH = "/vendor/drawio/bootstrap.v1.js";
 function drawioPreviewDocument(xml, origin) {
   const viewerUrl = new URL(DRAWIO_VIEWER_PATH, origin).href;
+  const bootstrapUrl = new URL(DRAWIO_BOOTSTRAP_PATH, origin).href;
   const data = JSON.stringify(xml).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
   return `<!doctype html><html><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' ${viewerUrl}; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${viewerUrl} ${bootstrapUrl}; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; base-uri 'none'; form-action 'none'">
 <style>html,body{height:100%;margin:0;background:#fff;color:#222;font:14px system-ui;overflow:hidden}#diagram{position:absolute;inset:0;overflow:auto}#error{padding:20px;white-space:pre-wrap}button,select{font:inherit}</style>
-<script>window.urlParams={offline:'1',math:'0'};window.mxLoadResources=false;window.mxLoadStylesheets=false;</script>
-<script src="${viewerUrl}"></script></head><body><div id="diagram"></div><div id="error" role="alert" hidden></div>
-<script>
-try {
-  var xml=${data};
-  var doc=new DOMParser().parseFromString(xml,'application/xml');
-  if(doc.querySelector('parsererror') || !['mxfile','mxGraphModel'].includes(doc.documentElement.nodeName)) throw new Error('Invalid draw.io XML. Switch to source to inspect this file.');
-  if(typeof GraphViewer==='undefined') throw new Error('The diagram viewer could not be loaded. Try refreshing this page.');
-  document.getElementById('diagram').setAttribute('data-mxgraph',JSON.stringify({xml:xml,toolbar:'pages zoom layers','toolbar-nohide':true,'toolbar-position':'top',lightbox:false,editable:false,nav:true,center:true,resize:false,'auto-fit':true,'responsive-auto-fit':true,'allow-zoom-in':false,'browser-translate':false,target:'blank'}));
-  GraphViewer.createViewerForElement(document.getElementById('diagram'));
-} catch(error) {
-  document.getElementById('diagram').hidden=true;
-  var el=document.getElementById('error');el.hidden=false;el.textContent=error.message||'Unable to render this diagram. Switch to source to inspect this file.';
-}
-</script></body></html>`;
+</head><body><div id="diagram"></div><p id="loading" role="status">Loading diagram\u2026</p><div id="error" role="alert" hidden></div>
+<script id="diagram-data" type="application/json">${data}</script>
+<script src="${bootstrapUrl}"></script></body></html>`;
 }
 function GraphDrawioPreview({ content, name, truncated }) {
   const srcDoc = useMemo7(() => drawioPreviewDocument(content, typeof window === "undefined" ? "http://localhost" : window.location.origin), [content]);
