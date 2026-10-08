@@ -45,7 +45,12 @@
   /* Use the space freed by moving model/permission controls into Settings.
      Reserve room for the prompt and action buttons in narrow split panes. */
   max-width: min(24rem, max(4rem, calc(100cqi - 11rem)));
+  cursor: pointer; min-height: 28px; border-radius: 6px;
 }
+[data-composer-layout] .composer-model-label:hover { background: var(--theme-hover); }
+[data-composer-layout] .composer-model-label:disabled { cursor: not-allowed; opacity: .5; }
+[data-composer-layout] .thread-graph-composer-toolbar { cursor: default; }
+[data-composer-layout] .thread-graph-composer-toolbar button:not(:disabled) { cursor: pointer; }
 [data-composer-layout] .thread-graph-composer-stop-button { position: static; }
 [data-composer-layout] .thread-graph-composer-shell,
 .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-shell { padding: 9px 12px; }

@@ -1,24 +1,31 @@
-import { translate, useI18n } from "../../i18n";
+import { translate, useI18n } from '../../i18n';
 import type {
   ModelOptionDto,
   ReasoningEffortDto,
   SandboxModeDto,
   ThreadContextUsageDto,
   UpdateThreadSettingsInput,
-} from "@remote-codex/shared";
-import type { ReactNode } from "react";
+} from '@remote-codex/shared';
+import type { ReactNode } from 'react';
 
-import { InputGroupButton } from "../graph-ui/InputGroup";
-import type { SettingsMenu } from "./types";
-import { formatReasoningEffortLabel } from "./composerUtils";
-import { ContextProgressBar } from "./composerPresentation";
+import { InputGroupButton } from '../graph-ui/InputGroup';
+import type { SettingsMenu } from './types';
+import { formatReasoningEffortLabel } from './composerUtils';
+import { ContextProgressBar } from './composerPresentation';
+import { ComposerMenuSurface } from './ComposerMenuSurface';
+import { Check } from 'lucide-react';
 
 export function ComposerSettingsToolbar({
+  openMenu,
   model,
   modelOptions,
   modelContextTitle,
   contextUsage,
   reasoningEffort,
+  supportedEfforts,
+  modelControlsDisabled,
+  effortControlsDisabled,
+  settingsBusy,
   goalComposeMode,
   goalBusy,
   activeView,
@@ -27,6 +34,8 @@ export function ComposerSettingsToolbar({
   sendButtonClassName,
   sendButtonBaseClassName,
   beforeSend,
+  onSetOpenMenu,
+  onUpdateSettings,
 }: {
   beforeSend?: ReactNode;
   openMenu: SettingsMenu;
@@ -35,13 +44,13 @@ export function ComposerSettingsToolbar({
   modelContextTitle: string;
   contextUsage: ThreadContextUsageDto | null | undefined;
   reasoningEffort: ReasoningEffortDto | null | undefined;
-  supportedEfforts: ModelOptionDto["supportedReasoningEfforts"];
+  supportedEfforts: ModelOptionDto['supportedReasoningEfforts'];
   sandboxMode: SandboxModeDto | null | undefined;
   sandboxModeAvailable: boolean;
   settingsBusy: boolean;
   goalComposeMode: boolean;
   goalBusy: boolean;
-  activeView: "chat" | "shell";
+  activeView: 'chat' | 'shell';
   disabled: boolean;
   fastMode: boolean;
   sendButtonLabel: string;
@@ -59,19 +68,92 @@ export function ComposerSettingsToolbar({
   const selectedModelLabel =
     modelOptions.find((entry) => entry.model === model)?.displayName ||
     model ||
-    translate("chat.selectModel");
+    translate('chat.selectModel');
 
   return (
     <>
       <div className="composer-model-control relative min-w-0">
-        <span
+        <button
+          type="button"
+          data-composer-menu-trigger="true"
+          aria-label={translate('chat.modelAndEffort', {
+            value1: selectedModelLabel,
+            value2: formatReasoningEffortLabel(reasoningEffort),
+          })}
+          aria-haspopup="menu"
+          aria-expanded={openMenu === 'model'}
+          disabled={
+            modelControlsDisabled || settingsBusy || modelOptions.length === 0
+          }
+          onClick={() =>
+            onSetOpenMenu((current) => (current === 'model' ? null : 'model'))
+          }
           data-testid="composer-model-label"
           title={`${selectedModelLabel} · ${formatReasoningEffortLabel(reasoningEffort)}\n${modelContextTitle}`}
           className="composer-model-label block truncate whitespace-nowrap px-1 text-xs text-stone-400"
         >
           {selectedModelLabel}
-        </span>
+        </button>
         {model ? <ContextProgressBar contextUsage={contextUsage} /> : null}
+        {openMenu === 'model' && (
+          <ComposerMenuSurface
+            align="end"
+            className="w-[min(19rem,calc(100vw-2rem))] rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-1.5 text-[var(--theme-fg)] shadow-xl"
+          >
+            <p className="px-3 py-2 text-xs text-[var(--theme-fg-muted)]">
+              {translate('chat.model')}
+            </p>
+            <div className="max-h-[min(280px,35dvh)] overflow-y-auto">
+              {modelOptions.map((entry) => (
+                <button
+                  key={entry.id}
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked={entry.model === model}
+                  disabled={modelControlsDisabled || settingsBusy}
+                  onClick={() =>
+                    onUpdateSettings({
+                      model: entry.model,
+                      reasoningEffort: entry.defaultReasoningEffort ?? null,
+                    })
+                  }
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed"
+                >
+                  <span>{entry.displayName}</span>
+                  {entry.model === model && (
+                    <Check size={14} className="shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
+            {supportedEfforts.length > 0 && (
+              <div className="mt-1 border-t border-[var(--theme-border)] pt-1">
+                <p className="px-3 py-2 text-xs text-[var(--theme-fg-muted)]">
+                  {translate('chat.effort')}
+                </p>
+                <div className="flex flex-wrap gap-1 px-2 pb-2">
+                  {supportedEfforts.map((entry) => (
+                    <button
+                      key={entry.reasoningEffort}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={entry.reasoningEffort === reasoningEffort}
+                      disabled={effortControlsDisabled || settingsBusy}
+                      onClick={() =>
+                        onUpdateSettings({
+                          reasoningEffort: entry.reasoningEffort,
+                        })
+                      }
+                      className={`cursor-pointer rounded-md px-2.5 py-1.5 text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed ${entry.reasoningEffort === reasoningEffort ? 'bg-[var(--theme-hover)]' : ''}`}
+                    >
+                      {formatReasoningEffortLabel(entry.reasoningEffort)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </ComposerMenuSurface>
+        )}
       </div>
 
       {beforeSend}
@@ -81,11 +163,11 @@ export function ComposerSettingsToolbar({
         size="icon-xs"
         aria-label={
           goalComposeMode
-            ? translate("chat.setGoal")
-            : translate("chat.sendPrompt")
+            ? translate('chat.setGoal')
+            : translate('chat.sendPrompt')
         }
         title={sendButtonLabel}
-        disabled={goalBusy || (activeView === "chat" ? disabled : false)}
+        disabled={goalBusy || (activeView === 'chat' ? disabled : false)}
         className={`${sendButtonBaseClassName} h-9 w-9 rounded-full text-sm font-medium disabled:cursor-not-allowed sm:h-8 sm:w-8 ${sendButtonClassName}`}
       >
         <svg
