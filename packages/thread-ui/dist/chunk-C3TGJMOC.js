@@ -3,10 +3,10 @@ import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } f
 
 // src/i18n/automation.en.ts
 var automationEn = {
-  "automation.title": "Automations",
+  "automation.title": "Automation",
   "automation.create": "Create automation",
-  "automation.description": "Device schedules survive Supervisor restarts. Busy prompts wait for the entire turn and merge missed ticks.",
-  "automation.native": "Native watches remain separate and read-only.",
+  "automation.description": "Read-only schedules, triggers and usage. Agents manage automations through CLI/API. Device schedules survive Supervisor restarts.",
+  "automation.native": "Includes native Claude watches. Session timers stop when the Claude process ends.",
   "automation.name": "Name",
   "automation.trigger": "Trigger",
   "automation.interval": "Interval",
@@ -49,7 +49,7 @@ var automationEn = {
   "automation.none": "None",
   "automation.pending": "Pending",
   "automation.merged": "Merged ticks",
-  "automation.empty": "No device automations yet.",
+  "automation.empty": "No recorded automations.",
   "automation.noRuns": "No executions yet.",
   "automation.definition": "Definition",
   "automation.state": "State",
@@ -79,7 +79,25 @@ var automationEn = {
   "automation.error": "Error",
   "automation.intervalSummary": "Every {{value1}} seconds",
   "automation.device": "Device managed",
-  "automation.close": "Close"
+  "automation.close": "Close",
+  "automation.active": "Active automations",
+  "automation.historical": "History and inactive automations",
+  "automation.totals": "Lifetime totals",
+  "automation.triggers": "Triggers",
+  "automation.tokens": "Attributed tokens",
+  "automation.cost": "Attributed cost (USD)",
+  "automation.unknown": "Unknown",
+  "automation.coverage": "Tokens available for {{value1}} of {{value3}} associated turns; USD priced for {{value2}} of {{value3}}.",
+  "automation.incomplete": "Excluded: {{value1}} ambiguous turns, {{value2}} missing turns; {{value3}} started runs have no turn attribution.",
+  "automation.unknownStatistics": "Lifetime statistics unavailable on this Supervisor.",
+  "automation.totalCoverage": "Sum of known attributed tokens and USD estimates across all recorded history, including persisted running usage. Missing or ambiguous usage is excluded; USD includes only priced turns. Totals may be partial.",
+  "automation.triggerSemantics": "Device trigger counts include merged and skipped occurrences; native watch counts include uniquely matched recorded scheduled turns. Trigger counts are not action counts.",
+  "automation.inboxCharge": "Passive inbox delivery has no model-token charge.",
+  "automation.scriptCharge": "The script action has no model-token charge. Models invoked independently by a script are not measured here.",
+  "automation.historyLimit": "Latest 100 execution records. Totals above include all historical runs.",
+  "automation.nativeUnavailable": "Native watch history is unavailable; totals may omit native watches.",
+  "automation.nativeCoverage": "USD priced for {{value1}} of {{value2}} recorded scheduled turns.",
+  "automation.nativeTokenCoverage": "Tokens available for {{value1}} of {{value2}} recorded scheduled turns."
 };
 
 // src/i18n/search.en.ts
@@ -2489,8 +2507,8 @@ var en = {
 var automationZhCN = {
   "automation.title": "\u81EA\u52A8\u5316",
   "automation.create": "\u521B\u5EFA\u81EA\u52A8\u5316",
-  "automation.description": "\u8BBE\u5907\u8C03\u5EA6\u8DE8 Supervisor \u91CD\u542F\u4FDD\u7559\u3002\u7EBF\u7A0B\u5FD9\u65F6\u7B49\u5F85\u6574\u4E2A\u8F6E\u6B21\u7ED3\u675F\uFF0C\u5E76\u5408\u5E76\u9519\u8FC7\u7684\u5468\u671F\u3002",
-  "automation.native": "\u539F\u751F watches \u4FDD\u6301\u72EC\u7ACB\uFF0C\u53EA\u8BFB\u5C55\u793A\u3002",
+  "automation.description": "\u53EA\u8BFB\u67E5\u770B\u8BA1\u5212\u3001\u89E6\u53D1\u4E0E\u6D88\u8017\u3002\u667A\u80FD\u4F53\u901A\u8FC7 CLI/API \u7BA1\u7406\u81EA\u52A8\u5316\u3002\u8BBE\u5907\u8C03\u5EA6\u8DE8 Supervisor \u91CD\u542F\u4FDD\u7559\u3002",
+  "automation.native": "\u5305\u542B Claude \u539F\u751F\u5B9A\u65F6\u4EFB\u52A1\uFF1B\u4F1A\u8BDD\u5B9A\u65F6\u5668\u4F1A\u968F Claude \u8FDB\u7A0B\u7ED3\u675F\u800C\u505C\u6B62\u3002",
   "automation.name": "\u540D\u79F0",
   "automation.trigger": "\u89E6\u53D1\u5668",
   "automation.interval": "\u56FA\u5B9A\u95F4\u9694",
@@ -2533,7 +2551,7 @@ var automationZhCN = {
   "automation.none": "\u65E0",
   "automation.pending": "\u5F85\u6267\u884C",
   "automation.merged": "\u5408\u5E76\u5468\u671F\u6570",
-  "automation.empty": "\u5C1A\u65E0\u8BBE\u5907\u81EA\u52A8\u5316\u3002",
+  "automation.empty": "\u6682\u65E0\u81EA\u52A8\u5316\u8BB0\u5F55\u3002",
   "automation.noRuns": "\u5C1A\u65E0\u6267\u884C\u8BB0\u5F55\u3002",
   "automation.definition": "\u5B9A\u4E49",
   "automation.state": "\u72B6\u6001",
@@ -2563,7 +2581,25 @@ var automationZhCN = {
   "automation.error": "\u9519\u8BEF",
   "automation.intervalSummary": "\u6BCF {{value1}} \u79D2",
   "automation.device": "\u8BBE\u5907\u7BA1\u7406",
-  "automation.close": "\u5173\u95ED"
+  "automation.close": "\u5173\u95ED",
+  "automation.active": "\u5F53\u524D\u81EA\u52A8\u5316",
+  "automation.historical": "\u5386\u53F2\u4E0E\u975E\u6D3B\u8DC3\u81EA\u52A8\u5316",
+  "automation.totals": "\u7D2F\u8BA1\u7EDF\u8BA1",
+  "automation.triggers": "\u89E6\u53D1\u6B21\u6570",
+  "automation.tokens": "\u5DF2\u5F52\u5C5E token",
+  "automation.cost": "\u5DF2\u5F52\u5C5E\u8D39\u7528\uFF08USD\uFF09",
+  "automation.unknown": "\u672A\u77E5",
+  "automation.coverage": "{{value3}} \u4E2A\u5173\u8054\u56DE\u5408\u4E2D\uFF0C{{value1}} \u4E2A\u6709 token \u8BB0\u5F55\uFF0C{{value2}} \u4E2A\u6709 USD \u4EF7\u683C\u3002",
+  "automation.incomplete": "\u672A\u8BA1\u5165\uFF1A{{value1}} \u4E2A\u5F52\u5C5E\u6709\u6B67\u4E49\u7684\u56DE\u5408\u3001{{value2}} \u4E2A\u7F3A\u5931\u56DE\u5408\uFF1B{{value3}} \u6B21\u5DF2\u542F\u52A8\u6267\u884C\u7F3A\u5C11\u56DE\u5408\u5173\u8054\u3002",
+  "automation.unknownStatistics": "\u6B64 Supervisor \u6682\u4E0D\u63D0\u4F9B\u7D2F\u8BA1\u7EDF\u8BA1\u3002",
+  "automation.totalCoverage": "\u7D2F\u52A0\u5168\u90E8\u5386\u53F2\u4E2D\u53EF\u5F52\u5C5E\u7684\u5DF2\u77E5 token \u4E0E USD \u4F30\u7B97\uFF0C\u5305\u542B\u5DF2\u6301\u4E45\u5316\u7684\u8FD0\u884C\u4E2D\u6D88\u8017\u3002\u7F3A\u5931\u6216\u6B67\u4E49\u6D88\u8017\u4E0D\u8BA1\u5165\uFF1BUSD \u4EC5\u5305\u542B\u5DF2\u5B9A\u4EF7\u56DE\u5408\uFF0C\u56E0\u6B64\u603B\u8BA1\u53EF\u80FD\u4E0D\u5B8C\u6574\u3002",
+  "automation.triggerSemantics": "\u8BBE\u5907\u89E6\u53D1\u6B21\u6570\u5305\u542B\u5408\u5E76\u4E0E\u8DF3\u8FC7\u7684\u89E6\u53D1\uFF1B\u539F\u751F\u5B9A\u65F6\u4EFB\u52A1\u6B21\u6570\u4E3A\u552F\u4E00\u5339\u914D\u7684\u5DF2\u8BB0\u5F55\u5B9A\u65F6\u56DE\u5408\u6570\u3002\u89E6\u53D1\u6B21\u6570\u4E0D\u7B49\u4E8E\u6267\u884C\u6B21\u6570\u3002",
+  "automation.inboxCharge": "\u88AB\u52A8\u6536\u4EF6\u7BB1\u6295\u9012\u4E0D\u4EA7\u751F\u6A21\u578B token \u8D39\u7528\u3002",
+  "automation.scriptCharge": "\u811A\u672C\u52A8\u4F5C\u672C\u8EAB\u4E0D\u4EA7\u751F\u6A21\u578B token \u8D39\u7528\uFF1B\u811A\u672C\u72EC\u7ACB\u8C03\u7528\u6A21\u578B\u7684\u6D88\u8017\u4E0D\u5728\u6B64\u7EDF\u8BA1\u3002",
+  "automation.historyLimit": "\u663E\u793A\u6700\u8FD1 100 \u6761\u6267\u884C\u8BB0\u5F55\uFF1B\u4E0A\u65B9\u7D2F\u8BA1\u7EDF\u8BA1\u5305\u542B\u5168\u90E8\u5386\u53F2\u6267\u884C\u3002",
+  "automation.nativeUnavailable": "\u539F\u751F\u5B9A\u65F6\u4EFB\u52A1\u5386\u53F2\u6682\u4E0D\u53EF\u7528\uFF0C\u603B\u8BA1\u53EF\u80FD\u672A\u5305\u542B\u539F\u751F\u4EFB\u52A1\u3002",
+  "automation.nativeCoverage": "{{value2}} \u4E2A\u5DF2\u8BB0\u5F55\u5B9A\u65F6\u56DE\u5408\u4E2D\uFF0C{{value1}} \u4E2A\u6709 USD \u4EF7\u683C\u3002",
+  "automation.nativeTokenCoverage": "{{value2}} \u4E2A\u5DF2\u8BB0\u5F55\u5B9A\u65F6\u56DE\u5408\u4E2D\uFF0C{{value1}} \u4E2A\u6709 token \u8BB0\u5F55\u3002"
 };
 
 // src/i18n/search.zh-CN.ts
