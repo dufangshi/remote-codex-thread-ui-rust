@@ -48,6 +48,13 @@
   cursor: pointer; min-height: 28px; border-radius: 6px;
 }
 [data-composer-layout] .composer-model-label:hover { background: var(--theme-hover); }
+[data-composer-layout] .composer-model-name {
+  display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  line-height: 16px;
+}
+[data-composer-layout] .composer-model-effort {
+  display: block; font-size: 10px; line-height: 11px; opacity: .7;
+}
 [data-composer-layout] .composer-model-label:disabled { cursor: not-allowed; opacity: .5; }
 [data-composer-layout] .thread-graph-composer-toolbar { cursor: default; }
 [data-composer-layout] .thread-graph-composer-toolbar button:not(:disabled) { cursor: pointer; }

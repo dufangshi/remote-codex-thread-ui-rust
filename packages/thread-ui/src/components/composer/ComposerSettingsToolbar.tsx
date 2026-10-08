@@ -14,6 +14,7 @@ import { formatReasoningEffortLabel } from './composerUtils';
 import { ContextProgressBar } from './composerPresentation';
 import { ComposerMenuSurface } from './ComposerMenuSurface';
 import { Check } from 'lucide-react';
+import { ComposerReasoningSlider } from './ComposerReasoningSlider';
 
 export function ComposerSettingsToolbar({
   openMenu,
@@ -69,6 +70,8 @@ export function ComposerSettingsToolbar({
     modelOptions.find((entry) => entry.model === model)?.displayName ||
     model ||
     translate('chat.selectModel');
+  const supportsEffort = supportedEfforts.length > 0;
+  const effortLabel = formatReasoningEffortLabel(reasoningEffort);
 
   return (
     <>
@@ -76,10 +79,14 @@ export function ComposerSettingsToolbar({
         <button
           type="button"
           data-composer-menu-trigger="true"
-          aria-label={translate('chat.modelAndEffort', {
-            value1: selectedModelLabel,
-            value2: formatReasoningEffortLabel(reasoningEffort),
-          })}
+          aria-label={
+            supportsEffort
+              ? translate('chat.modelAndEffort', {
+                  value1: selectedModelLabel,
+                  value2: effortLabel,
+                })
+              : selectedModelLabel
+          }
           aria-haspopup="menu"
           aria-expanded={openMenu === 'model'}
           disabled={
@@ -89,10 +96,13 @@ export function ComposerSettingsToolbar({
             onSetOpenMenu((current) => (current === 'model' ? null : 'model'))
           }
           data-testid="composer-model-label"
-          title={`${selectedModelLabel} · ${formatReasoningEffortLabel(reasoningEffort)}\n${modelContextTitle}`}
-          className="composer-model-label block truncate whitespace-nowrap px-1 text-xs text-stone-400"
+          title={`${selectedModelLabel}${supportsEffort ? ` · ${effortLabel}` : ''}\n${modelContextTitle}`}
+          className="composer-model-label flex flex-col items-center justify-center whitespace-nowrap px-1 text-xs text-stone-400"
         >
-          {selectedModelLabel}
+          <span className="composer-model-name">{selectedModelLabel}</span>
+          {supportsEffort && (
+            <span className="composer-model-effort">{effortLabel}</span>
+          )}
         </button>
         {model ? <ContextProgressBar contextUsage={contextUsage} /> : null}
         {openMenu === 'model' && (
@@ -127,30 +137,17 @@ export function ComposerSettingsToolbar({
               ))}
             </div>
             {supportedEfforts.length > 0 && (
-              <div className="mt-1 border-t border-[var(--theme-border)] pt-1">
-                <p className="px-3 py-2 text-xs text-[var(--theme-fg-muted)]">
-                  {translate('chat.effort')}
-                </p>
-                <div className="flex flex-wrap gap-1 px-2 pb-2">
-                  {supportedEfforts.map((entry) => (
-                    <button
-                      key={entry.reasoningEffort}
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={entry.reasoningEffort === reasoningEffort}
-                      disabled={effortControlsDisabled || settingsBusy}
-                      onClick={() =>
-                        onUpdateSettings({
-                          reasoningEffort: entry.reasoningEffort,
-                        })
-                      }
-                      className={`cursor-pointer rounded-md px-2.5 py-1.5 text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed ${entry.reasoningEffort === reasoningEffort ? 'bg-[var(--theme-hover)]' : ''}`}
-                    >
-                      {formatReasoningEffortLabel(entry.reasoningEffort)}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <ComposerReasoningSlider
+                key={model}
+                efforts={supportedEfforts}
+                effort={reasoningEffort}
+                defaultEffort={
+                  modelOptions.find((entry) => entry.model === model)
+                    ?.defaultReasoningEffort
+                }
+                disabled={effortControlsDisabled || settingsBusy}
+                onCommit={(next) => onUpdateSettings({ reasoningEffort: next })}
+              />
             )}
           </ComposerMenuSurface>
         )}

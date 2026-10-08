@@ -6,6 +6,7 @@ import './styles/composer-plan.css';
 import './styles/export-dialog.css';
 import './styles/matter-workbench.css';
 import './styles/composer-compact.css';
+import './styles/composer-reasoning.css';
 
 export type {
   ShellSocketConnection,

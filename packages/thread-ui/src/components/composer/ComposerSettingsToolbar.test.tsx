@@ -138,6 +138,14 @@ function buttonByText(view: HTMLElement, text: string) {
 
 describe('ComposerSettingsToolbar', () => {
   beforeEach(() => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
     (
       globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }
     ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -148,6 +156,7 @@ describe('ComposerSettingsToolbar', () => {
     container?.remove();
     root = null;
     container = null;
+    vi.unstubAllGlobals();
   });
 
   it('preserves the full model name in a clickable label with effort and context in its title', () => {
@@ -162,7 +171,12 @@ describe('ComposerSettingsToolbar', () => {
       ],
     });
     const label = view.querySelector('[data-testid="composer-model-label"]');
-    expect(label?.textContent).toBe('Opus · 5 (1M context)');
+    expect(label?.querySelector('.composer-model-name')?.textContent).toBe(
+      'Opus · 5 (1M context)',
+    );
+    expect(label?.querySelector('.composer-model-effort')?.textContent).toBe(
+      'medium',
+    );
     expect(label?.getAttribute('title')).toContain('medium');
     expect(label?.getAttribute('title')).toContain('1k / 8k tokens');
     expect(label?.closest('button')?.getAttribute('type')).toBe('button');
