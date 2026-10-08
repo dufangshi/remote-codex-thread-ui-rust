@@ -7,6 +7,8 @@ export const automationZhCN = {
   "automation.trigger": "触发器",
   "automation.interval": "固定间隔",
   "automation.at": "指定时间一次",
+  "automation.threadEnded": "其它线程结束",
+  "automation.threadEndedNote": "注册后，来源线程每个完整轮次结束触发一次，不回放历史。来源关闭或删除时暂停此自动化。",
   "automation.turnEnded": "精确轮次结束",
   "automation.taskEnded": "任务结束",
   "automation.commandEnded": "受控命令结束",

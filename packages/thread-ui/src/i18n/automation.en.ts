@@ -7,6 +7,8 @@ export const automationEn = {
   "automation.trigger": "Trigger",
   "automation.interval": "Interval",
   "automation.at": "Once at",
+  "automation.threadEnded": "Other thread ended",
+  "automation.threadEndedNote": "Runs once for each complete turn after registration. History is not replayed. Closing or deleting the source pauses this automation.",
   "automation.turnEnded": "Exact turn ended",
   "automation.taskEnded": "Task ended",
   "automation.commandEnded": "Controlled command ended",
