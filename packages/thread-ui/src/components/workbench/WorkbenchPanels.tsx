@@ -5,7 +5,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from 'react';
-import { Columns2, FolderOpen, Users, X, RotateCcw } from 'lucide-react';
+import { FolderOpen, X } from 'lucide-react';
 import { translate as t, useI18n } from '../../i18n';
 import type { WorkbenchPresentation } from './presentation';
 
@@ -16,13 +16,22 @@ export interface WorkbenchPanelsOptions {
   primaryStatus: string;
   primaryHarness: string;
   presentation: WorkbenchPresentation;
-  onPresentationChange: (patch: Partial<WorkbenchPresentation>) => void;
+  onPresentationChange: (
+    patch: Partial<WorkbenchPresentation>,
+  ) => boolean | void;
   candidates: Array<{ id: string; title: string }>;
   referenceTitle?: string;
   referenceContent?: ReactNode;
   collaborationContent?: ReactNode;
   onMakePrimary: () => void;
   storageFailed?: boolean;
+  focusedPane?: 'primary' | 'reference';
+  onFocusPane?: (pane: 'primary' | 'reference') => boolean | void;
+  toolContent?: ReactNode;
+  toolTitle?: string;
+  toolsTargetLabel?: string;
+  toolsOpen?: boolean;
+  onCloseTools?: () => void;
 }
 export function WorkbenchPanels({
   options: o,
@@ -38,19 +47,24 @@ export function WorkbenchPanels({
   useI18n();
   const { mode, referenceId, ratio } = o.presentation;
   const root = useRef<HTMLDivElement>(null);
-  const referenceTrigger = useRef<HTMLButtonElement>(null);
   const [compact, setCompact] = useState(() => window.innerWidth < 1000);
   const [mobileView, setMobileView] = useState<'primary' | 'reference'>(
     'primary',
   );
-  const [pickerOpen, setPickerOpen] = useState(false);
   const previousMode = useRef(mode);
   useEffect(() => {
     if (previousMode.current !== mode) {
+      const before = previousMode.current;
       previousMode.current = mode;
-      if (mode !== 'focus') setMobileView('reference');
+      if (mode === 'collaboration') setMobileView('reference');
+      else if (
+        mode === 'thread' &&
+        before === 'focus' &&
+        (!compact || o.onFocusPane?.('reference') !== false)
+      )
+        setMobileView('reference');
     }
-  }, [mode]);
+  }, [mode, compact, o.onFocusPane]);
   const [filesVisited, setFilesVisited] = useState(mode === 'files');
   const drag = useRef<{ x: number; ratio: number; width: number } | null>(null);
   const [lastReveal, setLastReveal] = useState(revealExplorer);
@@ -58,8 +72,7 @@ export function WorkbenchPanels({
     if (lastReveal !== revealExplorer) {
       setLastReveal(revealExplorer);
       if (revealExplorer > 0) {
-        o.onPresentationChange({ mode: 'files', ratio: 35 });
-        setMobileView('reference');
+        o.onPresentationChange({ mode: 'files' });
       }
     }
   }, [revealExplorer, lastReveal, o.onPresentationChange]);
@@ -76,20 +89,54 @@ export function WorkbenchPanels({
   }, []);
   useEffect(() => {
     setMobileView('primary');
-    setPickerOpen(false);
   }, [o.primaryTitle]);
   const close = () => {
-    o.onPresentationChange({ mode: 'focus' });
+    if (o.onPresentationChange({ mode: 'focus' }) === false) return;
     setMobileView('primary');
-    referenceTrigger.current?.focus();
   };
-  const showReference = mode !== 'focus';
+  const showThread =
+    Boolean(referenceId) && (mode === 'thread' || mode === 'files');
+  const showReference = showThread || mode === 'collaboration';
+  const closeFiles = () =>
+    o.onPresentationChange({ mode: referenceId ? 'thread' : 'focus' });
+  const historyHandlers = useRef({
+    onFocusPane: o.onFocusPane,
+    onPresentationChange: o.onPresentationChange,
+    onCloseTools: o.onCloseTools,
+  });
+  historyHandlers.current = {
+    onFocusPane: o.onFocusPane,
+    onPresentationChange: o.onPresentationChange,
+    onCloseTools: o.onCloseTools,
+  };
   // Phone panes are views, not route navigation. Back returns to the left conversation.
   useEffect(() => {
-    if (!compact || mobileView !== 'reference' || mode === 'focus') return;
+    const drawerOpen = mode === 'files' || o.toolsOpen;
+    if (
+      !compact ||
+      (!drawerOpen && (!showReference || mobileView !== 'reference'))
+    )
+      return;
     const marker = `workbench-reference-${Date.now()}`;
     history.pushState({ ...history.state, workbenchReference: marker }, '');
-    const back = () => setMobileView('primary');
+    const back = () => {
+      const handlers = historyHandlers.current;
+      if (o.toolsOpen) handlers.onCloseTools?.();
+      else if (mode === 'files')
+        handlers.onPresentationChange({
+          mode: referenceId ? 'thread' : 'focus',
+        });
+      else {
+        if (handlers.onFocusPane?.('primary') === false) {
+          history.pushState(
+            { ...history.state, workbenchReference: marker },
+            '',
+          );
+          return;
+        }
+        setMobileView('primary');
+      }
+    };
     window.addEventListener('popstate', back);
     return () => {
       window.removeEventListener('popstate', back);
@@ -98,13 +145,7 @@ export function WorkbenchPanels({
         history.replaceState(state, '');
       }
     };
-  }, [compact, mobileView, showReference]);
-  const selectMode = (next: 'thread' | 'files' | 'collaboration') => {
-    // File mode includes both a tree and an editor; give its toolbar more room.
-    o.onPresentationChange({ mode: next, ...(next === 'files' ? { ratio: 35 } : {}) });
-    setPickerOpen(false);
-    setMobileView('reference');
-  };
+  }, [compact, mobileView, showReference, mode, referenceId, o.toolsOpen]);
   return (
     <div
       ref={root}
@@ -113,86 +154,6 @@ export function WorkbenchPanels({
       data-mode={mode}
       style={{ '--primary-ratio': `${ratio}%` } as CSSProperties}
     >
-      <header
-        className="workbench-context"
-        title={`${o.deviceLabel} / ${o.workspaceLabel}`}
-      >
-        <span className="workbench-source-device">{o.deviceLabel}</span>
-        <span aria-hidden="true">/</span>
-        <strong>{o.workspaceLabel}</strong>
-        <label className="workbench-split-picker">
-          <Columns2 size={15} aria-hidden="true" />
-          <select
-            aria-label={t('workbench.compareSession')}
-            value={referenceId ?? ''}
-            onChange={(event) => {
-              if (event.target.value) {
-                o.onPresentationChange({
-                  referenceId: event.target.value,
-                  mode: 'thread',
-                });
-                setMobileView('reference');
-                setPickerOpen(false);
-              }
-            }}
-          >
-            <option value="">{t('workbench.splitSession')}</option>
-            {o.candidates.map((thread) => (
-              <option key={thread.id} value={thread.id}>
-                {thread.title}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="workbench-reference-picker">
-          <button
-            ref={referenceTrigger}
-            aria-expanded={pickerOpen}
-            onClick={() => setPickerOpen((open) => !open)}
-            data-testid="reference-picker"
-          >
-            <Columns2 size={15} />
-            {t('workbench.referenceArea')}
-          </button>
-          {pickerOpen && (
-            <div
-              className="workbench-reference-menu"
-              onKeyDown={(event) => {
-                if (event.key === 'Escape') {
-                  setPickerOpen(false);
-                  referenceTrigger.current?.focus();
-                }
-              }}
-            >
-              <button onClick={() => selectMode('files')}>
-                <FolderOpen size={15} />
-                {t('workbench.referenceFiles')}
-              </button>
-              <button onClick={() => selectMode('collaboration')}>
-                <Users size={15} />
-                {t('workbench.collaboration')}
-              </button>
-              {referenceId && (
-                <button onClick={() => selectMode('thread')}>
-                  {t('workbench.restoreComparison')}
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  o.onPresentationChange({
-                    ratio: 55,
-                    mode: referenceId ? 'thread' : 'focus',
-                  });
-                  setPickerOpen(false);
-                }}
-              >
-                <RotateCcw size={15} />
-                {t('workbench.resetLayout')}
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
       {o.storageFailed && (
         <p role="status" className="workbench-persistence-notice">
           {t('workbench.layoutSessionOnly')}
@@ -205,15 +166,21 @@ export function WorkbenchPanels({
         >
           <button
             aria-pressed={mobileView === 'primary'}
-            onClick={() => setMobileView('primary')}
+            onClick={() => {
+              if (o.onFocusPane?.('primary') !== false)
+                setMobileView('primary');
+            }}
           >
             {o.primaryTitle}
           </button>
           <button
             aria-pressed={mobileView === 'reference'}
-            onClick={() => setMobileView('reference')}
+            onClick={() => {
+              if (!showThread || o.onFocusPane?.('reference') !== false)
+                setMobileView('reference');
+            }}
           >
-            {mode === 'thread' ? o.referenceTitle : mode === 'files' ? t('workbench.referenceFiles') : t('workbench.collaboration')}
+            {showThread ? o.referenceTitle : t('workbench.collaboration')}
           </button>
         </nav>
       )}
@@ -223,6 +190,15 @@ export function WorkbenchPanels({
         <section
           className="workbench-primary matter-chat"
           data-testid="primary-pane"
+          data-focused={o.focusedPane === 'primary'}
+          onPointerDownCapture={(event) => {
+            if (o.onFocusPane?.('primary') === false)
+              event.preventDefault();
+          }}
+          onFocusCapture={(event) => {
+            if (o.onFocusPane?.('primary') === false)
+              (event.relatedTarget as HTMLElement | null)?.focus();
+          }}
           hidden={compact && showReference && mobileView !== 'primary'}
         >
           <div className="workbench-pane-body">{children}</div>
@@ -283,9 +259,18 @@ export function WorkbenchPanels({
         <section
           className="workbench-reference"
           data-testid="reference-pane"
+          data-focused={o.focusedPane === 'reference'}
+          onPointerDownCapture={(event) => {
+            if (showThread && o.onFocusPane?.('reference') === false)
+              event.preventDefault();
+          }}
+          onFocusCapture={(event) => {
+            if (showThread && o.onFocusPane?.('reference') === false)
+              (event.relatedTarget as HTMLElement | null)?.focus();
+          }}
           hidden={!showReference || (compact && mobileView !== 'reference')}
           onKeyDown={(e) => {
-            if (e.key === 'Escape') {
+            if (e.key === 'Escape' && !e.defaultPrevented) {
               e.preventDefault();
               close();
             }
@@ -294,38 +279,36 @@ export function WorkbenchPanels({
           <header className="workbench-pane-heading">
             <div>
               <strong>
-                {mode === 'thread'
+                {showThread
                   ? (o.referenceTitle ?? t('workbench.loadingThreadDetail'))
-                  : mode === 'files'
-                    ? t('workbench.referenceFiles')
-                    : t('workbench.collaboration')}
+                  : t('workbench.collaboration')}
               </strong>
             </div>
-            {mode === 'thread' && (
+            {mode !== 'files' && (
+              <button
+                aria-label={t('workbench.referenceFiles')}
+                title={t('workbench.referenceFiles')}
+                onClick={() => o.onPresentationChange({ mode: 'files' })}
+              >
+                <FolderOpen size={16} />
+              </button>
+            )}
+            {showThread && (
               <button onClick={o.onMakePrimary} data-testid="make-primary">
                 {t('workbench.makePrimary')}
               </button>
             )}
             <button
               onClick={close}
-              aria-label={t('workbench.closeReference')}
-              title={t('workbench.closeReferenceContinues')}
+              aria-label={t('workbench.closeSplit')}
+              title={t('workbench.closeSplitContinues')}
             >
               <X size={17} />
             </button>
           </header>
-          <div className="workbench-pane-body" hidden={mode !== 'thread'}>
+          <div className="workbench-pane-body" hidden={!showThread}>
             {o.referenceContent}
           </div>
-          {filesVisited && (
-            <aside
-              aria-label={t('workbench.explorer')}
-              className="workbench-pane-body workbench-files"
-              hidden={mode !== 'files'}
-            >
-              {explorer}
-            </aside>
-          )}
           <div
             className="workbench-pane-body workbench-collaboration"
             hidden={mode !== 'collaboration'}
@@ -334,6 +317,66 @@ export function WorkbenchPanels({
           </div>
         </section>
       </div>
+      {filesVisited && (
+        <aside
+          role="region"
+          aria-label={t('workbench.referenceFiles')}
+          className="workbench-tool-drawer"
+          hidden={mode !== 'files'}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape' && !event.defaultPrevented) {
+              event.preventDefault();
+              event.stopPropagation();
+              closeFiles();
+            }
+          }}
+        >
+          <header>
+            <div>
+              <strong>{t('workbench.referenceFiles')}</strong>
+              {o.toolsTargetLabel && <small>{o.toolsTargetLabel}</small>}
+            </div>
+            <button
+              data-testid="workbench-close-files"
+              aria-label={t('workbench.closeFiles')}
+              onClick={closeFiles}
+            >
+              <X size={17} />
+            </button>
+          </header>
+          <div className="workbench-pane-body workbench-files">{explorer}</div>
+        </aside>
+      )}
+      {o.toolContent && (
+        <aside
+          role="region"
+          aria-label={o.toolTitle ?? t('workbench.terminal')}
+          className="workbench-tool-drawer"
+          hidden={!o.toolsOpen}
+          onKeyDown={(event) => {
+            if (event.key === 'Escape' && !event.defaultPrevented) {
+              event.preventDefault();
+              event.stopPropagation();
+              o.onCloseTools?.();
+            }
+          }}
+        >
+          <header>
+            <div>
+              <strong>{o.toolTitle ?? t('workbench.terminal')}</strong>
+              {o.toolsTargetLabel && <small>{o.toolsTargetLabel}</small>}
+            </div>
+            <button
+              data-testid="workbench-close-tools"
+              aria-label={t('workbench.closeTools')}
+              onClick={o.onCloseTools}
+            >
+              <X size={17} />
+            </button>
+          </header>
+          <div className="workbench-pane-body">{o.toolContent}</div>
+        </aside>
+      )}
     </div>
   );
 }

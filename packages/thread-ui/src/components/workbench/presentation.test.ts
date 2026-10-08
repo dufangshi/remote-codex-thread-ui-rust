@@ -29,3 +29,38 @@ describe('workbench presentation recovery', () => {
     ).toEqual({ referenceId: null, mode: 'files', ratio: 55 });
   });
 });
+
+describe('cross-device split membership', () => {
+  it('migrates host-relative members and validates remote device identity independently', () => {
+    expect(
+      normalizePresentation({ schemaVersion: 1, referenceId: 'peer' }, null)
+        .referenceDeviceId,
+    ).toBeUndefined();
+    expect(
+      normalizePresentation(
+        {
+          schemaVersion: 1,
+          referenceId: 'peer',
+          referenceDeviceId: 'device-b',
+        },
+        null,
+      ),
+    ).toMatchObject({ referenceId: 'peer', referenceDeviceId: 'device-b' });
+    expect(
+      normalizePresentation(
+        {
+          schemaVersion: 1,
+          referenceId: 'peer',
+          referenceDeviceId: '../invalid',
+        },
+        null,
+      ),
+    ).toMatchObject({ referenceId: 'peer', referenceDeviceId: null });
+    expect(
+      normalizePresentation(
+        { schemaVersion: 1, referenceId: null, referenceDeviceId: 'device-b' },
+        null,
+      ),
+    ).toMatchObject({ referenceId: null, referenceDeviceId: null });
+  });
+});

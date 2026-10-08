@@ -122,7 +122,7 @@ export function MatterWorkbench({
   const explorerOpen = o.panels ? o.panels.presentation.mode === 'files' : legacyExplorerOpen;
   const setExplorerOpen = (value: boolean | ((open: boolean) => boolean)) => {
     const next = typeof value === 'function' ? value(explorerOpen) : value;
-    if (o.panels) o.panels.onPresentationChange({ mode: next ? 'files' : 'focus', ...(next ? { ratio: 35 } : {}) });
+    if (o.panels) o.panels.onPresentationChange({ mode: next ? 'files' : o.panels.presentation.referenceId ? 'thread' : 'focus' });
     else setLegacyExplorerOpen(next);
   };
   const [explorerWidth, setExplorerWidth] = useState(() => {

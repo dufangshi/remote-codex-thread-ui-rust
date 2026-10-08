@@ -81,3 +81,38 @@ describe('pending workbench identity', () => {
     expect(localStorage.getItem('account-b.members')).toBeNull();
   });
 });
+
+describe('device-aware presentation persistence', () => {
+  it('saves pending device and thread together and keeps membership through file and resize actions', () => {
+    render(null, 'host/workspace');
+    act(() =>
+      current.update({
+        referenceId: 'peer',
+        referenceDeviceId: 'remote-device',
+        mode: 'thread',
+      }),
+    );
+    render('account-host-workspace', 'host/workspace');
+    const membership = localStorage.getItem('account-host-workspace.members');
+    expect(JSON.parse(membership!)).toMatchObject({
+      referenceId: 'peer',
+      referenceDeviceId: 'remote-device',
+    });
+    act(() => current.update({ mode: 'files', ratio: 40 }));
+    expect(localStorage.getItem('account-host-workspace.members')).toBe(
+      membership,
+    );
+    render('other-scope', 'other-host/workspace');
+    render('account-host-workspace', 'host/workspace');
+    expect(current.value).toMatchObject({
+      referenceId: 'peer',
+      referenceDeviceId: 'remote-device',
+      mode: 'files',
+      ratio: 40,
+    });
+    act(() => current.update({ referenceDeviceId: null }));
+    expect(
+      JSON.parse(localStorage.getItem('account-host-workspace.members')!),
+    ).toMatchObject({ referenceId: 'peer', referenceDeviceId: null });
+  });
+});

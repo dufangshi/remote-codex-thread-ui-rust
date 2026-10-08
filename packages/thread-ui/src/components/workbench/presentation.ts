@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export type ReferenceMode = 'focus' | 'thread' | 'files' | 'collaboration';
 export interface WorkbenchPresentation {
   referenceId: string | null;
+  /** Null (and legacy absence) resolves to the host device. */
+  referenceDeviceId?: string | null;
   mode: ReferenceMode;
   ratio: number;
 }
@@ -15,7 +17,11 @@ export function normalizePresentation(
   members: unknown,
   arrangement: unknown,
 ): WorkbenchPresentation {
-  const m = members as { schemaVersion?: number; referenceId?: unknown } | null;
+  const m = members as {
+    schemaVersion?: number;
+    referenceId?: unknown;
+    referenceDeviceId?: unknown;
+  } | null;
   const a = arrangement as {
     schemaVersion?: number;
     mode?: unknown;
@@ -42,6 +48,16 @@ export function normalizePresentation(
       : 55;
   return {
     referenceId,
+    ...(m && 'referenceDeviceId' in m
+      ? {
+          referenceDeviceId:
+            referenceId &&
+            typeof m.referenceDeviceId === 'string' &&
+            /^[a-zA-Z0-9_-]{1,128}$/.test(m.referenceDeviceId)
+              ? m.referenceDeviceId
+              : null,
+        }
+      : {}),
     mode: mode === 'thread' && !referenceId ? 'focus' : mode,
     ratio,
   };
@@ -64,10 +80,14 @@ function write(
 ): boolean {
   try {
     // Do not rewrite membership for a resize or mode change.
-    if ('referenceId' in patch)
+    if ('referenceId' in patch || 'referenceDeviceId' in patch)
       localStorage.setItem(
         `${scope}.members`,
-        JSON.stringify({ schemaVersion: 1, referenceId: value.referenceId }),
+        JSON.stringify({
+          schemaVersion: 1,
+          referenceId: value.referenceId,
+          referenceDeviceId: value.referenceDeviceId ?? null,
+        }),
       );
     localStorage.setItem(
       `${scope}.arrangement`,
