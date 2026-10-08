@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { type ReactNode, type RefCallback } from 'react';
 
 export interface GraphChatTurnFrameProps {
@@ -31,6 +32,7 @@ export function GraphChatTurnFrame({
   timeTitle,
   tokenSummary,
 }: GraphChatTurnFrameProps) {
+  useI18n();
   return (
     <article
       ref={refCallback}
@@ -42,7 +44,7 @@ export function GraphChatTurnFrame({
         <div className="min-w-0 flex flex-1 items-start gap-1.5">
           <div className="min-w-0 flex flex-1 items-center gap-1.5 overflow-hidden">
             <span className="thread-graph-turn-index rounded-[0.6rem] border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em]">
-              Turn {absoluteIndex}
+              {translate("chat.turn")} {absoluteIndex}
             </span>
             <time
               dateTime={startedAt ?? undefined}

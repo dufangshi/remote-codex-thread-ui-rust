@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import type { HighlighterCore } from 'shiki/core';
 import { getGraphChatHighlighter } from './graph-chat/graphChatShiki';
@@ -5,6 +6,7 @@ import { languageForPath } from './graph-workspace/workspaceTree';
 import { useAppShellNav } from '../app-shell/AppShellNavContext';
 
 export function DiffDetail({ text }: { text: string }) {
+  useI18n();
   const [highlighter, setHighlighter] = useState<HighlighterCore | null>(null);
   const theme = useAppShellNav()?.effectiveTheme ?? (document.documentElement.dataset.themeEffective === 'light' ? 'light' : 'dark');
   useEffect(() => {
@@ -29,7 +31,7 @@ export function DiffDetail({ text }: { text: string }) {
       return { line, kind, code, oldNumber, newNumber, tokens };
     });
   }, [text, highlighter, theme]);
-  return <pre className="thread-diff" aria-label="File changes" data-highlighted={Boolean(highlighter)}>
+  return <pre className="thread-diff" aria-label={translate("files.fileChanges")} data-highlighted={Boolean(highlighter)}>
     {rows.map((row, index) => <div key={index} className={`thread-diff-line is-${row.kind}`}>
       <span className="thread-diff-number">{row.oldNumber}</span><span className="thread-diff-number">{row.newNumber}</span>
       <span className="thread-diff-sign">{row.kind === 'add' ? '+' : row.kind === 'remove' ? '−' : ' '}</span>

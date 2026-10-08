@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import {
   ClipboardEvent,
   type Dispatch,
@@ -295,6 +296,7 @@ export function ThreadComposer({
   onSteerPendingPrompt,
   onCancelPendingPrompt,
 }: ThreadComposerProps) {
+  useI18n();
   const [openMenu, setOpenMenu] = useState<SettingsMenu>(null);
   const [slashPanelView, setSlashPanelView] = useState<SlashPanelView>('root');
   const submitInFlightRef = useRef(false);

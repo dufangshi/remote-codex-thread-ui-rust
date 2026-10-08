@@ -6,6 +6,7 @@ import { ReasoningEffortDto, CollaborationModeDto, SandboxModeDto, ModelOptionDt
 import { F as FrontendPluginModule } from './plugin-types-lcO37_1W.js';
 export { A as ArtifactRenderContext, I as InlineCodeRenderContext, T as ThreadPanelContribution } from './plugin-types-lcO37_1W.js';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+export { DEFAULT_LOCALE, I18nProvider, LOCALE_OPTIONS, LOCALE_STORAGE_KEY, LanguageSwitcher, Locale, SUPPORTED_LOCALES, TranslationKey, TranslationValues, detectLocale, formatDate, formatNumber, getLocale, initializeI18n, normalizeLocale, setLocale, t, translate, useI18n } from './i18n.js';
 
 interface SlashPanelState<T> {
     status: 'idle' | 'loading' | 'ready' | 'failed';
@@ -507,11 +508,11 @@ declare function LongTextDialog({ open, title, text, kind, onClose, }: LongTextD
 
 declare function formatShortTimestamp(value: string | null): string;
 declare function formatLongTimestamp(value: string | null): string;
-declare function threadStatusLabel(status: ThreadDto['status']): "Confirming status" | "Idle" | "Running" | "Interrupted" | "Failed" | "Not Loaded" | "System Error";
+declare function threadStatusLabel(status: ThreadDto['status']): string;
 declare function threadStatusClassName(status: ThreadDto['status']): "ui-status-warning" | "ui-status-neutral" | "ui-status-info" | "ui-status-danger";
-declare function turnStatusLabel(status: ThreadTurnDto['status'] | 'sending'): "Completed" | "Confirming status" | "Running" | "Interrupted" | "Failed" | "Sending";
+declare function turnStatusLabel(status: ThreadTurnDto['status'] | 'sending'): string;
 declare function historyItemAccentClassName(kind: ThreadHistoryItemDto['kind']): "ui-status-neutral" | "timeline-kind-user" | "timeline-kind-agent" | "timeline-kind-action" | "timeline-kind-command" | "timeline-kind-search" | "timeline-kind-file-read" | "timeline-kind-reasoning" | "timeline-kind-agent-tool" | "timeline-kind-skill-tool" | "timeline-kind-plan" | "timeline-kind-file";
-declare function historyItemLabel(kind: ThreadHistoryItemDto['kind']): "User" | "Reasoning" | "Agent" | "Artifact" | "Image" | "Context" | "Command" | "Web Search" | "File Read" | "Skill" | "Tool" | "Plan" | "File Change" | "Hook" | "Other";
+declare function historyItemLabel(kind: ThreadHistoryItemDto['kind']): string;
 
 declare function hasLikelyMarkdownSyntax(text: string): boolean;
 

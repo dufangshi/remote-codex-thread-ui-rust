@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type {
   CollaborationModeDto,
   ModelOptionDto,
@@ -379,7 +380,7 @@ export function formatReasoningEffortLabel(
   value: ReasoningEffortDto | null | undefined,
 ) {
   if (!value) {
-    return 'Auto';
+    return translate("chat.auto");
   }
 
   switch (value) {
@@ -514,7 +515,7 @@ export function formatModelContextTitle(
   contextUsage: ThreadContextUsageDto | null | undefined,
 ) {
   if (!model) {
-    return 'Select model';
+    return translate("chat.selectModel");
   }
 
   if (
@@ -522,7 +523,7 @@ export function formatModelContextTitle(
     typeof contextUsage.tokensInContextWindow !== 'number' ||
     typeof contextUsage.modelContextWindow !== 'number'
   ) {
-    return `${model} · context unavailable`;
+    return translate("chat.contextUnavailable", { value1: model });
   }
 
   const usedTokens = Math.max(contextUsage.tokensInContextWindow, 0);
@@ -531,9 +532,9 @@ export function formatModelContextTitle(
 
   return [
     model,
-    `${formatContextTokenKilocount(usedTokens)} used / ${formatContextTokenKilocount(contextTokens)}`,
-    `${formatContextTokenKilocount(remainingTokens)} left`,
-    `${clampPercent(contextUsage.remainingPercent)}% context left`,
+    translate("chat.contextUsedSummary", { used: formatContextTokenKilocount(usedTokens), total: formatContextTokenKilocount(contextTokens) }),
+    translate("chat.contextRemainingSummary", { remaining: formatContextTokenKilocount(remainingTokens) }),
+    translate("chat.contextLeft", { value1: clampPercent(contextUsage.remainingPercent) }),
   ].join(' · ');
 }
 

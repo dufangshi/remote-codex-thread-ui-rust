@@ -1,14 +1,16 @@
+import { translate, useI18n } from '../i18n';
 import { useId, useState, type ReactNode } from 'react';
 
 export type SettingsSection = { id: string; label: string; description?: string; content: ReactNode };
 
 export function SettingsPanels({ sections, initialId }: { sections: SettingsSection[]; initialId?: string }) {
+  useI18n();
   const [selected, setSelected] = useState(initialId ?? sections[0]?.id);
   const scope = useId();
   const active = sections.find((section) => section.id === selected) ?? sections[0];
   if (!active) return null;
   return <div className="settings-workspace">
-    <nav className="settings-navigation" role="tablist" aria-label="Settings categories">
+    <nav className="settings-navigation" role="tablist" aria-label={translate("settings.settingsCategories")}>
       {sections.map((section, index) => <button
         key={section.id} type="button" role="tab" id={`${scope}-${section.id}`}
         aria-controls={`${scope}-panel`} aria-selected={active.id === section.id}

@@ -1,3 +1,7 @@
+import {
+  translate
+} from "./chunk-4Q3ARP5S.js";
+
 // src/plugins/builtin-plugin-modules.tsx
 import { terminalPluginManifest } from "@remote-codex/plugin-terminal";
 var builtinFrontendPlugins = [
@@ -7,7 +11,9 @@ var builtinFrontendPlugins = [
       {
         id: "terminal",
         kind: "terminal",
-        label: "Terminal"
+        get label() {
+          return translate("workbench.terminal");
+        }
       }
     ]
   }

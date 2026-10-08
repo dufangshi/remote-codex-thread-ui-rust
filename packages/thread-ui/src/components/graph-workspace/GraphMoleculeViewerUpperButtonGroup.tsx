@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type { GLViewer } from '3dmol';
 import { Box, Camera, Copy, Download, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 import type { RefObject } from 'react';
@@ -27,6 +28,7 @@ export default function GraphMoleculeViewerUpperButtonGroup({
   xyzContent: string | null;
   xyzFormat: string;
 }) {
+  useI18n();
   const slug = moleculeSlug(moleculeId);
 
   async function handleCopyXYZ() {
@@ -81,28 +83,28 @@ export default function GraphMoleculeViewerUpperButtonGroup({
   return (
     <GraphMoleculeButtonGroup className="ml-auto justify-end">
       <GraphMoleculeIconButton
-        label="Copy current structure"
+        label={translate("files.copyCurrentStructure")}
         onClick={() => void handleCopyXYZ()}
         disabled={!xyzContent}
       >
         <Copy className="size-3.5" />
       </GraphMoleculeIconButton>
       <GraphMoleculeIconButton
-        label="Download current structure"
+        label={translate("files.downloadCurrentStructure")}
         onClick={handleDownloadXYZ}
         disabled={!xyzContent}
       >
         <Download className="size-3.5" />
       </GraphMoleculeIconButton>
       <GraphMoleculeIconButton
-        label="Download full trajectory"
+        label={translate("files.downloadFullTrajectory")}
         onClick={handleDownloadAllXYZ}
         disabled={!exportContent}
       >
         <Box className="size-3.5" />
       </GraphMoleculeIconButton>
       <GraphMoleculeIconButton
-        label="Copy screenshot"
+        label={translate("files.copyScreenshot")}
         onClick={onScreenshot}
         disabled={!viewerRef.current || !xyzContent}
       >
@@ -110,21 +112,21 @@ export default function GraphMoleculeViewerUpperButtonGroup({
       </GraphMoleculeIconButton>
       <ButtonGroupSeparator className="thread-graph-molecule-button-divider" />
       <GraphMoleculeIconButton
-        label="Zoom in"
+        label={translate("files.zoomIn")}
         onClick={handleZoomIn}
         disabled={!viewerRef.current || !xyzContent}
       >
         <ZoomIn className="size-3.5" />
       </GraphMoleculeIconButton>
       <GraphMoleculeIconButton
-        label="Zoom out"
+        label={translate("files.zoomOut")}
         onClick={handleZoomOut}
         disabled={!viewerRef.current || !xyzContent}
       >
         <ZoomOut className="size-3.5" />
       </GraphMoleculeIconButton>
       <GraphMoleculeIconButton
-        label="Reset camera"
+        label={translate("files.resetCamera")}
         onClick={handleReset}
         disabled={!viewerRef.current || !xyzContent}
       >

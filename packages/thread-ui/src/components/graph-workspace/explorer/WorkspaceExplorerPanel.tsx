@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import {
   FileCode2,
   ListCollapse,
@@ -98,6 +99,7 @@ export function WorkspaceExplorerPanel({
   tree: WorkspaceTreeNode;
   rootError?: string | null;
 } & WorkspaceNodeActionProps) {
+  useI18n();
   const visibleTree = useMemo(
     () => ({
       ...tree,
@@ -133,15 +135,14 @@ export function WorkspaceExplorerPanel({
     <aside className="thread-graph-explorer flex h-full min-h-0 flex-col overflow-hidden rounded-md">
       <div className="thread-graph-explorer-header flex h-9 shrink-0 items-center justify-between border-b px-2">
         <h2 className="text-[11px] font-semibold uppercase text-slate-600 dark:text-slate-300">
-          Explorer
-        </h2>
+          {translate("files.explorer")}</h2>
         <div className="thread-graph-explorer-toolbar flex items-center gap-1">
           <button
             type="button"
             onClick={openFilter}
             className={iconButtonClassName}
-            title="Filter workspace"
-            aria-label="Filter workspace"
+            title={translate("files.filterWorkspace")}
+            aria-label={translate("files.filterWorkspace")}
             aria-pressed={filterOpen}
           >
             <Search className="h-4 w-4" />
@@ -150,8 +151,8 @@ export function WorkspaceExplorerPanel({
             type="button"
             onClick={onCollapseAll}
             className={iconButtonClassName}
-            title="Collapse folders"
-            aria-label="Collapse folders"
+            title={translate("files.collapseFolders")}
+            aria-label={translate("files.collapseFolders")}
           >
             <ListCollapse className="h-4 w-4" />
           </button>
@@ -160,8 +161,8 @@ export function WorkspaceExplorerPanel({
             onClick={onRefresh}
             disabled={!onRefresh}
             className={iconButtonClassName}
-            title="Refresh workspace"
-            aria-label="Refresh workspace"
+            title={translate("files.refreshWorkspace")}
+            aria-label={translate("files.refreshWorkspace")}
           >
             <RefreshCw
               className={`h-4 w-4 motion-reduce:animate-none ${loading ? 'animate-spin' : ''}`}
@@ -171,8 +172,8 @@ export function WorkspaceExplorerPanel({
             <details className="thread-graph-explorer-more relative">
               <summary
                 className={`${iconButtonClassName} list-none cursor-pointer`}
-                title="More Explorer actions"
-                aria-label="More Explorer actions"
+                title={translate("files.moreExplorerActions")}
+                aria-label={translate("files.moreExplorerActions")}
               >
                 <MoreHorizontal className="h-4 w-4" />
               </summary>
@@ -184,8 +185,7 @@ export function WorkspaceExplorerPanel({
                     className="flex h-9 w-full items-center gap-2 rounded px-2 text-left text-sm hover:bg-[var(--theme-hover)]"
                   >
                     <Upload className="h-4 w-4" />
-                    Upload file
-                  </button>
+                    {translate("files.uploadFile")}</button>
                 ) : null}
                 {onEmptyGarbage ? (
                   <button
@@ -195,8 +195,7 @@ export function WorkspaceExplorerPanel({
                     className="flex h-9 w-full items-center gap-2 rounded px-2 text-left text-sm text-rose-600 hover:bg-rose-500/10 disabled:opacity-50 dark:text-rose-300"
                   >
                     <Trash2 className="h-4 w-4" />
-                    Empty garbage
-                  </button>
+                    {translate("files.emptyGarbage_b701de")}</button>
                 ) : null}
               </div>
             </details>
@@ -207,8 +206,8 @@ export function WorkspaceExplorerPanel({
               data-testid="expand-viewer"
               onClick={onExpandViewer}
               className={collapseButtonClassName}
-              title="Show Editor"
-              aria-label="Show Editor"
+              title={translate("files.showEditor")}
+              aria-label={translate("files.showEditor")}
             >
               <PanelRightOpen className="h-4 w-4" />
             </button>
@@ -218,8 +217,8 @@ export function WorkspaceExplorerPanel({
               data-testid="collapse-explorer"
               onClick={onCollapse}
               className={collapseButtonClassName}
-              title="Hide Explorer"
-              aria-label="Hide Explorer"
+              title={translate("files.hideExplorer")}
+              aria-label={translate("files.hideExplorer")}
             >
               <PanelLeftClose className="h-4 w-4" />
             </button>
@@ -249,15 +248,15 @@ export function WorkspaceExplorerPanel({
                   }
                 }}
                 className="h-8 min-w-0 flex-1 bg-transparent text-sm text-[var(--theme-fg)] outline-none"
-                placeholder="Filter loaded files"
-                aria-label="Filter workspace files"
+                placeholder={translate("files.filterLoadedFiles")}
+                aria-label={translate("files.filterWorkspaceFiles")}
               />
               <button
                 type="button"
                 onClick={closeFilter}
                 className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--theme-fg-muted)] hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]"
-                title="Close filter"
-                aria-label="Close filter"
+                title={translate("files.closeFilter")}
+                aria-label={translate("files.closeFilter")}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -265,7 +264,7 @@ export function WorkspaceExplorerPanel({
             <div
               className="thread-graph-explorer-filter-mode inline-flex shrink-0 self-end rounded-md border border-[var(--theme-border)] p-0.5"
               role="group"
-              aria-label="Explorer filter mode"
+              aria-label={translate("files.explorerFilterMode")}
             >
               {(['filter', 'highlight'] as const).map((mode) => (
                 <button
@@ -276,11 +275,11 @@ export function WorkspaceExplorerPanel({
                   aria-pressed={filterMode === mode}
                   title={
                     mode === 'filter'
-                      ? 'Show matches only'
-                      : 'Highlight matches'
+                      ? translate("files.showMatchesOnly")
+                      : translate("files.highlightMatches")
                   }
                 >
-                  {mode === 'filter' ? 'Filter' : 'Highlight'}
+                  {mode === 'filter' ? translate("files.filter") : translate("files.highlight")}
                 </button>
               ))}
             </div>
@@ -291,9 +290,9 @@ export function WorkspaceExplorerPanel({
               aria-live="polite"
             >
               {filterResult.matchCount}{' '}
-              {filterResult.matchCount === 1 ? 'match' : 'matches'}
+              {filterResult.matchCount === 1 ? translate("files.match") : translate("files.matches")}
               {filterResult.hasUnresolvedDirectories
-                ? ' in loaded folders'
+                ? translate("files.inLoadedFolders")
                 : ''}
             </div>
           ) : null}
@@ -303,8 +302,7 @@ export function WorkspaceExplorerPanel({
       {liveNodes.length > 0 ? (
         <div className="shrink-0 border-b border-slate-200 py-2 dark:border-[#2a2f3a]">
           <div className="thread-graph-workspace-label px-3 pb-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-            Live
-          </div>
+            {translate("files.live")}</div>
           {liveNodes.map((node) => (
             <button
               key={node.id}
@@ -325,7 +323,7 @@ export function WorkspaceExplorerPanel({
         <div
           className="flex-1 space-y-1 px-3 py-2"
           role="status"
-          aria-label="Loading workspace files"
+          aria-label={translate("files.loadingWorkspaceFiles")}
         >
           {[0, 1, 2, 3, 4].map((index) => (
             <div
@@ -343,8 +341,7 @@ export function WorkspaceExplorerPanel({
             onClick={onRefresh}
             className="mt-2 h-8 rounded px-2 font-medium hover:bg-rose-500/10"
           >
-            Retry
-          </button>
+            {translate("files.retry")}</button>
         </div>
       ) : (
         <WorkspaceExplorerTree
@@ -381,13 +378,10 @@ export function WorkspaceExplorerPanel({
       filterMode === 'filter' &&
       filterResult.matchCount === 0 ? (
         <p className="thread-graph-workspace-empty mx-4 mb-4 rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-4 text-sm text-slate-500 dark:border-[#303642] dark:bg-[#1b1f29] dark:text-slate-400">
-          No matches in loaded folders.
-        </p>
+          {translate("files.noMatchesInLoadedFolders")}</p>
       ) : visibleTree.children.length === 0 ? (
         <p className="thread-graph-workspace-empty mx-4 mb-4 rounded-lg border border-dashed border-slate-200 bg-slate-50 px-3 py-4 text-sm text-slate-500 dark:border-[#303642] dark:bg-[#1b1f29] dark:text-slate-400">
-          This workspace is empty. Agent tool runs execute inside the thread
-          workspace, so files should appear here as the session works.
-        </p>
+          {translate("files.thisWorkspaceIsEmptyAgentToolRuns")}</p>
       ) : null}
     </aside>
   );

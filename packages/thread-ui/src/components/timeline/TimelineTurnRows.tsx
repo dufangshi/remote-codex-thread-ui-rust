@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   memo,
   useCallback,
@@ -136,6 +137,7 @@ export const HistoryItemRow = memo(function HistoryItemRow({
   timeMeta,
   autoOpenToolDetails = false,
 }: HistoryItemRowProps) {
+  const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   if (item.kind === 'reasoning' && !shellNav?.showReasoningSummaries) return null;
   if (isCompactChatItem(item.kind)) {
@@ -256,7 +258,7 @@ export const HistoryItemRow = memo(function HistoryItemRow({
       kind: 'webSearch';
     };
     const detailText =
-      typedItem.detailText?.trim() || typedItem.text || 'Web search';
+      typedItem.detailText?.trim() || typedItem.text || translate("chat.webSearch");
     return (
       <WebSearchItem
         autoOpen={autoOpenToolDetails}
@@ -265,10 +267,10 @@ export const HistoryItemRow = memo(function HistoryItemRow({
         onOpen={() =>
           onOpenDeferredHistoryItemDetail(
             typedItem,
-            'Web Search Details',
+            translate("chat.webSearchDetails"),
             detailText,
-            'Loading full web search details...',
-            'Unable to load full web search details.',
+            translate("chat.loadingFullWebSearchDetails"),
+            translate("chat.unableToLoadFullWebSearchDetails"),
           )
         }
       />
@@ -280,7 +282,7 @@ export const HistoryItemRow = memo(function HistoryItemRow({
       kind: 'fileRead';
     };
     const detailText =
-      typedItem.detailText?.trim() || typedItem.text || 'File read';
+      typedItem.detailText?.trim() || typedItem.text || translate("chat.fileRead");
     return (
       <FileReadItem
         autoOpen={autoOpenToolDetails}
@@ -289,10 +291,10 @@ export const HistoryItemRow = memo(function HistoryItemRow({
         onOpen={() =>
           onOpenDeferredHistoryItemDetail(
             typedItem,
-            'File Read Details',
+            translate("chat.fileReadDetails"),
             detailText,
-            'Loading full file read details...',
-            'Unable to load full file read details.',
+            translate("chat.loadingFullFileReadDetails"),
+            translate("chat.unableToLoadFullFileReadDetails"),
           )
         }
       />
@@ -337,7 +339,7 @@ export const HistoryItemRow = memo(function HistoryItemRow({
       kind: 'fileChange';
     };
     const detailText =
-      typedItem.detailText?.trim() || typedItem.text || 'File change';
+      typedItem.detailText?.trim() || typedItem.text || translate("chat.fileChange");
     return (
       <FileChangeItem
         item={typedItem}
@@ -345,10 +347,10 @@ export const HistoryItemRow = memo(function HistoryItemRow({
         onOpen={() =>
           onOpenDeferredHistoryItemDetail(
             typedItem,
-            'File Change Details',
+            translate("chat.fileChangeDetails"),
             detailText,
-            'Loading full file change details...',
-            'Unable to load full file change details.',
+            translate("chat.loadingFullFileChangeDetails"),
+            translate("chat.unableToLoadFullFileChangeDetails"),
           )
         }
       />
@@ -463,7 +465,7 @@ export function formatWorkedDuration(
     endMillis === null ||
     endMillis < startMillis
   ) {
-    return 'Worked';
+    return translate("chat.worked");
   }
 
   const totalSeconds = Math.max(
@@ -569,6 +571,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   scrollRootRef,
   articleRef,
 }: ThreadTurnRowProps) {
+  const { locale: i18nLocale } = useI18n();
   const showReasoningSummaries = useAppShellNav()?.showReasoningSummaries ?? false;
   const hasLiveActivity =
     Boolean(livePlan) ||
@@ -708,14 +711,13 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     [groupedItems, activeForRendering],
   );
   const workedLabel = useMemo(
-    () => turn.status === 'recovering' ? 'Confirming status' : activeForRendering ? 'Working' : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
+    () => turn.status === 'recovering' ? translate("chat.confirmingStatus") : activeForRendering ? translate("chat.working") : formatWorkedDuration(turn.startedAt, turn.completedAt, mergedItems),
     [activeForRendering, mergedItems, turn.completedAt, turn.startedAt, turn.status],
   );
   const interruptedLabel =
     turn.status === 'interrupted' ? (
       <span className="thread-graph-worked-interrupted shrink-0 text-[11px]">
-        Interrupted
-      </span>
+        {translate("chat.interrupted")}</span>
     ) : null;
   const hasCollapsedHiddenItems =
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
@@ -766,20 +768,20 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
             className="group flex shrink-0 items-center gap-2 text-left transition"
           onClick={() => onToggleCollapse(turn, effectiveCollapsed)}
           disabled={deferredItemsLoading}
-          aria-label={`${workedLabel}. ${effectiveCollapsed ? 'Expand' : 'Collapse'} turn ${absoluteIndex}`}
+          aria-label={translate("chat.turn_6e6e38", { value1: workedLabel, value2: effectiveCollapsed ? translate("chat.expand") : translate("chat.collapse"), value3: absoluteIndex })}
           aria-expanded={!effectiveCollapsed}
         >
           <span className="thread-graph-worked-label shrink-0">
             {deferredItemsLoading
-              ? 'Loading complete history...'
+              ? translate("chat.loadingCompleteHistory")
               : deferredItemsError
-                ? 'History unavailable, retry'
+                ? translate("chat.historyUnavailableRetry")
                 : workedLabel}
           </span>
           {interruptedLabel}
           <ChevronRight className={`h-4 w-4 shrink-0 transition ${effectiveCollapsed ? '' : 'rotate-90'}`} />
           </button>
-          <span className="thread-execution-step-count">{stepCount} steps</span>
+          <span className="thread-execution-step-count">{stepCount} {translate("chat.steps")}</span>
           <TurnUsageInline turn={turn} speedMode="average" />
           <span
             className="thread-graph-worked-rule h-px min-w-0 flex-1"
@@ -886,6 +888,7 @@ function TimelineHistoryEntries({
   turnStartedAt,
   autoOpenLatestToolDetails = false,
 }: TimelineHistoryEntriesProps) {
+  const { locale: i18nLocale } = useI18n();
   const latestEntryKey = entries.at(-1)?.key ?? null;
   const relativeTimeMeta = useCallback(
     (timestamp: string | null | undefined, endTimestamp?: string | null) =>
@@ -922,7 +925,7 @@ function TimelineHistoryEntries({
           items={entry.items}
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
-          onOpen={(item, title) => onOpenDeferredHistoryItemDetail(item, title, item.detailText ?? item.text, 'Loading file changes...', 'Unable to load file changes.')}
+          onOpen={(item, title) => onOpenDeferredHistoryItemDetail(item, title, item.detailText ?? item.text, translate("chat.loadingFileChanges"), translate("chat.unableToLoadFileChanges"))}
           renderItemTime={relativeTimeMeta}
           timeMeta={relativeTimeMeta(firstHistoryEntryTimestamp(entry), lastHistoryEntryTimestamp(entry))}
         />

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { ComposerMenuSurface } from './ComposerMenuSurface';
 import type {
   ModelOptionDto,
@@ -18,16 +19,16 @@ const sandboxOptions: Array<{
   mode: SandboxModeDto;
   label: string;
 }> = [
-  { mode: 'read-only', label: 'Read only' },
-  { mode: 'workspace-write', label: 'Workspace write' },
-  { mode: 'danger-full-access', label: 'Danger' },
+  { mode: 'read-only', get label() { return translate("chat.readOnly"); } },
+  { mode: 'workspace-write', get label() { return translate("chat.workspaceWrite"); } },
+  { mode: 'danger-full-access', get label() { return translate("chat.danger"); } },
 ];
 
 function formatSandboxModeLabel(mode: SandboxModeDto | null | undefined) {
   return (
     sandboxOptions.find(
       (entry) => entry.mode === (mode ?? 'danger-full-access'),
-    )?.label ?? 'Danger'
+    )?.label ?? translate("chat.danger")
   );
 }
 
@@ -40,9 +41,9 @@ function formatSandboxModeCompactLabel(
     case 'workspace-write':
       return 'WW';
     case 'danger-full-access':
-      return 'Full';
+      return translate("chat.full");
     default:
-      return 'Full';
+      return translate("chat.full");
   }
 }
 
@@ -99,13 +100,14 @@ export function ComposerSettingsToolbar({
   onSetOpenMenu: (updater: (current: SettingsMenu) => SettingsMenu) => void;
   onUpdateSettings: (input: UpdateThreadSettingsInput) => void;
 }) {
+  useI18n();
   const [settingsSection, setSettingsSection] = useState<
     'model' | 'effort' | null
   >(null);
   const selectedModelLabel = (
     modelOptions.find((entry) => entry.model === model)?.displayName ||
     model ||
-    'Select model'
+    translate("chat.selectModel")
   ).replace(/\s+\([^)]+\)\s*$/, '');
 
   return (
@@ -118,7 +120,7 @@ export function ComposerSettingsToolbar({
           data-composer-menu-trigger="true"
           aria-haspopup="menu"
           aria-expanded={openMenu === 'model'}
-          aria-label={`Model and effort: ${selectedModelLabel}, ${formatReasoningEffortLabel(reasoningEffort)}`}
+          aria-label={translate("chat.modelAndEffort", { value1: selectedModelLabel, value2: formatReasoningEffortLabel(reasoningEffort) })}
           disabled={modelControlsDisabled || modelOptions.length === 0}
           onClick={() => {
             setSettingsSection(null);
@@ -126,7 +128,7 @@ export function ComposerSettingsToolbar({
           }}
           title={
             fastMode
-              ? `Fast mode is on. Turn it off from the slash toolbox to edit model. ${modelContextTitle}`
+              ? translate("chat.fastModeIsOnTurnItOff", { value1: modelContextTitle })
               : modelContextTitle
           }
           className={`${inlineToggleClassName} relative min-w-0 max-w-[10rem] overflow-hidden rounded-full px-2.5 text-left text-stone-300 disabled:cursor-not-allowed disabled:text-stone-600 sm:max-w-[14rem]`}
@@ -146,7 +148,7 @@ export function ComposerSettingsToolbar({
               onClick={() => setSettingsSection('model')}
               className={`${menuItemClassName} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-stone-300`}
             >
-              <span>Model</span>
+              <span>{translate("chat.model")}</span>
               <span className="flex min-w-0 items-center gap-1 text-stone-500">
                 <span className="max-w-[7rem] truncate">
                   {selectedModelLabel}
@@ -161,7 +163,7 @@ export function ComposerSettingsToolbar({
               onClick={() => setSettingsSection('effort')}
               className={`${menuItemClassName} flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-stone-300 disabled:cursor-not-allowed disabled:text-stone-600`}
             >
-              <span>Effort</span>
+              <span>{translate("chat.effort")}</span>
               <span className="flex items-center gap-1 text-stone-500">
                 {formatReasoningEffortLabel(reasoningEffort)}
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -170,7 +172,7 @@ export function ComposerSettingsToolbar({
 
             {settingsSection === 'model' ? (
               <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5">
-                <p className="px-3 py-1.5 text-xs text-stone-500">Model</p>
+                <p className="px-3 py-1.5 text-xs text-stone-500">{translate("chat.model")}</p>
                 <div className="max-h-72 overflow-auto">
                   {modelOptions.map((entry) => {
                     const selected = entry.model === model;
@@ -212,7 +214,7 @@ export function ComposerSettingsToolbar({
 
             {settingsSection === 'effort' ? (
               <div className="mt-1 w-full overflow-hidden border-t border-stone-700 bg-stone-900 p-1.5">
-                <p className="px-3 py-1.5 text-xs text-stone-500">Effort</p>
+                <p className="px-3 py-1.5 text-xs text-stone-500">{translate("chat.effort")}</p>
                 {supportedEfforts.map((entry) => {
                   const selected = entry.reasoningEffort === reasoningEffort;
                   return (
@@ -240,12 +242,11 @@ export function ComposerSettingsToolbar({
                   (entry) => entry.reasoningEffort === 'ultra',
                 ) ? (
                   <p className="px-3 pb-1 pt-2 text-xs leading-4 text-stone-500">
-                    Higher effort can consume usage limits faster.
-                  </p>
+                    {translate("chat.higherEffortCanConsumeUsageLimitsFaster")}</p>
                 ) : null}
               </div>
             ) : null}
-            <div className="mt-1 border-t border-[var(--theme-border)] px-3 py-2 text-xs leading-5 text-[var(--theme-fg-muted)]" aria-label="Context usage">
+            <div className="mt-1 border-t border-[var(--theme-border)] px-3 py-2 text-xs leading-5 text-[var(--theme-fg-muted)]" aria-label={translate("chat.contextUsage")}>
               {modelContextTitle}
             </div>
           </ComposerMenuSurface>
@@ -261,14 +262,14 @@ export function ComposerSettingsToolbar({
             data-composer-menu-trigger="true"
             aria-haspopup="menu"
             aria-expanded={openMenu === 'sandbox'}
-            aria-label={`Sandbox: ${formatSandboxModeLabel(sandboxMode)}`}
+            aria-label={translate("chat.sandbox", { value1: formatSandboxModeLabel(sandboxMode) })}
             disabled={settingsBusy}
             onClick={() =>
               onSetOpenMenu((current) =>
                 current === 'sandbox' ? null : 'sandbox',
               )
             }
-            title={`Sandbox: ${formatSandboxModeLabel(sandboxMode)}`}
+            title={translate("chat.sandbox", { value1: formatSandboxModeLabel(sandboxMode) })}
             className={`${inlineToggleClassName} rounded-full px-2.5 text-stone-300 disabled:cursor-not-allowed disabled:text-stone-700`}
           >
             {formatSandboxModeCompactLabel(sandboxMode)}
@@ -307,7 +308,7 @@ export function ComposerSettingsToolbar({
         type="submit"
         variant="default"
         size="icon-xs"
-        aria-label={goalComposeMode ? 'Set goal' : 'Send Prompt'}
+        aria-label={goalComposeMode ? translate("chat.setGoal") : translate("chat.sendPrompt")}
         title={sendButtonLabel}
         disabled={goalBusy || (activeView === 'chat' ? disabled : false)}
         className={`${sendButtonBaseClassName} h-9 w-9 rounded-full text-sm font-medium disabled:cursor-not-allowed sm:h-8 sm:w-8 ${sendButtonClassName}`}

@@ -1,9 +1,11 @@
+import { translate, useI18n } from '../../i18n';
 import { useState, type MouseEvent, type ReactNode } from 'react';
 import { CheckCircle2, Circle, Loader2, XCircle } from 'lucide-react';
 
 type GraphChatMessageKind = 'userMessage' | 'agentMessage';
 
 function GraphChatRunningDots() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <span className="ml-1.5 inline-flex items-center gap-1" aria-hidden="true">
       {[0, 1, 2].map((index) => (
@@ -22,10 +24,15 @@ export function GraphChatMessageStatusBadge({
 }: {
   status: string | null | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   if (!status) {
     return null;
   }
 
+  const label = status === 'Accepted' ? translate('chat.acceptedStatus')
+    : status === 'Steering' ? translate('chat.steeringStatus')
+    : status === 'Awaiting response' ? translate('chat.awaitingResponseStatus')
+    : status === 'Completed' ? translate('chat.completed') : status;
   const normalized = status.toLowerCase();
   const isRunning =
     normalized.includes('running') ||
@@ -55,13 +62,13 @@ export function GraphChatMessageStatusBadge({
   return (
     <span
       className={`thread-graph-message-status inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-normal ${className}`}
-      title={status}
-      aria-label={`Status: ${status}`}
+      title={label}
+      aria-label={translate("chat.status", { value1: label })}
     >
       <span className="thread-graph-message-status-icon inline-flex shrink-0">
         {isRunning ? <GraphChatRunningDots /> : icon}
       </span>
-      <span className="thread-graph-status-label">{status}</span>
+      <span className="thread-graph-status-label">{label}</span>
     </span>
   );
 }
@@ -87,6 +94,7 @@ export function GraphChatMessageFrame({
   timeLabel?: ReactNode;
   timeTitle?: string | null | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const isUser = kind === 'userMessage';
   const [touchActionsVisible, setTouchActionsVisible] = useState(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? '';

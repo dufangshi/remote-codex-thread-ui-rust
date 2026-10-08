@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import {
   lazy,
   memo,
@@ -14,16 +15,17 @@ const LazyThreadGraphWorkspacePanel = lazy(async () => {
 });
 
 export function ThreadGraphWorkspaceLoadingFallback() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <div className="flex h-full min-h-0 flex-1 items-center justify-center px-4 text-sm text-[var(--theme-fg-muted)]">
-      Loading workspace...
-    </div>
+      {translate("files.loadingWorkspace")}</div>
   );
 }
 
 export function ThreadGraphWorkspacePanel(
   props: ThreadGraphWorkspacePanelProps,
 ) {
+  const { locale: i18nLocale } = useI18n();
   return (
     <Suspense fallback={<ThreadGraphWorkspaceLoadingFallback />}>
       <LazyThreadGraphWorkspacePanel {...props} />

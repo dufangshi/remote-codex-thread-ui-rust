@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { mergeThreadHistoryItem } from '@remote-codex/shared';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -189,6 +190,7 @@ function ThreadTimelineComponent({
   adapter,
   autoCollapseCompletedTurns,
 }: ThreadTimelineProps) {
+  useI18n();
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns =
     autoCollapseCompletedTurns ??
@@ -329,7 +331,7 @@ function ThreadTimelineComponent({
     void Promise.resolve(loadTurnDetail(turn.id))
       .then((loadedTurn) => {
         if (loadedTurn.id !== turn.id) {
-          throw new Error('Loaded turn detail did not match the requested turn.');
+          throw new Error(translate("chat.loadedTurnDetailDidNotMatchThe"));
         }
         setLoadedTurnDetails((current) => ({
           ...current,
@@ -346,7 +348,7 @@ function ThreadTimelineComponent({
           [turn.id]:
             caught instanceof Error
               ? caught.message
-              : 'Unable to load complete turn history.',
+              : translate("chat.unableToLoadCompleteTurnHistory"),
         }));
       })
       .finally(() => {
@@ -369,10 +371,10 @@ function ThreadTimelineComponent({
           loadingTurnDetailIds.has(turn.id) || turnDetailErrors[turn.id]) continue;
       setLoadingTurnDetailIds((current) => new Set(current).add(turn.id));
       void Promise.resolve().then(() => loadTurnDetail(turn.id)).then((detail) => {
-        if (detail.id !== turn.id) throw new Error('Loaded turn detail did not match the requested turn.');
+        if (detail.id !== turn.id) throw new Error(translate("chat.loadedTurnDetailDidNotMatchThe"));
         setLoadedTurnDetails((current) => ({ ...current, [turn.id]: detail }));
       }).catch((error: unknown) => {
-        setTurnDetailErrors((current) => ({ ...current, [turn.id]: error instanceof Error ? error.message : 'Unable to load complete turn history.' }));
+        setTurnDetailErrors((current) => ({ ...current, [turn.id]: error instanceof Error ? error.message : translate("chat.unableToLoadCompleteTurnHistory") }));
       }).finally(() => {
         setLoadingTurnDetailIds((current) => { const next = new Set(current); next.delete(turn.id); return next; });
       });
@@ -599,7 +601,7 @@ function ThreadTimelineComponent({
                     className="thread-history-earlier flex items-center gap-2 px-2 py-2 text-xs transition"
                   >
                     <span className="thread-history-arrow" aria-hidden="true">↑</span>
-                    {loadingEarlier ? 'Loading earlier…' : 'Earlier messages'}
+                    {loadingEarlier ? translate("chat.loadingEarlier") : translate("chat.earlierMessages")}
                   </button>
                 )}
                 {showLoadAll && (
@@ -608,17 +610,13 @@ function ThreadTimelineComponent({
                     onClick={handleLoadAllClick}
                     className="rounded-full border border-amber-300/40 px-2.5 py-1.5 text-amber-200 transition hover:bg-amber-300/10"
                   >
-                    Load full history
-                  </button>
+                    {translate("chat.loadFullHistory")}</button>
                 )}
                 <p className="timeline-meta-text">
-                  Showing {visibleTurns.length} of {effectiveTotalTurnCount} turns
-                  {hiddenCount > 0
-                    ? ` · ${hiddenCount} earlier hidden${
-                        loadedHiddenCount > 0 && unloadedHiddenCount > 0
+                  {translate("chat.showing")} {visibleTurns.length} {translate("chat.of")} {effectiveTotalTurnCount} {translate("chat.turns")}{hiddenCount > 0
+                    ? translate("chat.earlierHidden", { value1: hiddenCount, value2: loadedHiddenCount > 0 && unloadedHiddenCount > 0
                           ? ` (${loadedHiddenCount} loaded)`
-                          : ''
-                      }`
+                          : '' })
                     : ''}
                 </p>
               </div>
@@ -627,8 +625,7 @@ function ThreadTimelineComponent({
 
           {turns.length === 0 && !liveOutput && !optimisticTurn && (
             <div className="thread-graph-empty-state px-3 py-8 text-sm sm:px-5">
-              Send the first prompt to start the thread.
-            </div>
+              {translate("chat.sendTheFirstPromptToStartThe")}</div>
           )}
 
           {(visibleTurns.length > 0 ||
@@ -860,7 +857,7 @@ function ThreadTimelineComponent({
                             });
                         }}
                       >
-                        {cancelingSteerIds.has(steer.id) ? 'Canceling...' : 'Cancel'}
+                        {cancelingSteerIds.has(steer.id) ? translate("chat.canceling") : translate("chat.cancel")}
                       </button>
                     </div>
                   ) : null}
@@ -977,7 +974,7 @@ function ThreadTimelineComponent({
 
       <LongTextDialog
         open={expandedText !== null}
-        title={expandedText?.title ?? 'Full text'}
+        title={expandedText?.title ?? translate("chat.fullText")}
         text={expandedText?.text ?? ''}
         kind={expandedText?.kind}
         onClose={closeExpandedText}

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   useLayoutEffect,
   type MutableRefObject,
@@ -54,7 +55,7 @@ function createPromptAttachmentToken(
     const previewUrl = attachmentPreviewUrls[attachment.clientId];
     if (previewUrl) {
       token.setAttribute('role', 'button');
-      token.setAttribute('aria-label', `Open image preview: ${attachment.originalName || 'Pasted image'}`);
+      token.setAttribute('aria-label', translate("chat.openImagePreview", { value1: attachment.originalName || translate("chat.pastedImage") }));
       token.tabIndex = 0;
       token.classList.add('cursor-zoom-in');
       const image = document.createElement('img');
@@ -145,6 +146,7 @@ export function useComposerPromptDomSync({
   serializeEditorPrompt,
   restoreSelection,
 }: UseComposerPromptDomSyncInput) {
+  useI18n();
   useLayoutEffect(() => {
     const editor = promptRef.current;
     if (!editor || isShellView || editor.dataset.imeComposing === 'true') {

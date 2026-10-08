@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useEffect, useState } from 'react';
 
 import type { ThreadHistoryItemDto } from '@remote-codex/shared';
@@ -19,6 +20,7 @@ function RunningDots({
 }: {
   tone?: 'amber' | 'emerald' | 'sky';
 }) {
+  const { locale: i18nLocale } = useI18n();
   const dotClassName =
     tone === 'emerald'
       ? 'bg-sky-200/90'
@@ -145,6 +147,7 @@ export function deriveDisplayedLivePlan(
 }
 
 function useSecondClock(enabled: boolean) {
+  const { locale: i18nLocale } = useI18n();
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -188,6 +191,7 @@ function TurnStatusIndicator({
 }: {
   status: TimelineTurn['status'];
 }) {
+  const { locale: i18nLocale } = useI18n();
   const label = turnStatusLabel(status);
 
   if (status === 'completed') {
@@ -275,6 +279,7 @@ export function TurnStatusBar({
   lastActivityAt?: string | null;
   backgroundAgentCount?: number;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const label = turnStatusLabel(turn.status);
   const runtimeSummary = formatTurnRuntimeSummary(turn);
   const active = isActiveTurnStatus(turn.status);
@@ -295,14 +300,12 @@ export function TurnStatusBar({
         <div className="thread-graph-turn-footer-runtime flex min-w-0 flex-wrap items-center gap-2">
           {active && turn.status !== 'recovering' && backgroundAgentCount > 0 ? (
             <span className="thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]" role="status">
-              {backgroundAgentCount} background agent{backgroundAgentCount === 1 ? '' : 's'} running
-            </span>
+              {backgroundAgentCount} {translate("chat.backgroundAgent")}{backgroundAgentCount === 1 ? '' : translate("chat.s")} {translate("chat.running_3c49d9")}</span>
           ) : <TurnStatusIndicator status={turn.status} />}
           {active && turn.status !== 'recovering' && progressAge !== null && Number.isFinite(progressAge) && (
             <span className="thread-progress-age text-[10px] text-[var(--theme-fg-muted)]"
-              title="Time since the last turn progress update. Connection heartbeats do not count.">
-              Last progress · {progressAge}s ago
-            </span>
+              title={translate("chat.timeSinceTheLastTurnProgressUpdate")}>
+              {translate("chat.lastProgress")} {progressAge}{translate("chat.sAgo")}</span>
           )}
           <TurnUsageInline turn={turn} />
         </div>
@@ -310,13 +313,13 @@ export function TurnStatusBar({
           {effectiveLastActivityAt ? (
             <time
               dateTime={effectiveLastActivityAt}
-              title={`Last activity ${formatLongTimestamp(effectiveLastActivityAt)}`}
+              title={translate("chat.lastActivity", { value1: formatLongTimestamp(effectiveLastActivityAt) })}
             >
               {formatShortTimestamp(effectiveLastActivityAt)}
             </time>
           ) : null}
           {elapsedLabel ? (
-            <span aria-label={`Running for ${elapsedLabel}`}>· {elapsedLabel}</span>
+            <span aria-label={translate("chat.runningFor", { value1: elapsedLabel })}>· {elapsedLabel}</span>
           ) : null}
         </div>
       </div>

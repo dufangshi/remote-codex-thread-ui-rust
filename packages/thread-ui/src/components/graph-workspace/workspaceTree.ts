@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { normalizeFileSystemPath, relativeWorkspacePath } from '../workspacePaths';
 import type {
   AgentRuntimeStatusDto,
@@ -372,7 +373,7 @@ export function collectWorkspaceItems(
 ) {
   const root: WorkspaceTreeNode = {
     id: 'root',
-    name: detail.workspace.label ?? 'Workspace',
+    name: detail.workspace.label ?? translate("files.workspace"),
     path: '',
     kind: 'directory',
     children: [],

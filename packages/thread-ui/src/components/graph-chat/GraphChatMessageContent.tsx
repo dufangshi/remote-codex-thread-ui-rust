@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { externalLinkProps } from '../externalLinkProps';
 import {
   memo,
@@ -108,6 +109,7 @@ function parseWorkspaceFileHref(href: string | undefined, workspaceRootPath?: st
 }
 
 function PreRenderer({ children, ...props }: ComponentProps<'pre'>) {
+  const { locale: i18nLocale } = useI18n();
   if (isToolCodeElement(children)) {
     return <>{children}</>;
   }
@@ -148,6 +150,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   workspaceRootPath?: string | undefined;
   resolveHref?: ((href: string) => string) | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const plugins = usePlugins();
   const [highlighter, setHighlighter] = useState<Awaited<
@@ -229,6 +232,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
     node,
     ...props
   }: CodeRendererProps): ReactElement | null => {
+  const { locale: i18nLocale } = useI18n();
     const match = /language-(\w+(?:-\w+)*)/.exec(codeClassName || '');
     const language = match ? (match[1] ?? '') : '';
     const textContent = textFromReactNode(children).replace(/\n$/, '');
@@ -254,7 +258,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       }
 
       const toolName =
-        typeof data.call.tool === 'string' ? data.call.tool : 'Unknown';
+        typeof data.call.tool === 'string' ? data.call.tool : translate("chat.unknown");
       const callId =
         typeof data.call.call_id === 'string' ? data.call.call_id : undefined;
       return (
@@ -292,7 +296,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       return (
         <GraphChatToolCall
           callId={callId}
-          toolName={typeof data.tool === 'string' ? data.tool : 'Unknown'}
+          toolName={typeof data.tool === 'string' ? data.tool : translate("chat.unknown")}
           status={liveResult ? getGraphChatToolUiStatus(liveResult) : 'pending'}
           parameters={reconstructGraphChatToolArgs(data.args)}
           result={liveResult}
@@ -352,12 +356,12 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
             className="thread-graph-code-copy absolute right-2 top-2 z-10 rounded-md p-1.5"
             title={
               copyState[id] === 'copied'
-                ? 'Copied'
+                ? translate("chat.copied")
                 : copyState[id] === 'failed'
-                  ? 'Copy failed'
-                  : 'Copy'
+                  ? translate("chat.copyFailed")
+                  : translate("chat.copy")
             }
-            aria-label="Copy code"
+            aria-label={translate("chat.copyCode")}
           >
             {copyState[id] === 'copied' ? (
               <Check className="h-3.5 w-3.5" />
@@ -418,8 +422,8 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
           },
           img({src, alt}) {
             const resolved = src ? (resolveHref?.(src) ?? src) : undefined;
-            if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || 'Image unavailable'}</span>;
-            return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} /> : <span>{alt || 'Image unavailable'}</span>;
+            if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || translate("chat.imageUnavailable")}</span>;
+            return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} /> : <span>{alt || translate("chat.imageUnavailable")}</span>;
           },
           code: CodeBlockRenderer,
           pre: PreRenderer,

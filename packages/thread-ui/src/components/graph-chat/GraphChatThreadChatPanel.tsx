@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   useCallback,
   useEffect,
@@ -65,6 +66,7 @@ export function GraphChatThreadChatPanel({
   floatingMobileComposerBottomOffset = 0,
   composerHostRef,
 }: GraphChatThreadChatPanelProps) {
+  useI18n();
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [mobileComposerHeight, setMobileComposerHeight] = useState(0);
   const [mobileComposerOverlap, setMobileComposerOverlap] = useState(0);
@@ -384,9 +386,9 @@ export function GraphChatThreadChatPanel({
       {timelineElement}
       <div className="thread-chat-usage-footer hidden shrink-0 items-center px-4 py-1 text-[10px] leading-4 sm:flex">
         <span className="min-w-0">
-          {detail.turns.length} turn{detail.turns.length !== 1 ? 's' : ''}
+          {detail.turns.length} {translate("chat.turn_b09c73")}{detail.turns.length !== 1 ? translate("chat.s") : ''}
           <span className="mx-1 text-[var(--theme-border-contrast)]">|</span>
-          {transcriptItemCount} item{transcriptItemCount !== 1 ? 's' : ''}
+          {transcriptItemCount} {translate("chat.item")}{transcriptItemCount !== 1 ? translate("chat.s") : ''}
         </span>
       </div>
       {resolvedComposerProps ? (

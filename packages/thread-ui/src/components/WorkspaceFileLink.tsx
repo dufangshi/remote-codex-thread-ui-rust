@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -5,6 +6,7 @@ export function WorkspaceFileLink({path, line, children, onOpen, className = 'th
   path: string; line?: number | undefined; children: ReactNode;
   onOpen: (input: {path: string; line?: number}) => void; className?: string;
 }) {
+  useI18n();
   const [menu, setMenu] = useState<{x: number; y: number} | null>(null);
   const [copyError, setCopyError] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -25,10 +27,10 @@ export function WorkspaceFileLink({path, line, children, onOpen, className = 'th
     <a href={displayPath.split('/').map(encodeURIComponent).join('/') + (line ? `#L${line}` : '')} title={address} className={className}
       onClick={event=>{event.preventDefault();open();}}
       onContextMenu={event=>{event.preventDefault();setCopyError(false);setMenu({x:Math.min(event.clientX,window.innerWidth-190),y:Math.min(event.clientY,window.innerHeight-100)});}}>{children}</a>
-    {menu && createPortal(<div ref={menuRef} role="menu" aria-label="File link" className="thread-workspace-link-menu" style={{left:Math.max(8,menu.x),top:Math.max(8,menu.y)}}>
-      <button role="menuitem" onClick={open}>Open file</button>
-      <button role="menuitem" onClick={()=>{void navigator.clipboard.writeText(address).then(()=>setMenu(null)).catch(()=>setCopyError(true));}}>Copy link address</button>
-      {copyError && <span role="alert">Could not copy path</span>}
+    {menu && createPortal(<div ref={menuRef} role="menu" aria-label={translate("files.fileLink")} className="thread-workspace-link-menu" style={{left:Math.max(8,menu.x),top:Math.max(8,menu.y)}}>
+      <button role="menuitem" onClick={open}>{translate("files.openFile")}</button>
+      <button role="menuitem" onClick={()=>{void navigator.clipboard.writeText(address).then(()=>setMenu(null)).catch(()=>setCopyError(true));}}>{translate("files.copyLinkAddress")}</button>
+      {copyError && <span role="alert">{translate("files.couldNotCopyPath")}</span>}
     </div>, document.body)}
   </>;
 }

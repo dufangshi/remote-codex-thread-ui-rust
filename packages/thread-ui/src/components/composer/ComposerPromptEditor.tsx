@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useRef, useState } from 'react';
 import { GraphWorkspaceImageLightbox } from '../ZoomableImage';
 import type {
@@ -66,6 +67,7 @@ export function ComposerPromptEditor({
   onDragLeave,
   onDrop,
 }: ComposerPromptEditorProps) {
+  useI18n();
   const previewTrigger = useRef<HTMLElement | null>(null);
   const [preview, setPreview] = useState<{src: string; alt: string} | null>(null);
   function attachmentImage(target: EventTarget | null) {
@@ -91,7 +93,7 @@ export function ComposerPromptEditor({
         <div
           ref={promptRef}
           role="textbox"
-          aria-label="Prompt"
+          aria-label={translate("chat.prompt")}
           aria-multiline="true"
           contentEditable={disabled ? false : 'plaintext-only'}
           inputMode="text"

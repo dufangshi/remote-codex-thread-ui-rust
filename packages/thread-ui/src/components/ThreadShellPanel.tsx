@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { MessageSquare } from 'lucide-react';
 import {
   forwardRef,
@@ -92,6 +93,7 @@ export const ThreadShellPanel = forwardRef<
   }: ThreadShellPanelProps,
   ref,
 ) {
+  useI18n();
   const primaryPaneRef = useRef<ShellPaneHandle | null>(null);
   const secondaryPaneRef = useRef<ShellPaneHandle | null>(null);
   const feedbackTimerRef = useRef<number | null>(null);
@@ -215,7 +217,7 @@ export const ThreadShellPanel = forwardRef<
       setShellState(response);
       setError(null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Unable to load shell state.');
+      setError(caught instanceof Error ? caught.message : translate("files.unableToLoadShellState"));
     } finally {
       setLoading(false);
     }
@@ -391,7 +393,7 @@ export const ThreadShellPanel = forwardRef<
       setRenameDraft('');
       setError(null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Unable to rename shell.');
+      setError(caught instanceof Error ? caught.message : translate("files.unableToRenameShell"));
     } finally {
       setBusy(false);
     }
@@ -462,7 +464,7 @@ export const ThreadShellPanel = forwardRef<
         setError(null);
       } catch (caught) {
         setError(
-          caught instanceof Error ? caught.message : 'Unable to create shell.',
+          caught instanceof Error ? caught.message : translate("files.unableToCreateShell"),
         );
       } finally {
         createShellInFlightRef.current = false;
@@ -512,7 +514,7 @@ export const ThreadShellPanel = forwardRef<
         setError(null);
       } catch (caught) {
         setError(
-          caught instanceof Error ? caught.message : 'Unable to terminate shell.',
+          caught instanceof Error ? caught.message : translate("files.unableToTerminateShell"),
         );
       } finally {
         setBusy(false);
@@ -616,7 +618,7 @@ export const ThreadShellPanel = forwardRef<
   const handleCopyVisibleShellText = useCallback(async () => {
     const copied = await activePaneRef.current?.copyLastCommandOutput();
     if (!copied) {
-      setTransientToolboxFeedback('failed', 'Nothing to copy');
+      setTransientToolboxFeedback('failed', translate("files.nothingToCopy"));
       return false;
     }
     return true;
@@ -708,7 +710,7 @@ export const ThreadShellPanel = forwardRef<
               }}
               autoFocus
               className="w-full rounded border border-sky-300/35 bg-stone-950/70 px-2 py-1 text-xs text-stone-100 outline-none"
-              aria-label="Shell name"
+              aria-label={translate("files.shellName")}
             />
           </form>
         ) : (
@@ -732,28 +734,25 @@ export const ThreadShellPanel = forwardRef<
                 type="button"
                 onClick={() => void handleSubmitRenameShell()}
                 className="rounded border border-sky-300/35 bg-sky-300/12 px-1.5 py-1 text-[10px] text-sky-50"
-                title="Save shell name"
+                title={translate("files.saveShellName")}
               >
-                Save
-              </button>
+                {translate("files.save")}</button>
               <button
                 type="button"
                 onClick={handleCancelRenameShell}
                 className="rounded border border-stone-700 px-1.5 py-1 text-[10px] text-stone-200"
-                title="Cancel rename"
+                title={translate("files.cancelRename")}
               >
-                Cancel
-              </button>
+                {translate("files.cancel")}</button>
             </>
           ) : (
             <button
               type="button"
               onClick={() => handleStartRenameShell(shell)}
               className="rounded border border-stone-700 px-1.5 py-1 text-[10px] text-stone-200 hover:border-sky-300/40"
-              title="Rename shell"
+              title={translate("files.renameShell")}
             >
-              Rename
-            </button>
+              {translate("files.rename_d3f4cb")}</button>
           )}
           {splitMode === 'columns' && (
             <>
@@ -761,7 +760,7 @@ export const ThreadShellPanel = forwardRef<
                 type="button"
                 onClick={() => handleAssignShellToPane(shell, 'primary')}
                 className="rounded border border-stone-700 px-1.5 py-1 text-[10px] text-stone-200 hover:border-sky-300/40"
-                title="Open in left pane"
+                title={translate("files.openInLeftPane")}
               >
                 L
               </button>
@@ -769,7 +768,7 @@ export const ThreadShellPanel = forwardRef<
                 type="button"
                 onClick={() => handleAssignShellToPane(shell, 'secondary')}
                 className="rounded border border-stone-700 px-1.5 py-1 text-[10px] text-stone-200 hover:border-sky-300/40"
-                title="Open in right pane"
+                title={translate("files.openInRightPane")}
               >
                 R
               </button>
@@ -780,10 +779,9 @@ export const ThreadShellPanel = forwardRef<
             disabled={busy}
             onClick={() => void handleTerminateShell(shell.id)}
             className="rounded border border-rose-300/35 bg-rose-300/12 px-1.5 py-1 text-[10px] text-rose-100 disabled:cursor-not-allowed disabled:opacity-50"
-            title="Kill shell process"
+            title={translate("files.killShellProcess")}
           >
-            Kill
-          </button>
+            {translate("files.kill")}</button>
         </div>
       </div>
     </div>
@@ -796,9 +794,9 @@ export const ThreadShellPanel = forwardRef<
         <div className="shell-header shrink-0 border-b px-3 py-3 sm:px-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs uppercase tracking-[0.24em] text-[var(--theme-fg-muted)]">Shell</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-[var(--theme-fg-muted)]">{translate("files.shell")}</p>
               <p className="mt-1 truncate text-sm text-[var(--theme-fg-soft)]">
-                {activeRuntime.promptLabel ?? activeShell?.cwd ?? 'Create a terminal for this thread.'}
+                {activeRuntime.promptLabel ?? activeShell?.cwd ?? translate("files.createATerminalForThisThread")}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -819,18 +817,16 @@ export const ThreadShellPanel = forwardRef<
                   onClick={() => void handleTerminateShell(activeShell.id)}
                   className="rounded-full border border-rose-300/35 bg-rose-300/12 px-3 py-2 text-sm text-rose-600 transition hover:bg-rose-300/18 dark:text-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Terminate
-                </button>
+                  {translate("files.terminate")}</button>
               )}
             </div>
           </div>
           {(error || loading || workspacePathMissing) && (
             <div className="shell-banner mt-3 rounded-2xl border px-3 py-3 text-sm">
-              {loading && <p className="text-[var(--theme-fg-muted)]">Loading shell state...</p>}
+              {loading && <p className="text-[var(--theme-fg-muted)]">{translate("files.loadingShellState")}</p>}
               {!loading && workspacePathMissing && (
                 <p className="text-rose-600 dark:text-rose-100">
-                  Workspace path is missing on this machine. Restore the path before creating a shell.
-                </p>
+                  {translate("files.workspacePathIsMissingOnThisMachine")}</p>
               )}
               {!loading && error && (
                 <p className="text-amber-700 dark:text-amber-100">{error}</p>
@@ -845,7 +841,7 @@ export const ThreadShellPanel = forwardRef<
           <div className="shell-terminal-bar flex shrink-0 items-center gap-2 border-b px-2 py-2">
             <div className="flex min-w-0 flex-1 items-center gap-2 px-1">
               <span className="min-w-0 truncate text-xs text-[var(--theme-fg-soft)]">
-                {activeShell ? shellLabel(activeShell) : 'No live shell process'}
+                {activeShell ? shellLabel(activeShell) : translate("files.noLiveShellProcess")}
               </span>
               {activeShell && (
                 <span className="shrink-0 text-[10px] uppercase tracking-[0.12em] text-[var(--theme-fg-muted)]">
@@ -855,7 +851,7 @@ export const ThreadShellPanel = forwardRef<
             </div>
             <div className="flex shrink-0 items-center gap-1.5">
               <span className="hidden text-xs text-[var(--theme-fg-muted)] sm:inline">
-                Live {liveShells.length}
+                {translate("files.live")} {liveShells.length}
               </span>
 
             </div>
@@ -863,11 +859,9 @@ export const ThreadShellPanel = forwardRef<
           {status === 'not_created' || workspacePathMissing ? (
             <div className="flex h-full items-center justify-center px-6 text-center">
               <div className="shell-empty-state max-w-md rounded-[1.6rem] border px-6 py-8">
-                <p className="text-base font-medium text-[var(--theme-fg)]">Durable thread shell</p>
+                <p className="text-base font-medium text-[var(--theme-fg)]">{translate("files.durableThreadShell")}</p>
                 <p className="mt-3 text-sm leading-6 text-[var(--theme-fg-muted)]">
-                  The shell runs under a supervisor-managed PTY and reconnects after browser disconnects.
-                  Create it explicitly when you want to inspect or take over the workspace.
-                </p>
+                  {translate("files.theShellRunsUnderASupervisorManaged")}</p>
                 {!workspacePathMissing && (
                   <button
                     type="button"
@@ -875,22 +869,20 @@ export const ThreadShellPanel = forwardRef<
                     onClick={() => void handleCreateShell('primary')}
                     className="mt-5 rounded-md border border-sky-300/35 bg-sky-300/12 px-3 py-2 text-sm text-sky-50 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    New Shell
-                  </button>
+                    {translate("files.newShell")}</button>
                 )}
               </div>
             </div>
           ) : (
             <div className="grid h-full min-h-0 grid-cols-1 gap-2 p-2 sm:grid-cols-[minmax(0,1fr)_16rem] sm:p-3">
               <div className="shell-terminal-frame relative min-h-0 overflow-hidden rounded-[1.4rem] border shadow-inner">
-      {!isMobileShell && onBackToChat && <button type="button" onClick={onBackToChat} className="shell-chat-return" aria-label="Back to chat" title="Back to chat"><MessageSquare size={19} /></button>}
+      {!isMobileShell && onBackToChat && <button type="button" onClick={onBackToChat} className="shell-chat-return" aria-label={translate("files.backToChat")} title={translate("files.backToChat")}><MessageSquare size={19} /></button>}
                 {!showHeader && (error || loading || workspacePathMissing) && (
                   <div className="shell-banner absolute left-2 right-2 top-2 z-10 rounded-2xl border px-3 py-3 text-sm backdrop-blur sm:left-3 sm:right-3 sm:top-3">
-                    {loading && <p className="text-[var(--theme-fg-muted)]">Loading shell state...</p>}
+                    {loading && <p className="text-[var(--theme-fg-muted)]">{translate("files.loadingShellState")}</p>}
                     {!loading && workspacePathMissing && (
                       <p className="text-rose-600 dark:text-rose-100">
-                        Workspace path is missing on this machine. Restore the path before creating a shell.
-                      </p>
+                        {translate("files.workspacePathIsMissingOnThisMachine")}</p>
                     )}
                     {!loading && error && (
                       <p className="text-amber-700 dark:text-amber-100">{error}</p>
@@ -933,16 +925,15 @@ export const ThreadShellPanel = forwardRef<
                       type="button"
                       onClick={() => handleClosePane('primary')}
                       className="absolute left-2 top-2 z-10 rounded-md border border-stone-700/80 bg-stone-950/70 px-2 py-1 text-[10px] text-stone-200 hover:border-rose-300/40"
-                      title="Close left pane"
+                      title={translate("files.closeLeftPane")}
                     >
-                      Close
-                    </button>
+                      {translate("files.close")}</button>
                   )}
                   {splitMode === 'columns' && (
                     <button
                       type="button"
-                      aria-label="Resize shell panes"
-                      title="Resize shell panes"
+                      aria-label={translate("files.resizeShellPanes")}
+                      title={translate("files.resizeShellPanes")}
                       onPointerDown={handleSplitDividerPointerDown}
                       className="hidden cursor-col-resize border-x border-stone-800/80 bg-stone-900/60 transition hover:border-sky-300/40 hover:bg-sky-300/10 sm:block"
                     />
@@ -969,10 +960,9 @@ export const ThreadShellPanel = forwardRef<
                         type="button"
                         onClick={() => handleClosePane('secondary')}
                         className="absolute left-2 top-2 z-10 rounded-md border border-stone-700/80 bg-stone-950/70 px-2 py-1 text-[10px] text-stone-200 hover:border-rose-300/40"
-                        title="Close right pane"
+                        title={translate("files.closeRightPane")}
                       >
-                        Close
-                      </button>
+                        {translate("files.close")}</button>
                     </div>
                   )}
                 </div>
@@ -991,13 +981,13 @@ export const ThreadShellPanel = forwardRef<
                           <button
                             type="button"
                             onClick={() => {
-                              setTransientToolboxFeedback('idle', 'Use the prompt box tools to paste');
+                              setTransientToolboxFeedback('idle', translate("files.useThePromptBoxToolsToPaste"));
                             }}
                             className="inline-flex items-center justify-center rounded-full border border-sky-300/35 bg-sky-300/12 px-2.5 py-2 text-sky-600 dark:text-sky-50"
                           >
                             <span className="inline-flex items-center gap-1.5">
                               <ClipboardIcon />
-                              <span className="text-[11px] font-medium tracking-[0.12em]">Paste</span>
+                              <span className="text-[11px] font-medium tracking-[0.12em]">{translate("files.paste")}</span>
                             </span>
                           </button>
                           <button
@@ -1007,7 +997,7 @@ export const ThreadShellPanel = forwardRef<
                           >
                             <span className="inline-flex items-center gap-1.5">
                               <ClipboardIcon />
-                              <span className="text-[11px] font-medium tracking-[0.12em]">Copy</span>
+                              <span className="text-[11px] font-medium tracking-[0.12em]">{translate("files.copy")}</span>
                             </span>
                           </button>
                           <button
@@ -1015,23 +1005,23 @@ export const ThreadShellPanel = forwardRef<
                             disabled={!activeRuntime.shellInputEnabled}
                             onClick={() => {
                               if (activePaneRef.current?.sendControl('clear')) {
-                                setTransientToolboxFeedback('done', 'Cleared');
+                                setTransientToolboxFeedback('done', translate("files.cleared"));
                               } else {
-                                setTransientToolboxFeedback('failed', 'Connect the shell first');
+                                setTransientToolboxFeedback('failed', translate("files.connectTheShellFirst"));
                               }
                             }}
                             className="disabled:opacity-45"
                           >
-                            <ControlIcon label="CLEAR" tone="sky" />
+                            <ControlIcon label={translate("files.cLEAR")} tone="sky" />
                           </button>
                           <button
                             type="button"
                             disabled={!activeRuntime.shellInputEnabled || !activeRuntime.isCommandRunning}
                             onClick={() => {
                               if (activePaneRef.current?.sendInput('\u0003')) {
-                                setTransientToolboxFeedback('done', 'Sent Ctrl-C');
+                                setTransientToolboxFeedback('done', translate("files.sentCtrlC"));
                               } else {
-                                setTransientToolboxFeedback('failed', 'Connect the shell first');
+                                setTransientToolboxFeedback('failed', translate("files.connectTheShellFirst"));
                               }
                             }}
                             className="disabled:opacity-45"
@@ -1047,7 +1037,7 @@ export const ThreadShellPanel = forwardRef<
                                 if (activePaneRef.current?.sendControl(action)) {
                                   setTransientToolboxFeedback('done', `Sent ${action.toUpperCase().replace('_', '-')}`);
                                 } else {
-                                  setTransientToolboxFeedback('failed', 'Connect the shell first');
+                                  setTransientToolboxFeedback('failed', translate("files.connectTheShellFirst"));
                                 }
                               }}
                               className="disabled:opacity-45"
@@ -1061,7 +1051,7 @@ export const ThreadShellPanel = forwardRef<
                     <button
                       type="button"
                       aria-expanded={toolboxOpen}
-                      aria-label={toolboxOpen ? 'Close shell tools' : 'Open shell tools'}
+                      aria-label={toolboxOpen ? translate("files.closeShellTools") : translate("files.openShellTools")}
                       onClick={() => setToolboxOpen((current) => !current)}
                       className="shell-toolbox-trigger pointer-events-auto inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-2xl backdrop-blur transition"
                     >
@@ -1074,21 +1064,20 @@ export const ThreadShellPanel = forwardRef<
               <aside className="hidden min-h-0 overflow-hidden rounded-[1rem] border border-stone-800/80 bg-stone-950/30 p-2 sm:flex sm:flex-col">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <p className="text-xs uppercase tracking-[0.16em] text-[var(--theme-fg-muted)]">
-                    Processes
-                  </p>
-                  <span className="text-[10px] text-[var(--theme-fg-muted)]">{liveShells.length} live</span>
+                    {translate("files.processes")}</p>
+                  <span className="text-[10px] text-[var(--theme-fg-muted)]">{liveShells.length} {translate("files.live_98aadb")}</span>
                 </div>
                 <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
                   {liveShells.map(renderProcessRow)}
                   {liveShells.length === 0 && (
-                    <p className="px-2 py-3 text-xs text-[var(--theme-fg-muted)]">No live shell processes</p>
+                    <p className="px-2 py-3 text-xs text-[var(--theme-fg-muted)]">{translate("files.noLiveShellProcesses")}</p>
                   )}
                 </div>
                 <div className="mt-2 flex justify-end border-t border-stone-800/80 pt-2">
                   <button
                     type="button"
-                    aria-label="New shell"
-                    title="New shell"
+                    aria-label={translate("files.newShell_9c240c")}
+                    title={translate("files.newShell_9c240c")}
                     disabled={busy || loading || workspacePathMissing}
                     onClick={() => void handleCreateShell(activePaneId)}
                     className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-sky-300/35 bg-sky-300/12 text-base leading-none text-sky-50 disabled:cursor-not-allowed disabled:opacity-50"

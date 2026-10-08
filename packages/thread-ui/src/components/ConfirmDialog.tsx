@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -17,13 +18,14 @@ export function ConfirmDialog({
   open,
   title,
   description,
-  confirmLabel = 'Delete',
-  busyLabel = 'Deleting...',
+  confirmLabel = translate("workbench.delete"),
+  busyLabel = translate("workbench.deleting"),
   busy = false,
   error,
   onCancel,
   onConfirm,
 }: ConfirmDialogProps) {
+  useI18n();
   useEffect(() => {
     if (!open) {
       return;
@@ -49,7 +51,7 @@ export function ConfirmDialog({
     <div className="fixed inset-0 z-[95] flex items-center justify-center p-4 sm:p-6">
       <button
         type="button"
-        aria-label="Close confirmation dialog"
+        aria-label={translate("workbench.closeConfirmationDialog")}
         onClick={onCancel}
         disabled={busy}
         className="absolute inset-0 bg-[var(--overlay-scrim)] backdrop-blur-sm disabled:cursor-not-allowed"
@@ -68,7 +70,7 @@ export function ConfirmDialog({
           </div>
           <button
             type="button"
-            aria-label="Close dialog"
+            aria-label={translate("workbench.closeDialog")}
             onClick={onCancel}
             disabled={busy}
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[var(--theme-border)] text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60"
@@ -86,8 +88,7 @@ export function ConfirmDialog({
             disabled={busy}
             className="rounded-md border border-[var(--theme-border)] px-4 py-2 text-sm font-medium text-[var(--theme-fg-soft)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Cancel
-          </button>
+            {translate("workbench.cancel")}</button>
           <button
             type="button"
             onClick={() => void onConfirm()}

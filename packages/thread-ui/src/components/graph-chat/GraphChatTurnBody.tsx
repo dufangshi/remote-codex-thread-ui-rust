@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { type ReactNode } from 'react';
 import { CheckCircle2, Clock3, Loader2, XCircle } from 'lucide-react';
 
@@ -45,17 +46,18 @@ function normalizeGraphChatPlanStepStatus(status: string) {
 }
 
 function GraphChatPlanStepStatusIcon({ status }: { status: string }) {
+  const { locale: i18nLocale } = useI18n();
   const normalized = normalizeGraphChatPlanStepStatus(status);
   const label =
     normalized === 'completed'
-      ? 'Plan step status: Completed'
+      ? translate("chat.planStepStatusCompleted")
       : normalized === 'in_progress'
-        ? 'Plan step status: In progress'
+        ? translate("chat.planStepStatusInProgress")
         : normalized === 'pending'
-          ? 'Plan step status: Pending'
+          ? translate("chat.planStepStatusPending")
           : normalized === 'failed'
-            ? 'Plan step status: Failed'
-            : `Plan step status: ${status}`;
+            ? translate("chat.planStepStatusFailed")
+            : translate("chat.planStepStatus", { value1: status });
 
   const badgeClassName =
     normalized === 'completed'
@@ -92,13 +94,13 @@ function GraphChatPlanStepStatusIcon({ status }: { status: string }) {
 }
 
 export function GraphChatLivePlanCard({ livePlan }: { livePlan: GraphChatLivePlan }) {
+  const { locale: i18nLocale } = useI18n();
   return (
     <div className="thread-graph-plan-card rounded-xl border px-3 py-3">
       <div className="thread-graph-plan-header flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-semibold">Plan update</p>
+        <p className="text-sm font-semibold">{translate("chat.planUpdate")}</p>
         <Badge className="thread-graph-plan-badge">
-          Live
-        </Badge>
+          {translate("chat.live")}</Badge>
       </div>
       {livePlan.explanation ? (
         <p className="thread-graph-plan-explanation mt-3 text-sm">
@@ -135,6 +137,7 @@ export function GraphChatTurnBody({
   liveOutput?: ReactNode;
   livePlan?: GraphChatLivePlan | null;
 }) {
+  const { locale: i18nLocale } = useI18n();
   return (
     <>
       {history}

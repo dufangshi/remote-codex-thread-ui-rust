@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import { relativeWorkspacePath } from '../../workspacePaths';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -62,6 +63,7 @@ export function useWorkspaceExplorerController({
   focusPathRequest = null,
   workspaceAdapter,
 }: UseWorkspaceExplorerControllerInput) {
+  useI18n();
   const workspaceIdentity = useMemo(
     () => ({
       threadId: detail.thread.id,
@@ -86,7 +88,7 @@ export function useWorkspaceExplorerController({
   const tree = useMemo(() => {
     const root = adapterTree ?? fallbackTree;
     return linkedFiles.length ? {...root, children: [...root.children, {
-      id: 'linked-files', path: 'linked-files:', name: 'Linked files', kind: 'directory' as const,
+      id: 'linked-files', path: 'linked-files:', name: translate("files.linkedFiles"), kind: 'directory' as const,
       children: linkedFiles, childrenLoaded: true, hasChildren: true,
     }]} : root;
   }, [adapterTree, fallbackTree, linkedFiles]);
@@ -233,7 +235,7 @@ export function useWorkspaceExplorerController({
           return;
         }
         setWorkspaceError(
-          error instanceof Error ? error.message : 'Failed to load workspace',
+          error instanceof Error ? error.message : translate("files.failedToLoadWorkspace"),
         );
         setAdapterModel(null);
       } finally {
@@ -305,7 +307,7 @@ export function useWorkspaceExplorerController({
           return;
         }
         const message =
-          error instanceof Error ? error.message : 'Failed to load directory';
+          error instanceof Error ? error.message : translate("files.failedToLoadDirectory");
         setWorkspaceError(message);
         setDirectoryErrors((current) => new Map(current).set(path, message));
       } finally {
@@ -378,7 +380,7 @@ export function useWorkspaceExplorerController({
           return;
         }
         if (external) {
-          if (!workspaceAdapter.statLinkedFile) throw new Error('Only the device owner can preview files outside this workspace.');
+          if (!workspaceAdapter.statLinkedFile) throw new Error(translate("files.onlyTheDeviceOwnerCanPreviewFiles"));
           const node = await workspaceAdapter.statLinkedFile({...workspaceIdentity, path: targetPath});
           if (!isCurrent()) return;
           const linked = workspaceTreeNodeToGraphNode({...node, path: targetPath});
@@ -409,7 +411,7 @@ export function useWorkspaceExplorerController({
         adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
         if (!hasWorkspaceExplorerPath(nextModel, targetPath)) {
-          throw new Error(`File not found: ./${targetPath}`);
+          throw new Error(translate("files.fileNotFound", { value1: targetPath }));
         }
         setSelectedNodeId(`workspace:${targetPath}`);
       } catch (error) {
@@ -419,7 +421,7 @@ export function useWorkspaceExplorerController({
         setWorkspaceError(
           error instanceof Error
             ? error.message
-            : `Failed to open ${targetPath}`,
+            : translate("files.failedToOpen", { value1: targetPath }),
         );
       } finally {
         if (isCurrent()) {

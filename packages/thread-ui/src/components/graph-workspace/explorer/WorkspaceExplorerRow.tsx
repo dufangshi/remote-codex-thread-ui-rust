@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import {
   ChevronDown,
   ChevronRight,
@@ -91,6 +92,7 @@ export function WorkspaceExplorerRow({
   onRetry?: (path: string) => void;
   onDownload?: (node: WorkspaceTreeNode) => void;
 } & WorkspaceNodeActionProps) {
+  useI18n();
   const node: WorkspaceTreeNode = {
     ...row.node.source,
     children: [],
@@ -173,7 +175,7 @@ export function WorkspaceExplorerRow({
         <button
           type="button"
           tabIndex={-1}
-          aria-label={`${expanded ? 'Collapse' : 'Expand'} ${node.name}`}
+          aria-label={`${expanded ? translate("files.collapse") : translate("files.expand")} ${node.name}`}
           className="inline-flex h-7 w-7 shrink-0 items-center justify-center sm:h-6 sm:w-6"
           onClick={() => {
             if (node.path) {
@@ -209,8 +211,8 @@ export function WorkspaceExplorerRow({
           tabIndex={-1}
           onClick={() => onRetry(node.path)}
           className="mr-1 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded text-rose-600 hover:bg-rose-500/10 dark:text-rose-300"
-          title={`${error}. Retry ${node.name}`}
-          aria-label={`Retry loading ${node.name}`}
+          title={translate("files.retry_f4914f", { value1: error, value2: node.name })}
+          aria-label={translate("files.retryLoading", { value1: node.name })}
         >
           <CircleAlert className="h-3.5 w-3.5" />
         </button>

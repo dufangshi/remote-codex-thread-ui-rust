@@ -1,3 +1,5 @@
+import { getLocale } from '../../i18n';
+import { translate, useI18n } from '../../i18n';
 import { useRef, useState } from 'react';
 import {
   DollarSign,
@@ -34,10 +36,11 @@ export function TokenUsageCost({
   usage,
   price,
   readOnly = false,
-  costLabel = 'API cost',
+  costLabel = translate("chat.aPICost"),
   detailsNote,
   tooltipZIndex = 80,
 }: TokenUsageCostProps) {
+  useI18n();
   const [detailsOpen, setDetailsOpen] = useState(false);
   const openAtPointerDown = useRef(false);
   const uncachedInput = usage
@@ -57,23 +60,23 @@ export function TokenUsageCost({
       : 0;
   const hasPrice =
     price && Number.isFinite(price.totalUsd) && price.totalUsd >= 0;
-  const priceTitle = 'API price unavailable for this model or usage report.';
+  const priceTitle = translate("chat.aPIPriceUnavailableForThisModelOr");
   const details = usage
     ? [
         {
-          label: 'Input',
+          label: translate("chat.input"),
           icon: ArrowDownToLine,
           value: uncachedInput,
           usd: price?.inputUsd,
         },
         {
-          label: 'Cached input',
+          label: translate("chat.cachedInput"),
           icon: Database,
           value: usage.cachedInputTokens,
           usd: price?.cachedInputUsd,
         },
         {
-          label: 'Output',
+          label: translate("chat.output"),
           icon: ArrowUpFromLine,
           value: usage.outputTokens - reasoning,
           usd: price ? price.outputUsd - reasoningUsd : undefined,
@@ -81,7 +84,7 @@ export function TokenUsageCost({
         ...(usage.reasoningOutputTokens > 0
           ? [
               {
-                label: 'Reasoning',
+                label: translate("chat.reasoning"),
                 icon: Brain,
                 value: reasoning,
                 usd: price ? reasoningUsd : undefined,
@@ -91,7 +94,7 @@ export function TokenUsageCost({
         ...(usage.cacheWriteInputTokens
           ? [
               {
-                label: 'Cache write',
+                label: translate("chat.cacheWrite"),
                 icon: Save,
                 value: usage.cacheWriteInputTokens,
                 usd: price?.cacheWriteInputUsd,
@@ -116,7 +119,7 @@ export function TokenUsageCost({
                   ? 'thread-turn-usage-price'
                   : 'thread-turn-usage-unavailable'
               }
-              aria-label={`${hasPrice ? `${costLabel} ${formatCompactUsd(price.totalUsd)}` : 'API price unavailable'}. Show token details`}
+              aria-label={translate("chat.showTokenDetails", { value1: hasPrice ? `${costLabel} ${formatCompactUsd(price.totalUsd)}` : translate("chat.aPIPriceUnavailable") })}
               aria-expanded={detailsOpen}
               onPointerDown={() => {
                 openAtPointerDown.current = detailsOpen;
@@ -134,7 +137,7 @@ export function TokenUsageCost({
             >
               {hasPrice
                 ? formatCompactUsd(price.totalUsd)
-                : 'Price unavailable'}
+                : translate("chat.priceUnavailable")}
             </button>
           </TooltipTrigger>
           <TooltipContent
@@ -171,16 +174,16 @@ export function TokenUsageCost({
                 <span key={label} style={{ display: 'contents' }}>
                   <Icon size={14} aria-label={label} />
                   <span
-                    aria-label={`${label}: ${value.toLocaleString('en-US')} tokens`}
-                    title={`${label}: ${value.toLocaleString('en-US')}`}
+                    aria-label={translate("chat.tokens", { value1: label, value2: value.toLocaleString(getLocale()) })}
+                    title={`${label}: ${value.toLocaleString(getLocale())}`}
                   >
                     {formatCompactTokenCount(value)}
                   </span>
                   <span
-                    aria-label={`${label} cost`}
+                    aria-label={translate("chat.cost", { value1: label })}
                     title={
-                      label === 'Reasoning'
-                        ? 'Included in output charges; not an additional fee'
+                      Icon === Brain
+                        ? translate("chat.includedInOutputChargesNotAnAdditional")
                         : undefined
                     }
                     style={{ textAlign: 'right' }}

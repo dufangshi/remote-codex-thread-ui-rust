@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { mergeThreadHistoryItem } from '@remote-codex/shared';
 import type { ThreadHistoryItemDto, ThreadTurnDto } from "@remote-codex/shared";
 
@@ -146,7 +147,7 @@ export function parseHookPromptText(text: string): ThreadHistoryItemDto | null {
   const hookRunId = match[1] ? decodeXmlEntities(match[1]) : null;
   const output = decodeXmlEntities(match[2] ?? "").trim();
   const eventName = hookRunId?.split(":")[0] ?? "hook";
-  const eventLabel = eventName === "stop" ? "Stop" : eventName;
+  const eventLabel = eventName === "stop" ? translate("chat.stop") : eventName;
   const sourcePath = hookRunId?.split(":").slice(2).join(":") || null;
 
   return {

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type {
@@ -51,6 +52,7 @@ export function useDeferredHistoryDetail({
   loadHistoryItemDetail,
   onSelectHistoryItemDetail,
 }: DeferredHistoryDetailInput) {
+  useI18n();
   const requestIdRef = useRef(0);
   const detailCacheRef = useRef<Map<string, ThreadHistoryItemDetailDto>>(
     new Map(),
@@ -151,9 +153,9 @@ export function useDeferredHistoryDetail({
       await openDeferredDetail({
         item,
         fallbackTitle,
-        fallbackText: item.detailText?.trim() || item.text || 'Command output',
-        loadingText: 'Loading full command output...',
-        errorText: 'Unable to load full command output.',
+        fallbackText: item.detailText?.trim() || item.text || translate("chat.commandOutput_e73be3"),
+        loadingText: translate("chat.loadingFullCommandOutput"),
+        errorText: translate("chat.unableToLoadFullCommandOutput"),
         useSelectionCallback: true,
       });
     },
@@ -170,9 +172,9 @@ export function useDeferredHistoryDetail({
       await openDeferredDetail({
         item,
         fallbackTitle,
-        fallbackText: item.detailText?.trim() || item.text || 'Tool call',
-        loadingText: 'Loading full tool call details...',
-        errorText: 'Unable to load full tool call details.',
+        fallbackText: item.detailText?.trim() || item.text || translate("chat.toolCall_e31318"),
+        loadingText: translate("chat.loadingFullToolCallDetails"),
+        errorText: translate("chat.unableToLoadFullToolCallDetails"),
         useSelectionCallback: true,
       });
     },

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type { ComponentProps, Dispatch, SetStateAction } from 'react';
 
 import type { ThreadShellControlState } from '../../types';
@@ -64,6 +65,7 @@ export function ComposerToolbar({
   onDismissPromptFocus,
   onSetOpenMenu,
 }: ComposerToolbarProps) {
+  useI18n();
   return (
     <InputGroupAddon
       align="block-end"
@@ -83,8 +85,8 @@ export function ComposerToolbar({
             type="button"
             variant="ghost"
             size="icon-xs"
-            aria-label={isShellView ? 'Switch to chat' : 'Switch to shell'}
-            title={isShellView ? 'Switch to chat' : 'Switch to shell'}
+            aria-label={isShellView ? translate("chat.switchToChat") : translate("chat.switchToShell")}
+            title={isShellView ? translate("chat.switchToChat") : translate("chat.switchToShell")}
             onClick={() => onToggleView?.()}
             className={`${iconButtonClassName} h-9 w-9 rounded-full sm:h-8 sm:w-8`}
           >
@@ -114,15 +116,15 @@ export function ComposerToolbar({
               data-composer-menu-trigger="true"
               aria-label={
                 openMenu === 'shellTools'
-                  ? 'Close shell tools'
-                  : 'Open shell tools'
+                  ? translate("chat.closeShellTools")
+                  : translate("chat.openShellTools")
               }
               aria-haspopup="menu"
               aria-expanded={openMenu === 'shellTools'}
               title={
                 openMenu === 'shellTools'
-                  ? 'Close shell tools'
-                  : 'Open shell tools'
+                  ? translate("chat.closeShellTools")
+                  : translate("chat.openShellTools")
               }
               onClick={() => {
                 onDismissPromptFocus();

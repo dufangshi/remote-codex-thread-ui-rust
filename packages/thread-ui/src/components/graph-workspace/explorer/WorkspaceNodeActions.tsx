@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import {
   Copy,
   ClipboardCopy,
@@ -29,6 +30,7 @@ export function WorkspaceNodeActions({
   onRename,
   onDelete,
 }: WorkspaceNodeActionProps & { node: WorkspaceTreeNode }) {
+  useI18n();
   const [menu, setMenu] = useState<{ left: number; top: number } | null>(null);
   const [dialog, setDialog] = useState<'rename' | 'delete' | null>(null);
   const [name, setName] = useState(node.name);
@@ -75,7 +77,7 @@ export function WorkspaceNodeActions({
       trigger.current?.focus();
     } catch (caught) {
       setError(
-        caught instanceof Error ? caught.message : 'File operation failed.',
+        caught instanceof Error ? caught.message : translate("files.fileOperationFailed"),
       );
     } finally {
       setBusy(false);
@@ -91,8 +93,8 @@ export function WorkspaceNodeActions({
           type="button"
           onClick={() => onDownload(node)}
           className={actionClass}
-          title={`Download ${node.name}`}
-          aria-label={`Download ${node.name}`}
+          title={translate("files.download", { value1: node.name })}
+          aria-label={translate("files.download", { value1: node.name })}
         >
           <Download size={14} />
         </button>
@@ -103,8 +105,8 @@ export function WorkspaceNodeActions({
             type="button"
             onClick={() => onCopyPath(node, 'relative')}
             className={actionClass}
-            title={`Copy relative path for ${node.name}`}
-            aria-label={`Copy relative path for ${node.name}`}
+            title={translate("files.copyRelativePathFor", { value1: node.name })}
+            aria-label={translate("files.copyRelativePathFor", { value1: node.name })}
           >
             <Copy size={14} />
           </button>
@@ -112,8 +114,8 @@ export function WorkspaceNodeActions({
             type="button"
             onClick={() => onCopyPath(node, 'absolute')}
             className={actionClass}
-            title={`Copy absolute path for ${node.name}`}
-            aria-label={`Copy absolute path for ${node.name}`}
+            title={translate("files.copyAbsolutePathFor", { value1: node.name })}
+            aria-label={translate("files.copyAbsolutePathFor", { value1: node.name })}
           >
             <ClipboardCopy size={14} />
           </button>
@@ -123,7 +125,7 @@ export function WorkspaceNodeActions({
         <button
           ref={trigger}
           type="button"
-          aria-label={`More actions for ${node.name}`}
+          aria-label={translate("files.moreActionsFor", { value1: node.name })}
           aria-haspopup="menu"
           aria-expanded={!!menu}
           className={actionClass}
@@ -153,7 +155,7 @@ export function WorkspaceNodeActions({
           <div
             ref={popup}
             role="menu"
-            aria-label={`Actions for ${node.name}`}
+            aria-label={translate("files.actionsFor", { value1: node.name })}
             className="thread-ui-shell workspace-node-menu"
             style={{
               position: 'fixed',
@@ -180,8 +182,7 @@ export function WorkspaceNodeActions({
                   setMenu(null);
                 }}
               >
-                <Pencil size={14} /> Rename
-              </button>
+                <Pencil size={14} /> {translate("files.rename_d3f4cb")}</button>
             )}
             {onDelete && (
               <button
@@ -193,16 +194,15 @@ export function WorkspaceNodeActions({
                   setMenu(null);
                 }}
               >
-                <Trash2 size={14} /> Delete
-              </button>
+                <Trash2 size={14} /> {translate("files.delete")}</button>
             )}
           </div>,
           document.body,
         )}
       <RenameDialog
         open={dialog === 'rename'}
-        title={`Rename ${node.kind === 'directory' ? 'folder' : 'file'}`}
-        label="Name"
+        title={translate("files.rename", { value1: node.kind === 'directory' ? 'folder' : 'file' })}
+        label={translate("files.name")}
         value={name}
         onChange={setName}
         onCancel={() => setDialog(null)}
@@ -212,8 +212,8 @@ export function WorkspaceNodeActions({
       />
       <ConfirmDialog
         open={dialog === 'delete'}
-        title={`Delete ${node.kind === 'directory' ? 'folder' : 'file'}?`}
-        description={`Permanently delete ${node.path}${node.kind === 'directory' ? ' and its contents' : ''}?`}
+        title={translate("files.delete_c93ae0", { value1: node.kind === 'directory' ? 'folder' : 'file' })}
+        description={translate("files.permanentlyDelete", { value1: node.path, value2: node.kind === 'directory' ? translate("files.andItsContents") : '' })}
         onCancel={() => setDialog(null)}
         onConfirm={mutate}
         busy={busy}

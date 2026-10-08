@@ -1,3 +1,8 @@
+import {
+  translate,
+  useI18n
+} from "./chunk-4Q3ARP5S.js";
+
 // src/components/ConfirmDialog.tsx
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -6,13 +11,14 @@ function ConfirmDialog({
   open,
   title,
   description,
-  confirmLabel = "Delete",
-  busyLabel = "Deleting...",
+  confirmLabel = translate("workbench.delete"),
+  busyLabel = translate("workbench.deleting"),
   busy = false,
   error,
   onCancel,
   onConfirm
 }) {
+  useI18n();
   useEffect(() => {
     if (!open) {
       return;
@@ -36,7 +42,7 @@ function ConfirmDialog({
         "button",
         {
           type: "button",
-          "aria-label": "Close confirmation dialog",
+          "aria-label": translate("workbench.closeConfirmationDialog"),
           onClick: onCancel,
           disabled: busy,
           className: "absolute inset-0 bg-[var(--overlay-scrim)] backdrop-blur-sm disabled:cursor-not-allowed"
@@ -60,7 +66,7 @@ function ConfirmDialog({
                 "button",
                 {
                   type: "button",
-                  "aria-label": "Close dialog",
+                  "aria-label": translate("workbench.closeDialog"),
                   onClick: onCancel,
                   disabled: busy,
                   className: "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[var(--theme-border)] text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60",
@@ -76,7 +82,7 @@ function ConfirmDialog({
                   onClick: onCancel,
                   disabled: busy,
                   className: "rounded-md border border-[var(--theme-border)] px-4 py-2 text-sm font-medium text-[var(--theme-fg-soft)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60",
-                  children: "Cancel"
+                  children: translate("workbench.cancel")
                 }
               ),
               /* @__PURE__ */ jsx(
@@ -169,6 +175,7 @@ function RenameDialog({
   onCancel,
   onSubmit
 }) {
+  useI18n();
   useEffect2(() => {
     if (!open) {
       return;
@@ -196,7 +203,7 @@ function RenameDialog({
         "button",
         {
           type: "button",
-          "aria-label": "Close rename dialog",
+          "aria-label": translate("workbench.closeRenameDialog"),
           onClick: onCancel,
           disabled: busy,
           className: "absolute inset-0 bg-[var(--overlay-scrim)] backdrop-blur-sm disabled:cursor-not-allowed"
@@ -214,13 +221,13 @@ function RenameDialog({
             /* @__PURE__ */ jsxs3("div", { className: "flex items-start justify-between gap-3", children: [
               /* @__PURE__ */ jsxs3("div", { className: "min-w-0 flex-1", children: [
                 /* @__PURE__ */ jsx3("p", { className: "text-sm font-medium", children: title }),
-                /* @__PURE__ */ jsx3("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: "Changes are saved only after confirmation." })
+                /* @__PURE__ */ jsx3("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: translate("workbench.changesAreSavedOnlyAfterConfirmation") })
               ] }),
               /* @__PURE__ */ jsx3(
                 "button",
                 {
                   type: "button",
-                  "aria-label": "Close dialog",
+                  "aria-label": translate("workbench.closeDialog"),
                   onClick: onCancel,
                   disabled: busy,
                   className: "inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[var(--theme-border)] text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60",
@@ -251,7 +258,7 @@ function RenameDialog({
                   onClick: onCancel,
                   disabled: busy,
                   className: "rounded-md border border-[var(--theme-border)] px-4 py-2 text-sm font-medium text-[var(--theme-fg-soft)] transition hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed disabled:opacity-60",
-                  children: "Cancel"
+                  children: translate("workbench.cancel")
                 }
               ),
               /* @__PURE__ */ jsx3(
@@ -260,7 +267,7 @@ function RenameDialog({
                   type: "submit",
                   disabled: busy || !value.trim(),
                   className: "ui-action-success rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed",
-                  children: "Save"
+                  children: translate("workbench.save")
                 }
               )
             ] })
@@ -552,7 +559,7 @@ function sortWorkspaceTree(node) {
 function collectWorkspaceItems(detail, artifacts, status, activeView) {
   const root = {
     id: "root",
-    name: detail.workspace.label ?? "Workspace",
+    name: detail.workspace.label ?? translate("files.workspace"),
     path: "",
     kind: "directory",
     children: []
@@ -740,6 +747,7 @@ function GraphWorkspaceImageLightbox({
   onClose,
   src
 }) {
+  const { locale: i18nLocale } = useI18n();
   const viewportRef = useRef(null);
   const closeButtonRef = useRef(null);
   const dragRef = useRef(null);
@@ -829,14 +837,14 @@ function GraphWorkspaceImageLightbox({
         className: "thread-graph-image-lightbox",
         role: "dialog",
         "aria-modal": "true",
-        "aria-label": `Image preview: ${alt || "workspace image"}`,
+        "aria-label": translate("files.imagePreview", { value1: alt || translate("files.workspaceImage") }),
         children: [
           /* @__PURE__ */ jsxs4(
             "div",
             {
               className: "thread-graph-image-lightbox-toolbar",
               role: "toolbar",
-              "aria-label": "Image zoom controls",
+              "aria-label": translate("files.imageZoomControls"),
               children: [
                 /* @__PURE__ */ jsx6(
                   "button",
@@ -844,8 +852,8 @@ function GraphWorkspaceImageLightbox({
                     type: "button",
                     onClick: () => updateScale(scale - IMAGE_LIGHTBOX_SCALE_STEP),
                     disabled: scale <= IMAGE_LIGHTBOX_MIN_SCALE,
-                    title: "Zoom out",
-                    "aria-label": "Zoom out",
+                    title: translate("files.zoomOut"),
+                    "aria-label": translate("files.zoomOut"),
                     children: /* @__PURE__ */ jsx6(Minus, { className: "h-4 w-4" })
                   }
                 ),
@@ -855,8 +863,8 @@ function GraphWorkspaceImageLightbox({
                     type: "button",
                     onClick: resetView,
                     className: "thread-graph-image-lightbox-scale",
-                    title: "Reset zoom",
-                    "aria-label": `Reset zoom, currently ${Math.round(scale * 100)}%`,
+                    title: translate("files.resetZoom"),
+                    "aria-label": translate("files.resetZoomCurrently", { value1: Math.round(scale * 100) }),
                     children: [
                       /* @__PURE__ */ jsx6(RotateCcw, { className: "h-3.5 w-3.5" }),
                       /* @__PURE__ */ jsxs4("span", { children: [
@@ -872,8 +880,8 @@ function GraphWorkspaceImageLightbox({
                     type: "button",
                     onClick: () => updateScale(scale + IMAGE_LIGHTBOX_SCALE_STEP),
                     disabled: scale >= IMAGE_LIGHTBOX_MAX_SCALE,
-                    title: "Zoom in",
-                    "aria-label": "Zoom in",
+                    title: translate("files.zoomIn"),
+                    "aria-label": translate("files.zoomIn"),
                     children: /* @__PURE__ */ jsx6(Plus, { className: "h-4 w-4" })
                   }
                 ),
@@ -890,8 +898,8 @@ function GraphWorkspaceImageLightbox({
                     ref: closeButtonRef,
                     type: "button",
                     onClick: onClose,
-                    title: "Close image preview",
-                    "aria-label": "Close image preview",
+                    title: translate("files.closeImagePreview"),
+                    "aria-label": translate("files.closeImagePreview"),
                     children: /* @__PURE__ */ jsx6(X, { className: "h-4 w-4" })
                   }
                 )
@@ -939,6 +947,7 @@ function ZoomableImage({
   loading,
   src
 }) {
+  const { locale: i18nLocale } = useI18n();
   const triggerRef = useRef(null);
   const [open, setOpen] = useState(false);
   function closeLightbox() {
@@ -953,8 +962,8 @@ function ZoomableImage({
         type: "button",
         className: "thread-graph-zoomable-image-trigger",
         onClick: () => setOpen(true),
-        title: "Open image preview",
-        "aria-label": `Open image preview: ${alt || "workspace image"}`,
+        title: translate("files.openImagePreview"),
+        "aria-label": translate("files.openImagePreview_bdac35", { value1: alt || translate("files.workspaceImage") }),
         children: /* @__PURE__ */ jsx6("img", { src, alt, className, loading })
       }
     ),
@@ -1081,6 +1090,7 @@ import { useEffect as useEffect4, useRef as useRef2, useState as useState2 } fro
 import { createPortal as createPortal4 } from "react-dom";
 import { Fragment as Fragment2, jsx as jsx7, jsxs as jsxs5 } from "react/jsx-runtime";
 function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-inline-link" }) {
+  useI18n();
   const [menu, setMenu] = useState2(null);
   const [copyError, setCopyError] = useState2(false);
   const menuRef = useRef2(null);
@@ -1127,12 +1137,12 @@ function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-i
         children
       }
     ),
-    menu && createPortal4(/* @__PURE__ */ jsxs5("div", { ref: menuRef, role: "menu", "aria-label": "File link", className: "thread-workspace-link-menu", style: { left: Math.max(8, menu.x), top: Math.max(8, menu.y) }, children: [
-      /* @__PURE__ */ jsx7("button", { role: "menuitem", onClick: open, children: "Open file" }),
+    menu && createPortal4(/* @__PURE__ */ jsxs5("div", { ref: menuRef, role: "menu", "aria-label": translate("files.fileLink"), className: "thread-workspace-link-menu", style: { left: Math.max(8, menu.x), top: Math.max(8, menu.y) }, children: [
+      /* @__PURE__ */ jsx7("button", { role: "menuitem", onClick: open, children: translate("files.openFile") }),
       /* @__PURE__ */ jsx7("button", { role: "menuitem", onClick: () => {
         void navigator.clipboard.writeText(address).then(() => setMenu(null)).catch(() => setCopyError(true));
-      }, children: "Copy link address" }),
-      copyError && /* @__PURE__ */ jsx7("span", { role: "alert", children: "Could not copy path" })
+      }, children: translate("files.copyLinkAddress") }),
+      copyError && /* @__PURE__ */ jsx7("span", { role: "alert", children: translate("files.couldNotCopyPath") })
     ] }), document.body)
   ] });
 }

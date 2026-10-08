@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   AlignVerticalDistributeCenter,
   ArrowUpRight,
@@ -49,6 +50,7 @@ export default function GraphMoleculeViewerLowerButtonGroup({
   unitCellAvailable: boolean;
   unitCellVisible: boolean;
 }) {
+  useI18n();
   const hasSelection = selectedSerials.length > 0;
   const hasStaged = stagedAtoms > 0;
 
@@ -56,67 +58,67 @@ export default function GraphMoleculeViewerLowerButtonGroup({
     <>
       <div className="flex w-full justify-between gap-2 overflow-x-auto">
         <GraphMoleculeButtonGroup>
-          <GraphMoleculeIconButton label="Distance">
+          <GraphMoleculeIconButton label={translate("files.distance")}>
             <AlignVerticalDistributeCenter className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Connectivity">
+          <GraphMoleculeIconButton label={translate("files.connectivity")}>
             <Share2 className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Angle">
+          <GraphMoleculeIconButton label={translate("files.angle")}>
             <Waypoints className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Dihedral">
+          <GraphMoleculeIconButton label={translate("files.dihedral")}>
             <Spline className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Add dummy atoms">
+          <GraphMoleculeIconButton label={translate("files.addDummyAtoms")}>
             <Bubbles className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Delete atoms">
+          <GraphMoleculeIconButton label={translate("files.deleteAtoms")}>
             <CircleX className="size-4" />
           </GraphMoleculeIconButton>
-          <GraphMoleculeIconButton label="Rotate">
+          <GraphMoleculeIconButton label={translate("files.rotate")}>
             <Rotate3d className="size-4" />
           </GraphMoleculeIconButton>
         </GraphMoleculeButtonGroup>
 
         <GraphMoleculeButtonGroup>
           <GraphMoleculeIconButton
-            label={unitCellVisible ? 'Hide unit cell' : 'Show unit cell'}
+            label={unitCellVisible ? translate("files.hideUnitCell") : translate("files.showUnitCell")}
             disabled={!unitCellAvailable}
             onClick={onToggleUnitCell}
           >
             <Boxes className="size-4" />
           </GraphMoleculeIconButton>
           <GraphMoleculeIconButton
-            label="Clear selection"
+            label={translate("files.clearSelection")}
             disabled={!hasSelection}
             onClick={onClearSelection}
           >
             <Trash2 className="size-4" />
           </GraphMoleculeIconButton>
           <GraphMoleculeIconButton
-            label="Send selection"
+            label={translate("files.sendSelection")}
             disabled={!hasSelection}
             onClick={onSendSelection}
           >
             <Send className="size-4" />
           </GraphMoleculeIconButton>
           <GraphMoleculeIconButton
-            label="Stage current selection"
+            label={translate("files.stageCurrentSelection")}
             disabled={!hasSelection}
             onClick={onStageSelection}
           >
             <Box className="size-4" />
           </GraphMoleculeIconButton>
           <GraphMoleculeIconButton
-            label="Clear staged selections"
+            label={translate("files.clearStagedSelections")}
             disabled={!hasStaged}
             onClick={onClearStaged}
           >
             <Eraser className="size-4" />
           </GraphMoleculeIconButton>
           <GraphMoleculeIconButton
-            label="Send staged selections"
+            label={translate("files.sendStagedSelections")}
             disabled={!hasStaged}
             onClick={onSendStaged}
           >
@@ -141,7 +143,7 @@ export default function GraphMoleculeViewerLowerButtonGroup({
           <div className="thread-graph-molecule-camera-divider" />
           <div className="flex flex-col gap-1 text-[10px]">
             <div>
-              Selected atoms:{' '}
+              {translate("files.selectedAtoms")}{' '}
               {selectedSerials.length > 0
                 ? selectedSerials
                     .map(
@@ -149,11 +151,10 @@ export default function GraphMoleculeViewerLowerButtonGroup({
                         `${selectedAtomLabels[serial] ?? 'Atom'}(${serial})`,
                     )
                     .join(', ')
-                : 'None'}
+                : translate("files.none")}
             </div>
             <div>
-              Staged: {stagedMolecules} molecule(s), {stagedAtoms} atom(s)
-            </div>
+              {translate("files.staged")} {stagedMolecules} {translate("files.moleculeS")} {stagedAtoms} {translate("files.atomS")}</div>
           </div>
         </div>
       ) : null}

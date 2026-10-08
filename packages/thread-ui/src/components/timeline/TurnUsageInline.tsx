@@ -1,9 +1,11 @@
+import { getLocale } from '../../i18n';
+import { translate, useI18n } from '../../i18n';
 import { TokenUsageCost } from './TokenUsageCost';
 import type { TimelineTurn } from './timelineItems';
 import { formatCompactTokenCount } from './tokenFormatting';
 
 export function formatTurnRuntimeSummary(turn: TimelineTurn) {
-  const model = turn.model?.trim() || 'Model unavailable';
+  const model = turn.model?.trim() || translate("chat.modelUnavailable");
   const effort = turn.reasoningEffort?.trim();
   return effort ? `${model} · ${effort}` : model;
 }
@@ -17,6 +19,7 @@ export function TurnUsageInline({
   readOnly?: boolean;
   speedMode?: 'average' | 'recent';
 }) {
+  useI18n();
   const usage = turn.tokenUsage?.total;
   const price = turn.priceEstimate;
   const active = ['inProgress', 'sending', 'recovering'].includes(turn.status);
@@ -30,9 +33,9 @@ export function TurnUsageInline({
     : (speed?.averageOutputTokensPerSecond ?? speed?.averageTokensPerSecond);
   const speedTitle = measured
     ? recent
-      ? `Latest confirmed response, ${((speed?.latestOutputTimeMs ?? 0) / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 })} seconds: actual output tokens (including reasoning and tool arguments) / LLM response time, including time to first output. Tool execution and user waits excluded. Updates when the harness reports tokens, not on each text chunk.${speed?.latestOutputMeasuredAt ? ` Measured at ${new Date(speed.latestOutputMeasuredAt).toLocaleTimeString()}.` : ''}`
-      : 'Whole-turn average of confirmed response intervals. Actual output tokens include reasoning and tool arguments; response latency is included. Tool execution, user waits and unreported idle tails are excluded. This is not instantaneous decoder speed.'
-    : `${recent ? 'Last 60 seconds, confirmed usage-report intervals only' : 'Whole-turn average'}: actual output tokens (including reasoning and tool arguments) / LLM response time. Tool execution and user waits excluded.`;
+      ? translate("chat.latestConfirmedResponseSecondsActualOutputTokens", { value1: ((speed?.latestOutputTimeMs ?? 0) / 1000).toLocaleString(getLocale(), { maximumFractionDigits: 1 }), value2: speed?.latestOutputMeasuredAt ? translate('chat.measuredAt', { time: new Date(speed.latestOutputMeasuredAt).toLocaleTimeString(getLocale()) }) : '' })
+      : translate('chat.responseAverage')
+    : translate('chat.responseSpeed', { period: recent ? translate('chat.responseRecent') : translate('chat.responseWhole') });
 
   return (
     <span className="thread-turn-usage" data-testid="turn-usage">
@@ -41,7 +44,7 @@ export function TurnUsageInline({
         title={formatTurnRuntimeSummary(turn)}
       >
         <span className="thread-turn-usage-model-name">
-          {turn.model?.trim() || 'Model unavailable'}
+          {turn.model?.trim() || translate("chat.modelUnavailable")}
         </span>
         {turn.reasoningEffort?.trim() ? (
           <span className="thread-turn-usage-effort">
@@ -53,10 +56,10 @@ export function TurnUsageInline({
       {usage ? (
         <span
           className="thread-turn-usage-tokens"
-          aria-label="Turn token usage"
+          aria-label={translate("chat.turnTokenUsage")}
         >
           <span
-            title={`Total tokens: ${usage.totalTokens.toLocaleString('en-US')}`}
+            title={translate("chat.totalTokens", { value1: usage.totalTokens.toLocaleString(getLocale()) })}
           >
             <span className="thread-turn-usage-value">
               {formatCompactTokenCount(usage.totalTokens)}
@@ -73,14 +76,14 @@ export function TurnUsageInline({
           aria-label={
             recent
               ? measured
-                ? 'Latest confirmed output token speed'
-                : 'Recent output token speed'
-              : 'Average output token speed'
+                ? translate("chat.latestConfirmedOutputTokenSpeed")
+                : translate("chat.recentOutputTokenSpeed")
+              : translate("chat.averageOutputTokenSpeed")
           }
-          title={`${speedTitle}${rate == null ? ' Waiting for the first output token usage report.' : ''}`}
+          title={`${speedTitle}${rate == null ? translate("chat.waitingForTheFirstOutputTokenUsage") : ''}`}
         >
           {rate != null && Number.isFinite(rate) && rate >= 0
-            ? rate.toLocaleString('en-US', {
+            ? rate.toLocaleString(getLocale(), {
                 maximumFractionDigits: 1,
                 minimumFractionDigits: 1,
               })

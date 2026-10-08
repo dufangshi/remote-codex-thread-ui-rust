@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { CornerUpRight, Loader2, X } from "lucide-react";
 import { useState } from "react";
 
@@ -16,6 +17,7 @@ export function ComposerPendingQueue({
   onSteer?: (pendingPromptId: string) => Promise<void> | void;
   onCancel?: (pendingPromptId: string) => Promise<void> | void;
 }) {
+  useI18n();
   const [busyIds, setBusyIds] = useState<Set<string>>(() => new Set());
 
   async function runAction(
@@ -41,11 +43,11 @@ export function ComposerPendingQueue({
 
   return (
     <section
-      aria-label="Queued prompts"
+      aria-label={translate("chat.queuedPrompts")}
       className="thread-composer-pending-queue mx-auto mb-2 w-full max-w-4xl overflow-hidden rounded-xl border"
     >
       <div className="flex items-center justify-between px-3 py-1.5 text-[11px] font-medium text-[var(--theme-fg-muted)]">
-        <span>Queued</span>
+        <span>{translate("chat.queued")}</span>
         <span>{prompts.length}</span>
       </div>
       <div className="max-h-36 overflow-y-auto">
@@ -68,8 +70,7 @@ export function ComposerPendingQueue({
                     className="h-3.5 w-3.5 animate-spin"
                     aria-hidden="true"
                   />
-                  Queueing
-                </span>
+                  {translate("chat.queueing")}</span>
               ) : (
                 <>
                   {onSteer ? (
@@ -97,8 +98,8 @@ export function ComposerPendingQueue({
                     <button
                       type="button"
                       disabled={busy}
-                      aria-label="Remove queued prompt"
-                      title="Remove from queue"
+                      aria-label={translate("chat.removeQueuedPrompt")}
+                      title={translate("chat.removeFromQueue")}
                       onClick={() => void runAction(prompt.id, onCancel)}
                       className="thread-composer-queue-remove inline-flex h-8 w-8 items-center justify-center rounded-lg transition disabled:cursor-wait disabled:opacity-60"
                     >

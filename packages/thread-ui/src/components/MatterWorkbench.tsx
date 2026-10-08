@@ -1,3 +1,5 @@
+import { getLocale } from '../i18n';
+import { translate, useI18n } from '../i18n';
 import { useEffect, useState, useRef, type ReactNode, type CSSProperties } from 'react';
 import {
   ArrowLeft,
@@ -91,6 +93,7 @@ export function MatterWorkbench({
   revealExplorer: number;
   children: ReactNode;
 }) {
+  useI18n();
   const tabs = o.workspaceThreads ?? o.threads.filter(thread => thread.key === o.currentKey);
   const tabsRef = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -165,7 +168,7 @@ export function MatterWorkbench({
     <div key={root.key}>
       {renderThread(root, threadGroupActivity(root, children))}
       {children.length > 0 && <details open={children.some(child => child.key === o.currentKey) || undefined} style={{ margin: '0 0 6px 14px' }}>
-        <summary style={{ padding: '4px 8px', fontSize: 12, cursor: 'pointer', color: 'var(--theme-fg-soft)' }}>{children.length} agent threads</summary>
+        <summary style={{ padding: '4px 8px', fontSize: 12, cursor: 'pointer', color: 'var(--theme-fg-soft)' }}>{children.length} {translate("workbench.agentThreads_655dcc")}</summary>
         {children.map(child => renderThread(child))}
       </details>}
     </div>
@@ -193,16 +196,16 @@ export function MatterWorkbench({
         }
       }}
     >
-      {!mobile && <nav className="matter-rail" aria-label="Workspace tools">
+      {!mobile && <nav className="matter-rail" aria-label={translate("workbench.workspaceTools")}>
         <a
           className="matter-brand"
           href={homeHref}
-          aria-label="Remote Codex home"
+          aria-label={translate("workbench.remoteCodexHome")}
         >
           r<span>c</span>
         </a>
         <button
-          aria-label="Chat"
+          aria-label={translate("workbench.chat")}
           aria-pressed={o.activeView === 'chat'}
           onClick={() => o.onViewChange('chat')}
         >
@@ -210,20 +213,20 @@ export function MatterWorkbench({
         </button>
         {o.terminalEnabled && (
           <button
-            aria-label="Terminal"
+            aria-label={translate("workbench.terminal")}
             aria-pressed={o.activeView === 'shell'}
             onClick={() => o.onViewChange('shell')}
           >
             <Terminal />
           </button>
         )}
-        <button aria-label="Toggle Explorer" aria-pressed={explorerOpen} aria-expanded={explorerOpen}
-          title="Explorer" onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
+        <button aria-label={translate("workbench.toggleExplorer")} aria-pressed={explorerOpen} aria-expanded={explorerOpen}
+          title={translate("workbench.explorer")} onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
         <div className="matter-rail-bottom">{deviceMonitor}{settings}</div>
       </nav>}
       <header className={`matter-topbar ${o.searchOpen ? 'is-search-open' : ''}`}>
         <button
-          aria-label="Toggle shortcuts sidebar"
+          aria-label={translate("workbench.toggleShortcutsSidebar")}
           aria-expanded={mobile ? sidebarOpen : !sidebarHidden}
           onClick={() => {
             if (mobile) setSidebarOpen(!sidebarOpen);
@@ -234,34 +237,34 @@ export function MatterWorkbench({
         </button>
         <span className="matter-topbar-brand">Remote Codex</span>
         <span className="matter-topbar-separator" />
-        <button aria-label="Go back" onClick={() => history.back()}>
+        <button aria-label={translate("workbench.goBack")} onClick={() => history.back()}>
           <ArrowLeft />
         </button>
-        <button aria-label="Go forward" onClick={() => history.forward()}>
+        <button aria-label={translate("workbench.goForward")} onClick={() => history.forward()}>
           <ArrowRight />
         </button>
-        <a href={homeHref} aria-label="Back to workspaces" title="Workspaces">
+        <a href={homeHref} aria-label={translate("workbench.backToWorkspaces")} title={translate("workbench.workspaces")}>
           <Home />
         </a>
         <div className="matter-topbar-search">{o.search ?? <button
           className="matter-search-trigger"
-          aria-label="Search conversation"
+          aria-label={translate("workbench.searchConversation")}
           disabled={o.emptyWorkspace}
           onClick={o.onSearch}
         >
           <Search />
-          <span>Search conversation</span>
+          <span>{translate("workbench.searchConversation")}</span>
         </button>}</div>
         <div className="matter-topbar-end">
           {mobile && deviceMonitor}
           {mobile && <>
-            <button aria-label="Chat" aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
-            {o.terminalEnabled && <button aria-label="Terminal" aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
+            <button aria-label={translate("workbench.chat")} aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
+            {o.terminalEnabled && <button aria-label={translate("workbench.terminal")} aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
             {settings}
           </>}
           <div className="matter-connection">{connection}</div>
           <button
-            aria-label="Notifications"
+            aria-label={translate("workbench.notifications")}
             aria-expanded={bellOpen}
             onClick={() => {
               setBellOpen(!bellOpen);
@@ -276,20 +279,20 @@ export function MatterWorkbench({
       {sidebarOpen && (
         <button
           className="matter-sidebar-scrim"
-          aria-label="Close navigation"
+          aria-label={translate("workbench.closeNavigation")}
           onClick={() => setSidebarOpen(false)}
         />
       )}
       <aside
         className={`matter-sidebar ${sidebarOpen ? 'is-open' : ''}`}
-        aria-label="Thread navigation"
+        aria-label={translate("workbench.threadNavigation")}
       >
         <div className="matter-sidebar-heading">
-          <span>Workspace</span>
-          <button className="matter-mobile-close" aria-label="Open Explorer" onClick={() => {setExplorerOpen(true);setSidebarOpen(false);}}><FolderOpen /></button>
+          <span>{translate("workbench.workspace")}</span>
+          <button className="matter-mobile-close" aria-label={translate("workbench.openExplorer")} onClick={() => {setExplorerOpen(true);setSidebarOpen(false);}}><FolderOpen /></button>
           <button
             className="matter-mobile-close"
-            aria-label="Close sidebar"
+            aria-label={translate("workbench.closeSidebar")}
             onClick={() => setSidebarOpen(false)}
           >
             <X />
@@ -306,7 +309,7 @@ export function MatterWorkbench({
           onClick={() => setShortcutsOpen(!shortcutsOpen)}
         >
           {shortcutsOpen ? <ChevronDown /> : <ChevronRight />}
-          <span>Shortcuts</span>
+          <span>{translate("workbench.shortcuts")}</span>
           <Star />
         </button>
         {shortcutsOpen && (
@@ -316,10 +319,8 @@ export function MatterWorkbench({
             ))}
             {!o.threads.some((t) => t.favorite) && (
               <p className="matter-sidebar-hint">
-                Star a thread to keep it close.
-                <br />
-                Across workspaces and devices.
-              </p>
+                {translate("workbench.starAThreadToKeepItClose")}<br />
+                {translate("workbench.acrossWorkspacesAndDevices")}</p>
             )}
           </div>
         )}
@@ -329,8 +330,8 @@ export function MatterWorkbench({
           onClick={() => setRecentsOpen(!recentsOpen)}
         >
           {recentsOpen ? <ChevronDown /> : <ChevronRight />}
-          <span>Recent chats</span>
-          <span className="matter-section-count" title={`${o.threads.length} conversations, ${groupThreads(o.threads).length} groups`}>{groupThreads(o.threads).length}</span>
+          <span>{translate("workbench.recentChats")}</span>
+          <span className="matter-section-count" title={translate("workbench.conversationsGroups", { value1: o.threads.length, value2: groupThreads(o.threads).length })}>{groupThreads(o.threads).length}</span>
         </button>
         {recentsOpen && (
           <div className="matter-thread-section" data-testid="recent-chats">
@@ -338,16 +339,15 @@ export function MatterWorkbench({
           </div>
         )}
         <div className="matter-sidebar-footer">
-          Your conversations, together.
-        </div>
+          {translate("workbench.yourConversationsTogether")}</div>
       </aside>
       <main className="matter-main">
         <div className="matter-tabs-row">
-        <nav ref={tabsRef} className="matter-thread-tabs" aria-label="Workspace threads">
+        <nav ref={tabsRef} className="matter-thread-tabs" aria-label={translate("workbench.workspaceThreads")}>
           <GroupedThreadTabs threads={tabs} currentKey={o.currentKey} onNavigate={navigate} />
           {newThread}
         </nav>
-        {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label="Thread tools" aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? 'Hide thread tools' : 'Show thread tools'}><SlidersHorizontal /></button>}
+        {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label={translate("workbench.threadTools")} aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? translate("workbench.hideThreadTools") : translate("workbench.showThreadTools")}><SlidersHorizontal /></button>}
         {o.statusActions}
         {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">
           <WorkbenchPath path={o.workspacePath} />
@@ -356,7 +356,7 @@ export function MatterWorkbench({
             {title}
           </span>
           <button
-            aria-label={o.favorite ? 'Remove shortcut' : 'Add shortcut'}
+            aria-label={o.favorite ? translate("workbench.removeShortcut") : translate("workbench.addShortcut")}
             aria-pressed={o.favorite}
             disabled={o.favoriteBusy}
             onClick={o.onToggleFavorite}
@@ -367,7 +367,7 @@ export function MatterWorkbench({
             {actions}
             {threadMenu}
             <button
-              aria-label="Toggle Explorer"
+              aria-label={translate("workbench.toggleExplorer")}
               aria-expanded={explorerOpen}
               onClick={() => setExplorerOpen(!explorerOpen)}
             >
@@ -383,8 +383,8 @@ export function MatterWorkbench({
             </WorkbenchContext.Provider>
           </div>
           {explorerOpen && (
-            <aside className="matter-explorer" aria-label="Explorer">
-              {!mobile && <div role="separator" aria-label="Resize Explorer" aria-orientation="vertical" aria-valuemin={260} aria-valuemax={Math.max(260, (contentRef.current?.clientWidth ?? 1000) - 320)} aria-valuenow={explorerWidth} tabIndex={0} className="matter-explorer-resize"
+            <aside className="matter-explorer" aria-label={translate("workbench.explorer")}>
+              {!mobile && <div role="separator" aria-label={translate("workbench.resizeExplorer")} aria-orientation="vertical" aria-valuemin={260} aria-valuemax={Math.max(260, (contentRef.current?.clientWidth ?? 1000) - 320)} aria-valuenow={explorerWidth} tabIndex={0} className="matter-explorer-resize"
                 onPointerDown={e => { e.preventDefault(); e.currentTarget.setPointerCapture(e.pointerId); resizeOrigin.current = { x: e.clientX, width: explorerWidth }; }}
                 onPointerMove={e => { if (resizeOrigin.current) resizeExplorer(resizeOrigin.current.width + resizeOrigin.current.x - e.clientX); }}
                 onPointerUp={e => { resizeOrigin.current = null; e.currentTarget.releasePointerCapture(e.pointerId); }}
@@ -392,9 +392,8 @@ export function MatterWorkbench({
                 onKeyDown={e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); resizeExplorer(explorerWidth + (e.key === 'ArrowLeft' ? 24 : -24)); } }}
               />}
               <div className="matter-explorer-heading">
-                Explorer
-                <button
-                  aria-label="Close Explorer"
+                {translate("workbench.explorer")}<button
+                  aria-label={translate("workbench.closeExplorer")}
                   onClick={() => setExplorerOpen(false)}
                 >
                   <X />
@@ -409,20 +408,19 @@ export function MatterWorkbench({
         <>
           <button
             className="matter-popover-scrim"
-            aria-label="Close notifications"
+            aria-label={translate("workbench.closeNotifications")}
             onClick={() => setBellOpen(false)}
           />
           <section
             className="matter-notifications"
-            aria-label="Notifications"
+            aria-label={translate("workbench.notifications")}
             onKeyDown={(e) => {
               if (e.key === 'Escape') setBellOpen(false);
             }}
           >
             <div className="matter-notifications-heading">
-              Notifications
-              <button
-                aria-label="Close notification panel"
+              {translate("workbench.notifications")}<button
+                aria-label={translate("workbench.closeNotificationPanel")}
                 onClick={() => setBellOpen(false)}
               >
                 <X />
@@ -442,12 +440,12 @@ export function MatterWorkbench({
                   <span>
                     {n.title}
                     {n.summary && <p className="matter-notification-summary">{n.summary}</p>}
-                    <small>{new Date(n.occurredAt).toLocaleString()}</small>
+                    <small>{new Date(n.occurredAt).toLocaleString(getLocale())}</small>
                   </span>
                 </a>
               ))
             ) : (
-              <p>All caught up. Completed threads will appear here.</p>
+              <p>{translate("workbench.allCaughtUpCompletedThreadsWillAppear")}</p>
             )}
           </section>
         </>

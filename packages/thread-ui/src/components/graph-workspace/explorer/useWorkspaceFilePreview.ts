@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import { useLayoutEffect, useState } from 'react';
 
 import type {
@@ -29,6 +30,7 @@ export function useWorkspaceFilePreview({
   onError: (error: string | null) => void;
   refreshTree: (preferredPath?: string | null) => Promise<void>;
 }) {
+  useI18n();
   const [previewFile, setPreviewFile] =
     useState<ThreadWorkspaceFilePreview | null>(null);
   const [downloadOnly, setDownloadOnly] = useState(false);
@@ -65,7 +67,7 @@ export function useWorkspaceFilePreview({
         }
         const extension = extensionOf(currentPath);
         if (isDrawioPath(currentPath) && (activeNode?.size ?? 0) > DRAWIO_MAX_BYTES) {
-          throw new Error('Diagram preview supports files up to 8 MiB. Download this file to view it locally.');
+          throw new Error(translate("files.diagramPreviewSupportsFilesUpTo8"));
         }
         const rawUrl = currentAdapter.getRawFileUrl?.({
           ...identity,
@@ -95,7 +97,7 @@ export function useWorkspaceFilePreview({
       } catch (error) {
         if (!cancelled) {
           onError(
-            error instanceof Error ? error.message : 'Failed to read file',
+            error instanceof Error ? error.message : translate("files.failedToReadFile"),
           );
         }
       } finally {

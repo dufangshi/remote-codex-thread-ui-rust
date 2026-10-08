@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { ComposerMenuSurface } from './ComposerMenuSurface';
 import type {
   AgentBackendToolboxItemSchemaDto,
@@ -201,6 +202,7 @@ export function ComposerSlashToolboxMenu({
   onSaveHttpMcp: () => Promise<void> | void;
   onSaveRawMcpBlock: () => Promise<void> | void;
 }) {
+  useI18n();
   return (
     <div className="relative">
       <InputGroupButton
@@ -208,8 +210,8 @@ export function ComposerSlashToolboxMenu({
         variant="ghost"
         size="icon-xs"
         data-composer-menu-trigger="true"
-        aria-label="Open slash toolbox"
-        title="Open slash toolbox"
+        aria-label={translate("chat.openSlashToolbox")}
+        title={translate("chat.openSlashToolbox")}
         onClick={onToggle}
         className={`${iconButtonClassName} h-9 w-9 rounded-full sm:h-8 sm:w-8`}
       >
@@ -253,12 +255,12 @@ export function ComposerSlashToolboxMenu({
                       ? 'ui-status-warning'
                       : menuItemClassName
                   } block w-full rounded-xl px-3 py-2 text-left text-sm transition disabled:cursor-not-allowed disabled:opacity-60`}
-                  title="Toggle plan mode"
+                  title={translate("chat.togglePlanMode")}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span>/plan</span>
                     <span className="text-[11px] uppercase tracking-[0.16em] text-stone-400">
-                      {displayedCollaborationMode === 'plan' ? 'On' : 'Off'}
+                      {displayedCollaborationMode === 'plan' ? translate("chat.on") : translate("chat.off")}
                     </span>
                   </div>
                 </button>
@@ -278,7 +280,7 @@ export function ComposerSlashToolboxMenu({
                         void onViewGoals?.();
                       }}
                       className="min-w-0 flex-1 px-3 py-2.5 text-left text-sm text-[var(--theme-fg)] transition hover:bg-[var(--theme-hover)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-accent-border)] disabled:cursor-not-allowed disabled:opacity-45"
-                      aria-label="View goals"
+                      aria-label={translate("chat.viewGoals")}
                     >
                       <span>{item.command}</span>
                     </button>
@@ -287,10 +289,9 @@ export function ComposerSlashToolboxMenu({
                       disabled={toolboxItemDisabled(item)}
                       onClick={(event) => onToolboxItemClick(item, event)}
                       className="min-w-14 border-l border-[var(--theme-border)] px-3 text-xs font-semibold text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)] focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-accent-border)] disabled:cursor-not-allowed disabled:opacity-45"
-                      aria-label="Open goal composer"
+                      aria-label={translate("chat.openGoalComposer")}
                     >
-                      Open
-                    </button>
+                      {translate("chat.open")}</button>
                   </div>
                 ) : (
                   <button
@@ -312,16 +313,14 @@ export function ComposerSlashToolboxMenu({
               )}
               {availableToolboxItems.length === 0 && !planModeAvailable ? (
                 <p className="px-3 py-2 text-sm text-stone-400">
-                  No backend tools are available for this thread.
-                </p>
+                  {translate("chat.noBackendToolsAreAvailableForThis")}</p>
               ) : null}
             </div>
           ) : (
             <div className="flex min-h-0 max-h-80 flex-col">
               {forkBusy && (slashPanelView === 'fork' || slashPanelView === 'forkTurns') ? (
                 <p role="status" className="shrink-0 px-3 py-2 text-sm text-[var(--theme-fg-muted)]">
-                  Creating fork… You will be taken to the new thread when it is ready.
-                </p>
+                  {translate("chat.creatingForkYouWillBeTakenTo")}</p>
               ) : null}
               {forkError && (slashPanelView === 'fork' || slashPanelView === 'forkTurns') ? (
                 <p role="alert" className="m-2 shrink-0 rounded-xl border border-[var(--status-danger-border)] bg-[var(--status-danger-bg)] px-3 py-3 text-sm text-[var(--status-danger-fg)]">

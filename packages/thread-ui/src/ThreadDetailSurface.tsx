@@ -1,3 +1,4 @@
+import { translate, useI18n } from './i18n';
 import {
   useMemo,
   type ComponentType,
@@ -97,14 +98,14 @@ function formatTopbarTokenCount(value: number | undefined) {
 
 function formatTopbarUsageSummary(usage: GraphChatThreadUsageSummary | null) {
   if (!usage || usage.turns <= 0) {
-    return "waiting for agent usage";
+    return translate("workbench.waitingForAgentUsage");
   }
   const baseTokenParts = `in ${formatTopbarTokenCount(usage.input)} / out ${formatTopbarTokenCount(
     usage.output,
   )} / cache read ${formatTopbarTokenCount(usage.cache)}`;
   const tokenParts =
     usage.cacheWrite > 0
-      ? `${baseTokenParts} / cache write ${formatTopbarTokenCount(usage.cacheWrite)}`
+      ? translate("workbench.cacheWrite", { value1: baseTokenParts, value2: formatTopbarTokenCount(usage.cacheWrite) })
       : baseTokenParts;
   return usage.pricedTurns > 0
     ? `${tokenParts} / cost ${formatCompactUsd(usage.priceUsd)}`
@@ -293,6 +294,7 @@ export function ThreadDetailSurface({
   loadingContent,
   emptyContent,
 }: ThreadDetailSurfaceProps) {
+  useI18n();
   const detail = useMemo(
     () => (rawDetail ? sanitizeThreadDetailHistory(rawDetail) : null),
     [rawDetail],
@@ -385,8 +387,7 @@ export function ThreadDetailSurface({
   const defaultContent = loading ? (
     (loadingContent ?? (
       <div className="flex flex-1 items-center justify-center px-6 py-12 text-center text-[var(--theme-fg-muted)]">
-        Loading thread detail...
-      </div>
+        {translate("workbench.loadingThreadDetail")}</div>
     ))
   ) : detail ? (
     <div className={className}>
@@ -405,7 +406,7 @@ export function ThreadDetailSurface({
       {detail.workspacePathStatus === "missing" &&
         (workspaceMissingContent ?? (
           <div className="shrink-0 border-b border-rose-500/20 bg-rose-500/10 px-5 py-4 text-sm text-rose-100 sm:px-6">
-            <p className="font-medium text-rose-50">Workspace path missing</p>
+            <p className="font-medium text-rose-50">{translate("workbench.workspacePathMissing")}</p>
             <p className="mt-1 break-words text-rose-100/90">
               {detail.workspace.absPath}
             </p>
@@ -459,12 +460,9 @@ export function ThreadDetailSurface({
               <div className="flex min-h-0 flex-1 items-center justify-center p-4 sm:p-6">
                 <div className="thread-empty-surface max-w-md rounded-[1.6rem] border px-6 py-8 text-center">
                   <p className="text-base font-medium text-[var(--theme-fg)]">
-                    Terminal plugin disabled
-                  </p>
+                    {translate("workbench.terminalPluginDisabled")}</p>
                   <p className="mt-3 text-sm leading-6 text-[var(--theme-fg-muted)]">
-                    Enable the Terminal plugin in Settings to use the shell
-                    panel.
-                  </p>
+                    {translate("workbench.enableTheTerminalPluginInSettingsTo")}</p>
                 </div>
               </div>
             ))
@@ -473,11 +471,9 @@ export function ThreadDetailSurface({
               <div className="flex min-h-0 flex-1 items-center justify-center p-4 sm:p-6">
                 <div className="thread-empty-surface max-w-md rounded-[1.6rem] border px-6 py-8 text-center">
                   <p className="text-base font-medium text-[var(--theme-fg)]">
-                    Thread disconnected
-                  </p>
+                    {translate("workbench.threadDisconnected")}</p>
                   <p className="mt-3 text-sm leading-6 text-[var(--theme-fg-soft)]">
-                    Reconnect this thread before creating or attaching a shell.
-                  </p>
+                    {translate("workbench.reconnectThisThreadBeforeCreatingOrAttaching")}</p>
                 </div>
               </div>
             ))
@@ -488,8 +484,7 @@ export function ThreadDetailSurface({
   ) : (
     (emptyContent ?? (
       <div className="flex flex-1 items-center justify-center px-6 py-12 text-center text-[var(--theme-fg-muted)]">
-        Select a thread to inspect.
-      </div>
+        {translate("workbench.selectAThreadToInspect")}</div>
     ))
   );
 
@@ -530,7 +525,7 @@ export function ThreadDetailSurface({
       hideRoomsRail={presentation === "embedded-single-thread"}
       onOpenThread={adapter.openThread}
       workspaceContent={resolvedWorkspaceContent}
-      workspaceTitle={workspaceTitle ?? "Workspace"}
+      workspaceTitle={workspaceTitle ?? translate("workbench.workspace")}
       workspaceActions={workspaceActions}
       {...(workspaceFocusPathRequest
         ? { workspaceRevealRequestKey: workspaceFocusPathRequest.requestId }

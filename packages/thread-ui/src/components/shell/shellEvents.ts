@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type {
   ShellEventEnvelope,
   ShellEventPayloadMap,
@@ -166,7 +167,7 @@ export const SHELL_RECONNECT_DELAY_MS = 800;
 export const SHELL_ATTACH_TIMEOUT_MS = 4000;
 export const SHELL_RECONNECT_PROMISE_TIMEOUT_MS = 4500;
 export const SHELL_ATTACH_TIMEOUT_MESSAGE =
-  'Shell connection timed out. Reconnecting...';
+  translate("workbench.shellConnectionTimedOutReconnecting");
 
 export function deriveShellAttachTimeoutAction({
   isCurrentSocket,
@@ -622,7 +623,7 @@ export function deriveShellLifecycleEventAction({
       settleAttachPromise: false,
       isCommandRunning: undefined,
       connectionError: String(
-        event.payload.message ?? 'Shell connection failed.',
+        event.payload.message ?? translate("workbench.shellConnectionFailed"),
       ),
       intentionalDisconnect: undefined,
       closeSocket: false,
@@ -650,7 +651,7 @@ export function deriveShellLifecycleEventAction({
       isCommandRunning: false,
       connectionError:
         detachedReason === 'replaced'
-          ? 'This shell connection was taken over by another pane or device.'
+          ? translate("workbench.thisShellConnectionWasTakenOverBy")
           : null,
       intentionalDisconnect: detachedReason === 'replaced' ? true : undefined,
       closeSocket: true,

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { relativeWorkspacePath } from '../workspacePaths';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -42,6 +43,7 @@ export function GraphWorkspaceExplorer({
   focusPathRequest?: { path: string; line?: number; requestId: number } | null;
   workspaceAdapter?: ThreadWorkspaceAdapter | null;
 }) {
+  useI18n();
   const {
     activeNode,
     adapterModel,
@@ -294,8 +296,8 @@ export function GraphWorkspaceExplorer({
     onCopyPath: handleCopyPath,
     ...(workspaceAdapter?.renameNode ? {onRename: async (node: WorkspaceTreeNode, name: string) => {
       const relative = relativeWorkspacePath(node.path, detail.workspace.absPath);
-      if (!relative || !name.trim() || name === '.' || name === '..' || /[\\/\x00-\x1f]/.test(name)) throw new Error('Enter a valid filename without path separators.');
-      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error('Save or discard unsaved changes before renaming.');
+      if (!relative || !name.trim() || name === '.' || name === '..' || /[\\/\x00-\x1f]/.test(name)) throw new Error(translate("files.enterAValidFilenameWithoutPathSeparators"));
+      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error(translate("files.saveOrDiscardUnsavedChangesBeforeRenaming"));
       const prefix = relative.includes('/') ? relative.slice(0, relative.lastIndexOf('/') + 1) : '';
       const toPath = prefix + name.trim();
       await workspaceAdapter.renameNode!({...workspaceIdentity, fromPath: relative, toPath});
@@ -304,8 +306,8 @@ export function GraphWorkspaceExplorer({
     }} : {}),
     ...(workspaceAdapter?.deleteNode ? {onDelete: async (node: WorkspaceTreeNode) => {
       const relative = relativeWorkspacePath(node.path, detail.workspace.absPath);
-      if (!relative) throw new Error('The workspace root cannot be deleted.');
-      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error('Save or discard unsaved changes before deleting.');
+      if (!relative) throw new Error(translate("files.theWorkspaceRootCannotBeDeleted"));
+      if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error(translate("files.saveOrDiscardUnsavedChangesBeforeDeleting"));
       await workspaceAdapter.deleteNode!({...workspaceIdentity, path: relative});
       setFileTabs(tabs => tabs.filter(tab => tab.path !== node.path && !tab.path.startsWith(`${node.path}/`)));
       if (activeNode?.path === node.path || activeNode?.path.startsWith(`${node.path}/`)) setSelectedNodeId(null);
@@ -510,7 +512,7 @@ export function GraphWorkspaceExplorer({
       <input
         ref={fileInputRef}
         type="file"
-        aria-label="Workspace upload file input"
+        aria-label={translate("files.workspaceUploadFileInput")}
         data-testid="workspace-upload-file-input"
         className="hidden"
         onChange={(event) => void handleUpload(event)}

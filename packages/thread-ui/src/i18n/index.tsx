@@ -26,8 +26,8 @@ export function initializeI18n() {
     try { stored = typeof localStorage === 'undefined' ? null : localStorage.getItem(LOCALE_STORAGE_KEY); } catch { /* Private browsers may deny storage. */ }
     store.locale = detectLocale(stored, typeof navigator === 'undefined' ? [] : navigator.languages?.length ? navigator.languages : [navigator.language]);
     store.initialized = true;
+    applyDocumentLocale();
   }
-  applyDocumentLocale();
   return store.locale;
 }
 export function getLocale(): Locale { return initializeI18n(); }

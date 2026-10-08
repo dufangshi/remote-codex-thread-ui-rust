@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useCallback, useState } from 'react';
 
 import type { ProviderHostFileDto } from '@remote-codex/shared';
@@ -12,7 +13,7 @@ import type { McpPanelMode } from './types';
 const DEFAULT_RAW_MCP_BLOCK =
   '[mcp_servers.example_stdio]\ncommand = "npx"\nargs = ["-y", "your-mcp-server"]\n';
 const MCP_CONFIG_SUCCESS_MESSAGE =
-  'MCP entry written to provider config. Restart the backend if it does not appear immediately.';
+  translate("chat.mCPEntryWrittenToProviderConfigRestart");
 
 export interface UseComposerMcpConfigInput {
   hostConfigFilesAvailable: boolean;
@@ -50,6 +51,7 @@ export function useComposerMcpConfig({
   setMcpPanelMode,
   onOpenMcp,
 }: UseComposerMcpConfigInput): UseComposerMcpConfigResult {
+  useI18n();
   const [mcpHttpName, setMcpHttpName] = useState('');
   const [mcpHttpUrl, setMcpHttpUrl] = useState('');
   const [mcpRawBlock, setMcpRawBlock] = useState('');
@@ -66,7 +68,7 @@ export function useComposerMcpConfig({
   const loadProviderConfig = useCallback(async () => {
     if (!hostConfigFilesAvailable || !onReadProviderConfig) {
       throw new Error(
-        'Provider config editing is unavailable for this thread.',
+        translate("chat.providerConfigEditingIsUnavailableForThis"),
       );
     }
 
@@ -79,7 +81,7 @@ export function useComposerMcpConfig({
     async (nextContent: string) => {
       if (!hostConfigFilesAvailable || !onWriteProviderConfig) {
         throw new Error(
-          'Provider config editing is unavailable for this thread.',
+          translate("chat.providerConfigEditingIsUnavailableForThis"),
         );
       }
 
@@ -95,12 +97,12 @@ export function useComposerMcpConfig({
     const url = mcpHttpUrl.trim();
     if (!name) {
       setMcpConfigError(
-        'MCP name must use only letters, numbers, underscore, or hyphen.',
+        translate("chat.mCPNameMustUseOnlyLettersNumbers"),
       );
       return;
     }
     if (!/^https?:\/\//i.test(url)) {
-      setMcpConfigError('HTTP MCP URL must start with http:// or https://');
+      setMcpConfigError(translate("chat.hTTPMCPURLMustStartWithHttp"));
       return;
     }
 
@@ -125,7 +127,7 @@ export function useComposerMcpConfig({
       setMcpConfigError(
         error instanceof Error
           ? error.message
-          : 'Unable to update provider config.',
+          : translate("chat.unableToUpdateProviderConfig"),
       );
     } finally {
       setMcpConfigBusy(false);
@@ -152,7 +154,7 @@ export function useComposerMcpConfig({
       setMcpConfigError(
         error instanceof Error
           ? error.message
-          : 'Unable to load provider config.',
+          : translate("chat.unableToLoadProviderConfig"),
       );
     } finally {
       setMcpConfigBusy(false);
@@ -163,7 +165,7 @@ export function useComposerMcpConfig({
     const serverName = parseMcpServerNameFromBlock(mcpRawBlock);
     if (!serverName) {
       setMcpConfigError(
-        'The raw MCP block must start with a header like [mcp_servers.name].',
+        translate("chat.theRawMCPBlockMustStartWith"),
       );
       return;
     }
@@ -187,7 +189,7 @@ export function useComposerMcpConfig({
       setMcpConfigError(
         error instanceof Error
           ? error.message
-          : 'Unable to update provider config.',
+          : translate("chat.unableToUpdateProviderConfig"),
       );
     } finally {
       setMcpConfigBusy(false);

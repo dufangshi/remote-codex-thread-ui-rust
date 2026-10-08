@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { Circle, FileCode2, X } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 
@@ -22,6 +23,7 @@ export function WorkspaceFileTabs({
   tabs: WorkspaceFileTab[];
   trailingAction?: ReactNode;
 }) {
+  useI18n();
   const [pendingClosePath, setPendingClosePath] = useState<string | null>(null);
   const pendingTab = tabs.find((tab) => tab.path === pendingClosePath) ?? null;
 
@@ -43,7 +45,7 @@ export function WorkspaceFileTabs({
         <div
           className="thread-graph-editor-tabs flex min-w-0 flex-1 overflow-x-auto"
           role="tablist"
-          aria-label="Open workspace files"
+          aria-label={translate("files.openWorkspaceFiles")}
         >
           {tabs.map((tab) => {
             const active = tab.path === activePath;
@@ -69,8 +71,8 @@ export function WorkspaceFileTabs({
                   type="button"
                   onClick={() => requestClose(tab.path)}
                   className="thread-graph-editor-tab-close mr-1 flex h-5 w-5 shrink-0 items-center justify-center rounded"
-                  title={`Close ${tab.name}`}
-                  aria-label={`Close ${tab.name}`}
+                  title={translate("files.close_069e97", { value1: tab.name })}
+                  aria-label={translate("files.close_069e97", { value1: tab.name })}
                 >
                   {dirty ? (
                     <Circle className="h-2.5 w-2.5 fill-current" />
@@ -94,7 +96,7 @@ export function WorkspaceFileTabs({
           role="alert"
         >
           <span className="min-w-0 truncate">
-            Discard unsaved changes in {pendingTab.name}?
+            {translate("files.discardUnsavedChangesIn")} {pendingTab.name}?
           </span>
           <div className="flex shrink-0 items-center gap-1">
             <button
@@ -102,8 +104,7 @@ export function WorkspaceFileTabs({
               onClick={() => setPendingClosePath(null)}
               className="h-7 rounded px-2 hover:bg-[var(--theme-hover)]"
             >
-              Keep editing
-            </button>
+              {translate("files.keepEditing")}</button>
             <button
               type="button"
               onClick={() => {
@@ -112,8 +113,7 @@ export function WorkspaceFileTabs({
               }}
               className="h-7 rounded bg-rose-500/15 px-2 text-rose-700 hover:bg-rose-500/25 dark:text-rose-200"
             >
-              Discard
-            </button>
+              {translate("files.discard")}</button>
           </div>
         </div>
       ) : null}

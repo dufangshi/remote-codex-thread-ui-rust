@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type {
   ShellSessionDto,
   ShellStatusDto,
@@ -103,12 +104,12 @@ export function buildConnectionButtonState({
   const disabled =
     busy || loading || status === 'creating' || workspacePathMissing;
   const label = activeRuntime.shellInputEnabled
-    ? 'Disconnect shell'
+    ? translate("workbench.disconnectShell")
     : activeShell && !isLiveShell(activeShell)
-      ? 'Restart shell'
+      ? translate("workbench.restartShell")
       : activeShell
-        ? 'Connect shell'
-        : 'Create shell';
+        ? translate("workbench.connectShell")
+        : translate("workbench.createShell");
   const className = activeRuntime.shellInputEnabled
     ? 'border-emerald-300/45 bg-emerald-300/18 text-emerald-50 ring-1 ring-emerald-300/20 hover:bg-emerald-300/24'
     : activeShell && !isLiveShell(activeShell)

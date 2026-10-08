@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { memo, useEffect, useMemo, useState, type ReactNode } from 'react';
 import {
   GitBranch,
@@ -187,21 +188,21 @@ function collectToolEvents(detail: ThreadDetailDto): GraphToolEventSummary[] {
 function formatToolKind(value: ThreadHistoryItemDto['kind']) {
   switch (value) {
     case 'toolCall':
-      return 'Tool call';
+      return translate("files.toolCall");
     case 'agentToolCall':
-      return 'Agent tool';
+      return translate("files.agentTool");
     case 'skillToolCall':
-      return 'Skill tool';
+      return translate("files.skillTool");
     case 'commandExecution':
-      return 'Command';
+      return translate("files.command");
     case 'webSearch':
-      return 'Search';
+      return translate("files.search");
     case 'fileRead':
-      return 'File read';
+      return translate("files.fileRead");
     case 'fileChange':
-      return 'File change';
+      return translate("files.fileChange");
     case 'hook':
-      return 'Hook';
+      return translate("files.hook");
     default:
       return value
         .replace(/([A-Z])/g, ' $1')
@@ -212,9 +213,9 @@ function formatToolKind(value: ThreadHistoryItemDto['kind']) {
 function itemGraphLabel(item: ThreadHistoryItemDto) {
   switch (item.kind) {
     case 'userMessage':
-      return 'User';
+      return translate("files.user");
     case 'agentMessage':
-      return 'Agent';
+      return translate("files.agent");
     default:
       return formatToolKind(item.kind);
   }
@@ -232,12 +233,12 @@ function collectGraphNodes(
   const nodes: GraphChatInputNode[] = [
     {
       id: `thread:${detail.thread.id}`,
-      name: detail.thread.title || 'Thread',
+      name: detail.thread.title || translate("files.thread"),
       description: detail.thread.model ?? detail.thread.status,
     },
     {
       id: `workspace:${detail.workspace.id}`,
-      name: detail.workspace.label ?? 'Workspace',
+      name: detail.workspace.label ?? translate("files.workspace"),
       description: detail.workspace.absPath,
       out_node_id: `thread:${detail.thread.id}`,
     },
@@ -310,6 +311,7 @@ export function ThreadGraphWorkspacePanel({
   features: featureConfig,
   focusPathRequest = null,
 }: ThreadGraphWorkspacePanelProps) {
+  const { locale: i18nLocale } = useI18n();
   const features = useMemo(
     () => resolveWorkspaceFeatures(featureConfig),
     [featureConfig],
@@ -326,20 +328,20 @@ export function ThreadGraphWorkspacePanel({
   const primaryTabs = useMemo(() => {
     const tabs: PrimaryWorkspaceTab[] = [];
     if (features.workspace) {
-      tabs.push({ id: 'workspace', label: 'Workspace', icon: null });
+      tabs.push({ id: 'workspace', label: translate("files.workspace"), icon: null });
     }
     return tabs;
-  }, [features.workspace]);
+  }, [features.workspace, i18nLocale]);
   const secondaryTabs = useMemo(() => {
     const tabs: SecondaryWorkspaceTab[] = [];
     if (features.threadGraph) {
-      tabs.push({ id: 'graph', label: 'Thread graph', icon: GitBranch });
+      tabs.push({ id: 'graph', label: translate("files.threadGraph"), icon: GitBranch });
     }
     if (features.extensions) {
-      tabs.push({ id: 'extensions', label: 'Remote Codex extensions', icon: Wrench });
+      tabs.push({ id: 'extensions', label: translate("files.remoteCodexExtensions"), icon: Wrench });
     }
     return tabs;
-  }, [features.extensions, features.threadGraph]);
+  }, [features.extensions, features.threadGraph, i18nLocale]);
 
   useEffect(() => {
     if (!activeTab || !isWorkspaceTabEnabled(features, activeTab)) {
@@ -379,7 +381,7 @@ export function ThreadGraphWorkspacePanel({
         {secondaryTabs.length ? (
           <div
             className="thread-graph-right-tab-secondary ml-auto flex h-6 min-w-0 shrink items-center gap-0.5 border-l pl-1"
-            aria-label="Remote Codex workspace extensions"
+            aria-label={translate("files.remoteCodexWorkspaceExtensions")}
           >
             {secondaryTabs.map((tab) => {
               const Icon = tab.icon;
@@ -424,7 +426,7 @@ export function ThreadGraphWorkspacePanel({
         {activeTab === 'extensions' ? (
           <div className="h-full min-h-0 overflow-y-auto p-3">
             <div className="grid gap-3">
-              <WorkspaceInfoCard label="Plugin Panels">
+              <WorkspaceInfoCard label={translate("files.pluginPanels")}>
                 {threadPanels.length ? (
                   <div className="flex flex-wrap gap-2">
                     {threadPanels.map((panel) => (
@@ -438,11 +440,10 @@ export function ThreadGraphWorkspacePanel({
                   </div>
                 ) : (
                   <p className="text-[var(--theme-fg-muted)]">
-                    No thread panels are enabled.
-                  </p>
+                    {translate("files.noThreadPanelsAreEnabled")}</p>
                 )}
               </WorkspaceInfoCard>
-              <WorkspaceInfoCard label="Enabled Renderers">
+              <WorkspaceInfoCard label={translate("files.enabledRenderers")}>
                 <div className="flex flex-wrap gap-2">
                   {plugins.plugins
                     .filter((plugin) => plugin.enabled)
@@ -456,39 +457,32 @@ export function ThreadGraphWorkspacePanel({
                     ))}
                 </div>
               </WorkspaceInfoCard>
-              <WorkspaceInfoCard label="Remote Codex Tools">
+              <WorkspaceInfoCard label={translate("files.remoteCodexTools")}>
                 <div className="grid gap-2 text-[var(--theme-fg-muted)]">
                   <div className="flex items-start gap-2">
                     <Terminal className="mt-0.5 h-4 w-4 shrink-0" />
                     <p>
-                      Terminal stays available when the Terminal plugin and
-                      shell adapter are attached.
-                    </p>
+                      {translate("files.terminalStaysAvailableWhenTheTerminalPlugin")}</p>
                   </div>
                   <div className="flex items-start gap-2">
                     <Paperclip className="mt-0.5 h-4 w-4 shrink-0" />
                     <p>
-                      Composer attachments, slash panels, hooks, MCP, goals,
-                      and fork controls remain part of the chat surface.
-                    </p>
+                      {translate("files.composerAttachmentsSlashPanelsHooksMCPGoals")}</p>
                   </div>
                   <div className="flex items-start gap-2">
                     <Trash2 className="mt-0.5 h-4 w-4 shrink-0" />
                     <p>
-                      Destructive actions stay explicit: delete thread,
-                      interrupt, compact, and hook trust controls remain host
-                      governed.
-                    </p>
+                      {translate("files.destructiveActionsStayExplicitDeleteThreadInterrupt")}</p>
                   </div>
                 </div>
               </WorkspaceInfoCard>
               {metaContent ? (
-                <WorkspaceInfoCard label="Thread Meta">
+                <WorkspaceInfoCard label={translate("files.threadMeta")}>
                   {metaContent}
                 </WorkspaceInfoCard>
               ) : null}
               {settingsContent ? (
-                <WorkspaceInfoCard label="Settings">
+                <WorkspaceInfoCard label={translate("files.settings")}>
                   {settingsContent}
                 </WorkspaceInfoCard>
               ) : null}

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type { GLModel, GLViewer } from '3dmol';
 
 export type ThreeDmolApi = {
@@ -14,7 +15,7 @@ let threeDmolPromise: Promise<ThreeDmolApi> | null = null;
 
 export async function load3Dmol(): Promise<ThreeDmolApi> {
   if (typeof window === 'undefined') {
-    throw new Error('3Dmol is only available in a browser environment.');
+    throw new Error(translate("files.3DmolIsOnlyAvailableInABrowser"));
   }
 
   if (window['3Dmol']) {
@@ -32,14 +33,14 @@ export async function load3Dmol(): Promise<ThreeDmolApi> {
           resolve(window['3Dmol']);
           return;
         }
-        reject(new Error('3Dmol loaded without exposing the expected global.'));
+        reject(new Error(translate("files.3DmolLoadedWithoutExposingTheExpectedGlobal")));
       };
 
       if (existingScript) {
         existingScript.addEventListener('load', handleLoad, { once: true });
         existingScript.addEventListener(
           'error',
-          () => reject(new Error('Unable to load 3Dmol viewer runtime.')),
+          () => reject(new Error(translate("files.unableToLoad3DmolViewerRuntime"))),
           { once: true },
         );
         return;
@@ -52,7 +53,7 @@ export async function load3Dmol(): Promise<ThreeDmolApi> {
       script.addEventListener('load', handleLoad, { once: true });
       script.addEventListener(
         'error',
-        () => reject(new Error('Unable to load 3Dmol viewer runtime.')),
+        () => reject(new Error(translate("files.unableToLoad3DmolViewerRuntime"))),
         { once: true },
       );
       document.head.appendChild(script);

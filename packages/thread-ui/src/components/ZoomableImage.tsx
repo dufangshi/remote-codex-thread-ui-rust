@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Minus, Plus, RotateCcw, X } from 'lucide-react';
@@ -22,6 +23,7 @@ export function GraphWorkspaceImageLightbox({
   onClose: () => void;
   src: string;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const dragRef = useRef<{
@@ -127,19 +129,19 @@ export function GraphWorkspaceImageLightbox({
       className="thread-graph-image-lightbox"
       role="dialog"
       aria-modal="true"
-      aria-label={`Image preview: ${alt || 'workspace image'}`}
+      aria-label={translate("files.imagePreview", { value1: alt || translate("files.workspaceImage") })}
     >
       <div
         className="thread-graph-image-lightbox-toolbar"
         role="toolbar"
-        aria-label="Image zoom controls"
+        aria-label={translate("files.imageZoomControls")}
       >
         <button
           type="button"
           onClick={() => updateScale(scale - IMAGE_LIGHTBOX_SCALE_STEP)}
           disabled={scale <= IMAGE_LIGHTBOX_MIN_SCALE}
-          title="Zoom out"
-          aria-label="Zoom out"
+          title={translate("files.zoomOut")}
+          aria-label={translate("files.zoomOut")}
         >
           <Minus className="h-4 w-4" />
         </button>
@@ -147,8 +149,8 @@ export function GraphWorkspaceImageLightbox({
           type="button"
           onClick={resetView}
           className="thread-graph-image-lightbox-scale"
-          title="Reset zoom"
-          aria-label={`Reset zoom, currently ${Math.round(scale * 100)}%`}
+          title={translate("files.resetZoom")}
+          aria-label={translate("files.resetZoomCurrently", { value1: Math.round(scale * 100) })}
         >
           <RotateCcw className="h-3.5 w-3.5" />
           <span>{Math.round(scale * 100)}%</span>
@@ -157,8 +159,8 @@ export function GraphWorkspaceImageLightbox({
           type="button"
           onClick={() => updateScale(scale + IMAGE_LIGHTBOX_SCALE_STEP)}
           disabled={scale >= IMAGE_LIGHTBOX_MAX_SCALE}
-          title="Zoom in"
-          aria-label="Zoom in"
+          title={translate("files.zoomIn")}
+          aria-label={translate("files.zoomIn")}
         >
           <Plus className="h-4 w-4" />
         </button>
@@ -170,8 +172,8 @@ export function GraphWorkspaceImageLightbox({
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
-          title="Close image preview"
-          aria-label="Close image preview"
+          title={translate("files.closeImagePreview")}
+          aria-label={translate("files.closeImagePreview")}
         >
           <X className="h-4 w-4" />
         </button>
@@ -216,6 +218,7 @@ export function ZoomableImage({
   loading?: 'eager' | 'lazy';
   src: string;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -231,8 +234,8 @@ export function ZoomableImage({
         type="button"
         className="thread-graph-zoomable-image-trigger"
         onClick={() => setOpen(true)}
-        title="Open image preview"
-        aria-label={`Open image preview: ${alt || 'workspace image'}`}
+        title={translate("files.openImagePreview")}
+        aria-label={translate("files.openImagePreview_bdac35", { value1: alt || translate("files.workspaceImage") })}
       >
         <img src={src} alt={alt} className={className} loading={loading} />
       </button>

@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type { AgentSubscriptionUsageDto } from '@remote-codex/shared';
 import { ComposerSubscriptionUsage } from './ComposerSubscriptionUsage';
 
@@ -20,6 +21,7 @@ export function ComposerJumpLatestButton({
   onJumpToNextTurn?: (() => void) | undefined;
   subscriptionUsage?: AgentSubscriptionUsageDto | null;
 }) {
+  useI18n();
   if (activeView !== 'chat') {
     return null;
   }
@@ -28,7 +30,7 @@ export function ComposerJumpLatestButton({
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[90] h-11 -translate-y-full bg-transparent touch-manipulation sm:h-10">
       <span
         role="group"
-        aria-label="Timeline navigation"
+        aria-label={translate("chat.timelineNavigation")}
         className={`thread-jump-latest-badge pointer-events-auto absolute bottom-1 left-1/2 inline-flex h-5 min-w-[7.5rem] -translate-x-1/2 overflow-hidden rounded-[0.7rem] border shadow-sm transition ${
           followTail
             ? 'is-active border-sky-300/36 bg-sky-300/[0.03] text-sky-100/86'
@@ -37,8 +39,8 @@ export function ComposerJumpLatestButton({
       >
         <button
           type="button"
-          aria-label="Jump to previous turn"
-          title={canJumpToPreviousTurn ? 'Jump to the start of the previous turn' : 'No earlier turn'}
+          aria-label={translate("chat.jumpToPreviousTurn")}
+          title={canJumpToPreviousTurn ? translate("chat.jumpToTheStartOfThePrevious") : translate("chat.noEarlierTurn")}
           disabled={!canJumpToPreviousTurn}
           onClick={() => onJumpToPreviousTurn?.()}
           className="inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35"
@@ -50,8 +52,8 @@ export function ComposerJumpLatestButton({
         <span aria-hidden="true" className="w-px bg-current opacity-20" />
         <button
           type="button"
-          aria-label="Jump to latest"
-          title={followTail ? 'Latest messages are in view' : 'Jump to the bottom'}
+          aria-label={translate("chat.jumpToLatest")}
+          title={followTail ? translate("chat.latestMessagesAreInView") : translate("chat.jumpToTheBottom")}
           onClick={() => onToggleFollow?.()}
           className="inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70"
         >
@@ -69,8 +71,8 @@ export function ComposerJumpLatestButton({
         <span aria-hidden="true" className="w-px bg-current opacity-20" />
         <button
           type="button"
-          aria-label="Jump to next turn"
-          title={canJumpToNextTurn ? 'Jump to the start of the next turn' : 'No later turn'}
+          aria-label={translate("chat.jumpToNextTurn")}
+          title={canJumpToNextTurn ? translate("chat.jumpToTheStartOfTheNext") : translate("chat.noLaterTurn")}
           disabled={!canJumpToNextTurn}
           onClick={() => onJumpToNextTurn?.()}
           className="inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35"

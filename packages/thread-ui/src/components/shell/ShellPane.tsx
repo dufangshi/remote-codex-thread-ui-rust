@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   forwardRef,
   useCallback,
@@ -110,6 +111,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
     },
     ref,
   ) {
+  useI18n();
     const transformRef = useRef(inputTransform);
     transformRef.current = inputTransform;
     const terminalRef = useRef<Terminal | null>(null);
@@ -423,7 +425,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       })().catch((error: unknown) => {
         if (cancelled) return;
         terminalInitializingRef.current = false;
-        setConnectionError(error instanceof Error ? error.message : 'Unable to initialize terminal.');
+        setConnectionError(error instanceof Error ? error.message : translate("files.unableToInitializeTerminal"));
       });
 
       return () => {
@@ -717,16 +719,16 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
             lastCommandOutputRef.current.trim() ||
             getVisibleTerminalText(terminalHostNode);
           if (!output) {
-            onFeedback?.('failed', 'Nothing to copy');
+            onFeedback?.('failed', translate("files.nothingToCopy"));
             return false;
           }
 
           try {
             await navigator.clipboard.writeText(output);
-            onFeedback?.('done', 'Copied');
+            onFeedback?.('done', translate("files.copied"));
             return true;
           } catch {
-            onFeedback?.('failed', 'Copy failed');
+            onFeedback?.('failed', translate("files.copyFailed"));
             return false;
           }
         },
@@ -771,8 +773,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
         />
         {isActive && (
           <div className="pointer-events-none absolute right-2 top-2 rounded-md border border-sky-300/30 bg-sky-300/10 px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-sky-100">
-            Active
-          </div>
+            {translate("files.active")}</div>
         )}
       </div>
     );

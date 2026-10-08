@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useEffect, useRef } from 'react';
 import * as monaco from 'monaco-editor/editor/editor.api.js';
 import 'monaco-editor/languages/definitions/cpp/register.js';
@@ -115,6 +116,7 @@ export default function GraphWorkspaceMonacoEditor({
   path,
   readOnly,
 }: GraphWorkspaceMonacoEditorProps) {
+  const { locale } = useI18n();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const modelRef = useRef<monaco.editor.ITextModel | null>(null);
@@ -153,7 +155,7 @@ export default function GraphWorkspaceMonacoEditor({
       theme: initialDarkRef.current
         ? 'remote-codex-dark'
         : 'remote-codex-light',
-      ariaLabel: `Workspace editor: ${path}`,
+      ariaLabel: translate("files.workspaceEditor", { value1: path }),
       fontFamily:
         '"IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace',
       fontSize: 13,
@@ -208,6 +210,10 @@ export default function GraphWorkspaceMonacoEditor({
     monaco.editor.setTheme(dark ? 'remote-codex-dark' : 'remote-codex-light');
     editorRef.current?.updateOptions({ readOnly });
   }, [dark, readOnly]);
+
+  useEffect(() => {
+    editorRef.current?.updateOptions({ ariaLabel: translate('files.workspaceEditor', { value1: path }) });
+  }, [locale, path]);
 
   useEffect(() => {
     const editor = editorRef.current;

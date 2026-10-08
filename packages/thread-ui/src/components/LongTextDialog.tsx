@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { DiffDetail } from './DiffDetail';
@@ -17,6 +18,7 @@ export function LongTextDialog({
   kind,
   onClose,
 }: LongTextDialogProps) {
+  useI18n();
   useEffect(() => {
     if (!open) {
       return;
@@ -42,7 +44,7 @@ export function LongTextDialog({
     <div className="fixed inset-0 z-[90] flex items-center justify-center p-4 sm:p-6">
       <button
         type="button"
-        aria-label="Close full text"
+        aria-label={translate("workbench.closeFullText")}
         onClick={onClose}
         className="absolute inset-0 bg-[var(--overlay-scrim)] backdrop-blur-sm"
       />
@@ -56,7 +58,7 @@ export function LongTextDialog({
           <p className="truncate text-sm font-medium">{title}</p>
           <button
             type="button"
-            aria-label="Close dialog"
+            aria-label={translate("workbench.closeDialog")}
             onClick={onClose}
             className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)]"
           >

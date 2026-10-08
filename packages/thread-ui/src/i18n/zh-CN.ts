@@ -1,6 +1,19 @@
 import type { en } from './en';
+import { authZhCN } from './auth.zh-CN';
+import { chatZhCN } from './chat.zh-CN';
+import { commonZhCN } from './common.zh-CN';
+import { devicesZhCN } from './devices.zh-CN';
+import { filesZhCN } from './files.zh-CN';
+import { settingsZhCN } from './settings.zh-CN';
+import { sharingZhCN } from './sharing.zh-CN';
+import { workbenchZhCN } from './workbench.zh-CN';
 export const zhCN = {
-  'common.language': '语言',
-  'common.languageDescription': '选择此浏览器的界面语言。',
-  'common.items': { one: '{{count}} 项', other: '{{count}} 项' },
-} satisfies Record<keyof typeof en, string | { one: string; other: string }>;
+  ...authZhCN,
+  ...chatZhCN,
+  ...commonZhCN,
+  ...devicesZhCN,
+  ...filesZhCN,
+  ...settingsZhCN,
+  ...sharingZhCN,
+  ...workbenchZhCN,
+} satisfies Record<keyof typeof en, string | { readonly one: string; readonly other: string }>;

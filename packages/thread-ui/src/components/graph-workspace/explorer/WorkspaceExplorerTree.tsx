@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   useCallback,
@@ -65,6 +66,7 @@ export function WorkspaceExplorerTree({
   onToggle: (path: string) => void;
   virtualize?: boolean;
 } & WorkspaceNodeActionProps) {
+  useI18n();
   const model = useMemo(() => createWorkspaceExplorerModel(tree), [tree]);
   const projection = useMemo(
     () =>
@@ -205,7 +207,7 @@ export function WorkspaceExplorerTree({
     <div
       ref={scrollerRef}
       role="tree"
-      aria-label="Workspace files"
+      aria-label={translate("files.workspaceFiles")}
       className="thread-graph-workspace-tree-scroll min-h-0 flex-1 overflow-y-auto py-1 outline-none"
       onScroll={(event) => {
         if (scrollTopRef) {
@@ -232,7 +234,7 @@ export function WorkspaceExplorerTree({
           return (
             <div
               key={rendered.key}
-              role="none"
+              role={"none"}
               data-index={rendered.index}
               ref={canVirtualize ? virtualizer.measureElement : undefined}
               style={

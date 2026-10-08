@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import type { ShellStatusDto } from '@remote-codex/shared';
 
 export function terminalThemeFor(effectiveTheme: 'light' | 'dark') {
@@ -27,21 +28,21 @@ export function terminalThemeFor(effectiveTheme: 'light' | 'dark') {
 export function statusLabel(status: ShellStatusDto) {
   switch (status) {
     case 'not_created':
-      return 'Not created';
+      return translate("chat.notCreated");
     case 'creating':
-      return 'Creating';
+      return translate("chat.creating");
     case 'running':
-      return 'Running';
+      return translate("chat.running");
     case 'attached':
-      return 'Attached';
+      return translate("chat.attached");
     case 'detached':
-      return 'Detached';
+      return translate("chat.detached");
     case 'exited':
-      return 'Exited';
+      return translate("chat.exited");
     case 'not_found':
-      return 'Missing';
+      return translate("chat.missing");
     case 'workspace_missing':
-      return 'Workspace missing';
+      return translate("chat.workspaceMissing");
   }
 }
 
@@ -72,6 +73,7 @@ export function clampPaneRatio(value: number) {
 }
 
 export function WrenchScrewdriverIcon() {
+  useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -90,6 +92,7 @@ export function WrenchScrewdriverIcon() {
 }
 
 export function ConnectionIcon({ connected }: { connected: boolean }) {
+  useI18n();
   if (!connected) {
     return (
       <svg
@@ -120,6 +123,7 @@ export function ConnectionIcon({ connected }: { connected: boolean }) {
 }
 
 export function ClipboardIcon() {
+  useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -142,6 +146,7 @@ export function ControlIcon({
   label: string;
   tone?: 'stone' | 'rose' | 'sky';
 }) {
+  useI18n();
   const toneClassName =
     tone === 'rose'
       ? 'border-rose-300/35 bg-rose-300/14 text-rose-600 dark:text-rose-50'

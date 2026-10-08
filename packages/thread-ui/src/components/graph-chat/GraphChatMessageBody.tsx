@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import {
   memo,
@@ -89,6 +90,7 @@ function tokenizeUserMessageText(text: string): UserMessageSegment[] {
 }
 
 export function GraphChatLinkifiedPlainText({ text }: { text: string }) {
+  const { locale: i18nLocale } = useI18n();
   const parts: ReactNode[] = [];
   let cursor = 0;
 
@@ -161,6 +163,7 @@ export const GraphChatMarkdownAwareBody = memo(
     workspaceRootPath?: string | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const messageRef = useRef<HTMLDivElement | null>(null);
     const scrollAnchorRef = useRef<{
       root: HTMLDivElement;
@@ -263,7 +266,7 @@ export const GraphChatMarkdownAwareBody = memo(
             className="thread-graph-show-more timeline-meta-text mt-1 inline-flex w-fit items-center gap-1 rounded px-1 text-xs transition"
           >
             {expanded ? <ChevronUp size={14} aria-hidden="true" /> : <ChevronDown size={14} aria-hidden="true" />}
-            <span>{expanded ? 'Show less' : 'Show more'}</span>
+            <span>{expanded ? translate("chat.showLess") : translate("chat.showMore")}</span>
           </button>
         ) : null}
       </div>
@@ -291,6 +294,7 @@ export const GraphChatAgentMessageBody = memo(
     workspaceRootPath?: string | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
+  const { locale: i18nLocale } = useI18n();
     return (
       <GraphChatMarkdownAwareBody
         messageId={messageId}
@@ -319,6 +323,7 @@ export const GraphChatUserMessageBody = memo(
     attachmentPreviewUrls?: Record<string, string> | undefined;
     getImageAssetUrl?: ThreadTimelineAdapter['getImageAssetUrl'] | undefined;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const segments = useMemo(() => tokenizeUserMessageText(text), [text]);
 
     return (
@@ -334,7 +339,7 @@ export const GraphChatUserMessageBody = memo(
               (threadId
                 ? getImageAssetUrl?.({ threadId, path: segment.path }) ?? null
                 : null);
-            const label = basenameFromAssetPath(segment.path) || 'Attached image';
+            const label = basenameFromAssetPath(segment.path) || translate("chat.attachedImage");
 
             return (
               <span
@@ -351,8 +356,7 @@ export const GraphChatUserMessageBody = memo(
                     />
                   ) : (
                     <span className="inline-flex h-[4.5rem] w-[6rem] items-center justify-center rounded-[0.75rem] bg-stone-950 text-[10px] text-sky-100">
-                      PHOTO
-                    </span>
+                      {translate("chat.pHOTO")}</span>
                   )}
                   <span
                     className="mt-1 max-w-[7rem] truncate text-[10px] font-medium tracking-[0.08em] text-sky-50"
@@ -365,7 +369,7 @@ export const GraphChatUserMessageBody = memo(
             );
           }
 
-          const fileName = basenameFromAssetPath(segment.path) || 'Attached file';
+          const fileName = basenameFromAssetPath(segment.path) || translate("chat.attachedFile");
           return (
             <span
               key={segment.key}
@@ -376,8 +380,7 @@ export const GraphChatUserMessageBody = memo(
                 title={segment.path}
               >
                 <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-emerald-200/20 bg-emerald-300/12 text-[9px]">
-                  FILE
-                </span>
+                  {translate("chat.fILE")}</span>
                 <span className="min-w-0 truncate">{fileName}</span>
               </span>
             </span>

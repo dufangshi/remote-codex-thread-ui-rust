@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { Pause, Play } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GraphMoleculeViewerLowerButtonGroup from './GraphMoleculeViewerLowerButtonGroup';
@@ -48,7 +49,7 @@ export function GraphMoleculeViewer({
   onScreenshot,
   onSelectionChange,
   source,
-  title = 'PyMOL-style (PDB/CIF)',
+  title = translate("files.pyMOLStylePDBCIF"),
 }: {
   className?: string;
   moleculeId?: string | null;
@@ -57,6 +58,7 @@ export function GraphMoleculeViewer({
   source: GraphMoleculeViewerSource;
   title?: string | null;
 }) {
+  useI18n();
   const viewerHostRef = useRef<HTMLDivElement | null>(null);
   const viewerRef = useRef<GLViewer | null>(null);
   const modelRef = useRef<GLModel | null>(null);
@@ -135,13 +137,13 @@ export function GraphMoleculeViewer({
         canvas.getContext('experimental-webgl');
       if (!webGl) {
         setViewerInitError(
-          'WebGL is unavailable in this browser environment. Unable to render 3D viewer.',
+          translate("files.webGLIsUnavailableInThisBrowserEnvironment"),
         );
         return;
       }
     } catch {
       setViewerInitError(
-        'WebGL is unavailable in this browser environment. Unable to render 3D viewer.',
+        translate("files.webGLIsUnavailableInThisBrowserEnvironment"),
       );
       return;
     }
@@ -166,14 +168,14 @@ export function GraphMoleculeViewer({
         } catch (error) {
           console.error('Failed to initialize 3Dmol viewer:', error);
           setViewerInitError(
-            'Failed to initialize 3D viewer. Please refresh or try another browser.',
+            translate("files.failedToInitialize3DViewerPleaseRefresh"),
           );
         }
       })
       .catch((error: unknown) => {
         console.error('Failed to load 3Dmol viewer runtime:', error);
         setViewerInitError(
-          'Failed to load 3D viewer runtime. Please refresh or try another browser.',
+          translate("files.failedToLoad3DViewerRuntimePlease"),
         );
       });
 
@@ -287,7 +289,7 @@ export function GraphMoleculeViewer({
       viewer.render();
     } catch (error) {
       console.error('Failed to render molecule:', error);
-      setViewerInitError('Unable to render this molecular structure.');
+      setViewerInitError(translate("files.unableToRenderThisMolecularStructure"));
     }
   }, [xyzContent, xyzFormat]);
 
@@ -445,12 +447,10 @@ export function GraphMoleculeViewer({
             {title}
           </h2>
           <p className="mt-1 hidden text-[11px] text-slate-400 sm:block">
-            cartoon + surface
-          </p>
+            {translate("files.cartoonSurface")}</p>
         </div>
         <span className="shrink-0 text-[11px] text-slate-400">
-          workspace preview
-        </span>
+          {translate("files.workspacePreview")}</span>
       </div>
 
       <div className="thread-graph-molecule-body min-h-0 flex-1">
@@ -469,8 +469,7 @@ export function GraphMoleculeViewer({
           ) : null}
           {!viewerInitError && !xyzContent ? (
             <div className="thread-graph-molecule-empty absolute inset-0 flex items-center justify-center p-4 text-sm text-slate-400">
-              No molecule data available.
-            </div>
+              {translate("files.noMoleculeDataAvailable")}</div>
           ) : null}
           {hoveredAtom ? (
             <div
@@ -492,10 +491,9 @@ export function GraphMoleculeViewer({
         <div className="thread-graph-molecule-controls shrink-0">
           <div className="thread-graph-molecule-control-row">
             <div className="min-w-0">
-              <p className="thread-graph-molecule-control-title">Ball & Stick</p>
+              <p className="thread-graph-molecule-control-title">{translate("files.ballStick")}</p>
               <p className="thread-graph-molecule-control-subtitle">
-                XYZ / PDB / CIF preview
-              </p>
+                {translate("files.xYZPDBCIFPreview")}</p>
             </div>
             <GraphMoleculeViewerUpperButtonGroup
               currentIndex={currentIndex}
@@ -512,7 +510,7 @@ export function GraphMoleculeViewer({
             <div className="thread-graph-molecule-trajectory">
               <div className="mb-2 flex justify-between gap-3 text-xs">
                 <span className="flex min-w-0 items-center gap-2">
-                  Trajectory {currentIndex + 1} / {xyzArray.length}
+                  {translate("files.trajectory")} {currentIndex + 1} / {xyzArray.length}
                   <Button
                     type="button"
                     variant="ghost"
@@ -527,8 +525,8 @@ export function GraphMoleculeViewer({
                         return next;
                       });
                     }}
-                    aria-label={isPlaying ? 'Pause trajectory' : 'Play trajectory'}
-                    title={isPlaying ? 'Pause trajectory' : 'Play trajectory'}
+                    aria-label={isPlaying ? translate("files.pauseTrajectory") : translate("files.playTrajectory")}
+                    title={isPlaying ? translate("files.pauseTrajectory") : translate("files.playTrajectory")}
                   >
                     {isPlaying && currentIndex !== xyzArray.length - 1 ? (
                       <Pause className="h-3 w-3" />
@@ -548,8 +546,7 @@ export function GraphMoleculeViewer({
                       isLive ? 'animate-pulse bg-red-600' : 'bg-gray-300'
                     }`}
                   />
-                  Live
-                </Button>
+                  {translate("files.live")}</Button>
               </div>
               <Slider
                 value={[currentIndex]}
@@ -558,7 +555,7 @@ export function GraphMoleculeViewer({
                 onValueChange={(value: number[]) =>
                   setCurrentIndex(value[0] ?? 0)
                 }
-                aria-label="Trajectory frame"
+                aria-label={translate("files.trajectoryFrame")}
               />
             </div>
           ) : null}

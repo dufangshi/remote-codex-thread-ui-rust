@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../../i18n';
 import { useRef, useState, type ChangeEvent } from 'react';
 
 import { normalizeFileSystemPath, relativeWorkspacePath } from '../../workspacePaths';
@@ -22,6 +23,7 @@ export function useWorkspaceExplorerActions({
   refreshTree: (preferredPath?: string | null) => Promise<void>;
   workspaceRootPath: string;
 }) {
+  useI18n();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [showGarbageDialog, setShowGarbageDialog] = useState(false);
   const [garbageFiles, setGarbageFiles] = useState<string[]>([]);
@@ -44,7 +46,7 @@ export function useWorkspaceExplorerActions({
           : result.file.path;
       await refreshTree(preferredPath);
     } catch (error) {
-      onError(error instanceof Error ? error.message : 'Failed to upload file');
+      onError(error instanceof Error ? error.message : translate("files.failedToUploadFile"));
     } finally {
       onLoadingChange(false);
     }
@@ -92,11 +94,11 @@ export function useWorkspaceExplorerActions({
       return;
     }
     const relative = relativeWorkspacePath(node.path, workspaceRootPath);
-    if (kind === 'relative' && relative === null) { onError('This file is outside the workspace. Copy its absolute path instead.'); return; }
+    if (kind === 'relative' && relative === null) { onError(translate("files.thisFileIsOutsideTheWorkspaceCopy")); return; }
     const path = kind === 'relative' ? relative! : relative === null ? normalizeFileSystemPath(node.path) : `${normalizeFileSystemPath(workspaceRootPath).replace(/\/+$/, '')}/${relative}`;
     void navigator.clipboard.writeText(path).catch((error) => {
       onError(
-        error instanceof Error ? error.message : 'Failed to copy file path',
+        error instanceof Error ? error.message : translate("files.failedToCopyFilePath"),
       );
     });
   }
@@ -117,7 +119,7 @@ export function useWorkspaceExplorerActions({
     } catch (error) {
       setGarbageFiles([]);
       onError(
-        error instanceof Error ? error.message : 'Failed to list garbage files',
+        error instanceof Error ? error.message : translate("files.failedToListGarbageFiles"),
       );
     } finally {
       setShowGarbageDialog(true);
@@ -135,7 +137,7 @@ export function useWorkspaceExplorerActions({
       await refreshTree(activeNode?.path ?? null);
     } catch (error) {
       onError(
-        error instanceof Error ? error.message : 'Failed to empty garbage',
+        error instanceof Error ? error.message : translate("files.failedToEmptyGarbage"),
       );
     }
   }

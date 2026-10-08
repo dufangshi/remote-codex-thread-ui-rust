@@ -1,4 +1,8 @@
 import {
+  translate,
+  useI18n
+} from "./chunk-4Q3ARP5S.js";
+import {
   KeyCode,
   KeyMod,
   Uri,
@@ -250,6 +254,7 @@ function GraphWorkspaceMonacoEditor({
   path,
   readOnly
 }) {
+  const { locale } = useI18n();
   const hostRef = useRef(null);
   const editorRef = useRef(null);
   const modelRef = useRef(null);
@@ -283,7 +288,7 @@ function GraphWorkspaceMonacoEditor({
       readOnly: initialReadOnlyRef.current,
       automaticLayout: true,
       theme: initialDarkRef.current ? "remote-codex-dark" : "remote-codex-light",
-      ariaLabel: `Workspace editor: ${path}`,
+      ariaLabel: translate("files.workspaceEditor", { value1: path }),
       fontFamily: '"IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace',
       fontSize: 13,
       lineHeight: 21,
@@ -335,6 +340,9 @@ function GraphWorkspaceMonacoEditor({
     editor.setTheme(dark ? "remote-codex-dark" : "remote-codex-light");
     editorRef.current?.updateOptions({ readOnly });
   }, [dark, readOnly]);
+  useEffect(() => {
+    editorRef.current?.updateOptions({ ariaLabel: translate("files.workspaceEditor", { value1: path }) });
+  }, [locale, path]);
   useEffect(() => {
     const editor2 = editorRef.current;
     if (!editor2 || !focusLine || focusLine < 1) {

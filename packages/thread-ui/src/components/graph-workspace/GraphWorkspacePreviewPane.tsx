@@ -1,3 +1,5 @@
+import { getLocale } from '../../i18n';
+import { translate, useI18n } from '../../i18n';
 import { externalLinkProps } from '../externalLinkProps';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
@@ -61,6 +63,7 @@ function DownloadFilePreview({ node, onDownload }: {
   node: WorkspaceTreeNode;
   onDownload?: () => Promise<void> | void;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const size = node.size;
@@ -72,20 +75,20 @@ function DownloadFilePreview({ node, onDownload }: {
       <Download aria-hidden="true" className="thread-graph-download-preview-icon" />
       <strong>{node.name}</strong>
       {sizeLabel ? <span>{sizeLabel}</span> : null}
-      <p>This file is available to download.</p>
+      <p>{translate("files.thisFileIsAvailableToDownload")}</p>
       {onDownload ? (
-        <button type="button" disabled={pending} aria-label={`Download ${node.name}`}
+        <button type="button" disabled={pending} aria-label={translate("files.download", { value1: node.name })}
           onClick={async () => {
             setPending(true);
             setError(null);
             try { await onDownload(); }
-            catch (caught) { setError(caught instanceof Error ? caught.message : 'Download failed. Please try again.'); }
+            catch (caught) { setError(caught instanceof Error ? caught.message : translate("files.downloadFailedPleaseTryAgain")); }
             finally { setPending(false); }
           }}>
           <Download aria-hidden="true" size={16} />
-          {pending ? 'Downloading…' : 'Download file'}
+          {pending ? translate("files.downloading") : translate("files.downloadFile")}
         </button>
-      ) : <span>Downloads are unavailable for this connection.</span>}
+      ) : <span>{translate("files.downloadsAreUnavailableForThisConnection")}</span>}
       {error ? <p role="alert">{error}</p> : null}
     </div>
   );
@@ -172,6 +175,7 @@ const GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview({
   focusLine?: number | null;
   language?: string;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const rootRef = useRef<HTMLDivElement | null>(null);
   const [highlighter, setHighlighter] = useState<HighlighterCore | null>(null);
   const [dark, setDark] = useState(false);
@@ -258,7 +262,7 @@ const GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview({
       ref={rootRef}
       className="thread-graph-code-preview min-h-0 flex-1 overflow-auto"
       role="region"
-      aria-label="Source code"
+      aria-label={translate("files.sourceCode")}
     >
       {highlightedHtml ? (
         <div
@@ -306,6 +310,7 @@ const GraphWorkspaceMarkdownPreview = memo(
     resolveWorkspaceFileUrl?: (path: string) => string | null;
     workspaceRootPath?: string;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const resolvePath = (resourceUrl: string | undefined) =>
       resourceUrl
         ? resolveWorkspaceMarkdownPath({
@@ -414,6 +419,7 @@ export function GraphWorkspacePreviewPane({
   selectedTarget: GraphWorkspacePreviewTarget;
   workspaceRootPath?: string;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const surfaceRef = useRef<HTMLElement | null>(null);
   const [editing, setEditing] = useState(false);
   const [draftContent, setDraftContent] = useState('');
@@ -443,7 +449,7 @@ export function GraphWorkspacePreviewPane({
   const extension = previewFile ? extensionOf(previewFile.path) : '';
   const isMarkdownFile = MARKDOWN_EXTENSIONS.has(extension);
   const isDrawioFile = isDrawioPath(previewFile?.path ?? '');
-  const renderedViewLabel = isDrawioFile ? 'Diagram' : 'Markdown';
+  const renderedViewLabel = isDrawioFile ? translate("files.diagram") : 'Markdown';
   const title = previewTargetTitle(selectedTarget);
   const canEditFile =
     Boolean(previewFile && onSaveFile) &&
@@ -517,7 +523,7 @@ export function GraphWorkspacePreviewPane({
       setEditing(false);
     } catch (error) {
       setSaveError(
-        error instanceof Error ? error.message : 'Failed to save file.',
+        error instanceof Error ? error.message : translate("files.failedToSaveFile"),
       );
     } finally {
       setSaving(false);
@@ -537,7 +543,7 @@ export function GraphWorkspacePreviewPane({
           <div
             className="thread-graph-markdown-view-switch inline-flex items-center rounded border p-px"
             role="group"
-            aria-label={`${renderedViewLabel} view`}
+            aria-label={translate("files.view", { value1: renderedViewLabel })}
           >
             <button
               type="button"
@@ -546,8 +552,8 @@ export function GraphWorkspacePreviewPane({
                 markdownView === 'preview' ? 'is-active' : ''
               }`}
               aria-pressed={markdownView === 'preview'}
-              title={`${renderedViewLabel} preview`}
-              aria-label={`${renderedViewLabel} preview`}
+              title={translate("files.preview", { value1: renderedViewLabel })}
+              aria-label={translate("files.preview", { value1: renderedViewLabel })}
             >
               <BookOpen className="h-3 w-3" />
             </button>
@@ -558,8 +564,8 @@ export function GraphWorkspacePreviewPane({
                 markdownView === 'source' ? 'is-active' : ''
               }`}
               aria-pressed={markdownView === 'source'}
-              title={`${renderedViewLabel} source`}
-              aria-label={`${renderedViewLabel} source`}
+              title={translate("files.source", { value1: renderedViewLabel })}
+              aria-label={translate("files.source", { value1: renderedViewLabel })}
             >
               <Code2 className="h-3 w-3" />
             </button>
@@ -578,8 +584,8 @@ export function GraphWorkspacePreviewPane({
                   }}
                   disabled={saving}
                   className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40"
-                  title="Cancel edits"
-                  aria-label="Cancel edits"
+                  title={translate("files.cancelEdits")}
+                  aria-label={translate("files.cancelEdits")}
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -588,8 +594,8 @@ export function GraphWorkspacePreviewPane({
                   onClick={() => void handleSaveFile()}
                   disabled={saving || draftContent === previewFile.content}
                   className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40"
-                  title="Save file"
-                  aria-label="Save file"
+                  title={translate("files.saveFile")}
+                  aria-label={translate("files.saveFile")}
                 >
                   <Save className="h-3.5 w-3.5" />
                 </button>
@@ -604,8 +610,8 @@ export function GraphWorkspacePreviewPane({
                   setSaveError(null);
                 }}
                 className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition"
-                title="Edit file"
-                aria-label="Edit file"
+                title={translate("files.editFile")}
+                aria-label={translate("files.editFile")}
               >
                 <Pencil className="h-3.5 w-3.5" />
               </button>
@@ -620,8 +626,8 @@ export function GraphWorkspacePreviewPane({
       onClick={onExpandExplorer}
       data-testid="expand-explorer"
       className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]"
-      title="Show Explorer"
-      aria-label="Show Explorer"
+      title={translate("files.showExplorer")}
+      aria-label={translate("files.showExplorer")}
     >
       <PanelLeftOpen className="h-3.5 w-3.5" />
     </button>
@@ -631,8 +637,8 @@ export function GraphWorkspacePreviewPane({
       onClick={onCollapse}
       data-testid="collapse-viewer"
       className="flex h-6 w-6 shrink-0 items-center justify-center rounded text-[var(--theme-fg-muted)] transition hover:bg-[var(--theme-hover)] hover:text-[var(--theme-fg)]"
-      title="Hide Editor"
-      aria-label="Hide Editor"
+      title={translate("files.hideEditor")}
+      aria-label={translate("files.hideEditor")}
     >
       <PanelRightClose className="h-3.5 w-3.5" />
     </button>
@@ -647,7 +653,7 @@ export function GraphWorkspacePreviewPane({
       {selectedTarget?.kind !== 'workspace-file' ? (
         <div className="thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5">
           <span className="min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]">
-            {title ?? 'Preview'}
+            {title ?? translate("files.preview_f1fbb2")}
           </span>
           {viewerPaneToggle}
         </div>
@@ -677,13 +683,10 @@ export function GraphWorkspacePreviewPane({
         ) : null}
         {!selectedTarget ? (
           <div className="flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500">
-            Pick a live molecule, workspace file, artifact, or thread event to
-            preview it.
-          </div>
+            {translate("files.pickALiveMoleculeWorkspaceFileArtifact")}</div>
         ) : selectedTarget.kind === 'workspace-file' && previewLoading ? (
           <div className="flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500">
-            Loading file preview...
-          </div>
+            {translate("files.loadingFilePreview")}</div>
         ) : selectedTarget.kind === 'workspace-file' && downloadOnly ? (
           <DownloadFilePreview key={selectedTarget.node.path} node={selectedTarget.node} onDownload={onDownloadFile} />
         ) : selectedTarget.kind === 'workspace-file' && moleculeSnapshot ? (
@@ -691,7 +694,7 @@ export function GraphWorkspacePreviewPane({
             <GraphMoleculeViewer
               source={moleculeSnapshot}
               moleculeId={moleculeSnapshot.uuid ?? selectedTarget.node.path}
-              title="PyMOL-style (PDB/CIF)"
+              title={translate("files.pyMOLStylePDBCIF")}
             />
           </div>
         ) : selectedTarget.kind === 'workspace-file' && imageUrl ? (
@@ -706,9 +709,7 @@ export function GraphWorkspacePreviewPane({
           <div className="thread-graph-file-preview-frame min-h-0 flex-1 overflow-hidden">
             <iframe
               src={pdfUrl}
-              title={`PDF preview: ${
-                selectedTarget.node.path || selectedTarget.node.name
-              }`}
+              title={translate("files.pDFPreview", { value1: selectedTarget.node.path || selectedTarget.node.name })}
               className="h-full w-full border-0"
             />
           </div>
@@ -754,7 +755,7 @@ export function GraphWorkspacePreviewPane({
                 value={draftContent}
                 onChange={(event) => setDraftContent(event.currentTarget.value)}
                 spellCheck={false}
-                aria-label="Workspace file editor"
+                aria-label={translate("files.workspaceFileEditor")}
                 className="thread-graph-file-editor min-h-0 flex-1 resize-none border-0 bg-transparent p-4 font-mono text-[12px] leading-5 text-slate-900 outline-none dark:text-slate-100"
               />
             ) : isDrawioFile && markdownView === 'preview' && !editing ? (
@@ -779,8 +780,7 @@ export function GraphWorkspacePreviewPane({
               <Suspense
                 fallback={
                   <div className="flex min-h-0 flex-1 items-center justify-center text-sm text-[var(--theme-fg-muted)]">
-                    Loading editor...
-                  </div>
+                    {translate("files.loadingEditor")}</div>
                 }
               >
                 <GraphWorkspaceMonacoEditor
@@ -802,15 +802,15 @@ export function GraphWorkspacePreviewPane({
                   type="button"
                   onClick={onLoadMore}
                   disabled={loadingMore}
-                  title="Load more workspace preview"
-                  aria-label="Load more workspace preview"
+                  title={translate("files.loadMoreWorkspacePreview")}
+                  aria-label={translate("files.loadMoreWorkspacePreview")}
                   className="thread-graph-load-more-button rounded-md px-4 py-1.5 text-xs disabled:opacity-50"
                 >
                   {loadingMore
-                    ? 'Loading...'
-                    : `Load more (${(
+                    ? translate("files.loading")
+                    : translate("files.loadMoreBytesRemaining", { value1: (
                         previewFile.size - previewFile.nextOffset
-                      ).toLocaleString()} bytes remaining)`}
+                      ).toLocaleString(getLocale()) })}
                 </button>
               </div>
             ) : null}
@@ -830,7 +830,7 @@ export function GraphWorkspacePreviewPane({
         ) : selectedTarget.kind === 'meta' ? (
           <div className="min-h-0 flex-1 overflow-auto p-3">
             <div className="grid gap-3">
-              <WorkspaceInfoCard label="Workspace Data">
+              <WorkspaceInfoCard label={translate("files.workspaceData")}>
                 <GraphWorkspaceCodePreview
                   content={selectedTarget.node.detail ?? ''}
                 />

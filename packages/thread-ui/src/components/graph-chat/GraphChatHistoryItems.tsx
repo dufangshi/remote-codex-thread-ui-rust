@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   memo,
   useContext,
@@ -75,6 +76,7 @@ function isRunningHistoryStatus(status?: string | null) {
 }
 
 function FileChangeIcon() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -93,6 +95,7 @@ function FileChangeIcon() {
 }
 
 function FileReadIcon() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -113,6 +116,7 @@ function FileReadIcon() {
 }
 
 function CommandBatchIcon() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -134,6 +138,7 @@ function CommandBatchIcon() {
 }
 
 function SearchBatchIcon() {
+  const { locale: i18nLocale } = useI18n();
   return (
     <svg
       aria-hidden="true"
@@ -267,6 +272,7 @@ function RunningDots({
 }: {
   tone?: 'amber' | 'emerald' | 'sky';
 }) {
+  const { locale: i18nLocale } = useI18n();
   const dotClassName =
     tone === 'emerald'
       ? 'bg-sky-200/90'
@@ -344,7 +350,7 @@ function graphHistoryStatusConfig(status?: string | null) {
     return {
       className: 'is-completed',
       icon: <CheckCircle2 className="h-3.5 w-3.5" />,
-      label: 'Completed',
+      label: translate("chat.completed"),
     };
   }
 
@@ -357,7 +363,7 @@ function graphHistoryStatusConfig(status?: string | null) {
     return {
       className: 'is-failed',
       icon: <XCircle className="h-3.5 w-3.5" />,
-      label: 'Failed',
+      label: translate("chat.failed"),
     };
   }
 
@@ -365,14 +371,14 @@ function graphHistoryStatusConfig(status?: string | null) {
     return {
       className: 'is-pending',
       icon: <Loader2 className="h-3.5 w-3.5 animate-spin" />,
-      label: status?.trim() || 'Running',
+      label: status?.trim() || translate("chat.running"),
     };
   }
 
   return {
     className: 'is-neutral',
     icon: null,
-    label: status?.trim() || 'Event',
+    label: status?.trim() || translate("chat.event"),
   };
 }
 
@@ -433,6 +439,7 @@ function GraphChatHistoryEventFrame({
   title: string;
   tone: GraphHistoryEventTone;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const statusConfig = graphHistoryStatusConfig(item.status);
   const showStatus = Boolean(
     item.status && statusConfig.className !== 'is-completed',
@@ -458,7 +465,7 @@ function GraphChatHistoryEventFrame({
                 variant="outline"
                 className={`thread-graph-tool-badge ${statusConfig.className} rounded-full px-2 py-0.5 text-xs font-normal`}
                 title={statusConfig.label}
-                aria-label={`Status: ${statusConfig.label}`}
+                aria-label={translate("chat.status", { value1: statusConfig.label })}
               >
                 {statusConfig.icon}
                 <span className="thread-graph-status-label">
@@ -484,7 +491,7 @@ function GraphChatHistoryEventFrame({
 }
 
 function GraphChatHistoryToolFrame({
-  actionLabel = 'Open details', className, icon, item, onOpen, preview, timeMeta, title, tone,
+  actionLabel = translate("chat.openDetails"), className, icon, item, onOpen, preview, timeMeta, title, tone,
 }: {
   actionLabel?: string;
   actionTitle: string;
@@ -499,13 +506,14 @@ function GraphChatHistoryToolFrame({
   title: string;
   tone: GraphHistoryToolTone;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const status = graphHistoryStatusConfig(item.status);
   const [pathExpanded, setPathExpanded] = useState(false);
   const isRead = tone === 'fileRead';
   return (
     <div className={`thread-graph-event thread-graph-history-tool ${graphHistoryToneClassName(tone)} ${className ?? ''}`}>
       <div className="thread-history-direct-row">
-        <button type="button" aria-label={isRead ? 'Show full file path' : actionLabel}
+        <button type="button" aria-label={isRead ? translate("chat.showFullFilePath") : actionLabel}
           aria-expanded={isRead ? pathExpanded : undefined}
           onClick={isRead ? () => setPathExpanded(value => !value) : onOpen}
           className="thread-history-direct-action">
@@ -533,13 +541,14 @@ export const GraphChatPlanHistoryItem = memo(function GraphChatPlanHistoryItem({
   onBeforeResize?: () => void;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   return (
     <GraphChatHistoryEventFrame
       className="thread-graph-event-plan"
       icon={<ClipboardList className="h-4 w-4" />}
       item={item}
       timeMeta={timeMeta}
-      title="Planned"
+      title={translate("chat.planned")}
       tone="plan"
     >
       <div className="thread-graph-history-event-prose">
@@ -563,9 +572,10 @@ export const GraphChatContextCompactionItem = memo(
     item: ContextCompactionHistoryItem;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const isRunning =
       isRunningHistoryStatus(item.status) || item.text === 'Compacting context';
-    const primaryText = isRunning ? 'Compacting context' : 'Context compacted';
+    const primaryText = isRunning ? translate("chat.compactingContext") : translate("chat.contextCompacted");
     const secondaryText =
       item.detailText && item.detailText !== primaryText
         ? item.detailText
@@ -577,7 +587,7 @@ export const GraphChatContextCompactionItem = memo(
         icon={<Archive className="h-4 w-4" />}
         item={item}
         timeMeta={timeMeta}
-        title={isRunning ? 'Compacting' : 'Compacted'}
+        title={isRunning ? translate("chat.compacting") : translate("chat.compacted")}
         tone="context"
       >
         <div className="thread-graph-history-event-line">
@@ -607,13 +617,14 @@ export const GraphChatGenericHistoryItem = memo(
     item: ThreadHistoryItemDto;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     return (
       <GraphChatHistoryEventFrame
         className="thread-graph-event-generic"
         icon={<Info className="h-4 w-4" />}
         item={item}
         timeMeta={timeMeta}
-        title="Noted"
+        title={translate("chat.noted")}
         tone="generic"
       >
         <pre className="thread-graph-history-event-pre">
@@ -638,20 +649,21 @@ export const GraphChatCommandItem = memo(function GraphChatCommandItem({
   ) => void;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const summary = summarizeInlinePreviewText(item.previewText ?? item.text);
 
   return (
     <GraphChatHistoryToolFrame
       actionLabel="Open full command"
-      actionTitle="Command Output"
+      actionTitle={translate("chat.commandOutput")}
       autoOpen={autoOpen}
       className="thread-graph-event-command"
       icon={<Terminal className="h-4 w-4" />}
       item={item}
-      onOpen={() => onOpen(item, 'Command Output')}
+      onOpen={() => onOpen(item, translate("chat.commandOutput"))}
       preview={summary}
       timeMeta={timeMeta}
-      title="Ran"
+      title={translate("chat.ran")}
       tone="command"
     />
   );
@@ -671,20 +683,21 @@ export const GraphChatToolCallItem = memo(function GraphChatToolCallItem({
   ) => void;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const summary = summarizeInlinePreviewText(item.text);
 
   return (
     <GraphChatHistoryToolFrame
       actionLabel="Open full tool call"
-      actionTitle="Tool Call Details"
+      actionTitle={translate("chat.toolCallDetails")}
       autoOpen={autoOpen}
       className="thread-graph-event-tool"
       icon={<Wrench className="h-4 w-4" />}
       item={item}
-      onOpen={() => onOpen(item, 'Tool Call Details')}
+      onOpen={() => onOpen(item, translate("chat.toolCallDetails"))}
       preview={summary}
       timeMeta={timeMeta}
-      title="Used"
+      title={translate("chat.used")}
       tone="tool"
     />
   );
@@ -705,20 +718,21 @@ export const GraphChatAgentToolCallItem = memo(
     ) => void;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const summary = summarizeInlinePreviewText(item.text);
 
     return (
       <GraphChatHistoryToolFrame
         actionLabel="Open agent details"
-        actionTitle="Agent Details"
+        actionTitle={translate("chat.agentDetails")}
         autoOpen={autoOpen}
         className="thread-graph-event-agent-tool"
         icon={<Bot className="h-4 w-4" />}
         item={item}
-        onOpen={() => onOpen(item, 'Agent Details')}
+        onOpen={() => onOpen(item, translate("chat.agentDetails"))}
         preview={summary}
         timeMeta={timeMeta}
-        title="Delegated"
+        title={translate("chat.delegated")}
         tone="agent"
       />
     );
@@ -740,20 +754,21 @@ export const GraphChatSkillToolCallItem = memo(
     ) => void;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const summary = summarizeInlinePreviewText(item.text);
 
     return (
       <GraphChatHistoryToolFrame
         actionLabel="Open skill details"
-        actionTitle="Skill Details"
+        actionTitle={translate("chat.skillDetails")}
         autoOpen={autoOpen}
         className="thread-graph-event-skill-tool"
         icon={<Sparkles className="h-4 w-4" />}
         item={item}
-        onOpen={() => onOpen(item, 'Skill Details')}
+        onOpen={() => onOpen(item, translate("chat.skillDetails"))}
         preview={summary}
         timeMeta={timeMeta}
-        title="Loaded"
+        title={translate("chat.loaded")}
         tone="skill"
       />
     );
@@ -771,22 +786,23 @@ export const GraphChatWebSearchItem = memo(function GraphChatWebSearchItem({
   onOpen: (title: string, text: string) => void;
   timeMeta?: ReactNode;
 }) {
-  const previewText = item.previewText?.trim() || item.text || 'Web search';
-  const detailText = item.detailText?.trim() || item.text || 'Web search';
+  const { locale: i18nLocale } = useI18n();
+  const previewText = item.previewText?.trim() || item.text || translate("chat.webSearch");
+  const detailText = item.detailText?.trim() || item.text || translate("chat.webSearch");
   const summary = summarizeInlinePreviewText(previewText);
 
   return (
     <GraphChatHistoryToolFrame
       actionLabel="Open full web search"
-      actionTitle="Web Search Details"
+      actionTitle={translate("chat.webSearchDetails")}
       autoOpen={autoOpen}
       className="thread-graph-event-search"
       icon={<Search className="h-4 w-4" />}
       item={item}
-      onOpen={() => onOpen('Web Search Details', detailText)}
+      onOpen={() => onOpen(translate("chat.webSearchDetails"), detailText)}
       preview={summary}
       timeMeta={timeMeta}
-      title="Searched"
+      title={translate("chat.searched")}
       tone="search"
     />
   );
@@ -803,22 +819,23 @@ export const GraphChatFileReadItem = memo(function GraphChatFileReadItem({
   onOpen: (title: string, text: string) => void;
   timeMeta?: ReactNode;
 }) {
-  const previewText = item.previewText?.trim() || item.text || 'File read';
-  const detailText = item.detailText?.trim() || item.text || 'File read';
+  const { locale: i18nLocale } = useI18n();
+  const previewText = item.previewText?.trim() || item.text || translate("chat.fileRead");
+  const detailText = item.detailText?.trim() || item.text || translate("chat.fileRead");
   const summary = summarizeInlinePreviewText(previewText);
 
   return (
     <GraphChatHistoryToolFrame
       actionLabel="Open full file read"
-      actionTitle="File Read Details"
+      actionTitle={translate("chat.fileReadDetails")}
       autoOpen={autoOpen}
       className="thread-graph-event-file-read"
       icon={<FileText className="h-4 w-4" />}
       item={item}
-      onOpen={() => onOpen('File Read Details', detailText)}
+      onOpen={() => onOpen(translate("chat.fileReadDetails"), detailText)}
       preview={summary}
       timeMeta={timeMeta}
-      title="Read"
+      title={translate("chat.read")}
       tone="fileRead"
     />
   );
@@ -837,6 +854,7 @@ export const GraphChatImageItem = memo(function GraphChatImageItem({
   getImageAssetUrl?: GetImageAssetUrl | undefined;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const assetPath = item.assetPath ?? item.detailText ?? null;
   const imageUrl =
     threadId && assetPath
@@ -849,18 +867,18 @@ export const GraphChatImageItem = memo(function GraphChatImageItem({
       icon={<ImageIconLucide className="h-4 w-4" />}
       item={item}
       timeMeta={timeMeta}
-      title="Generated"
+      title={translate("chat.generated")}
       tone="image"
     >
       {imageUrl ? (
         <button
           type="button"
-          onClick={() => onOpen('Image Path', assetPath ?? item.text)}
+          onClick={() => onOpen(translate("chat.imagePath"), assetPath ?? item.text)}
           className="block w-full text-left"
         >
           <img
             src={imageUrl}
-            alt={item.text || 'Image preview'}
+            alt={item.text || translate("chat.imagePreview")}
             className="thread-graph-history-event-image"
             loading="lazy"
           />
@@ -871,7 +889,7 @@ export const GraphChatImageItem = memo(function GraphChatImageItem({
       {assetPath ? (
         <button
           type="button"
-          onClick={() => onOpen('Image Path', assetPath)}
+          onClick={() => onOpen(translate("chat.imagePath"), assetPath)}
           className="thread-graph-history-event-path"
           title={assetPath}
         >
@@ -891,6 +909,7 @@ export const GraphChatFileChangeItem = memo(function GraphChatFileChangeItem({
   onOpen: (title: string, text: string) => void;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const pathSummary =
     item.previewText?.trim() && item.text.trim() !== item.previewText.trim()
       ? item.text.trim()
@@ -933,8 +952,8 @@ export const GraphChatFileChangeItem = memo(function GraphChatFileChangeItem({
   const inlineSummary = canOpen ? (
     <button
       type="button"
-      aria-label="Open file change details"
-      onClick={() => onOpen('File Change Details', detailText ?? item.text)}
+      aria-label={translate("chat.openFileChangeDetails")}
+      onClick={() => onOpen(translate("chat.fileChangeDetails"), detailText ?? item.text)}
       className="thread-graph-file-change-inline-button min-w-0 flex-1 text-left"
       title={pathSummary ?? displayedPath}
     >
@@ -951,7 +970,7 @@ export const GraphChatFileChangeItem = memo(function GraphChatFileChangeItem({
       icon={<FilePenLine className="h-4 w-4" />}
       item={item}
       timeMeta={timeMeta}
-      title="Changed"
+      title={translate("chat.changed")}
       tone="fileChange"
     />
   );
@@ -970,6 +989,7 @@ export const GraphChatArtifactHistoryItem = memo(
     ) => void;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const plugins = usePlugins();
     const [expanded, setExpanded] = useState(false);
     const artifact = item.artifact;
@@ -987,19 +1007,17 @@ export const GraphChatArtifactHistoryItem = memo(
           <span className="inline-flex items-center gap-2">
             {artifact && !plugins.hasRendererForArtifact(artifact) ? (
               <span className="thread-graph-history-event-secondary">
-                No renderer
-              </span>
+                {translate("chat.noRenderer")}</span>
             ) : null}
             {artifact && onSelect ? (
               <button
                 type="button"
-                aria-label={`Open artifact inspector for ${artifact.title}`}
+                aria-label={translate("chat.openArtifactInspectorFor", { value1: artifact.title })}
                 onClick={() => onSelect(item, artifact)}
                 className="thread-graph-history-event-action"
               >
                 <PackageOpen className="h-3.5 w-3.5" />
-                Inspect
-              </button>
+                {translate("chat.inspect")}</button>
             ) : null}
           </span>
         }
@@ -1008,7 +1026,7 @@ export const GraphChatArtifactHistoryItem = memo(
           <button
             type="button"
             aria-expanded={expanded}
-            aria-label={`${expanded ? 'Collapse' : 'Expand'} artifact ${artifact?.title ?? item.text}`}
+            aria-label={translate("chat.artifact", { value1: expanded ? translate("chat.collapse") : translate("chat.expand"), value2: artifact?.title ?? item.text })}
             onClick={() => setExpanded((current) => !current)}
             className="thread-graph-artifact-inline-toggle flex min-w-0 flex-1 items-center gap-2 text-left"
           >
@@ -1030,7 +1048,7 @@ export const GraphChatArtifactHistoryItem = memo(
         icon={<PackageOpen className="h-4 w-4" />}
         item={item}
         timeMeta={timeMeta}
-        title="Created"
+        title={translate("chat.created")}
         tone="artifact"
       >
         {expanded
@@ -1052,6 +1070,7 @@ export const GraphChatHookItem = memo(function GraphChatHookItem({
   item: ThreadHistoryItemDto & { kind: 'hook' };
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const outputText =
     item.hookOutputEntries
       ?.map((entry) => entry.text.trim())
@@ -1079,7 +1098,7 @@ export const GraphChatHookItem = memo(function GraphChatHookItem({
       icon={<Webhook className="h-4 w-4" />}
       item={item}
       timeMeta={timeMeta}
-      title="Ran hook"
+      title={translate("chat.ranHook")}
       tone="hook"
     >
       <div className="thread-graph-history-event-line">
@@ -1127,6 +1146,7 @@ export const GraphChatCommandGroupItem = memo(
     timeMeta?: ReactNode;
     renderItemTime?: (timestamp: string | null | undefined) => ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const workbench = useContext(WorkbenchContext);
     const runningCount = items.filter((item) =>
       isRunningHistoryStatus(item.status),
@@ -1147,24 +1167,24 @@ export const GraphChatCommandGroupItem = memo(
         runningIndicator={runningCount > 0 ? <RunningDots /> : null}
         summary={
           <>
-            <span className="thread-graph-history-group-verb">Ran</span>
+            <span className="thread-graph-history-group-verb">{translate("chat.ran")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} command entries`}
+        toggleAriaLabel={translate("chat.commandEntries", { value1: expanded ? translate("chat.collapse") : translate("chat.expand"), value2: items.length })}
       >
         {items.map((item, index) => {
           const summary = summarizeInlinePreviewText(item.previewText ?? item.text);
           const status = graphHistoryStatusConfig(item.status);
           if (workbench) return (
             <button key={item.id} type="button"
-              aria-label={`Open grouped command ${index + 1}`}
+              aria-label={translate("chat.openGroupedCommand", { value1: index + 1 })}
               onClick={() => onOpen(item, `Command Output ${index + 1}`)}
               className="matter-command-step" title={summary.firstLine}>
-              <span className="matter-step-number" aria-label={`Step ${index + 1}`}>{String(index + 1).padStart(2, '0')}</span>
+              <span className="matter-step-number" aria-label={translate("chat.step", { value1: index + 1 })}>{String(index + 1).padStart(2, '0')}</span>
               <span className="matter-step-title">{summary.firstLine}</span>
               <span className={`matter-step-status ${status.className}`} role="img" aria-label={status.label} title={status.label}>
                 {status.className === 'is-completed' ? <Check size={13} /> : status.icon}
@@ -1177,13 +1197,13 @@ export const GraphChatCommandGroupItem = memo(
             <button
               key={item.id}
               type="button"
-              aria-label={`Open grouped command ${index + 1}`}
+              aria-label={translate("chat.openGroupedCommand", { value1: index + 1 })}
               onClick={() => onOpen(item, `Command Output ${index + 1}`)}
               className="thread-graph-history-detail-row block w-full rounded-md border px-3 py-2 text-left transition"
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-amber-300/18 bg-amber-300/[0.07] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-100">
-                  Step {index + 1}
+                  {translate("chat.step_dc416e")} {index + 1}
                 </span>
                 {item.status && (
                   <span className="thread-graph-history-detail-meta text-xs">
@@ -1223,16 +1243,17 @@ export const GraphChatToolCallGroupItem = memo(
     onOpen: (item: ToolActivityHistoryItem, title: string) => void;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const runningCount = items.filter((item) =>
       isRunningHistoryStatus(item.status),
     ).length;
     const firstKind = items[0]?.kind ?? 'toolCall';
     const label =
       firstKind === 'agentToolCall'
-        ? 'agent action'
+        ? translate("chat.agentAction")
         : firstKind === 'skillToolCall'
-          ? 'skill call'
-          : 'tool call';
+          ? translate("chat.skillCall")
+          : translate("chat.toolCall");
     const countLabel =
       items.length === 1 ? `1 ${label}` : `${items.length} ${label}s`;
 
@@ -1257,10 +1278,10 @@ export const GraphChatToolCallGroupItem = memo(
           <>
             <span className="thread-graph-history-group-verb">
               {firstKind === 'agentToolCall'
-                ? 'Delegated'
+                ? translate("chat.delegated")
                 : firstKind === 'skillToolCall'
-                  ? 'Loaded'
-                  : 'Used'}
+                  ? translate("chat.loaded")
+                  : translate("chat.used")}
             </span>
             <span className="thread-graph-history-group-description">
               {countLabel}
@@ -1268,7 +1289,7 @@ export const GraphChatToolCallGroupItem = memo(
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${countLabel}`}
+        toggleAriaLabel={`${expanded ? translate("chat.collapse") : translate("chat.expand")} ${countLabel}`}
       >
         {items.map((item, index) => {
           const summary = summarizeInlinePreviewText(item.text);
@@ -1276,7 +1297,7 @@ export const GraphChatToolCallGroupItem = memo(
             <button
               key={item.id}
               type="button"
-              aria-label={`Open ${label} ${index + 1}`}
+              aria-label={translate("chat.open_6beab4", { value1: label, value2: index + 1 })}
               onClick={() => onOpen(item, `${label} ${index + 1}`)}
               className="thread-graph-history-detail-row block w-full rounded-md border px-3 py-2 text-left transition"
             >
@@ -1314,6 +1335,7 @@ export const GraphChatAgentActivityGroupItem = memo(
     timeMeta?: ReactNode;
     children: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const countLabel =
       itemCount === 1 ? '1 operation' : `${itemCount} operations`;
     return (
@@ -1329,15 +1351,14 @@ export const GraphChatAgentActivityGroupItem = memo(
         summary={
           <>
             <span className="thread-graph-history-group-verb">
-              Worked
-            </span>
+              {translate("chat.worked")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${countLabel}`}
+        toggleAriaLabel={`${expanded ? translate("chat.collapse") : translate("chat.expand")} ${countLabel}`}
       >
         {children}
       </GraphChatHistoryGroupFrame>
@@ -1358,6 +1379,7 @@ export const GraphChatSearchGroupItem = memo(function GraphChatSearchGroupItem({
   onOpen: (title: string, text: string) => void;
   timeMeta?: ReactNode;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const countLabel =
     items.length === 1 ? '1 search' : `${items.length} searches`;
 
@@ -1374,33 +1396,32 @@ export const GraphChatSearchGroupItem = memo(function GraphChatSearchGroupItem({
       summary={
         <>
           <span className="thread-graph-history-group-verb">
-            Searched
-          </span>
+            {translate("chat.searched")}</span>
           <span className="thread-graph-history-group-description">
             {countLabel}
           </span>
         </>
       }
       timeMeta={timeMeta}
-      toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} web search entries`}
+      toggleAriaLabel={translate("chat.webSearchEntries", { value1: expanded ? translate("chat.collapse") : translate("chat.expand"), value2: items.length })}
     >
       {items.map((item, index) => {
         const previewText =
-          item.previewText?.trim() || item.text || 'Web search';
+          item.previewText?.trim() || item.text || translate("chat.webSearch");
         const summary = summarizeInlinePreviewText(previewText);
-        const detailText = item.detailText?.trim() || item.text || 'Web search';
+        const detailText = item.detailText?.trim() || item.text || translate("chat.webSearch");
 
         return (
           <button
             key={item.id}
             type="button"
-            aria-label={`Open grouped web search ${index + 1}`}
+            aria-label={translate("chat.openGroupedWebSearch", { value1: index + 1 })}
             onClick={() => onOpen(`Web Search ${index + 1}`, detailText)}
             className="thread-graph-history-detail-row block w-full rounded-md border px-3 py-2 text-left transition"
           >
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-sky-300/18 bg-sky-300/[0.07] px-2 py-0.5 text-[10px] uppercase tracking-[0.18em] text-sky-100">
-                Search {index + 1}
+                {translate("chat.search")} {index + 1}
               </span>
               {item.status && (
                 <span className="thread-graph-history-detail-meta text-xs">
@@ -1439,8 +1460,9 @@ export const GraphChatFileReadGroupItem = memo(
     onOpen: (title: string, text: string) => void;
     timeMeta?: ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const countLabel =
-      items.length === 1 ? '1 file read' : `${items.length} file reads`;
+      items.length === 1 ? translate("chat.1FileRead") : translate("chat.fileReads", { value1: items.length });
 
     return (
       <GraphChatHistoryGroupFrame
@@ -1455,15 +1477,14 @@ export const GraphChatFileReadGroupItem = memo(
         summary={
           <>
             <span className="thread-graph-history-group-verb">
-              Read
-            </span>
+              {translate("chat.read")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} file read entries`}
+        toggleAriaLabel={translate("chat.fileReadEntries", { value1: expanded ? translate("chat.collapse") : translate("chat.expand"), value2: items.length })}
       >
         {items.map((item) => (
           <GraphChatFileReadItem key={item.id} item={item} onOpen={onOpen} />
@@ -1489,6 +1510,7 @@ export const GraphChatFileChangeGroupItem = memo(
     timeMeta?: ReactNode;
     renderItemTime?: (timestamp: string | null | undefined) => ReactNode;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const changedFiles = items.reduce(
       (sum, item) => sum + (item.changedFiles ?? 0),
       0,
@@ -1502,7 +1524,7 @@ export const GraphChatFileChangeGroupItem = memo(
       0,
     );
     const batchLabel =
-      items.length === 1 ? '1 file change' : `${items.length} file changes`;
+      items.length === 1 ? translate("chat.1FileChange") : translate("chat.fileChanges", { value1: items.length });
 
     return (
       <GraphChatHistoryGroupFrame
@@ -1517,20 +1539,18 @@ export const GraphChatFileChangeGroupItem = memo(
         summary={
           <>
             <span className="thread-graph-history-group-verb">
-              Changed
-            </span>
+              {translate("chat.changed")}</span>
             <span className="thread-graph-history-group-description">
               {batchLabel}
             </span>
             {changedFiles > 0 ? (
               <span className="thread-graph-history-detail-meta text-xs">
-                {changedFiles} files
-              </span>
+                {changedFiles} {translate("chat.files")}</span>
             ) : null}
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? 'Collapse' : 'Expand'} ${items.length} file change entries`}
+        toggleAriaLabel={translate("chat.fileChangeEntries", { value1: expanded ? translate("chat.collapse") : translate("chat.expand"), value2: items.length })}
         trailingSummary={
           <span className="inline-flex shrink-0 items-center gap-1.5">
             {addedLines > 0 ? (
@@ -1556,7 +1576,7 @@ export const GraphChatFileChangeGroupItem = memo(
             <button
               key={item.id}
               type="button"
-              aria-label={`Open grouped file change ${index + 1}`}
+              aria-label={translate("chat.openGroupedFileChange", { value1: index + 1 })}
               onClick={() => onOpen(item, `File Change ${index + 1}`)}
               className="matter-command-step w-full text-left"
             >

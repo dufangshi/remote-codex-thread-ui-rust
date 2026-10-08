@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import {
   memo,
   useEffect,
@@ -49,6 +50,7 @@ function isGraphChatRunningStatus(status?: string | null) {
 }
 
 function GraphChatRunningDots({ tone = 'amber' }: { tone?: 'amber' | 'sky' }) {
+  const { locale: i18nLocale } = useI18n();
   const dotClassName = tone === 'sky' ? 'bg-sky-300/90' : 'bg-amber-200/90';
 
   return (
@@ -84,6 +86,7 @@ export const GraphChatCompactMessageItem = memo(
     timeTitle?: string | null | undefined;
     onBeforeMessageResize?: () => void;
   }) {
+  const { locale: i18nLocale } = useI18n();
     const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>(
       'idle',
     );
@@ -137,17 +140,17 @@ export const GraphChatCompactMessageItem = memo(
       setReasoningOpen((value) => !value);
     }
 
-    const copyLabel = item.kind === 'agentMessage' ? 'agent reply' : 'prompt';
+    const copyLabel = item.kind === 'agentMessage' ? translate("chat.agentReply") : 'prompt';
     const copyButton = (
       <button
         type="button"
-        aria-label={`Copy ${copyLabel}`}
+        aria-label={translate("chat.copy_6b0f10", { value1: copyLabel })}
         title={
           copyState === 'copied'
-            ? 'Copied'
+            ? translate("chat.copied")
             : copyState === 'failed'
-              ? 'Copy failed'
-              : `Copy ${copyLabel}`
+              ? translate("chat.copyFailed")
+              : translate("chat.copy_6b0f10", { value1: copyLabel })
         }
         onClick={() => void handleCopy()}
         className={`thread-graph-message-copy inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border transition ${
@@ -174,10 +177,10 @@ export const GraphChatCompactMessageItem = memo(
         <button
           type="button"
           aria-label={
-            reasoningOpen ? 'Hide chain of thought' : 'Show chain of thought'
+            reasoningOpen ? translate("chat.hideChainOfThought") : translate("chat.showChainOfThought")
           }
           aria-expanded={reasoningOpen}
-          title={reasoningOpen ? 'Hide CoT' : 'Show CoT'}
+          title={reasoningOpen ? translate("chat.hideCoT") : translate("chat.showCoT")}
           onClick={toggleReasoning}
           className={`thread-graph-thinking-toggle inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border px-2 text-xs font-medium transition ${
             reasoningOpen ? 'is-open' : ''
@@ -186,7 +189,7 @@ export const GraphChatCompactMessageItem = memo(
           <Brain
             className={`h-3.5 w-3.5 ${hasRunningReasoning ? 'animate-pulse' : ''}`}
           />
-          <span>CoT</span>
+          <span>{translate("chat.coT")}</span>
           {hasRunningReasoning ? <GraphChatRunningDots tone="sky" /> : null}
         </button>
       ) : null;

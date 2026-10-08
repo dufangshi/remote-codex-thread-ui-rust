@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { useState } from 'react';
 
 import type {
@@ -24,6 +25,7 @@ export function PendingRequestCard({
     input: RespondThreadActionRequestInput,
   ) => Promise<void> | void) | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [customAnswers, setCustomAnswers] = useState<Record<string, string>>({});
   const [selectedPlanDecision, setSelectedPlanDecision] = useState<
@@ -34,11 +36,11 @@ export function PendingRequestCard({
   const isPermissionRequest = request.kind === 'permissionRequest';
   const cardTitle =
     request.kind === 'planDecision'
-      ? 'Plan'
+      ? translate("chat.plan")
       : isPermissionRequest
-        ? 'Permission required'
+        ? translate("chat.permissionRequired")
       : request.kind === 'requestUserInput'
-        ? 'Answer Required'
+        ? translate("chat.answerRequired")
         : request.title;
 
   function getOptionPresentation(label: string) {
@@ -191,10 +193,10 @@ export function PendingRequestCard({
                       ) : null}
                       {busy && selectedPlanDecision === option.label
                         ? isPermissionRequest
-                          ? 'Submitting...'
+                          ? translate("chat.submitting")
                           : isImplement
-                          ? 'Starting...'
-                          : 'Saving...'
+                          ? translate("chat.starting")
+                          : translate("chat.saving")
                         : presentation.displayLabel}
                     </button>
                   );
@@ -268,8 +270,7 @@ export function PendingRequestCard({
                               : 'border-stone-700 text-stone-300 hover:bg-stone-800'
                           } disabled:cursor-not-allowed disabled:opacity-60`}
                         >
-                          Not from above
-                        </button>
+                          {translate("chat.notFromAbove")}</button>
                       );
                     })()}
                 </div>
@@ -282,7 +283,7 @@ export function PendingRequestCard({
                       : selectedAnswer === OTHER_SENTINEL;
                     return showOtherInput || question.isOther ? (
                       <input
-                        aria-label={`${question.header} custom answer`}
+                        aria-label={translate("chat.customAnswer", { value1: question.header })}
                         value={customAnswers[question.id] ?? ''}
                         onChange={(event) =>
                           setCustomAnswers((current) => ({
@@ -290,7 +291,7 @@ export function PendingRequestCard({
                             [question.id]: event.target.value,
                           }))
                         }
-                        placeholder="Enter a custom answer"
+                        placeholder={translate("chat.enterACustomAnswer")}
                         className="mt-3 w-full rounded-xl border border-stone-700 bg-stone-900 px-3 py-2 text-sm text-stone-100 outline-none transition focus:border-sky-300"
                       />
                     ) : null;
@@ -336,7 +337,7 @@ export function PendingRequestCard({
             }
             className="ui-action-info rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed"
           >
-            {busy ? 'Submitting...' : 'Submit'}
+            {busy ? translate("chat.submitting") : translate("chat.submit")}
           </button>
         </div>
       )}
@@ -349,6 +350,7 @@ export function AnsweredRequestNote({
 }: {
   note: ThreadAnsweredRequestNoteDto;
 }) {
+  const { locale: i18nLocale } = useI18n();
   return (
     <div className="timeline-note-card w-full rounded-2xl border px-3 py-2.5">
       <p className="timeline-meta-text text-[11px] uppercase tracking-[0.2em]">
@@ -360,7 +362,7 @@ export function AnsweredRequestNote({
             key={`${note.id}-${index}`}
             className="timeline-primary-text text-[13px] leading-5"
           >
-            You selected {line}
+            {translate("chat.youSelected")} {line}
           </p>
         ))}
       </div>
@@ -377,19 +379,20 @@ export function ActivityNoteCard({
   onOpenThread?: ((threadId: string) => void) | undefined;
   onOpenLinkedThread?: ((threadId: string) => void) | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const title =
     note.kind === 'forkCreated'
-      ? 'Fork'
+      ? translate("chat.fork")
       : note.kind === 'forkSource'
-        ? 'Fork source'
+        ? translate("chat.forkSource")
         : note.kind === 'goal'
-          ? 'Goal'
-          : 'System';
+          ? translate("chat.goal")
+          : translate("chat.system");
   const body =
     note.kind === 'forkCreated'
       ? `Thread forked from Turn ${note.turnIndex ?? '?'}`
       : note.kind === 'forkSource'
-        ? `Forked from ${note.linkedThreadTitle ?? 'source thread'} at Turn ${note.turnIndex ?? '?'}`
+        ? `Forked from ${note.linkedThreadTitle ?? translate("chat.sourceThread")} at Turn ${note.turnIndex ?? '?'}`
         : note.text ?? '';
 
   return (
@@ -420,7 +423,7 @@ export function ActivityNoteCard({
           }}
           className="relative z-10 mt-2 inline-flex cursor-pointer rounded-full border border-amber-300/30 px-3 py-1.5 text-xs text-amber-100 transition hover:bg-amber-300/10"
         >
-          {note.kind === 'forkCreated' ? 'Open fork' : 'Back to source'}
+          {note.kind === 'forkCreated' ? translate("chat.openFork") : translate("chat.backToSource")}
         </button>
       ) : null}
     </div>
@@ -436,6 +439,7 @@ export function ActivityNoteSection({
   onOpenThread?: ((threadId: string) => void) | undefined;
   onOpenLinkedThread?: ((threadId: string) => void) | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   if (notes.length === 0) {
     return null;
   }
@@ -468,6 +472,7 @@ export function RequestEntrySection({
       ) => Promise<void> | void)
     | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   if (entries.length === 0) {
     return null;
   }
@@ -506,6 +511,7 @@ export function RequestEntrySectionForTurn({
       ) => Promise<void> | void)
     | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   const entries: RequestEntryAnchor[] = [
     ...notes.map((note) => ({
       kind: 'note' as const,
@@ -557,6 +563,7 @@ export function ActivityRequestEntrySection({
   onOpenThread?: ((threadId: string) => void) | undefined;
   onOpenLinkedThread?: ((threadId: string) => void) | undefined;
 }) {
+  const { locale: i18nLocale } = useI18n();
   if (entries.length === 0) {
     return null;
   }

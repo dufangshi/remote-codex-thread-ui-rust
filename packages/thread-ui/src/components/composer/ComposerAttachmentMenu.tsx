@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../../i18n';
 import { ComposerMenuSurface } from './ComposerMenuSurface';
 import { InputGroupButton } from '../graph-ui/InputGroup';
 import { PlusIcon } from './composerPresentation';
@@ -19,6 +20,7 @@ export function ComposerAttachmentMenu({
   onPickPhoto: () => void;
   onPickFile: () => void;
 }) {
+  useI18n();
   return (
     <div className="relative">
       <InputGroupButton
@@ -26,8 +28,8 @@ export function ComposerAttachmentMenu({
         variant="ghost"
         size="icon-xs"
         data-composer-menu-trigger="true"
-        aria-label="Add attachment"
-        title="Add attachment"
+        aria-label={translate("chat.addAttachment")}
+        title={translate("chat.addAttachment")}
         onClick={onToggle}
         className={`${iconButtonClassName} h-9 w-9 rounded-full sm:h-8 sm:w-8`}
       >
@@ -45,15 +47,13 @@ export function ComposerAttachmentMenu({
               onClick={onPickPhoto}
               className={`${menuItemClassName} block w-full rounded-xl px-3 py-2 text-left text-sm transition`}
             >
-              Photo
-            </button>
+              {translate("chat.photo")}</button>
             <button
               type="button"
               onClick={onPickFile}
               className={`${menuItemClassName} mt-1 block w-full rounded-xl px-3 py-2 text-left text-sm transition`}
             >
-              File
-            </button>
+              {translate("chat.file")}</button>
           </div>
         </ComposerMenuSurface>
       )}

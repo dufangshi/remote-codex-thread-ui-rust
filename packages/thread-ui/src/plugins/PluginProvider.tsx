@@ -1,3 +1,4 @@
+import { translate, useI18n } from '../i18n';
 import {
   useCallback,
   useEffect,
@@ -45,6 +46,7 @@ export function PluginProvider({
   builtinPlugins?: FrontendPluginModule[];
   children: ReactNode;
 }) {
+  useI18n();
   const [plugins, setPlugins] = useState<PluginDto[]>(() =>
     mergePluginState(builtinPlugins, []),
   );
@@ -60,7 +62,7 @@ export function PluginProvider({
         : [];
       setPlugins(mergePluginState(builtinPlugins, serverPlugins));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to load plugins.');
+      setError(err instanceof Error ? err.message : translate("workbench.unableToLoadPlugins"));
     } finally {
       setLoading(false);
     }
@@ -103,7 +105,7 @@ export function PluginProvider({
             ),
           );
         }
-        setError(err instanceof Error ? err.message : 'Unable to update plugin.');
+        setError(err instanceof Error ? err.message : translate("workbench.unableToUpdatePlugin"));
         throw err;
       }
     },
@@ -113,7 +115,7 @@ export function PluginProvider({
   const importPluginManifest = useCallback(
     async (input: ImportPluginInput) => {
       if (!adapter.importPlugin) {
-        throw new Error('Plugin import is not available.');
+        throw new Error(translate("workbench.pluginImportIsNotAvailable"));
       }
 
       const imported = await adapter.importPlugin(input);
@@ -128,7 +130,7 @@ export function PluginProvider({
   const uninstallPlugin = useCallback(
     async (pluginId: string) => {
       if (!adapter.deletePlugin) {
-        throw new Error('Plugin uninstall is not available.');
+        throw new Error(translate("workbench.pluginUninstallIsNotAvailable"));
       }
 
       const removed = await adapter.deletePlugin(pluginId);

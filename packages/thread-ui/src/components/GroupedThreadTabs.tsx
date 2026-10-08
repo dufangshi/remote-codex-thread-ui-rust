@@ -1,11 +1,12 @@
+import { translate, useI18n } from '../i18n';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 import type { WorkbenchThread } from './MatterWorkbench';
 
 const statusLabels: Record<string, string> = {
-  running: 'Running', unread: 'Completed, unread', idle: 'Idle, read',
-  failed: 'Failed', interrupted: 'Interrupted', unknown: 'Status unavailable',
+  get running() { return translate("workbench.running"); }, get unread() { return translate("workbench.completedUnread"); }, get idle() { return translate("workbench.idleRead"); },
+  get failed() { return translate("workbench.failed"); }, get interrupted() { return translate("workbench.interrupted"); }, get unknown() { return translate("workbench.statusUnavailable"); },
 };
 
 // This is a navigation indicator. The parent's own execution state stays intact.
@@ -15,7 +16,7 @@ export function threadGroupActivity(root: WorkbenchThread, children: WorkbenchTh
   if (running && (root.status === 'idle' || root.status === 'unread')) {
     return {
       status: 'agents-running',
-      label: `${label} · ${running} agent thread${running === 1 ? '' : 's'} running`,
+      label: translate('workbench.agentThreadsRunning', { label, count: running }),
     };
   }
   return { status: root.status, label };
@@ -31,6 +32,7 @@ export function groupThreads(threads: WorkbenchThread[]) {
 export function GroupedThreadTabs({ threads, currentKey, onNavigate }: {
   threads: WorkbenchThread[]; currentKey: string; onNavigate: (href: string) => void;
 }) {
+  useI18n();
   const [menu, setMenu] = useState<{ key: string; left: number; top: number } | null>(null);
   const trigger = useRef<HTMLButtonElement | null>(null);
   const popup = useRef<HTMLDivElement>(null);
@@ -64,14 +66,14 @@ export function GroupedThreadTabs({ threads, currentKey, onNavigate }: {
           <span className="matter-status-dot" role="img" aria-label={activity.label} data-status={activity.status} />
           <span>{root.title}{selected ? ` · ${selected.title}` : ''}</span>
         </a>
-        {children.length > 0 && <button className="matter-group-toggle" aria-label={`${root.title}: ${children.length} agent threads`}
+        {children.length > 0 && <button className="matter-group-toggle" aria-label={translate("workbench.agentThreads", { value1: root.title, value2: children.length })}
           aria-expanded={menu?.key === root.key} aria-controls="matter-agent-threads" onClick={event => {
             const bounds = event.currentTarget.getBoundingClientRect(); trigger.current = event.currentTarget;
             setMenu(menu?.key === root.key ? null : { key: root.key, left: Math.max(8, Math.min(bounds.left, window.innerWidth - 296)), top: bounds.bottom + 4 });
           }}>{children.length}<ChevronDown size={12} /></button>}
       </div>;
     })}
-    {menu && activeMenu && createPortal(<div ref={popup} id="matter-agent-threads" role="region" aria-label={`${activeMenu.root.title} agent threads`}
+    {menu && activeMenu && createPortal(<div ref={popup} id="matter-agent-threads" role="region" aria-label={translate("workbench.agentThreads_187f89", { value1: activeMenu.root.title })}
       style={{ position: 'fixed', left: menu.left, top: menu.top, zIndex: 1000, width: 'min(280px, calc(100vw - 16px))', maxHeight: 'min(420px, 65dvh)', overflowY: 'auto', background: 'var(--theme-surface)', color: 'var(--theme-fg)', border: '1px solid var(--theme-border)', borderRadius: 8, padding: 6, boxShadow: '0 8px 24px #0004' }}>
       {[activeMenu.root, ...activeMenu.children].map(thread => {
         const activity = threadGroupActivity(thread, thread.key === activeMenu.root.key ? activeMenu.children : []);
