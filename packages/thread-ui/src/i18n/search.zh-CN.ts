@@ -13,6 +13,7 @@ export const searchZhCN = {
   'search.opening': "正在打开消息…",
   'search.searching': "正在搜索…",
   'search.empty': "没有匹配的消息或标题。",
+  'search.scopeUnavailable': "此设备上的搜索范围暂不可用。请更新设备运行时、检查工作区是否仍存在，或选择当前会话搜索。",
   'search.failed': "搜索失败。",
   'search.openFailed': "无法打开此消息。",
   'search.count': "{{count}}{{more}} 条结果",

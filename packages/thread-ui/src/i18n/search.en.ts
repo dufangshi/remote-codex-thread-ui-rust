@@ -13,6 +13,7 @@ export const searchEn = {
   'search.opening': "Opening message…",
   'search.searching': "Searching…",
   'search.empty': "No matching messages or titles.",
+  'search.scopeUnavailable': "This search scope is currently unavailable on this device. Update the device runtime, verify the workspace still exists, or choose Current conversation search.",
   'search.failed': "Search failed.",
   'search.openFailed': "Could not open this message.",
   'search.count': "{{count}}{{more}} matches",
