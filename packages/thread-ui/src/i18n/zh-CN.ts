@@ -1,3 +1,4 @@
+import { automationZhCN } from './automation.zh-CN';
 import { searchZhCN } from './search.zh-CN';
 import type { en } from './en';
 import { authZhCN } from './auth.zh-CN';
@@ -9,6 +10,7 @@ import { settingsZhCN } from './settings.zh-CN';
 import { sharingZhCN } from './sharing.zh-CN';
 import { workbenchZhCN } from './workbench.zh-CN';
 export const zhCN = {
+  ...automationZhCN,
   ...authZhCN,
   ...chatZhCN,
   ...commonZhCN,

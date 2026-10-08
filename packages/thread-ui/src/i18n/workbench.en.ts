@@ -72,7 +72,7 @@ export const workbenchEn = {
   "workbench.watches": "Watches ({{value1}})",
   "workbench.sessionWatches": "Session watches",
   "workbench.watches_2cb575": "Watches",
-  "workbench.sessionTimersStopWhenTheClaudeProcess": "Session timers stop when the Claude process exits.",
+  "workbench.sessionTimersStopWhenTheClaudeProcess": "Native watch status comes from tool history; live persistence is not confirmed.",
   "workbench.totalsIncludeRecordedScheduledTurns": "Totals include recorded scheduled turns.",
   "workbench.pastWatches": "Past watches (",
   "workbench.steerDeliveryIsNotYetConfirmedCheck": "Steer delivery is not yet confirmed. Check again after reconnecting; the message may already have been delivered.",

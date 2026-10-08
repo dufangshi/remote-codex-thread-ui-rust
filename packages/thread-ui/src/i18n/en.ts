@@ -1,3 +1,4 @@
+import { automationEn } from './automation.en';
 import { searchEn } from './search.en';
 import { authEn } from './auth.en';
 import { chatEn } from './chat.en';
@@ -8,6 +9,7 @@ import { settingsEn } from './settings.en';
 import { sharingEn } from './sharing.en';
 import { workbenchEn } from './workbench.en';
 export const en = {
+  ...automationEn,
   ...authEn,
   ...chatEn,
   ...commonEn,

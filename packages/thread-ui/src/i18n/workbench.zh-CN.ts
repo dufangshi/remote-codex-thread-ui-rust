@@ -72,7 +72,7 @@ export const workbenchZhCN = {
   "workbench.watches": "监视任务（{{value1}}）",
   "workbench.sessionWatches": "会话监视任务",
   "workbench.watches_2cb575": "监视任务",
-  "workbench.sessionTimersStopWhenTheClaudeProcess": "Claude 进程退出后，会话定时器停止。",
+  "workbench.sessionTimersStopWhenTheClaudeProcess": "原生 watch 状态来自工具历史；实时持久性尚未确认。",
   "workbench.totalsIncludeRecordedScheduledTurns": "总额包含已记录的调度轮次。",
   "workbench.pastWatches": "历史监视任务（",
   "workbench.steerDeliveryIsNotYetConfirmedCheck": "尚未确认 steer 送达。重新连接后请再次检查，消息可能已送达。",
