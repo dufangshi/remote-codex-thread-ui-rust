@@ -86,7 +86,16 @@ monaco.editor.defineTheme('remote-codex-light', {
   },
 });
 
+const releasedKeys = new Set<string>();
+const retainedModels = new Map<string, {model:monaco.editor.ITextModel;view:monaco.editor.ICodeEditorViewState|null}>();
+window.addEventListener('workspace-model-release', (event) => {
+  const key = (event as CustomEvent<string>).detail;
+  releasedKeys.add(key);
+  retainedModels.get(key)?.model.dispose(); retainedModels.delete(key);
+});
 export interface GraphWorkspaceMonacoEditorProps {
+  resourceKey?: string;
+  retainModel?: boolean;
   content: string;
   dark: boolean;
   focusLine?: number | null;
@@ -108,6 +117,8 @@ function monacoLanguage(language: string) {
 
 export default function GraphWorkspaceMonacoEditor({
   content,
+  resourceKey,
+  retainModel = false,
   dark,
   focusLine,
   language,
@@ -116,6 +127,7 @@ export default function GraphWorkspaceMonacoEditor({
   path,
   readOnly,
 }: GraphWorkspaceMonacoEditorProps) {
+  const modelKey = resourceKey ?? path;
   const { locale } = useI18n();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -137,9 +149,12 @@ export default function GraphWorkspaceMonacoEditor({
     }
     const uri = monaco.Uri.from({
       scheme: 'remote-codex-workspace',
-      path: `/${path.replace(/^\/+/, '')}`,
+      path: `/${encodeURIComponent(modelKey)}`,
     });
-    const existingModel = monaco.editor.getModel(uri);
+    releasedKeys.delete(modelKey);
+    const retained = retainedModels.get(modelKey);
+    retainedModels.delete(modelKey);
+    const existingModel = retained?.model ?? monaco.editor.getModel(uri);
     const model =
       existingModel ??
       monaco.editor.createModel(
@@ -176,6 +191,7 @@ export default function GraphWorkspaceMonacoEditor({
       overviewRulerBorder: false,
       stickyScroll: { enabled: true },
     });
+    if (retained?.view) editor.restoreViewState(retained.view);
     editorRef.current = editor;
     const changeSubscription = model.onDidChangeContent(() => {
       if (!applyingContentRef.current) {
@@ -187,14 +203,15 @@ export default function GraphWorkspaceMonacoEditor({
     });
     return () => {
       changeSubscription.dispose();
+      if (retainModel && !releasedKeys.has(modelKey)) retainedModels.set(modelKey,{model,view:editor.saveViewState()});
       editor.dispose();
       editorRef.current = null;
       modelRef.current = null;
-      if (!existingModel) {
+      if (!retainModel || releasedKeys.has(modelKey)) {
         model.dispose();
       }
     };
-  }, [path]);
+  }, [path,modelKey,retainModel]);
 
   useEffect(() => {
     const model = modelRef.current;

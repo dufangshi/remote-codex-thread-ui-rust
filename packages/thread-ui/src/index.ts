@@ -112,3 +112,6 @@ export {
   ConversationSearchExcerpt,
   type ConversationSearchScope,
 } from './components/ConversationSearchControls';
+
+export type { WorkspaceDocumentSnapshot, WorkspaceDocumentSaveInput, WorkspaceSaveReceipt } from "./adapters";
+export { confirmWorkspaceDocumentLeave } from "./components/graph-workspace/explorer/workspaceDocuments";

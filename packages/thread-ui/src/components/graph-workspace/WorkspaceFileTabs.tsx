@@ -15,6 +15,8 @@ export function WorkspaceFileTabs({
   onSelect,
   tabs,
   trailingAction,
+  onSaveAndClose,
+  blockedClosePaths = new Set(),
 }: {
   activePath: string | null;
   dirtyPaths: ReadonlySet<string>;
@@ -22,9 +24,12 @@ export function WorkspaceFileTabs({
   onSelect: (path: string) => void;
   tabs: WorkspaceFileTab[];
   trailingAction?: ReactNode;
+  onSaveAndClose?: (path: string) => Promise<void>;
+  blockedClosePaths?: ReadonlySet<string>;
 }) {
   useI18n();
   const [pendingClosePath, setPendingClosePath] = useState<string | null>(null);
+  const [savingClose, setSavingClose] = useState(false);
   const pendingTab = tabs.find((tab) => tab.path === pendingClosePath) ?? null;
 
   if (tabs.length === 0) {
@@ -92,7 +97,7 @@ export function WorkspaceFileTabs({
       </div>
       {pendingTab ? (
         <div
-          className="thread-graph-editor-close-confirm flex min-h-10 items-center justify-between gap-3 border-b px-3 py-1.5 text-xs"
+          className="thread-graph-editor-close-confirm flex flex-wrap min-h-10 items-center justify-between gap-3 border-b px-3 py-1.5 text-xs"
           role="alert"
         >
           <span className="min-w-0 truncate">
@@ -105,8 +110,10 @@ export function WorkspaceFileTabs({
               className="h-7 rounded px-2 hover:bg-[var(--theme-hover)]"
             >
               {translate("files.keepEditing")}</button>
+            {onSaveAndClose ? <button type="button" disabled={savingClose || blockedClosePaths.has(pendingTab.path)} onClick={async () => {setSavingClose(true); try {await onSaveAndClose(pendingTab.path);} finally {setSavingClose(false);}}}>{translate('files.safeSaveClose')}</button> : null}
             <button
               type="button"
+              disabled={savingClose || blockedClosePaths.has(pendingTab.path)}
               onClick={() => {
                 setPendingClosePath(null);
                 onClose(pendingTab.path);

@@ -85,6 +85,24 @@ type ThreadWorkspaceUploadResult = {
     paths: string[];
 };
 interface ThreadWorkspaceAdapter {
+    /** Opaque owner/device source identity; must change when either changes. */
+    resourceScopeKey?: string;
+    readDocument?: (input: {
+        threadId: string;
+        workspaceId?: string | null;
+        path: string;
+        signal?: AbortSignal;
+    }) => Promise<WorkspaceDocumentSnapshot>;
+    saveDocument?: (input: WorkspaceDocumentSaveInput & {
+        threadId: string;
+        workspaceId?: string | null;
+    }) => Promise<WorkspaceSaveReceipt>;
+    getSaveOperation?: (input: {
+        threadId: string;
+        workspaceId?: string | null;
+        operationId: string;
+    }) => Promise<WorkspaceSaveReceipt>;
+    textRangeRead?: boolean;
     /** Owner-only, read-only host files explicitly opened from a thread link. */
     statLinkedFile?: (input: {
         threadId: string;
@@ -193,6 +211,48 @@ interface ThreadDetailUiAdapter {
     workspace?: ThreadWorkspaceAdapter | null;
     shell?: ThreadShellAdapter | null;
 }
+/** Safe small-file editing is an explicit capability, never a legacy PUT option. */
+interface WorkspaceDocumentSnapshot {
+    path: string;
+    name: string;
+    language: string;
+    workspaceRevision: string;
+    fileIdentity: string;
+    contentHash: string | null;
+    content: string | null;
+    size: number;
+    encoding: string;
+    bom: boolean;
+    eol: string;
+    readOnlyReason: string | null;
+    truncated: boolean;
+}
+interface WorkspaceDocumentSaveInput {
+    path: string;
+    workspaceRevision: string;
+    fileIdentity: string;
+    expectedHash: string;
+    content: string;
+    draftRevision: number;
+    operationId: string;
+    operationCreatedAt: number;
+}
+interface WorkspaceSaveReceipt {
+    status: 'pending' | 'saved' | 'conflict' | 'failedBeforeWrite' | 'uncertain';
+    operationId: string;
+    draftRevision: number;
+    path: string;
+    contentHash?: string;
+    fileIdentity?: string;
+    size?: number;
+    workspaceRevision?: string;
+    encoding?: string;
+    bom?: boolean;
+    eol?: string;
+    snapshot?: WorkspaceDocumentSnapshot;
+    code?: string;
+    message?: string;
+}
 
 interface PluginContextValue {
     plugins: PluginDto[];
@@ -238,4 +298,4 @@ interface ThreadGraphWorkspaceFeatures {
 declare function ThreadGraphWorkspacePanel({ detail, status, plugins, workspaceAdapter, metaContent, settingsContent, activeView, features: featureConfig, focusPathRequest, }: ThreadGraphWorkspacePanelProps): react.JSX.Element | null;
 declare const MemoizedThreadGraphWorkspacePanel: react.MemoExoticComponent<typeof ThreadGraphWorkspacePanel>;
 
-export { MemoizedThreadGraphWorkspacePanel as M, type PromptAttachmentUpload as P, type SendPromptInput as S, type ThreadShellControlState as T, type WorkspaceTab as W, type ThreadTimelineAdapter as a, type ThreadShellAdapter as b, type ThreadGraphWorkspacePanelProps as c, type PluginContextValue as d, type ThreadDetailUiAdapter as e, type ThreadGraphWorkspaceFeatures as f, PluginContext as g, type ShellSocketConnection as h, type ShellSocketHandlers as i, type ThreadWorkspaceAdapter as j, createDefaultPluginContextValue as k, ThreadGraphWorkspacePanel as l, mergePluginState as m };
+export { MemoizedThreadGraphWorkspacePanel as M, type PromptAttachmentUpload as P, type SendPromptInput as S, type ThreadShellControlState as T, type WorkspaceDocumentSaveInput as W, type ThreadTimelineAdapter as a, type ThreadShellAdapter as b, type ThreadGraphWorkspacePanelProps as c, type PluginContextValue as d, type ThreadDetailUiAdapter as e, type ThreadGraphWorkspaceFeatures as f, PluginContext as g, type ShellSocketConnection as h, type ShellSocketHandlers as i, type ThreadWorkspaceAdapter as j, type WorkspaceDocumentSnapshot as k, type WorkspaceSaveReceipt as l, type WorkspaceTab as m, createDefaultPluginContextValue as n, mergePluginState as o, ThreadGraphWorkspacePanel as p };

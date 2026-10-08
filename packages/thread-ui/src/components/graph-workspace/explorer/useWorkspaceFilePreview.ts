@@ -13,6 +13,7 @@ import {
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerIdentity } from './useWorkspaceExplorerPersistence';
 
+import type { WorkspaceDocuments } from "./useWorkspaceDocuments";
 import { DRAWIO_MAX_BYTES, isBinaryPreview, isDownloadOnlyPath, isDrawioPath } from './filePreviewPolicy';
 
 const PREVIEW_CHUNK_BYTES = 24_000;
@@ -22,13 +23,13 @@ export function useWorkspaceFilePreview({
   adapter,
   identity,
   onError,
-  refreshTree,
+  documents,
 }: {
   activeNode: WorkspaceTreeNode | null;
   adapter?: ThreadWorkspaceAdapter | null;
   identity: WorkspaceExplorerIdentity;
   onError: (error: string | null) => void;
-  refreshTree: (preferredPath?: string | null) => Promise<void>;
+  documents: WorkspaceDocuments;
 }) {
   useI18n();
   const [previewFile, setPreviewFile] =
@@ -53,6 +54,7 @@ export function useWorkspaceFilePreview({
     const currentPath = selectedPath;
 
     let cancelled = false;
+    const abort = new AbortController();
     async function loadPreview() {
       setPreviewLoading(true);
       onError(null);
@@ -85,7 +87,12 @@ export function useWorkspaceFilePreview({
           }
           return;
         }
-        const file = await currentAdapter.readFile({
+        const safe = !currentPath.startsWith('/') && !/^[a-z]:[\\/]/i.test(currentPath) && !isDrawioPath(currentPath)
+          ? await documents.load(currentPath, abort.signal) : null;
+        if (safe && safe.content == null && !['fileTooLarge','safeUnavailable'].includes(safe.readOnlyReason??'')) {
+          if (!cancelled) setDownloadOnly(true); return;
+        }
+        const file = safe?.content != null ? { ...safe, content: safe.content, nextOffset: safe.size } : await currentAdapter.readFile({
           ...identity,
           path: currentPath,
           limit: isDrawioPath(currentPath) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES,
@@ -109,6 +116,7 @@ export function useWorkspaceFilePreview({
     void loadPreview();
     return () => {
       cancelled = true;
+      abort.abort();
     };
   }, [
     activeNode?.id,
@@ -117,10 +125,11 @@ export function useWorkspaceFilePreview({
     adapter,
     identity,
     onError,
+    documents.load,
   ]);
 
   async function loadMore() {
-    if (!adapter || !previewFile?.truncated) {
+    if (!adapter?.textRangeRead || !previewFile?.truncated) {
       return;
     }
     const requestedPath = previewFile.path;
@@ -148,20 +157,6 @@ export function useWorkspaceFilePreview({
     }
   }
 
-  async function saveFile(input: { path: string; content: string }) {
-    if (!adapter?.writeFile) {
-      return;
-    }
-    onError(null);
-    await adapter.writeFile({ ...identity, ...input });
-    await refreshTree(input.path);
-    const file = await adapter.readFile({
-      ...identity,
-      path: input.path,
-      limit: isDrawioPath(input.path) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES,
-    });
-    setPreviewFile(file);
-  }
 
   return {
     downloadOnly,
@@ -171,6 +166,6 @@ export function useWorkspaceFilePreview({
     pdfUrl,
     previewFile,
     previewLoading,
-    saveFile,
+
   };
 }

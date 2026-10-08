@@ -78,6 +78,12 @@ export type ThreadWorkspaceUploadResult =
     };
 
 export interface ThreadWorkspaceAdapter {
+  /** Opaque owner/device source identity; must change when either changes. */
+  resourceScopeKey?: string;
+  readDocument?: (input: { threadId: string; workspaceId?: string | null; path: string; signal?: AbortSignal }) => Promise<WorkspaceDocumentSnapshot>;
+  saveDocument?: (input: WorkspaceDocumentSaveInput & { threadId: string; workspaceId?: string | null }) => Promise<WorkspaceSaveReceipt>;
+  getSaveOperation?: (input: { threadId: string; workspaceId?: string | null; operationId: string }) => Promise<WorkspaceSaveReceipt>;
+  textRangeRead?: boolean;
   /** Owner-only, read-only host files explicitly opened from a thread link. */
   statLinkedFile?: (input: { threadId: string; path: string }) => Promise<ThreadWorkspaceTreeNode>;
   listTree(input: {
@@ -187,4 +193,23 @@ export interface ThreadDetailUiAdapter {
   openWorkspaceFile?: (input: { path: string; line?: number }) => void;
   workspace?: ThreadWorkspaceAdapter | null;
   shell?: ThreadShellAdapter | null;
+}
+
+/** Safe small-file editing is an explicit capability, never a legacy PUT option. */
+export interface WorkspaceDocumentSnapshot {
+  path: string; name: string; language: string; workspaceRevision: string;
+  fileIdentity: string; contentHash: string | null; content: string | null;
+  size: number; encoding: string; bom: boolean; eol: string;
+  readOnlyReason: string | null; truncated: boolean;
+}
+export interface WorkspaceDocumentSaveInput {
+  path: string; workspaceRevision: string; fileIdentity: string;
+  expectedHash: string; content: string; draftRevision: number; operationId: string; operationCreatedAt: number;
+}
+export interface WorkspaceSaveReceipt {
+  status: 'pending' | 'saved' | 'conflict' | 'failedBeforeWrite' | 'uncertain';
+  operationId: string; draftRevision: number; path: string;
+  contentHash?: string; fileIdentity?: string; size?: number;
+  workspaceRevision?: string; encoding?: string; bom?: boolean; eol?: string;
+  snapshot?: WorkspaceDocumentSnapshot; code?: string; message?: string;
 }

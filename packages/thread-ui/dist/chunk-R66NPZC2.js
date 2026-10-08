@@ -1,7 +1,136 @@
 import {
   translate,
   useI18n
-} from "./chunk-37PRWPV6.js";
+} from "./chunk-34F3IDCL.js";
+
+// src/components/graph-workspace/explorer/workspaceDocuments.ts
+var storeKey = /* @__PURE__ */ Symbol.for("remote-codex.workspace-documents");
+var documentGlobal = globalThis;
+var memory = documentGlobal[storeKey] ??= {
+  stores: /* @__PURE__ */ new Map(),
+  listeners: /* @__PURE__ */ new Set()
+};
+var documentStores = memory.stores;
+var documentListeners = memory.listeners;
+if (typeof window !== "undefined" && !memory.unloadInstalled) {
+  memory.unloadInstalled = true;
+  window.addEventListener("beforeunload", (event) => {
+    if ([...documentStores.values()].some(
+      (store) => [...store.values()].some(isProtected)
+    )) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+}
+function isProtected(doc) {
+  return doc.content !== doc.baseContent || ["saving", "unknown", "conflict"].includes(doc.phase);
+}
+function newDraft(key, snapshot) {
+  return {
+    key,
+    snapshot,
+    content: snapshot.content ?? "",
+    baseContent: snapshot.content ?? "",
+    revision: 0,
+    editing: false,
+    phase: "clean",
+    error: null
+  };
+}
+function editDraft(doc, content) {
+  return {
+    ...doc,
+    content,
+    revision: doc.revision + 1,
+    phase: ["saving", "conflict", "unknown"].includes(doc.phase) ? doc.phase : content === doc.baseContent ? "clean" : "dirty"
+  };
+}
+function settleSave(doc, receipt) {
+  const submitted = doc.submitted;
+  if (!submitted || submitted.operationId !== receipt.operationId || submitted.revision !== receipt.draftRevision)
+    return doc;
+  if (receipt.status === "saved" && receipt.contentHash && receipt.fileIdentity) {
+    return {
+      ...doc,
+      baseContent: submitted.content,
+      snapshot: {
+        ...doc.snapshot,
+        content: submitted.content,
+        contentHash: receipt.contentHash,
+        fileIdentity: receipt.fileIdentity,
+        size: receipt.size ?? doc.snapshot.size,
+        workspaceRevision: receipt.workspaceRevision ?? doc.snapshot.workspaceRevision,
+        encoding: receipt.encoding ?? doc.snapshot.encoding,
+        bom: receipt.bom ?? doc.snapshot.bom,
+        eol: receipt.eol ?? doc.snapshot.eol
+      },
+      phase: doc.content === submitted.content ? "clean" : "dirty",
+      submitted: void 0,
+      conflict: void 0,
+      needsVerification: false,
+      operationPending: false,
+      error: null
+    };
+  }
+  if (receipt.status === "conflict")
+    return {
+      ...doc,
+      phase: "conflict",
+      conflict: receipt.snapshot,
+      submitted: void 0,
+      error: receipt.snapshot ? null : translate("files.safeMissing")
+    };
+  if (receipt.status === "failedBeforeWrite")
+    return {
+      ...doc,
+      phase: "error",
+      submitted: void 0,
+      snapshot: receipt.code === "forbidden" ? { ...doc.snapshot, readOnlyReason: "permissionDenied" } : doc.snapshot,
+      error: receipt.message ?? translate("files.failedToSaveFile")
+    };
+  return {
+    ...doc,
+    phase: "unknown",
+    operationPending: receipt.status === "pending",
+    error: translate(
+      receipt.status === "pending" ? "files.safeWaitBeforeLeave" : "files.safeUnknown"
+    )
+  };
+}
+function confirmWorkspaceDocumentLeave() {
+  const protectedDocs = [...documentStores.values()].flatMap((store) => [...store.values()]).filter(isProtected);
+  if (!protectedDocs.length) return true;
+  if (protectedDocs.some(
+    (doc) => doc.phase === "saving" || doc.phase === "unknown"
+  )) {
+    window.alert(translate("files.safeWaitBeforeLeave"));
+    return false;
+  }
+  if (!window.confirm(translate("files.safeLeave"))) return false;
+  for (const store of documentStores.values())
+    for (const [path, doc] of store)
+      if (isProtected(doc)) {
+        store.delete(path);
+        window.dispatchEvent(
+          new CustomEvent("workspace-model-release", { detail: doc.key })
+        );
+      }
+  for (const listener of documentListeners) listener();
+  return true;
+}
+function downloadDraft(doc, disk = false) {
+  const content = disk ? doc.conflict?.content : doc.content;
+  if (content == null) return;
+  const url = URL.createObjectURL(
+    new Blob([content], { type: "text/plain;charset=utf-8" })
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${doc.snapshot.name}.${disk ? "disk-snapshot" : "draft"}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 // src/components/ConfirmDialog.tsx
 import { useEffect } from "react";
@@ -1181,5 +1310,13 @@ export {
   collectAncestorPaths,
   externalLinkProps,
   WorkspaceFileLink,
+  documentStores,
+  documentListeners,
+  isProtected,
+  newDraft,
+  editDraft,
+  settleSave,
+  confirmWorkspaceDocumentLeave,
+  downloadDraft,
   ConfirmDialog
 };

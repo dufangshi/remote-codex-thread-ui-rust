@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-37PRWPV6.js";
+} from "./chunk-34F3IDCL.js";
 import {
   KeyCode,
   KeyMod,
@@ -9,8 +9,6 @@ import {
   editor,
   languages
 } from "./chunk-JXQIYSAV.js";
-import "./chunk-7O5E2ZHX.js";
-import "./chunk-SSOM5P4O.js";
 
 // src/components/graph-workspace/GraphWorkspaceMonacoEditor.tsx
 import { useEffect, useRef } from "react";
@@ -236,6 +234,14 @@ editor.defineTheme("remote-codex-light", {
     "editorIndentGuide.activeBackground1": "#aeb6c3"
   }
 });
+var releasedKeys = /* @__PURE__ */ new Set();
+var retainedModels = /* @__PURE__ */ new Map();
+window.addEventListener("workspace-model-release", (event) => {
+  const key = event.detail;
+  releasedKeys.add(key);
+  retainedModels.get(key)?.model.dispose();
+  retainedModels.delete(key);
+});
 function monacoLanguage(language) {
   const aliases = {
     jsx: "javascript",
@@ -246,6 +252,8 @@ function monacoLanguage(language) {
 }
 function GraphWorkspaceMonacoEditor({
   content,
+  resourceKey,
+  retainModel = false,
   dark,
   focusLine,
   language,
@@ -254,6 +262,7 @@ function GraphWorkspaceMonacoEditor({
   path,
   readOnly
 }) {
+  const modelKey = resourceKey ?? path;
   const { locale } = useI18n();
   const hostRef = useRef(null);
   const editorRef = useRef(null);
@@ -274,9 +283,12 @@ function GraphWorkspaceMonacoEditor({
     }
     const uri = Uri.from({
       scheme: "remote-codex-workspace",
-      path: `/${path.replace(/^\/+/, "")}`
+      path: `/${encodeURIComponent(modelKey)}`
     });
-    const existingModel = editor.getModel(uri);
+    releasedKeys.delete(modelKey);
+    const retained = retainedModels.get(modelKey);
+    retainedModels.delete(modelKey);
+    const existingModel = retained?.model ?? editor.getModel(uri);
     const model = existingModel ?? editor.createModel(
       initialContentRef.current,
       monacoLanguage(initialLanguageRef.current),
@@ -308,6 +320,7 @@ function GraphWorkspaceMonacoEditor({
       overviewRulerBorder: false,
       stickyScroll: { enabled: true }
     });
+    if (retained?.view) editor2.restoreViewState(retained.view);
     editorRef.current = editor2;
     const changeSubscription = model.onDidChangeContent(() => {
       if (!applyingContentRef.current) {
@@ -319,14 +332,15 @@ function GraphWorkspaceMonacoEditor({
     });
     return () => {
       changeSubscription.dispose();
+      if (retainModel && !releasedKeys.has(modelKey)) retainedModels.set(modelKey, { model, view: editor2.saveViewState() });
       editor2.dispose();
       editorRef.current = null;
       modelRef.current = null;
-      if (!existingModel) {
+      if (!retainModel || releasedKeys.has(modelKey)) {
         model.dispose();
       }
     };
-  }, [path]);
+  }, [path, modelKey, retainModel]);
   useEffect(() => {
     const model = modelRef.current;
     if (!model || model.getValue() === content) {
@@ -361,6 +375,7 @@ function GraphWorkspaceMonacoEditor({
     }
   );
 }
+
 export {
-  GraphWorkspaceMonacoEditor as default
+  GraphWorkspaceMonacoEditor
 };

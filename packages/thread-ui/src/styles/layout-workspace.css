@@ -679,3 +679,19 @@
 }
 .thread-graph-download-preview button:hover { background: var(--theme-bg); }
 .thread-graph-download-preview button:disabled { opacity: .6; cursor: wait; }
+
+/* Safe small-file documents reuse the workspace surface and existing themes. */
+.workspace-document-status { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:6px; padding:8px 12px; border-bottom:1px solid var(--theme-border); color:var(--theme-fg-muted); font-size:11px; flex-shrink:0; }
+.workspace-document-actions { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+.workspace-document-actions button, .workspace-document-conflict select, .thread-graph-editor-close-confirm button { padding:5px 8px; border:1px solid var(--theme-border); border-radius:5px; background:var(--theme-surface); font-size:11px; color:var(--theme-fg); }
+.workspace-document-actions button:hover { background:var(--theme-hover); }
+.workspace-document-actions button:disabled { opacity:.45; cursor:not-allowed; }
+.workspace-document-conflict { padding:12px; border-bottom:1px solid #c58c31; background:color-mix(in srgb, #d89f35 9%, transparent); flex-shrink:0; max-height:65%; overflow:auto; min-width:0; font-size:12px; }
+.workspace-document-conflict strong { color:var(--theme-fg); }
+.workspace-document-conflict p { margin:6px 0; color:var(--theme-fg-muted); }
+.workspace-document-conflict label { display:block; margin:10px 0 6px; }
+.workspace-document-diff { height:220px; border:1px solid var(--theme-border); overflow:hidden; }
+.workspace-document-snapshot { font-size:10px; }
+@media (max-width:639px) { .workspace-document-diff {height:160px;} .workspace-document-status {padding:7px 9px;} .workspace-document-actions button {min-height:30px;} }
+
+.thread-ui-shell .thread-graph-file-editor { color:var(--theme-fg); background:var(--theme-panel); }

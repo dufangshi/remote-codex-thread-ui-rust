@@ -19,6 +19,10 @@ import {
   collectAncestorPaths,
   collectArtifacts,
   collectWorkspaceItems,
+  documentListeners,
+  documentStores,
+  downloadDraft,
+  editDraft,
   extensionOf,
   externalLinkProps,
   findFirstPreviewNode,
@@ -26,21 +30,25 @@ import {
   flattenWorkspaceNodes,
   getGraphChatHighlighter,
   hasWorkspacePath,
+  isProtected,
   languageForPath,
   localFileHref,
+  newDraft,
   normalizeFileSystemPath,
   relativeWorkspacePath,
+  settleSave,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-7VRWEQK6.js";
+} from "./chunk-R66NPZC2.js";
 import {
+  en,
   getLocale,
   translate,
   useI18n
-} from "./chunk-37PRWPV6.js";
+} from "./chunk-34F3IDCL.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
-import { memo as memo2, useEffect as useEffect9, useMemo as useMemo10, useState as useState11 } from "react";
+import { memo as memo2, useEffect as useEffect10, useMemo as useMemo10, useState as useState11 } from "react";
 import {
   GitBranch,
   Paperclip,
@@ -49,11 +57,255 @@ import {
   Wrench
 } from "lucide-react";
 
+// src/components/graph-workspace/explorer/useWorkspaceDocuments.ts
+import { useCallback, useEffect, useReducer } from "react";
+var listeners = documentListeners;
+var notify = () => {
+  for (const listener of listeners) listener();
+};
+function useWorkspaceDocuments(adapter, identity) {
+  const source = JSON.stringify([
+    adapter?.resourceScopeKey ?? identity.threadId,
+    identity.workspaceId
+  ]);
+  let store = documentStores.get(source);
+  if (!store) {
+    store = /* @__PURE__ */ new Map();
+    documentStores.set(source, store);
+  }
+  const documents = store;
+  function replaceDocument(path, next) {
+    const previous = documents.get(path);
+    const key = JSON.stringify([source, next.snapshot.workspaceRevision, path]);
+    if (previous && previous.key !== key)
+      window.dispatchEvent(
+        new CustomEvent("workspace-model-release", { detail: previous.key })
+      );
+    documents.set(path, { ...next, key });
+  }
+  const [, update] = useReducer((v) => v + 1, 0);
+  useEffect(() => {
+    listeners.add(update);
+    return () => {
+      listeners.delete(update);
+    };
+  }, []);
+  const load = useCallback(
+    async (path, signal) => {
+      if (!adapter?.readDocument) return null;
+      const existing = documents.get(path);
+      if (existing) return existing.snapshot;
+      const snapshot = await adapter.readDocument({
+        ...identity,
+        path,
+        signal
+      });
+      if (signal?.aborted) return null;
+      if (!documents.has(path)) {
+        const all = [...documentStores.values()].flatMap(
+          (store2) => [...store2].map(([path2, doc]) => ({ store: store2, path: path2, doc }))
+        );
+        if (all.length >= 32) {
+          const clean = all.find(
+            ({ doc }) => !isProtected(doc) && !doc.editing
+          );
+          if (clean) {
+            clean.store.delete(clean.path);
+            window.dispatchEvent(
+              new CustomEvent("workspace-model-release", {
+                detail: clean.doc.key
+              })
+            );
+          } else throw new Error(translate("files.safeDraftBudget"));
+        }
+        documents.set(
+          path,
+          newDraft(
+            JSON.stringify([source, snapshot.workspaceRevision, path]),
+            snapshot
+          )
+        );
+        notify();
+      }
+      return documents.get(path).snapshot;
+    },
+    [adapter, documents, identity, source]
+  );
+  function change(path, content) {
+    const doc = documents.get(path);
+    if (!doc) return;
+    documents.set(path, editDraft(doc, content));
+    notify();
+  }
+  function setEditing(path, editing) {
+    const doc = documents.get(path);
+    if (!doc) return;
+    documents.set(path, { ...doc, editing });
+    notify();
+  }
+  function discard(path) {
+    const doc = documents.get(path);
+    if (!doc) return true;
+    if (doc.phase === "saving" || doc.phase === "unknown") return false;
+    documents.delete(path);
+    window.dispatchEvent(
+      new CustomEvent("workspace-model-release", { detail: doc.key })
+    );
+    notify();
+    return true;
+  }
+  async function reconcile(path) {
+    const doc = documents.get(path);
+    if (!doc?.submitted || !adapter?.getSaveOperation) return false;
+    try {
+      const receipt = await adapter.getSaveOperation({
+        ...identity,
+        operationId: doc.submitted.operationId
+      });
+      const current = documents.get(path);
+      if (current) replaceDocument(path, settleSave(current, receipt));
+      notify();
+      return receipt.status === "saved";
+    } catch {
+      const current = documents.get(path);
+      if (current)
+        documents.set(path, {
+          ...current,
+          phase: "unknown",
+          error: translate("files.safeUnknown")
+        });
+      notify();
+      return false;
+    }
+  }
+  async function save(path, useConflict = false) {
+    const doc = documents.get(path);
+    if (!doc || !adapter?.saveDocument || ["saving", "unknown"].includes(doc.phase) || doc.snapshot.readOnlyReason)
+      return false;
+    const base = useConflict ? doc.conflict : doc.snapshot;
+    if (!base?.contentHash || useConflict && base.readOnlyReason)
+      return false;
+    const operationCreatedAt = Date.now();
+    const submitted = {
+      content: doc.content,
+      revision: doc.revision,
+      operationId: crypto.randomUUID()
+    };
+    documents.set(path, { ...doc, phase: "saving", submitted, error: null });
+    notify();
+    try {
+      const receipt = await adapter.saveDocument({
+        ...identity,
+        path,
+        content: submitted.content,
+        draftRevision: submitted.revision,
+        operationId: submitted.operationId,
+        operationCreatedAt,
+        workspaceRevision: base.workspaceRevision,
+        fileIdentity: base.fileIdentity,
+        expectedHash: base.contentHash
+      });
+      const current = documents.get(path);
+      if (current) replaceDocument(path, settleSave(current, receipt));
+      notify();
+    } catch (error) {
+      const current = documents.get(path);
+      if (!current) return false;
+      documents.set(path, {
+        ...current,
+        phase: "unknown",
+        error: error instanceof Error ? error.message : translate("files.safeUnknown")
+      });
+      notify();
+      await reconcile(path);
+    }
+    const latest = documents.get(path);
+    return latest?.phase === "clean" && latest.revision === submitted.revision;
+  }
+  function adoptDisk(path, revision) {
+    const doc = documents.get(path);
+    const disk = doc?.conflict;
+    if (!doc || !disk || disk.content == null || doc.revision !== revision || doc.phase === "saving")
+      return;
+    replaceDocument(path, {
+      ...newDraft(JSON.stringify([source, disk.workspaceRevision, path]), disk),
+      revision: doc.revision + 1,
+      editing: doc.editing,
+      needsVerification: true
+    });
+    notify();
+  }
+  async function checkDisk(path) {
+    const doc = documents.get(path);
+    if (!doc || !adapter?.readDocument || doc.phase === "saving") return;
+    const revision = doc.revision;
+    try {
+      const disk = await adapter.readDocument({ ...identity, path });
+      const current = documents.get(path);
+      if (!current) return;
+      if (isProtected(current) || current.revision !== revision) {
+        if (current.phase === "unknown" || disk.contentHash !== current.snapshot.contentHash || disk.fileIdentity !== current.snapshot.fileIdentity)
+          documents.set(path, {
+            ...current,
+            phase: current.phase === "unknown" ? "unknown" : "conflict",
+            conflict: disk
+          });
+      } else
+        replaceDocument(path, {
+          ...newDraft(
+            JSON.stringify([source, disk.workspaceRevision, path]),
+            disk
+          ),
+          revision: current.revision + 1,
+          editing: current.editing
+        });
+      notify();
+    } catch (error) {
+      const current = documents.get(path);
+      if (current) {
+        documents.set(path, {
+          ...current,
+          error: error instanceof Error ? error.message : translate("files.safeMissing")
+        });
+        notify();
+      }
+    }
+  }
+  function acceptVerifiedDisk(path) {
+    const doc = documents.get(path);
+    const disk = doc?.conflict;
+    if (!doc || !disk || doc.phase !== "unknown" || doc.operationPending) return;
+    replaceDocument(path, {
+      ...doc,
+      snapshot: disk,
+      baseContent: disk.content ?? "",
+      submitted: void 0,
+      phase: doc.content === disk.content ? "clean" : "dirty",
+      conflict: void 0,
+      error: null
+    });
+    notify();
+  }
+  return {
+    documents,
+    load,
+    change,
+    setEditing,
+    discard,
+    save,
+    reconcile,
+    adoptDisk,
+    checkDisk,
+    acceptVerifiedDisk,
+    source
+  };
+}
+
 // src/components/graph-workspace/GraphWorkspaceExplorer.tsx
-import { useEffect as useEffect7, useLayoutEffect as useLayoutEffect2, useRef as useRef8, useState as useState10 } from "react";
+import { useEffect as useEffect8, useLayoutEffect as useLayoutEffect2, useRef as useRef8, useState as useState10 } from "react";
 
 // src/components/graph-workspace/explorer/useWorkspaceExplorerController.ts
-import { useCallback, useEffect, useMemo as useMemo2, useRef, useState } from "react";
+import { useCallback as useCallback2, useEffect as useEffect2, useMemo as useMemo2, useRef, useState } from "react";
 
 // src/components/graph-workspace/explorer/workspaceExplorerModel.ts
 function sourceWithoutChildren(node) {
@@ -361,7 +613,7 @@ function useWorkspaceExplorerController({
   const workspaceGenerationRef = useRef(0);
   const directoryRequestGenerationsRef = useRef(/* @__PURE__ */ new Map());
   const skipPersistenceWriteRef = useRef(true);
-  const refreshWorkspaceTree = useCallback(
+  const refreshWorkspaceTree = useCallback2(
     async (preferredPath) => {
       if (!workspaceAdapter) {
         return;
@@ -432,7 +684,7 @@ function useWorkspaceExplorerController({
     },
     [workspaceAdapter, workspaceIdentity]
   );
-  const loadDirectoryChildren = useCallback(
+  const loadDirectoryChildren = useCallback2(
     async (path) => {
       if (!workspaceAdapter || !adapterModelRef.current) {
         return;
@@ -497,7 +749,7 @@ function useWorkspaceExplorerController({
     },
     [workspaceAdapter, workspaceIdentity]
   );
-  const focusWorkspacePath = useCallback(
+  const focusWorkspacePath = useCallback2(
     async (path) => {
       const targetPath = workspaceRelativeFocusPath(
         path,
@@ -591,7 +843,7 @@ function useWorkspaceExplorerController({
     },
     [detail.workspace.absPath, workspaceAdapter, workspaceIdentity]
   );
-  const toggleDirectory = useCallback(
+  const toggleDirectory = useCallback2(
     (path) => {
       if (!path) {
         return;
@@ -614,10 +866,10 @@ function useWorkspaceExplorerController({
     },
     [loadDirectoryChildren]
   );
-  const collapseAll = useCallback(() => {
+  const collapseAll = useCallback2(() => {
     setExpandedPaths(/* @__PURE__ */ new Set([""]));
   }, []);
-  useEffect(() => {
+  useEffect2(() => {
     setLinkedFiles([]);
     skipPersistenceWriteRef.current = true;
     const persisted = persistence.read();
@@ -638,7 +890,7 @@ function useWorkspaceExplorerController({
     setFilterQuery("");
     setFilterMode(persisted.filterMode ?? "filter");
   }, [persistence]);
-  useEffect(() => {
+  useEffect2(() => {
     if (skipPersistenceWriteRef.current) {
       skipPersistenceWriteRef.current = false;
       return;
@@ -649,7 +901,7 @@ function useWorkspaceExplorerController({
       filterMode
     });
   }, [expandedPaths, filterMode, nodeMap, persistence, selectedNodeId]);
-  useEffect(() => {
+  useEffect2(() => {
     if (!workspaceAdapter || !adapterModel || focusPendingRef.current) {
       return;
     }
@@ -667,7 +919,7 @@ function useWorkspaceExplorerController({
     nodeMap,
     workspaceAdapter
   ]);
-  useEffect(() => {
+  useEffect2(() => {
     workspaceGenerationRef.current += 1;
     refreshGenerationRef.current += 1;
     directoryRequestGenerationsRef.current.clear();
@@ -683,7 +935,7 @@ function useWorkspaceExplorerController({
       else void refreshWorkspaceTree();
     }
   }, [refreshWorkspaceTree]);
-  useEffect(() => {
+  useEffect2(() => {
     if (focusPathRequest) {
       const key = `${workspaceIdentity.threadId}:${focusPathRequest.requestId}`;
       if (handledFocusRequestRef.current === key) return;
@@ -691,7 +943,7 @@ function useWorkspaceExplorerController({
       void focusWorkspacePath(focusPathRequest.path);
     }
   }, [focusPathRequest, focusWorkspacePath]);
-  useEffect(() => {
+  useEffect2(() => {
     if (!workspaceAdapter?.subscribeWorkspaceChanged) {
       return;
     }
@@ -974,7 +1226,7 @@ function useWorkspaceFilePreview({
   adapter,
   identity,
   onError,
-  refreshTree
+  documents
 }) {
   useI18n();
   const [previewFile, setPreviewFile] = useState3(null);
@@ -996,6 +1248,7 @@ function useWorkspaceFilePreview({
     const currentAdapter = adapter;
     const currentPath = selectedPath;
     let cancelled = false;
+    const abort = new AbortController();
     async function loadPreview() {
       setPreviewLoading(true);
       onError(null);
@@ -1028,7 +1281,12 @@ function useWorkspaceFilePreview({
           }
           return;
         }
-        const file = await currentAdapter.readFile({
+        const safe = !currentPath.startsWith("/") && !/^[a-z]:[\\/]/i.test(currentPath) && !isDrawioPath(currentPath) ? await documents.load(currentPath, abort.signal) : null;
+        if (safe && safe.content == null && !["fileTooLarge", "safeUnavailable"].includes(safe.readOnlyReason ?? "")) {
+          if (!cancelled) setDownloadOnly(true);
+          return;
+        }
+        const file = safe?.content != null ? { ...safe, content: safe.content, nextOffset: safe.size } : await currentAdapter.readFile({
           ...identity,
           path: currentPath,
           limit: isDrawioPath(currentPath) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES
@@ -1052,6 +1310,7 @@ function useWorkspaceFilePreview({
     void loadPreview();
     return () => {
       cancelled = true;
+      abort.abort();
     };
   }, [
     activeNode?.id,
@@ -1059,10 +1318,11 @@ function useWorkspaceFilePreview({
     activeNode?.path,
     adapter,
     identity,
-    onError
+    onError,
+    documents.load
   ]);
   async function loadMore() {
-    if (!adapter || !previewFile?.truncated) {
+    if (!adapter?.textRangeRead || !previewFile?.truncated) {
       return;
     }
     const requestedPath = previewFile.path;
@@ -1087,20 +1347,6 @@ function useWorkspaceFilePreview({
       setLoadingMore(false);
     }
   }
-  async function saveFile(input) {
-    if (!adapter?.writeFile) {
-      return;
-    }
-    onError(null);
-    await adapter.writeFile({ ...identity, ...input });
-    await refreshTree(input.path);
-    const file = await adapter.readFile({
-      ...identity,
-      path: input.path,
-      limit: isDrawioPath(input.path) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES
-    });
-    setPreviewFile(file);
-  }
   return {
     downloadOnly,
     imageUrl,
@@ -1108,8 +1354,7 @@ function useWorkspaceFilePreview({
     loadMore,
     pdfUrl,
     previewFile,
-    previewLoading,
-    saveFile
+    previewLoading
   };
 }
 
@@ -1127,8 +1372,8 @@ import {
   X
 } from "lucide-react";
 import {
-  useCallback as useCallback3,
-  useEffect as useEffect4,
+  useCallback as useCallback4,
+  useEffect as useEffect5,
   useMemo as useMemo4,
   useRef as useRef5,
   useState as useState6
@@ -1137,8 +1382,8 @@ import {
 // src/components/graph-workspace/explorer/WorkspaceExplorerTree.tsx
 import { useVirtualizer } from "@tanstack/react-virtual";
 import {
-  useCallback as useCallback2,
-  useEffect as useEffect3,
+  useCallback as useCallback3,
+  useEffect as useEffect4,
   useMemo as useMemo3,
   useRef as useRef4,
   useState as useState5
@@ -1351,7 +1596,7 @@ import {
   Pencil,
   Trash2
 } from "lucide-react";
-import { useEffect as useEffect2, useRef as useRef3, useState as useState4 } from "react";
+import { useEffect as useEffect3, useRef as useRef3, useState as useState4 } from "react";
 import { createPortal } from "react-dom";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 function WorkspaceNodeActions({
@@ -1373,7 +1618,7 @@ function WorkspaceNodeActions({
     setMenu(null);
     trigger.current?.focus();
   };
-  useEffect2(() => {
+  useEffect3(() => {
     if (!menu) return;
     const outside = (event) => {
       if (!popup.current?.contains(event.target) && !trigger.current?.contains(event.target))
@@ -1800,7 +2045,7 @@ function WorkspaceExplorerTree({
     enabled: canVirtualize,
     useFlushSync: false
   });
-  useEffect3(() => {
+  useEffect4(() => {
     onFilterResultsChange?.({
       matchCount: projection.matchCount,
       hasUnresolvedDirectories: projection.hasUnresolvedDirectories
@@ -1810,7 +2055,7 @@ function WorkspaceExplorerTree({
     projection.hasUnresolvedDirectories,
     projection.matchCount
   ]);
-  useEffect3(() => {
+  useEffect4(() => {
     if (focusedId && projection.indexById.has(focusedId)) {
       return;
     }
@@ -1818,7 +2063,7 @@ function WorkspaceExplorerTree({
       selectedNodeId && projection.indexById.has(selectedNodeId) ? selectedNodeId : rows[0]?.id ?? null
     );
   }, [focusedId, projection.indexById, rows, selectedNodeId]);
-  const focusRow = useCallback2(
+  const focusRow = useCallback3(
     (id) => {
       setFocusedId(id);
       const index = projection.indexById.get(id);
@@ -1832,7 +2077,7 @@ function WorkspaceExplorerTree({
     [canVirtualize, projection.indexById, virtualizer]
   );
   const revealedSelectionRef = useRef4(null);
-  useEffect3(() => {
+  useEffect4(() => {
     const key = `${selectedNodeId}:${revealRequestKey ?? 0}`;
     if (!selectedNodeId || revealedSelectionRef.current === key) return;
     const index = projection.indexById.get(selectedNodeId);
@@ -1842,7 +2087,7 @@ function WorkspaceExplorerTree({
     if (canVirtualize) virtualizer.scrollToIndex(index, { align: "auto" });
     else rowElementsRef.current.get(selectedNodeId)?.scrollIntoView?.({ block: "nearest" });
   }, [selectedNodeId, revealRequestKey, projection.indexById, canVirtualize, virtualizer]);
-  const handleKeyDown = useCallback2(
+  const handleKeyDown = useCallback3(
     (event) => {
       const command = workspaceExplorerCommandForKey({
         key: event.key,
@@ -2026,12 +2271,12 @@ function WorkspaceExplorerPanel({
     hasUnresolvedDirectories: false
   });
   const filterInputRef = useRef5(null);
-  const openFilter = useCallback3(() => setFilterOpen(true), []);
-  const handleFilterResultsChange = useCallback3(
+  const openFilter = useCallback4(() => setFilterOpen(true), []);
+  const handleFilterResultsChange = useCallback4(
     (result) => setFilterResult(result),
     []
   );
-  useEffect4(() => {
+  useEffect5(() => {
     if (filterOpen) {
       window.requestAnimationFrame(() => filterInputRef.current?.focus());
     }
@@ -2302,7 +2547,7 @@ import {
   lazy,
   memo,
   Suspense,
-  useEffect as useEffect6,
+  useEffect as useEffect7,
   useMemo as useMemo8,
   useRef as useRef7,
   useState as useState9
@@ -2335,7 +2580,7 @@ function WorkspaceInfoCard({
 
 // src/components/graph-workspace/GraphMoleculeViewer.tsx
 import { Pause, Play } from "lucide-react";
-import { useCallback as useCallback4, useEffect as useEffect5, useMemo as useMemo6, useRef as useRef6, useState as useState7 } from "react";
+import { useCallback as useCallback5, useEffect as useEffect6, useMemo as useMemo6, useRef as useRef6, useState as useState7 } from "react";
 
 // src/components/graph-workspace/GraphMoleculeViewerLowerButtonGroup.tsx
 import {
@@ -2948,14 +3193,14 @@ function GraphMoleculeViewer({
     0
   );
   const stagedMolecules = Object.keys(stagedSelections).length;
-  useEffect5(() => {
+  useEffect6(() => {
     if (xyzArray.length === 0) {
       setCurrentIndex(0);
       return;
     }
     setCurrentIndex(xyzArray.length - 1);
   }, [xyzArray.length]);
-  useEffect5(() => {
+  useEffect6(() => {
     if (!isPlaying || xyzArray.length <= 1) {
       return;
     }
@@ -2971,7 +3216,7 @@ function GraphMoleculeViewer({
     }, 200);
     return () => window.clearInterval(interval);
   }, [isPlaying, xyzArray.length]);
-  useEffect5(() => {
+  useEffect6(() => {
     const host = viewerHostRef.current;
     if (!host || viewerRef.current) {
       return;
@@ -3025,7 +3270,7 @@ function GraphMoleculeViewer({
       modelRef.current = null;
     };
   }, []);
-  useEffect5(() => {
+  useEffect6(() => {
     const viewer = viewerRef.current;
     if (!viewer || !xyzContent) {
       return;
@@ -3104,7 +3349,7 @@ function GraphMoleculeViewer({
       setViewerInitError(translate("files.unableToRenderThisMolecularStructure"));
     }
   }, [xyzContent, xyzFormat]);
-  useEffect5(() => {
+  useEffect6(() => {
     const viewer = viewerRef.current;
     const model = modelRef.current;
     if (!viewer || !model) {
@@ -3132,7 +3377,7 @@ function GraphMoleculeViewer({
     }
     viewer.render();
   }, [unitCellAvailable, unitCellVisible, xyzContent, xyzFormat]);
-  useEffect5(() => {
+  useEffect6(() => {
     const viewer = viewerRef.current;
     const model = modelRef.current;
     if (!viewer || !model || !xyzContent) {
@@ -3151,7 +3396,7 @@ function GraphMoleculeViewer({
     viewer.render();
     onSelectionChange?.({ moleculeId, atoms: selectedSerials });
   }, [moleculeId, onSelectionChange, selectedSerials, xyzContent]);
-  useEffect5(() => {
+  useEffect6(() => {
     if (!xyzContent) {
       return;
     }
@@ -3175,7 +3420,7 @@ function GraphMoleculeViewer({
     animationFrame = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(animationFrame);
   }, [xyzContent]);
-  const handleScreenshot = useCallback4(async () => {
+  const handleScreenshot = useCallback5(async () => {
     const viewer = viewerRef.current;
     if (!viewer?.pngURI) {
       return;
@@ -3428,10 +3673,13 @@ function WorkspaceFileTabs({
   onClose,
   onSelect,
   tabs,
-  trailingAction
+  trailingAction,
+  onSaveAndClose,
+  blockedClosePaths = /* @__PURE__ */ new Set()
 }) {
   useI18n();
   const [pendingClosePath, setPendingClosePath] = useState8(null);
+  const [savingClose, setSavingClose] = useState8(false);
   const pendingTab = tabs.find((tab) => tab.path === pendingClosePath) ?? null;
   if (tabs.length === 0) {
     return null;
@@ -3498,7 +3746,7 @@ function WorkspaceFileTabs({
     pendingTab ? /* @__PURE__ */ jsxs10(
       "div",
       {
-        className: "thread-graph-editor-close-confirm flex min-h-10 items-center justify-between gap-3 border-b px-3 py-1.5 text-xs",
+        className: "thread-graph-editor-close-confirm flex flex-wrap min-h-10 items-center justify-between gap-3 border-b px-3 py-1.5 text-xs",
         role: "alert",
         children: [
           /* @__PURE__ */ jsxs10("span", { className: "min-w-0 truncate", children: [
@@ -3517,10 +3765,19 @@ function WorkspaceFileTabs({
                 children: translate("files.keepEditing")
               }
             ),
+            onSaveAndClose ? /* @__PURE__ */ jsx14("button", { type: "button", disabled: savingClose || blockedClosePaths.has(pendingTab.path), onClick: async () => {
+              setSavingClose(true);
+              try {
+                await onSaveAndClose(pendingTab.path);
+              } finally {
+                setSavingClose(false);
+              }
+            }, children: translate("files.safeSaveClose") }) : null,
             /* @__PURE__ */ jsx14(
               "button",
               {
                 type: "button",
+                disabled: savingClose || blockedClosePaths.has(pendingTab.path),
                 onClick: () => {
                   setPendingClosePath(null);
                   onClose(pendingTab.path);
@@ -3539,9 +3796,9 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-ALTVD5RV.js")
+  () => import("./GraphWorkspaceMonacoEditor-YT2EZF43.js")
 );
-function DownloadFilePreview({ node, onDownload }) {
+function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
   const [pending, setPending] = useState9(false);
   const [error, setError] = useState9(null);
@@ -3552,6 +3809,7 @@ function DownloadFilePreview({ node, onDownload }) {
     /* @__PURE__ */ jsx15("strong", { children: node.name }),
     sizeLabel ? /* @__PURE__ */ jsx15("span", { children: sizeLabel }) : null,
     /* @__PURE__ */ jsx15("p", { children: translate("files.thisFileIsAvailableToDownload") }),
+    readOnlyReason ? /* @__PURE__ */ jsx15("p", { children: translateReadOnly(readOnlyReason) }) : null,
     onDownload ? /* @__PURE__ */ jsxs11(
       "button",
       {
@@ -3578,6 +3836,11 @@ function DownloadFilePreview({ node, onDownload }) {
     error ? /* @__PURE__ */ jsx15("p", { role: "alert", children: error }) : null
   ] });
 }
+function translateReadOnly(reason) {
+  const key = `files.safeReason.${reason}`;
+  return Object.hasOwn(en, key) ? translate(key) : reason;
+}
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-FXHCX7KB.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -3642,7 +3905,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
   const rootRef = useRef7(null);
   const [highlighter, setHighlighter] = useState9(null);
   const [dark, setDark] = useState9(false);
-  useEffect6(() => {
+  useEffect7(() => {
     let alive = true;
     getGraphChatHighlighter().then((loadedHighlighter) => {
       if (alive) {
@@ -3653,7 +3916,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
       alive = false;
     };
   }, []);
-  useEffect6(() => {
+  useEffect7(() => {
     const shell = rootRef.current?.closest(".thread-ui-shell");
     const readDark = () => shell ? shell.getAttribute("data-theme-effective") === "dark" || shell.classList.contains("dark") || shell.classList.contains("thread-ui-theme-dark") : document.documentElement.classList.contains("dark");
     setDark(readDark());
@@ -3690,7 +3953,7 @@ var GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview2({
       );
     }
   }, [content, dark, highlighter, language]);
-  useEffect6(() => {
+  useEffect7(() => {
     const root = rootRef.current;
     root?.querySelectorAll(".is-focused-line").forEach((element) => element.classList.remove("is-focused-line"));
     if (!root || !focusLine || focusLine < 1) {
@@ -3795,7 +4058,10 @@ function GraphWorkspacePreviewPane({
   onDownloadFile,
   imageUrl,
   loadingMore,
-  onSaveFile,
+  documents,
+  resourceScopeKey,
+  canSaveDocument,
+  onSaveAndClose,
   onCloseFileTab,
   onDirtyChange,
   onExpandExplorer,
@@ -3813,10 +4079,19 @@ function GraphWorkspacePreviewPane({
 }) {
   const { locale: i18nLocale } = useI18n();
   const surfaceRef = useRef7(null);
-  const [editing, setEditing] = useState9(false);
-  const [draftContent, setDraftContent] = useState9("");
-  const [saveError, setSaveError] = useState9(null);
-  const [saving, setSaving] = useState9(false);
+  const document2 = previewFile ? documents?.documents.get(previewFile.path) : void 0;
+  const editing = document2?.editing ?? false;
+  const draftContent = document2?.content ?? previewFile?.content ?? "";
+  const saving = document2?.phase === "saving";
+  const saveError = document2?.error;
+  const setDraftContent = (content) => {
+    if (previewFile) documents?.change(previewFile.path, content);
+  };
+  const setEditing = (value) => {
+    if (previewFile) documents?.setEditing(previewFile.path, value);
+  };
+  const [showConflict, setShowConflict] = useState9(true);
+  const [diffMode, setDiffMode] = useState9("draftDisk");
   const [markdownView, setMarkdownView] = useState9(
     "preview"
   );
@@ -3837,11 +4112,11 @@ function GraphWorkspacePreviewPane({
   const isDrawioFile = isDrawioPath(previewFile?.path ?? "");
   const renderedViewLabel = isDrawioFile ? translate("files.diagram") : "Markdown";
   const title = previewTargetTitle(selectedTarget);
-  const canEditFile = Boolean(previewFile && onSaveFile) && !(previewFile && MOLECULAR_EXTENSIONS.has(extension)) && isSmallEditableTextFile(previewFile);
+  const canEditFile = Boolean(previewFile && canSaveDocument && document2 && !document2.snapshot.readOnlyReason && document2.snapshot.contentHash) && !(previewFile && MOLECULAR_EXTENSIONS.has(extension)) && isSmallEditableTextFile(previewFile);
   const isLiveArtifactPreview = selectedTarget?.kind === "live-molecule";
   const isArtifactPreview = Boolean(activeNode?.artifact && renderedArtifact);
   const isMoleculePreview = Boolean(moleculeSnapshot) || isArtifactPreview;
-  useEffect6(() => {
+  useEffect7(() => {
     if (typeof window.matchMedia !== "function") {
       return;
     }
@@ -3851,7 +4126,7 @@ function GraphWorkspacePreviewPane({
     mediaQuery.addEventListener?.("change", update);
     return () => mediaQuery.removeEventListener?.("change", update);
   }, []);
-  useEffect6(() => {
+  useEffect7(() => {
     const shell = surfaceRef.current?.closest(".thread-ui-shell");
     const update = () => setDark(
       shell?.getAttribute("data-theme-effective") === "dark" || shell?.classList.contains("dark") || shell?.classList.contains("thread-ui-theme-dark") || false
@@ -3867,40 +4142,13 @@ function GraphWorkspacePreviewPane({
     });
     return () => observer.disconnect();
   }, []);
-  useEffect6(() => {
-    setEditing(false);
-    setDraftContent(previewFile?.content ?? "");
-    setSaveError(null);
+  useEffect7(() => {
     setMarkdownView("preview");
-  }, [previewFile?.path, previewFile?.content]);
-  useEffect6(() => {
-    if (!previewFile) {
-      return;
-    }
-    onDirtyChange?.(
-      previewFile.path,
-      editing && draftContent !== previewFile.content
-    );
-  }, [draftContent, editing, onDirtyChange, previewFile]);
+    setShowConflict(true);
+    setDiffMode("draftDisk");
+  }, [previewFile?.path]);
   async function handleSaveFile() {
-    if (!previewFile || !onSaveFile) {
-      return;
-    }
-    setSaving(true);
-    setSaveError(null);
-    try {
-      await onSaveFile({
-        path: previewFile.path,
-        content: draftContent
-      });
-      setEditing(false);
-    } catch (error2) {
-      setSaveError(
-        error2 instanceof Error ? error2.message : translate("files.failedToSaveFile")
-      );
-    } finally {
-      setSaving(false);
-    }
+    if (previewFile) await documents?.save(previewFile.path);
   }
   const breadcrumbSegments = previewFile ? previewFile.path.replace(workspaceRootPath ?? "", "").split("/").filter(Boolean) : [];
   const fileToolbar = previewFile && (isMarkdownFile || isDrawioFile || canEditFile) ? /* @__PURE__ */ jsxs11("div", { className: "flex shrink-0 items-center gap-1", children: [
@@ -3944,11 +4192,11 @@ function GraphWorkspacePreviewPane({
         {
           type: "button",
           onClick: () => {
-            setDraftContent(previewFile.content);
+            if (document2 && isProtected(document2) && !window.confirm(translate("files.safeDiscard"))) return;
+            setDraftContent(document2?.baseContent ?? previewFile.content);
             setEditing(false);
-            setSaveError(null);
           },
-          disabled: saving,
+          disabled: saving || document2?.phase === "unknown",
           className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40",
           title: translate("files.cancelEdits"),
           "aria-label": translate("files.cancelEdits"),
@@ -3960,7 +4208,7 @@ function GraphWorkspacePreviewPane({
         {
           type: "button",
           onClick: () => void handleSaveFile(),
-          disabled: saving || draftContent === previewFile.content,
+          disabled: saving || document2?.phase === "unknown" || draftContent === document2?.baseContent,
           className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40",
           title: translate("files.saveFile"),
           "aria-label": translate("files.saveFile"),
@@ -3972,10 +4220,8 @@ function GraphWorkspacePreviewPane({
       {
         type: "button",
         onClick: () => {
-          setDraftContent(previewFile.content);
           setMarkdownView("source");
           setEditing(true);
-          setSaveError(null);
         },
         className: "thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition",
         title: translate("files.editFile"),
@@ -4026,6 +4272,8 @@ function GraphWorkspacePreviewPane({
             onClose: onCloseFileTab,
             onSelect: onSelectFileTab,
             tabs: fileTabs,
+            ...onSaveAndClose ? { onSaveAndClose } : {},
+            blockedClosePaths: new Set([...documents?.documents ?? []].filter(([, doc]) => ["saving", "unknown"].includes(doc.phase)).map(([path]) => path)),
             trailingAction: fileToolbar || viewerPaneToggle ? /* @__PURE__ */ jsxs11(Fragment4, { children: [
               fileToolbar,
               viewerPaneToggle
@@ -4034,7 +4282,7 @@ function GraphWorkspacePreviewPane({
         ) : null,
         /* @__PURE__ */ jsxs11("div", { className: "flex min-h-0 flex-1 flex-col overflow-hidden", children: [
           error ? /* @__PURE__ */ jsx15("div", { className: "border-b border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: error }) : null,
-          !selectedTarget ? /* @__PURE__ */ jsx15("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: translate("files.pickALiveMoleculeWorkspaceFileArtifact") }) : selectedTarget.kind === "workspace-file" && previewLoading ? /* @__PURE__ */ jsx15("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: translate("files.loadingFilePreview") }) : selectedTarget.kind === "workspace-file" && downloadOnly ? /* @__PURE__ */ jsx15(DownloadFilePreview, { node: selectedTarget.node, onDownload: onDownloadFile }, selectedTarget.node.path) : selectedTarget.kind === "workspace-file" && moleculeSnapshot ? /* @__PURE__ */ jsx15("div", { className: "thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx15(
+          !selectedTarget ? /* @__PURE__ */ jsx15("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: translate("files.pickALiveMoleculeWorkspaceFileArtifact") }) : selectedTarget.kind === "workspace-file" && previewLoading ? /* @__PURE__ */ jsx15("div", { className: "flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500", children: translate("files.loadingFilePreview") }) : selectedTarget.kind === "workspace-file" && downloadOnly ? /* @__PURE__ */ jsx15(DownloadFilePreview, { node: selectedTarget.node, onDownload: onDownloadFile, ...activeFilePath && documents?.documents.get(activeFilePath)?.snapshot.readOnlyReason ? { readOnlyReason: documents.documents.get(activeFilePath).snapshot.readOnlyReason } : {} }, selectedTarget.node.path) : selectedTarget.kind === "workspace-file" && moleculeSnapshot ? /* @__PURE__ */ jsx15("div", { className: "thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden", children: /* @__PURE__ */ jsx15(
             GraphMoleculeViewer,
             {
               source: moleculeSnapshot,
@@ -4082,6 +4330,68 @@ function GraphWorkspacePreviewPane({
               )) }),
               fileTabs.length === 0 ? fileToolbar : null
             ] }) : null,
+            document2 ? /* @__PURE__ */ jsxs11("div", { className: "workspace-document-status", role: "status", "data-testid": "workspace-document-status", children: [
+              /* @__PURE__ */ jsxs11("span", { children: [
+                document2.snapshot.readOnlyReason ? translate("files.safeReadOnly", { reason: translateReadOnly(document2.snapshot.readOnlyReason) }) : translate(document2.needsVerification && document2.phase === "clean" ? "files.safeAdoptedSnapshot" : `files.safePhase.${document2.phase}`),
+                " \xB7 ",
+                document2.snapshot.encoding === "utf-8" ? "UTF-8" : translate("files.safeUnknownEncoding"),
+                document2.snapshot.bom ? " BOM" : "",
+                " \xB7 ",
+                document2.snapshot.eol.toUpperCase(),
+                " \xB7 r",
+                document2.revision
+              ] }),
+              /* @__PURE__ */ jsxs11("div", { className: "workspace-document-actions", children: [
+                /* @__PURE__ */ jsx15("button", { type: "button", onClick: () => downloadDraft(document2), children: translate("files.safeDownloadDraft") }),
+                /* @__PURE__ */ jsx15("button", { type: "button", disabled: saving, onClick: () => void documents?.checkDisk(document2.snapshot.path), children: translate("files.safeCheckDisk") }),
+                document2.phase === "unknown" ? /* @__PURE__ */ jsx15("button", { type: "button", onClick: () => void documents?.reconcile(document2.snapshot.path), children: translate("files.safeVerifySave") }) : null,
+                document2.phase === "unknown" && document2.conflict ? /* @__PURE__ */ jsx15("button", { type: "button", disabled: document2.operationPending, onClick: () => {
+                  if (window.confirm(translate("files.safeManualRebase"))) documents?.acceptVerifiedDisk(document2.snapshot.path);
+                }, children: translate("files.safeUseCheckedBase") }) : null,
+                document2.phase === "conflict" && !showConflict ? /* @__PURE__ */ jsx15("button", { type: "button", onClick: () => setShowConflict(true), children: translate("files.safeViewConflict") }) : null
+              ] })
+            ] }) : canSaveDocument ? /* @__PURE__ */ jsx15("div", { className: "workspace-document-status", children: translate("files.safeUnavailable") }) : null,
+            document2 && (document2.phase === "conflict" || document2.phase === "unknown" && document2.conflict) && showConflict ? /* @__PURE__ */ jsxs11("div", { className: "workspace-document-conflict", "data-testid": "workspace-document-conflict", children: [
+              /* @__PURE__ */ jsx15("strong", { children: translate(document2.phase === "unknown" ? "files.safePhase.unknown" : "files.safeConflictTitle") }),
+              /* @__PURE__ */ jsx15("p", { children: translate(document2.phase === "unknown" ? "files.safeUnknown" : "files.safeConflictBody") }),
+              /* @__PURE__ */ jsxs11("div", { className: "workspace-document-actions", children: [
+                /* @__PURE__ */ jsx15("button", { type: "button", onClick: () => setShowConflict(false), children: translate("files.safeKeepDraft") }),
+                /* @__PURE__ */ jsx15("button", { type: "button", disabled: document2.phase === "unknown" || document2.conflict?.content == null, onClick: () => {
+                  const revision = document2.revision;
+                  if (window.confirm(translate("files.safeDiscard"))) documents?.adoptDisk(document2.snapshot.path, revision);
+                }, children: translate("files.safeAdoptDisk") }),
+                /* @__PURE__ */ jsx15("button", { type: "button", disabled: document2.phase === "unknown" || !document2.conflict?.contentHash || Boolean(document2.conflict.readOnlyReason), onClick: () => {
+                  if (window.confirm(translate("files.safeOverwriteConfirm"))) void documents?.save(document2.snapshot.path, true);
+                }, children: translate("files.safeOverwriteShown") }),
+                /* @__PURE__ */ jsx15("button", { type: "button", disabled: document2.conflict?.content == null, onClick: () => downloadDraft(document2, true), children: translate("files.safeDownloadDisk") })
+              ] }),
+              document2.conflict?.content != null ? /* @__PURE__ */ jsxs11(Fragment4, { children: [
+                /* @__PURE__ */ jsxs11("label", { children: [
+                  translate("files.safeCompare"),
+                  " ",
+                  /* @__PURE__ */ jsxs11("select", { value: diffMode, onChange: (e) => setDiffMode(e.target.value), children: [
+                    /* @__PURE__ */ jsx15("option", { value: "draftDisk", children: translate("files.safeDraftDisk") }),
+                    /* @__PURE__ */ jsx15("option", { value: "baseDraft", children: translate("files.safeBaseDraft") }),
+                    /* @__PURE__ */ jsx15("option", { value: "baseDisk", children: translate("files.safeBaseDisk") })
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsx15("div", { className: "workspace-document-diff", children: /* @__PURE__ */ jsx15(Suspense, { fallback: /* @__PURE__ */ jsx15("span", { children: translate("files.loadingEditor") }), children: /* @__PURE__ */ jsx15(
+                  WorkspaceDocumentDiff,
+                  {
+                    original: diffMode === "draftDisk" ? document2.content : document2.baseContent,
+                    modified: diffMode === "baseDraft" ? document2.content : document2.conflict.content,
+                    language: fileLanguage,
+                    dark,
+                    compact: compactViewer
+                  }
+                ) }) }),
+                /* @__PURE__ */ jsxs11("p", { className: "workspace-document-snapshot", children: [
+                  translate("files.safeFixedSnapshot"),
+                  " \xB7 ",
+                  document2.conflict.contentHash?.slice(0, 23)
+                ] })
+              ] }) : /* @__PURE__ */ jsx15("p", { children: translate("files.safeMissing") })
+            ] }) : null,
             saveError ? /* @__PURE__ */ jsx15("div", { className: "border-b border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200", children: saveError }) : null,
             editing && compactViewer ? /* @__PURE__ */ jsx15(
               "textarea",
@@ -4115,6 +4425,8 @@ function GraphWorkspacePreviewPane({
                 children: /* @__PURE__ */ jsx15(
                   GraphWorkspaceMonacoEditor,
                   {
+                    resourceKey: document2?.key ?? `${resourceScopeKey}:${previewFile.path}`,
+                    retainModel: Boolean(document2),
                     content: editing ? draftContent : previewFile.content,
                     dark,
                     focusLine,
@@ -4124,10 +4436,11 @@ function GraphWorkspacePreviewPane({
                     path: previewFile.path,
                     readOnly: !editing
                   },
-                  previewFile.path
+                  document2?.key ?? `${resourceScopeKey}:${previewFile.path}`
                 )
               }
             ),
+            previewFile.truncated && !onLoadMore ? /* @__PURE__ */ jsx15("div", { className: "workspace-document-status", children: translate("files.safeFirstPreview") }) : null,
             previewFile.truncated && onLoadMore ? /* @__PURE__ */ jsx15("div", { className: "thread-graph-file-preview-footer flex justify-center border-t px-4 py-3", children: /* @__PURE__ */ jsx15(
               "button",
               {
@@ -4255,9 +4568,12 @@ function GraphWorkspaceExplorer({
   );
   const [focusedLine, setFocusedLine] = useState10(null);
   const [fileTabs, setFileTabs] = useState10([]);
-  const [dirtyFilePaths, setDirtyFilePaths] = useState10(
-    () => /* @__PURE__ */ new Set()
-  );
+  const documents = useWorkspaceDocuments(workspaceAdapter, workspaceIdentity);
+  const dirtyFilePaths = new Set([...documents.documents].filter(([, doc]) => isProtected(doc)).map(([path]) => path));
+  const dirtyKey = [...dirtyFilePaths].join("\0");
+  useEffect8(() => {
+    setFileTabs((tabs) => tabs.map((tab) => dirtyFilePaths.has(tab.path) ? { ...tab, pinned: true } : tab));
+  }, [dirtyKey]);
   const [isMobileViewport, setIsMobileViewport] = useState10(false);
   const explorerScrollerRef = useRef8(null);
   const explorerScrollTopRef = useRef8(0);
@@ -4277,15 +4593,16 @@ function GraphWorkspaceExplorer({
     loadMore: handleLoadMore,
     pdfUrl,
     previewFile,
-    previewLoading,
-    saveFile: handleSaveFile
+    previewLoading
   } = useWorkspaceFilePreview({
     activeNode,
     adapter: workspaceAdapter,
     identity: workspaceIdentity,
     onError: setWorkspaceError,
-    refreshTree: refreshWorkspaceTree
+    documents
   });
+  const activeDocument = previewFile ? documents.documents.get(previewFile.path) : void 0;
+  const currentPreviewFile = previewFile && activeDocument?.snapshot.content != null ? { ...previewFile, ...activeDocument.snapshot, content: activeDocument.snapshot.content } : previewFile;
   const {
     confirmEmptyGarbage: handleConfirmEmptyGarbage,
     copyPath: handleCopyPath,
@@ -4306,13 +4623,12 @@ function GraphWorkspaceExplorer({
     refreshTree: refreshWorkspaceTree,
     workspaceRootPath: detail.workspace.absPath
   });
-  useEffect7(() => {
+  useEffect8(() => {
     explorerScrollTopRef.current = 0;
     pendingExplorerScrollRestoreRef.current = null;
     setFileTabs([]);
-    setDirtyFilePaths(/* @__PURE__ */ new Set());
   }, [workspaceIdentity.threadId, workspaceIdentity.workspaceId]);
-  useEffect7(() => {
+  useEffect8(() => {
     if (activeNode?.kind !== "file" || !activeNode.path) {
       return;
     }
@@ -4324,7 +4640,7 @@ function GraphWorkspaceExplorer({
       const nextTab = {
         name: activeNode.name,
         path: activeNode.path,
-        pinned: false
+        pinned: dirtyFilePaths.has(activeNode.path)
       };
       if (previewIndex < 0) {
         return [...current, nextTab];
@@ -4334,7 +4650,7 @@ function GraphWorkspaceExplorer({
       );
     });
   }, [activeNode]);
-  useEffect7(() => {
+  useEffect8(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
       setCollapsedPanel(null);
@@ -4383,7 +4699,7 @@ function GraphWorkspaceExplorer({
       restoredRevealRef.current = focusPathRequest.requestId;
     }
   }, [focusPathRequest, loadingTree, activeNode]);
-  useEffect7(() => {
+  useEffect8(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
@@ -4424,15 +4740,8 @@ function GraphWorkspaceExplorer({
   function handleCloseTab(path) {
     const closingIndex = fileTabs.findIndex((tab) => tab.path === path);
     const nextTabs = fileTabs.filter((tab) => tab.path !== path);
+    if (!documents.discard(path)) return;
     setFileTabs(nextTabs);
-    setDirtyFilePaths((current) => {
-      if (!current.has(path)) {
-        return current;
-      }
-      const next = new Set(current);
-      next.delete(path);
-      return next;
-    });
     if (activeNode?.path !== path) {
       return;
     }
@@ -4452,6 +4761,7 @@ function GraphWorkspaceExplorer({
       const prefix = relative.includes("/") ? relative.slice(0, relative.lastIndexOf("/") + 1) : "";
       const toPath = prefix + name.trim();
       await workspaceAdapter.renameNode({ ...workspaceIdentity, fromPath: relative, toPath });
+      for (const path of documents.documents.keys()) if (path === node.path || path.startsWith(`${node.path}/`)) documents.discard(path);
       setFileTabs((tabs) => tabs.map((tab) => tab.path === node.path || tab.path.startsWith(`${node.path}/`) ? { ...tab, path: toPath + tab.path.slice(node.path.length), name: tab.path === node.path ? name.trim() : tab.name } : tab));
       await refreshWorkspaceTree(toPath);
     } } : {},
@@ -4460,6 +4770,7 @@ function GraphWorkspaceExplorer({
       if (!relative) throw new Error(translate("files.theWorkspaceRootCannotBeDeleted"));
       if ([...dirtyFilePaths].some((path) => path === node.path || path.startsWith(`${node.path}/`))) throw new Error(translate("files.saveOrDiscardUnsavedChangesBeforeDeleting"));
       await workspaceAdapter.deleteNode({ ...workspaceIdentity, path: relative });
+      for (const path of documents.documents.keys()) if (path === node.path || path.startsWith(`${node.path}/`)) documents.discard(path);
       setFileTabs((tabs) => tabs.filter((tab) => tab.path !== node.path && !tab.path.startsWith(`${node.path}/`)));
       if (activeNode?.path === node.path || activeNode?.path.startsWith(`${node.path}/`)) setSelectedNodeId(null);
       await refreshWorkspaceTree();
@@ -4532,31 +4843,15 @@ function GraphWorkspaceExplorer({
         setCollapsedPanel(null);
         void focusWorkspacePath(path);
       },
-      onLoadMore: handleLoadMore,
+      ...workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {},
       onCloseFileTab: handleCloseTab,
-      onDirtyChange: (path, dirty) => {
-        if (dirty) {
-          setFileTabs(
-            (current) => current.map(
-              (tab) => tab.path === path ? { ...tab, pinned: true } : tab
-            )
-          );
-        }
-        setDirtyFilePaths((current) => {
-          if (current.has(path) === dirty) {
-            return current;
-          }
-          const next = new Set(current);
-          if (dirty) {
-            next.add(path);
-          } else {
-            next.delete(path);
-          }
-          return next;
-        });
-      },
       onSelectFileTab: (path) => void focusWorkspacePath(path),
-      ...workspaceAdapter?.writeFile && activeNode && relativeWorkspacePath(activeNode.path, detail.workspace.absPath) !== null ? { onSaveFile: handleSaveFile } : {},
+      documents,
+      resourceScopeKey: documents.source,
+      canSaveDocument: Boolean(workspaceAdapter?.saveDocument),
+      onSaveAndClose: async (path) => {
+        if (await documents.save(path)) handleCloseTab(path);
+      },
       ...collapsedPanel === "explorer" ? { onExpandExplorer: () => setCollapsedPanel(null) } : {
         onCollapse: () => {
           rememberExplorerScroll();
@@ -4564,7 +4859,7 @@ function GraphWorkspaceExplorer({
         }
       },
       pdfUrl,
-      previewFile,
+      previewFile: currentPreviewFile,
       previewLoading,
       plugins,
       ...workspaceAdapter?.getRawFileUrl ? {
@@ -4651,7 +4946,7 @@ function GraphWorkspaceExplorer({
 }
 
 // src/components/graph-chat/GraphVisualization.tsx
-import { useCallback as useCallback5, useEffect as useEffect8, useMemo as useMemo9 } from "react";
+import { useCallback as useCallback6, useEffect as useEffect9, useMemo as useMemo9 } from "react";
 import {
   addEdge,
   Background,
@@ -4975,11 +5270,11 @@ function GraphVisualization({ nodes: inputNodes }) {
     }),
     []
   );
-  useEffect8(() => {
+  useEffect9(() => {
     setFlowNodes(graph.nodes);
     setFlowEdges(graph.edges);
   }, [graph.edges, graph.nodes, setFlowEdges, setFlowNodes]);
-  const onConnect = useCallback5(
+  const onConnect = useCallback6(
     (params) => setFlowEdges(
       (edges) => addEdge(
         {
@@ -5257,12 +5552,12 @@ function ThreadGraphWorkspacePanel({
     }
     return tabs;
   }, [features.extensions, features.threadGraph, i18nLocale]);
-  useEffect9(() => {
+  useEffect10(() => {
     if (!activeTab || !isWorkspaceTabEnabled(features, activeTab)) {
       setActiveTab(firstEnabledWorkspaceTab(features, featureConfig?.defaultTab));
     }
   }, [activeTab, featureConfig?.defaultTab, features]);
-  useEffect9(() => {
+  useEffect10(() => {
     if (focusPathRequest && features.workspace) {
       setActiveTab("workspace");
     }

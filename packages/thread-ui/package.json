@@ -22,7 +22,8 @@
     "./i18n": {
       "types": "./dist/i18n.d.ts",
       "import": "./dist/i18n.js"
-    }
+    },
+    "./workspace-editor.worker": "./dist/workspace-editor.worker.js"
   },
   "files": [
     "dist/",

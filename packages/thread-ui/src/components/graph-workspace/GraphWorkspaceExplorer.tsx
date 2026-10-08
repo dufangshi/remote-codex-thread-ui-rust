@@ -1,3 +1,5 @@
+import { useWorkspaceDocuments } from "./explorer/useWorkspaceDocuments";
+import { isProtected } from "./explorer/workspaceDocuments";
 import { translate, useI18n } from '../../i18n';
 import { relativeWorkspacePath } from '../workspacePaths';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -86,9 +88,12 @@ export function GraphWorkspaceExplorer({
   );
   const [focusedLine, setFocusedLine] = useState<number | null>(null);
   const [fileTabs, setFileTabs] = useState<WorkspaceFileTab[]>([]);
-  const [dirtyFilePaths, setDirtyFilePaths] = useState<Set<string>>(
-    () => new Set(),
-  );
+  const documents = useWorkspaceDocuments(workspaceAdapter, workspaceIdentity);
+  const dirtyFilePaths = new Set([...documents.documents].filter(([,doc]) => isProtected(doc)).map(([path]) => path));
+  const dirtyKey = [...dirtyFilePaths].join('\0');
+  useEffect(() => {
+    setFileTabs(tabs => tabs.map(tab => dirtyFilePaths.has(tab.path) ? {...tab,pinned:true}:tab));
+  }, [dirtyKey]);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const explorerScrollerRef = useRef<HTMLDivElement | null>(null);
   const explorerScrollTopRef = useRef(0);
@@ -107,14 +112,16 @@ export function GraphWorkspaceExplorer({
     pdfUrl,
     previewFile,
     previewLoading,
-    saveFile: handleSaveFile,
   } = useWorkspaceFilePreview({
     activeNode,
     adapter: workspaceAdapter,
     identity: workspaceIdentity,
     onError: setWorkspaceError,
-    refreshTree: refreshWorkspaceTree,
+    documents,
   });
+  const activeDocument = previewFile ? documents.documents.get(previewFile.path) : undefined;
+  const currentPreviewFile = previewFile && activeDocument?.snapshot.content != null
+    ? {...previewFile,...activeDocument.snapshot,content:activeDocument.snapshot.content} : previewFile;
   const {
     confirmEmptyGarbage: handleConfirmEmptyGarbage,
     copyPath: handleCopyPath,
@@ -140,7 +147,6 @@ export function GraphWorkspaceExplorer({
     explorerScrollTopRef.current = 0;
     pendingExplorerScrollRestoreRef.current = null;
     setFileTabs([]);
-    setDirtyFilePaths(new Set());
   }, [workspaceIdentity.threadId, workspaceIdentity.workspaceId]);
 
   useEffect(() => {
@@ -155,7 +161,7 @@ export function GraphWorkspaceExplorer({
       const nextTab: WorkspaceFileTab = {
         name: activeNode.name,
         path: activeNode.path,
-        pinned: false,
+        pinned: dirtyFilePaths.has(activeNode.path),
       };
       if (previewIndex < 0) {
         return [...current, nextTab];
@@ -271,15 +277,8 @@ export function GraphWorkspaceExplorer({
   function handleCloseTab(path: string) {
     const closingIndex = fileTabs.findIndex((tab) => tab.path === path);
     const nextTabs = fileTabs.filter((tab) => tab.path !== path);
+    if (!documents.discard(path)) return;
     setFileTabs(nextTabs);
-    setDirtyFilePaths((current) => {
-      if (!current.has(path)) {
-        return current;
-      }
-      const next = new Set(current);
-      next.delete(path);
-      return next;
-    });
     if (activeNode?.path !== path) {
       return;
     }
@@ -301,6 +300,7 @@ export function GraphWorkspaceExplorer({
       const prefix = relative.includes('/') ? relative.slice(0, relative.lastIndexOf('/') + 1) : '';
       const toPath = prefix + name.trim();
       await workspaceAdapter.renameNode!({...workspaceIdentity, fromPath: relative, toPath});
+      for (const path of documents.documents.keys()) if(path===node.path || path.startsWith(`${node.path}/`)) documents.discard(path);
       setFileTabs(tabs => tabs.map(tab => tab.path === node.path || tab.path.startsWith(`${node.path}/`) ? {...tab, path: toPath + tab.path.slice(node.path.length), name: tab.path === node.path ? name.trim() : tab.name} : tab));
       await refreshWorkspaceTree(toPath);
     }} : {}),
@@ -309,6 +309,7 @@ export function GraphWorkspaceExplorer({
       if (!relative) throw new Error(translate("files.theWorkspaceRootCannotBeDeleted"));
       if ([...dirtyFilePaths].some(path => path === node.path || path.startsWith(`${node.path}/`))) throw new Error(translate("files.saveOrDiscardUnsavedChangesBeforeDeleting"));
       await workspaceAdapter.deleteNode!({...workspaceIdentity, path: relative});
+      for (const path of documents.documents.keys()) if(path===node.path || path.startsWith(`${node.path}/`)) documents.discard(path);
       setFileTabs(tabs => tabs.filter(tab => tab.path !== node.path && !tab.path.startsWith(`${node.path}/`)));
       if (activeNode?.path === node.path || activeNode?.path.startsWith(`${node.path}/`)) setSelectedNodeId(null);
       await refreshWorkspaceTree();
@@ -389,31 +390,13 @@ export function GraphWorkspaceExplorer({
         setCollapsedPanel(null);
         void focusWorkspacePath(path);
       }}
-      onLoadMore={handleLoadMore}
+      {...(workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {})}
       onCloseFileTab={handleCloseTab}
-      onDirtyChange={(path, dirty) => {
-        if (dirty) {
-          setFileTabs((current) =>
-            current.map((tab) =>
-              tab.path === path ? { ...tab, pinned: true } : tab,
-            ),
-          );
-        }
-        setDirtyFilePaths((current) => {
-          if (current.has(path) === dirty) {
-            return current;
-          }
-          const next = new Set(current);
-          if (dirty) {
-            next.add(path);
-          } else {
-            next.delete(path);
-          }
-          return next;
-        });
-      }}
       onSelectFileTab={(path) => void focusWorkspacePath(path)}
-      {...(workspaceAdapter?.writeFile && activeNode && relativeWorkspacePath(activeNode.path, detail.workspace.absPath) !== null ? { onSaveFile: handleSaveFile } : {})}
+      documents={documents}
+      resourceScopeKey={documents.source}
+      canSaveDocument={Boolean(workspaceAdapter?.saveDocument)}
+      onSaveAndClose={async (path) => { if (await documents.save(path)) handleCloseTab(path); }}
       {...(collapsedPanel === 'explorer'
         ? { onExpandExplorer: () => setCollapsedPanel(null) }
         : {
@@ -423,7 +406,7 @@ export function GraphWorkspaceExplorer({
             },
           })}
       pdfUrl={pdfUrl}
-      previewFile={previewFile}
+      previewFile={currentPreviewFile}
       previewLoading={previewLoading}
       plugins={plugins}
       {...(workspaceAdapter?.getRawFileUrl

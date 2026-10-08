@@ -1,4 +1,6 @@
-import { getLocale } from '../../i18n';
+import type { WorkspaceDocuments } from "./explorer/useWorkspaceDocuments";
+import { isProtected, downloadDraft } from "./explorer/workspaceDocuments";
+import { getLocale, en, type TranslationKey } from '../../i18n';
 import { translate, useI18n } from '../../i18n';
 import { externalLinkProps } from '../externalLinkProps';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
@@ -59,7 +61,8 @@ export type GraphWorkspacePreviewTarget =
   | { kind: 'meta'; node: WorkspaceTreeNode }
   | null;
 
-function DownloadFilePreview({ node, onDownload }: {
+function DownloadFilePreview({ node, onDownload, readOnlyReason }: {
+  readOnlyReason?: string;
   node: WorkspaceTreeNode;
   onDownload?: () => Promise<void> | void;
 }) {
@@ -76,6 +79,7 @@ function DownloadFilePreview({ node, onDownload }: {
       <strong>{node.name}</strong>
       {sizeLabel ? <span>{sizeLabel}</span> : null}
       <p>{translate("files.thisFileIsAvailableToDownload")}</p>
+      {readOnlyReason ? <p>{translateReadOnly(readOnlyReason)}</p> : null}
       {onDownload ? (
         <button type="button" disabled={pending} aria-label={translate("files.download", { value1: node.name })}
           onClick={async () => {
@@ -94,6 +98,11 @@ function DownloadFilePreview({ node, onDownload }: {
   );
 }
 
+function translateReadOnly(reason: string) {
+  const key = `files.safeReason.${reason}`;
+  return Object.hasOwn(en,key) ? translate(key as TranslationKey) : reason;
+}
+const WorkspaceDocumentDiff = lazy(() => import('./GraphWorkspaceMonacoDiff'));
 const SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 const SMALL_TEXT_FILE_MAX_LINES = 1000;
 const MARKDOWN_EXTENSIONS = new Set(['md', 'markdown']);
@@ -375,7 +384,10 @@ export function GraphWorkspacePreviewPane({
   onDownloadFile,
   imageUrl,
   loadingMore,
-  onSaveFile,
+  documents,
+  resourceScopeKey,
+  canSaveDocument,
+  onSaveAndClose,
   onCloseFileTab,
   onDirtyChange,
   onExpandExplorer,
@@ -400,10 +412,10 @@ export function GraphWorkspacePreviewPane({
   onDownloadFile?: () => Promise<void> | void;
   imageUrl?: string | null;
   loadingMore?: boolean;
-  onSaveFile?: (input: {
-    path: string;
-    content: string;
-  }) => Promise<void> | void;
+  documents?: WorkspaceDocuments;
+  resourceScopeKey?: string;
+  canSaveDocument?: boolean;
+  onSaveAndClose?: (path: string) => Promise<void>;
   onCloseFileTab?: (path: string) => void;
   onDirtyChange?: (path: string, dirty: boolean) => void;
   onExpandExplorer?: () => void;
@@ -421,10 +433,15 @@ export function GraphWorkspacePreviewPane({
 }) {
   const { locale: i18nLocale } = useI18n();
   const surfaceRef = useRef<HTMLElement | null>(null);
-  const [editing, setEditing] = useState(false);
-  const [draftContent, setDraftContent] = useState('');
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const document = previewFile ? documents?.documents.get(previewFile.path) : undefined;
+  const editing = document?.editing ?? false;
+  const draftContent = document?.content ?? previewFile?.content ?? '';
+  const saving = document?.phase === 'saving';
+  const saveError = document?.error;
+  const setDraftContent = (content: string) => { if (previewFile) documents?.change(previewFile.path,content); };
+  const setEditing = (value: boolean) => { if (previewFile) documents?.setEditing(previewFile.path,value); };
+  const [showConflict, setShowConflict] = useState(true);
+  const [diffMode, setDiffMode] = useState<'draftDisk'|'baseDraft'|'baseDisk'>('draftDisk');
   const [markdownView, setMarkdownView] = useState<'preview' | 'source'>(
     'preview',
   );
@@ -452,7 +469,7 @@ export function GraphWorkspacePreviewPane({
   const renderedViewLabel = isDrawioFile ? translate("files.diagram") : 'Markdown';
   const title = previewTargetTitle(selectedTarget);
   const canEditFile =
-    Boolean(previewFile && onSaveFile) &&
+    Boolean(previewFile && canSaveDocument && document && !document.snapshot.readOnlyReason && document.snapshot.contentHash) &&
     !(previewFile && MOLECULAR_EXTENSIONS.has(extension)) &&
     isSmallEditableTextFile(previewFile!);
   const isLiveArtifactPreview = selectedTarget?.kind === 'live-molecule';
@@ -492,42 +509,10 @@ export function GraphWorkspacePreviewPane({
   }, []);
 
   useEffect(() => {
-    setEditing(false);
-    setDraftContent(previewFile?.content ?? '');
-    setSaveError(null);
-    setMarkdownView('preview');
-  }, [previewFile?.path, previewFile?.content]);
-
-  useEffect(() => {
-    if (!previewFile) {
-      return;
-    }
-    onDirtyChange?.(
-      previewFile.path,
-      editing && draftContent !== previewFile.content,
-    );
-  }, [draftContent, editing, onDirtyChange, previewFile]);
-
+    setMarkdownView('preview'); setShowConflict(true); setDiffMode('draftDisk');
+  }, [previewFile?.path]);
   async function handleSaveFile() {
-    if (!previewFile || !onSaveFile) {
-      return;
-    }
-
-    setSaving(true);
-    setSaveError(null);
-    try {
-      await onSaveFile({
-        path: previewFile.path,
-        content: draftContent,
-      });
-      setEditing(false);
-    } catch (error) {
-      setSaveError(
-        error instanceof Error ? error.message : translate("files.failedToSaveFile"),
-      );
-    } finally {
-      setSaving(false);
-    }
+    if (previewFile) await documents?.save(previewFile.path);
   }
 
   const breadcrumbSegments = previewFile
@@ -578,11 +563,11 @@ export function GraphWorkspacePreviewPane({
                 <button
                   type="button"
                   onClick={() => {
-                    setDraftContent(previewFile.content);
+                    if (document && isProtected(document) && !window.confirm(translate('files.safeDiscard'))) return;
+                    setDraftContent(document?.baseContent ?? previewFile.content);
                     setEditing(false);
-                    setSaveError(null);
                   }}
-                  disabled={saving}
+                  disabled={saving || document?.phase === 'unknown'}
                   className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40"
                   title={translate("files.cancelEdits")}
                   aria-label={translate("files.cancelEdits")}
@@ -592,7 +577,7 @@ export function GraphWorkspacePreviewPane({
                 <button
                   type="button"
                   onClick={() => void handleSaveFile()}
-                  disabled={saving || draftContent === previewFile.content}
+                  disabled={saving || document?.phase === 'unknown' || draftContent === document?.baseContent}
                   className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition disabled:cursor-not-allowed disabled:opacity-40"
                   title={translate("files.saveFile")}
                   aria-label={translate("files.saveFile")}
@@ -604,10 +589,8 @@ export function GraphWorkspacePreviewPane({
               <button
                 type="button"
                 onClick={() => {
-                  setDraftContent(previewFile.content);
                   setMarkdownView('source');
                   setEditing(true);
-                  setSaveError(null);
                 }}
                 className="thread-graph-editor-toolbar-button flex h-6 w-6 items-center justify-center rounded transition"
                 title={translate("files.editFile")}
@@ -665,6 +648,8 @@ export function GraphWorkspacePreviewPane({
           onClose={onCloseFileTab}
           onSelect={onSelectFileTab}
           tabs={fileTabs}
+          {...(onSaveAndClose ? { onSaveAndClose } : {})}
+          blockedClosePaths={new Set([...documents?.documents ?? []].filter(([,doc]) => ['saving','unknown'].includes(doc.phase)).map(([path]) => path))}
           trailingAction={
             fileToolbar || viewerPaneToggle ? (
               <>
@@ -688,7 +673,7 @@ export function GraphWorkspacePreviewPane({
           <div className="flex min-h-0 flex-1 items-center justify-center px-5 text-center text-sm text-slate-400 dark:text-slate-500">
             {translate("files.loadingFilePreview")}</div>
         ) : selectedTarget.kind === 'workspace-file' && downloadOnly ? (
-          <DownloadFilePreview key={selectedTarget.node.path} node={selectedTarget.node} onDownload={onDownloadFile} />
+          <DownloadFilePreview key={selectedTarget.node.path} node={selectedTarget.node} onDownload={onDownloadFile} {...(activeFilePath && documents?.documents.get(activeFilePath)?.snapshot.readOnlyReason ? {readOnlyReason:documents.documents.get(activeFilePath)!.snapshot.readOnlyReason!}: {})} />
         ) : selectedTarget.kind === 'workspace-file' && moleculeSnapshot ? (
           <div className="thread-graph-molecule-preview min-h-0 flex-1 overflow-hidden">
             <GraphMoleculeViewer
@@ -745,6 +730,40 @@ export function GraphWorkspacePreviewPane({
                 {fileTabs.length === 0 ? fileToolbar : null}
               </div>
             ) : null}
+            {document ? (
+              <div className="workspace-document-status" role="status" data-testid="workspace-document-status">
+                <span>{document.snapshot.readOnlyReason ? translate('files.safeReadOnly', {reason: translateReadOnly(document.snapshot.readOnlyReason)}) : translate(document.needsVerification && document.phase==='clean' ? 'files.safeAdoptedSnapshot':`files.safePhase.${document.phase}`)} · {document.snapshot.encoding==='utf-8' ? 'UTF-8':translate('files.safeUnknownEncoding')}{document.snapshot.bom ? ' BOM' : ''} · {document.snapshot.eol.toUpperCase()} · r{document.revision}</span>
+                <div className="workspace-document-actions">
+                  <button type="button" onClick={() => downloadDraft(document)}>{translate('files.safeDownloadDraft')}</button>
+                  <button type="button" disabled={saving} onClick={() => void documents?.checkDisk(document.snapshot.path)}>{translate('files.safeCheckDisk')}</button>
+                  {document.phase === 'unknown' ? <button type="button" onClick={() => void documents?.reconcile(document.snapshot.path)}>{translate('files.safeVerifySave')}</button> : null}
+                  {document.phase === 'unknown' && document.conflict ? <button type="button" disabled={document.operationPending} onClick={() => {if(window.confirm(translate('files.safeManualRebase'))) documents?.acceptVerifiedDisk(document.snapshot.path);}}>{translate('files.safeUseCheckedBase')}</button> : null}
+                  {document.phase === 'conflict' && !showConflict ? <button type="button" onClick={() => setShowConflict(true)}>{translate('files.safeViewConflict')}</button> : null}
+                </div>
+              </div>
+            ) : canSaveDocument ? <div className="workspace-document-status">{translate('files.safeUnavailable')}</div> : null}
+            {document && (document.phase === 'conflict' || (document.phase === 'unknown' && document.conflict)) && showConflict ? (
+              <div className="workspace-document-conflict" data-testid="workspace-document-conflict">
+                <strong>{translate(document.phase==='unknown' ? 'files.safePhase.unknown':'files.safeConflictTitle')}</strong>
+                <p>{translate(document.phase==='unknown' ? 'files.safeUnknown':'files.safeConflictBody')}</p>
+                <div className="workspace-document-actions">
+                  <button type="button" onClick={() => setShowConflict(false)}>{translate('files.safeKeepDraft')}</button>
+                  <button type="button" disabled={document.phase==='unknown' || document.conflict?.content == null} onClick={() => {const revision=document.revision; if(window.confirm(translate('files.safeDiscard'))) documents?.adoptDisk(document.snapshot.path,revision);}}>{translate('files.safeAdoptDisk')}</button>
+                  <button type="button" disabled={document.phase==='unknown' || !document.conflict?.contentHash || Boolean(document.conflict.readOnlyReason)} onClick={() => {if(window.confirm(translate('files.safeOverwriteConfirm'))) void documents?.save(document.snapshot.path,true);}}>{translate('files.safeOverwriteShown')}</button>
+                  <button type="button" disabled={document.conflict?.content == null} onClick={() => downloadDraft(document,true)}>{translate('files.safeDownloadDisk')}</button>
+                </div>
+                {document.conflict?.content != null ? <>
+                  <label>{translate('files.safeCompare')} <select value={diffMode} onChange={e => setDiffMode(e.target.value as typeof diffMode)}>
+                    <option value="draftDisk">{translate('files.safeDraftDisk')}</option><option value="baseDraft">{translate('files.safeBaseDraft')}</option><option value="baseDisk">{translate('files.safeBaseDisk')}</option>
+                  </select></label>
+                  <div className="workspace-document-diff"><Suspense fallback={<span>{translate('files.loadingEditor')}</span>}><WorkspaceDocumentDiff
+                    original={diffMode==='draftDisk' ? document.content : document.baseContent}
+                    modified={diffMode==='baseDraft' ? document.content : document.conflict.content}
+                    language={fileLanguage} dark={dark} compact={compactViewer} /></Suspense></div>
+                  <p className="workspace-document-snapshot">{translate('files.safeFixedSnapshot')} · {document.conflict.contentHash?.slice(0,23)}</p>
+                </> : <p>{translate('files.safeMissing')}</p>}
+              </div>
+            ) : null}
             {saveError ? (
               <div className="border-b border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200">
                 {saveError}
@@ -784,7 +803,9 @@ export function GraphWorkspacePreviewPane({
                 }
               >
                 <GraphWorkspaceMonacoEditor
-                  key={previewFile.path}
+                  key={document?.key ?? `${resourceScopeKey}:${previewFile.path}`}
+                  resourceKey={document?.key ?? `${resourceScopeKey}:${previewFile.path}`}
+                  retainModel={Boolean(document)}
                   content={editing ? draftContent : previewFile.content}
                   dark={dark}
                   focusLine={focusLine}
@@ -796,6 +817,7 @@ export function GraphWorkspacePreviewPane({
                 />
               </Suspense>
             )}
+            {previewFile.truncated && !onLoadMore ? <div className="workspace-document-status">{translate("files.safeFirstPreview")}</div> : null}
             {previewFile.truncated && onLoadMore ? (
               <div className="thread-graph-file-preview-footer flex justify-center border-t px-4 py-3">
                 <button
