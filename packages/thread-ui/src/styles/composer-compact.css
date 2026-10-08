@@ -41,22 +41,22 @@
 [data-composer-layout] .thread-graph-composer-input [data-segment-type='attachment'] img {
   max-height: 20px; width: auto;
 }
-[data-composer-layout] .composer-model-control > button { max-width: clamp(48px, 16cqi, 150px) !important; padding-inline: 4px !important; }
-[data-composer-layout] .composer-sandbox-control > button { padding-inline: 4px !important; }
+[data-composer-layout] .composer-model-label {
+  /* Use the space freed by moving model/permission controls into Settings.
+     Reserve room for the prompt and action buttons in narrow split panes. */
+  max-width: min(24rem, max(4rem, calc(100cqi - 11rem)));
+}
 [data-composer-layout] .thread-graph-composer-stop-button { position: static; }
 [data-composer-layout] .thread-graph-composer-shell,
 .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-shell { padding: 9px 12px; }
 @container (max-width: 480px) {
-  [data-composer-layout] .composer-model-control > button { max-width: 54px !important; }
   [data-composer-layout] :is(.composer-tools, .composer-settings),
   .thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) { gap: 2px; }
   [data-composer-layout] .thread-graph-composer-toolbar,
   .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar { gap: 2px; }
-  [data-composer-layout] .composer-sandbox-control > button { font-size: 10px; padding-inline: 2px !important; }
 }
 
 [data-composer-layout] .thread-graph-composer-input > span { inset: 0; }
 @container (max-width: 300px) {
   .thread-ui-shell .matter-workbench [data-composer-layout] :is(.thread-graph-composer-icon-button, .thread-graph-composer-stop-button, .thread-graph-composer-send-button) { width: 24px !important; height: 24px !important; min-width: 24px !important; min-height: 24px !important; }
-  [data-composer-layout] .composer-model-control > button { max-width: 42px !important; }
 }

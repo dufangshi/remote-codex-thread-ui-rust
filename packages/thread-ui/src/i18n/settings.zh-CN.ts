@@ -10,6 +10,8 @@ export const settingsZhCN = {
   "settings.signInThroughRelayToChangeYour": "通过 Relay 登录后可修改账号快捷键。",
   "settings.steerDeliversToTheRunningTurnImmediately": "Steer 立即送达正在运行的轮次；空闲时启动新轮次。",
   "settings.retry": "重试",
+  "settings.workspacePermissions": "工作区权限",
+  "settings.fullAccess": "完全访问",
   "settings.harnessSettings": "Harness 设置",
   "settings.model": "模型",
   "settings.harnessModel": "Harness 模型",

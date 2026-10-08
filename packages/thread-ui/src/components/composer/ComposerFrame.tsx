@@ -64,7 +64,7 @@ export function ComposerFrame({
   goalSlot,
   shellPromptSlot,
 }: ComposerFrameProps) {
-  const expanded = useCompactComposer(formRef, activeView === 'chat');
+  const { expanded, focusOwner, ...focusEvents } = useCompactComposer(formRef, activeView === 'chat');
   return (
     <div className={layerClassName}>
       <ComposerHiddenAttachmentInputs
@@ -87,6 +87,8 @@ export function ComposerFrame({
 
       <form
         ref={formRef}
+        {...focusEvents}
+        data-composer-focus-owner={focusOwner}
         data-composer-layout={activeView === 'chat' ? (expanded ? 'expanded' : 'collapsed') : undefined}
         data-testid={activeView === 'chat' ? 'chat-composer' : undefined}
         onSubmit={onSubmit}

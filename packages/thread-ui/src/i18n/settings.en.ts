@@ -10,6 +10,8 @@ export const settingsEn = {
   "settings.signInThroughRelayToChangeYour": "Sign in through Relay to change your account shortcuts.",
   "settings.steerDeliversToTheRunningTurnImmediately": "Steer delivers to the running turn immediately. When idle, it starts a new turn.",
   "settings.retry": "Retry",
+  "settings.workspacePermissions": "Workspace permissions",
+  "settings.fullAccess": "Full access",
   "settings.harnessSettings": "Harness settings",
   "settings.model": "Model",
   "settings.harnessModel": "Harness model",

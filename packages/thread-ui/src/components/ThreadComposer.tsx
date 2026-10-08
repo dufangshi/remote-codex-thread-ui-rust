@@ -156,7 +156,7 @@ export interface ThreadComposerProps {
   onCompact?: () => Promise<void> | void;
   onOpenSkills?: () => Promise<void> | void;
   onOpenMcp?: () => Promise<void> | void;
-  onOpenHarness?: () => Promise<void> | void;
+  onOpenHarness?: (composerFocusOwner?: string) => Promise<void> | void;
   onOpenHooks?: () => Promise<void> | void;
   onCreateHook?: (input: CreateThreadHookInput) => Promise<void> | void;
   onUpdateHook?: (input: UpdateThreadHookInput) => Promise<void> | void;
@@ -560,7 +560,7 @@ export function ThreadComposer({
         break;
       case 'openHarness':
         setOpenMenu(null);
-        void onOpenHarness?.();
+        void onOpenHarness?.(menuRef.current?.dataset.composerFocusOwner);
         break;
       case 'noop':
         break;
