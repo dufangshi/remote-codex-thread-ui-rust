@@ -32,6 +32,9 @@ export type ComposerShellToolsPanelProps = ComponentProps<
 >;
 
 export interface ComposerToolbarProps {
+  canInterrupt?: boolean;
+  interruptLabel?: string;
+  onInterrupt?: (() => Promise<void> | void) | undefined;
   isShellView: boolean;
   canToggleShellView: boolean;
   isMobileShell: boolean;
@@ -50,6 +53,9 @@ export interface ComposerToolbarProps {
 }
 
 export function ComposerToolbar({
+  canInterrupt = false,
+  interruptLabel,
+  onInterrupt,
   isShellView,
   canToggleShellView,
   isMobileShell,
@@ -71,7 +77,7 @@ export function ComposerToolbar({
       align="block-end"
       className={`${toolbarClassName} relative z-[100] mb-0 flex items-center gap-2 text-xs`}
     >
-      <div className="flex shrink-0 items-center gap-1.5">
+      <div className="composer-tools flex shrink-0 items-center gap-1.5">
         {!isShellView && slashToolboxProps ? (
           <ComposerSlashToolboxMenu {...slashToolboxProps} />
         ) : null}
@@ -96,9 +102,18 @@ export function ComposerToolbar({
         )}
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5">
+      <div className="composer-settings flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5">
         {!isShellView && settingsToolbarProps ? (
-          <ComposerSettingsToolbar {...settingsToolbarProps} />
+          <ComposerSettingsToolbar {...settingsToolbarProps} beforeSend={canInterrupt ? (
+            <InputGroupButton
+              type="button" variant="ghost" size="icon-xs"
+              aria-label={interruptLabel} title={interruptLabel}
+              onClick={event => { event.preventDefault(); void onInterrupt?.(); }}
+              className="thread-graph-composer-stop-button ui-action-danger h-8 w-8 shrink-0 rounded-full"
+            >
+              <span aria-hidden="true" className="block h-2.5 w-2.5 rounded-[2px] bg-current" />
+            </InputGroupButton>
+          ) : null} />
         ) : null}
 
         {isShellView && shellPromptLabel ? (

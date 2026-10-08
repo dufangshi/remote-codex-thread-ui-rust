@@ -5,6 +5,7 @@ import type {
 } from 'react';
 
 import type { AgentSubscriptionUsageDto, PromptAttachmentKindDto } from '@remote-codex/shared';
+import { useCompactComposer } from './useCompactComposer';
 import { InputGroup } from '../graph-ui/InputGroup';
 import { ComposerHiddenAttachmentInputs } from './ComposerHiddenAttachmentInputs';
 import { ComposerJumpLatestButton } from './ComposerJumpLatestButton';
@@ -63,6 +64,7 @@ export function ComposerFrame({
   goalSlot,
   shellPromptSlot,
 }: ComposerFrameProps) {
+  const expanded = useCompactComposer(formRef, activeView === 'chat');
   return (
     <div className={layerClassName}>
       <ComposerHiddenAttachmentInputs
@@ -85,6 +87,7 @@ export function ComposerFrame({
 
       <form
         ref={formRef}
+        data-composer-layout={activeView === 'chat' ? (expanded ? 'expanded' : 'collapsed') : undefined}
         data-testid={activeView === 'chat' ? 'chat-composer' : undefined}
         onSubmit={onSubmit}
         className={formClassName}

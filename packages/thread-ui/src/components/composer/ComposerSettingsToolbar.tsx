@@ -8,7 +8,7 @@ import type {
   UpdateThreadSettingsInput,
 } from '@remote-codex/shared';
 import { Check, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import { InputGroupButton } from '../graph-ui/InputGroup';
 import type { SettingsMenu } from './types';
@@ -71,9 +71,11 @@ export function ComposerSettingsToolbar({
   inlineToggleClassName,
   menuItemClassName,
   sendButtonBaseClassName,
+  beforeSend,
   onSetOpenMenu,
   onUpdateSettings,
 }: {
+  beforeSend?: ReactNode;
   openMenu: SettingsMenu;
   model: string | null | undefined;
   modelOptions: ModelOptionDto[];
@@ -112,7 +114,7 @@ export function ComposerSettingsToolbar({
 
   return (
     <>
-      <div className="relative min-w-0">
+      <div className="composer-model-control relative min-w-0">
         <InputGroupButton
           type="button"
           variant="ghost"
@@ -254,7 +256,7 @@ export function ComposerSettingsToolbar({
       </div>
 
       {sandboxModeAvailable && (
-        <div className="relative">
+        <div className="composer-sandbox-control relative">
           <InputGroupButton
             type="button"
             variant="ghost"
@@ -304,6 +306,7 @@ export function ComposerSettingsToolbar({
         </div>
       )}
 
+      {beforeSend}
       <InputGroupButton
         type="submit"
         variant="default"

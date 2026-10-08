@@ -39,13 +39,13 @@ import {
   settleSave,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-MIDUEPF2.js";
+} from "./chunk-OV72CVLQ.js";
 import {
   en,
   getLocale,
   translate,
   useI18n
-} from "./chunk-DYJLM3AH.js";
+} from "./chunk-IFNWVAHZ.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect10, useMemo as useMemo10, useState as useState11 } from "react";
@@ -1361,6 +1361,7 @@ function useWorkspaceFilePreview({
 // src/components/graph-workspace/explorer/WorkspaceExplorerPanel.tsx
 import {
   FileCode2 as FileCode22,
+  FilePlus2,
   ListCollapse,
   MoreHorizontal as MoreHorizontal2,
   RefreshCw,
@@ -2250,6 +2251,7 @@ function WorkspaceExplorerPanel({
   onSelectNode,
   onToggle,
   onUpload,
+  onCreateFile,
   explorerScrollTopRef,
   explorerScrollerRef,
   selectedNodeId,
@@ -2289,6 +2291,17 @@ function WorkspaceExplorerPanel({
     /* @__PURE__ */ jsxs3("div", { className: "thread-graph-explorer-header flex h-9 shrink-0 items-center justify-between border-b px-2", children: [
       /* @__PURE__ */ jsx4("h2", { className: "text-[11px] font-semibold uppercase text-slate-600 dark:text-slate-300", children: translate("files.explorer") }),
       /* @__PURE__ */ jsxs3("div", { className: "thread-graph-explorer-toolbar flex items-center gap-1", children: [
+        onCreateFile && /* @__PURE__ */ jsx4(
+          "button",
+          {
+            type: "button",
+            onClick: onCreateFile,
+            className: iconButtonClassName,
+            title: translate("files.newFile"),
+            "aria-label": translate("files.newFile"),
+            children: /* @__PURE__ */ jsx4(FilePlus2, { className: "h-4 w-4" })
+          }
+        ),
         /* @__PURE__ */ jsx4(
           "button",
           {
@@ -3796,7 +3809,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-ISCV32LN.js")
+  () => import("./GraphWorkspaceMonacoEditor-UKGKPYNU.js")
 );
 function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
@@ -3840,7 +3853,7 @@ function translateReadOnly(reason) {
   const key = `files.safeReason.${reason}`;
   return Object.hasOwn(en, key) ? translate(key) : reason;
 }
-var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-IWJYRPZA.js"));
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-PFNUWH3H.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -4569,6 +4582,84 @@ function GraphWorkspaceExplorer({
   const [focusedLine, setFocusedLine] = useState10(null);
   const [fileTabs, setFileTabs] = useState10([]);
   const documents = useWorkspaceDocuments(workspaceAdapter, workspaceIdentity);
+  const [newFilePath, setNewFilePath] = useState10(null);
+  const [createError, setCreateError] = useState10(null);
+  const [creatingFile, setCreatingFile] = useState10(false);
+  const createSource = JSON.stringify([workspaceAdapter?.resourceScopeKey, workspaceIdentity.workspaceId, workspaceIdentity.threadId]);
+  const createOwnerRef = useRef8({ source: createSource, busy: false });
+  if (createOwnerRef.current.source !== createSource) createOwnerRef.current = { source: createSource, busy: false };
+  useEffect8(() => {
+    setNewFilePath(null);
+    setCreateError(null);
+    setCreatingFile(false);
+  }, [createSource]);
+  function openCreateFile() {
+    const relative = activeNode ? relativeWorkspacePath(activeNode.path, detail.workspace.absPath) : null;
+    const directory = relative && !relative.startsWith("linked-files:") ? activeNode?.kind === "directory" ? relative : relative.slice(0, Math.max(0, relative.lastIndexOf("/"))) : "";
+    setNewFilePath(directory ? `${directory}/` : "");
+    setCreateError(null);
+  }
+  async function handleCreateFile() {
+    if (!workspaceAdapter?.createFile || newFilePath === null) return;
+    const owner = createOwnerRef.current;
+    if (owner.busy) return;
+    const path = newFilePath.trim();
+    if (!path || path.length > 4096 || /[\\\x00-\x1f\x7f]/.test(path) || /^[a-z]:/i.test(path) || path.split("/").some((part) => !part || part === "." || part === "..")) {
+      setCreateError(translate("files.invalidNewFilePath"));
+      return;
+    }
+    if (dirtyFilePaths.has(path)) {
+      setCreateError(translate("files.createHasDraft"));
+      return;
+    }
+    owner.busy = true;
+    setCreatingFile(true);
+    setCreateError(null);
+    let created = false;
+    try {
+      await workspaceAdapter.createFile({ ...workspaceIdentity, path });
+      created = true;
+      if (createOwnerRef.current !== owner) return;
+      documents.discard(path);
+      setNewFilePath(null);
+      setFilterQuery("");
+      await refreshWorkspaceTree(path);
+      if (createOwnerRef.current !== owner) return;
+      await focusWorkspacePath(path);
+      if (createOwnerRef.current !== owner) return;
+      const snapshot = await documents.load(path);
+      if (createOwnerRef.current !== owner) return;
+      if (snapshot && !snapshot.readOnlyReason && workspaceAdapter.saveDocument) documents.setEditing(path, true);
+      setFileTabs((tabs) => [...tabs.filter((tab) => tab.path !== path), { path, name: path.split("/").pop(), pinned: true }]);
+      setCollapsedPanel(isMobileViewport ? "explorer" : null);
+    } catch (error) {
+      if (createOwnerRef.current !== owner) return;
+      const message = error instanceof Error ? error.message : translate("files.fileOperationFailed");
+      if (created) setWorkspaceError(translate("files.createdButOpenFailed", { path, error: message }));
+      else setCreateError(message);
+    } finally {
+      owner.busy = false;
+      if (createOwnerRef.current === owner) setCreatingFile(false);
+    }
+  }
+  const createDialog = /* @__PURE__ */ jsx17(
+    RenameDialog,
+    {
+      open: newFilePath !== null,
+      title: translate("files.newFile"),
+      label: translate("files.newFilePath"),
+      description: translate("files.newFileDescription"),
+      submitLabel: translate("files.createFile"),
+      value: newFilePath ?? "",
+      onChange: setNewFilePath,
+      onCancel: () => {
+        if (!creatingFile) setNewFilePath(null);
+      },
+      onSubmit: handleCreateFile,
+      busy: creatingFile,
+      error: createError
+    }
+  );
   const dirtyFilePaths = new Set([...documents.documents].filter(([, doc]) => isProtected(doc)).map(([path]) => path));
   const dirtyKey = [...dirtyFilePaths].join("\0");
   useEffect8(() => {
@@ -4778,7 +4869,8 @@ function GraphWorkspaceExplorer({
     ...workspaceAdapter?.downloadNode ? { onDownload: handleDownload } : {},
     ...workspaceAdapter?.emptyGarbage ? { onEmptyGarbage: handleOpenGarbage } : {},
     ...workspaceAdapter ? { onRefresh: () => void refreshWorkspaceTree(activeNode?.path ?? null) } : {},
-    ...workspaceAdapter?.uploadFile ? { onUpload: pickUploadFile } : {}
+    ...workspaceAdapter?.uploadFile ? { onUpload: pickUploadFile } : {},
+    ...workspaceAdapter?.createFile ? { onCreateFile: openCreateFile } : {}
   };
   const explorerPanel = /* @__PURE__ */ jsx17(
     WorkspaceExplorerPanel,
@@ -4819,7 +4911,11 @@ function GraphWorkspaceExplorer({
           setCollapsedPanel("explorer");
         }
       },
-      onToggle: toggleDirectory,
+      onToggle: (path) => {
+        toggleDirectory(path);
+        setFocusedLine(null);
+        setSelectedNodeId(`workspace:${path}`);
+      },
       selectedNodeId: activeNode?.id ?? null,
       revealRequestKey: focusPathRequest?.requestId,
       tree,
@@ -4873,22 +4969,28 @@ function GraphWorkspaceExplorer({
     }
   );
   if (collapsedPanel === "explorer") {
-    return /* @__PURE__ */ jsx17(
+    return /* @__PURE__ */ jsxs13(
       "div",
       {
         "data-testid": "workspace-panel",
         className: "relative h-full min-h-0 w-full overflow-hidden p-1",
-        children: viewerPanel
+        children: [
+          viewerPanel,
+          createDialog
+        ]
       }
     );
   }
   if (collapsedPanel === "viewer") {
-    return /* @__PURE__ */ jsx17(
+    return /* @__PURE__ */ jsxs13(
       "div",
       {
         "data-testid": "workspace-panel",
         className: "relative h-full min-h-0 w-full overflow-hidden p-1",
-        children: explorerPanel
+        children: [
+          explorerPanel,
+          createDialog
+        ]
       }
     );
   }
@@ -4939,7 +5041,8 @@ function GraphWorkspaceExplorer({
             className: "hidden",
             onChange: (event) => void handleUpload(event)
           }
-        )
+        ),
+        createDialog
       ]
     }
   );

@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-DYJLM3AH.js";
+} from "./chunk-IFNWVAHZ.js";
 
 // src/components/graph-workspace/explorer/workspaceDocuments.ts
 var storeKey = /* @__PURE__ */ Symbol.for("remote-codex.workspace-documents");
@@ -300,6 +300,8 @@ function RenameDialog({
   value,
   busy = false,
   error,
+  description,
+  submitLabel,
   onChange,
   onCancel,
   onSubmit
@@ -345,12 +347,18 @@ function RenameDialog({
           "aria-modal": "true",
           "aria-label": title,
           onSubmit: handleSubmit,
+          onKeyDown: (event) => {
+            if (event.key === "Escape") {
+              event.stopPropagation();
+              if (!busy) onCancel();
+            }
+          },
           className: "relative z-[1] w-full max-w-md rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-5 text-[var(--theme-fg)] shadow-[var(--theme-shadow)] sm:p-6",
           children: [
             /* @__PURE__ */ jsxs3("div", { className: "flex items-start justify-between gap-3", children: [
               /* @__PURE__ */ jsxs3("div", { className: "min-w-0 flex-1", children: [
                 /* @__PURE__ */ jsx3("p", { className: "text-sm font-medium", children: title }),
-                /* @__PURE__ */ jsx3("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: translate("workbench.changesAreSavedOnlyAfterConfirmation") })
+                /* @__PURE__ */ jsx3("p", { className: "mt-1 text-sm text-[var(--theme-fg-muted)]", children: description ?? translate("workbench.changesAreSavedOnlyAfterConfirmation") })
               ] }),
               /* @__PURE__ */ jsx3(
                 "button",
@@ -396,7 +404,7 @@ function RenameDialog({
                   type: "submit",
                   disabled: busy || !value.trim(),
                   className: "ui-action-success rounded-full px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed",
-                  children: translate("workbench.save")
+                  children: submitLabel ?? translate("workbench.save")
                 }
               )
             ] })

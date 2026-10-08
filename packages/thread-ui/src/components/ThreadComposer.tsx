@@ -360,6 +360,7 @@ export function ThreadComposer({
     isDraftControlled,
     updateDraft,
     flushControlledDraftToHost,
+    captureSubmission,
   } = useComposerDraft({
     isShellView,
     draftPrompt,
@@ -712,17 +713,21 @@ export function ThreadComposer({
         return;
       }
 
-      const submitted = await onSubmit({
-        ...submitInput,
-        ...(!isShellView && delivery ? { delivery } : {}),
-      });
-      if (submitted === false) {
-        return;
+      const submission = captureSubmission({ prompt, attachments });
+      try {
+        const submitted = await onSubmit({
+          ...submitInput,
+          ...(!isShellView && delivery ? { delivery } : {}),
+        });
+        if (submitted === false) {
+          submission.cancel();
+          return;
+        }
+        submission.complete();
+      } catch (error) {
+        submission.cancel();
+        throw error;
       }
-      updateDraft(() => ({
-        prompt: '',
-        attachments: [],
-      }));
     } finally {
       submitInFlightRef.current = false;
     }
@@ -1113,7 +1118,12 @@ export function ThreadComposer({
         ) : null
       }
       toolbarSlot={
-        <ComposerToolbar {...toolbarProps} />
+        <ComposerToolbar
+          {...toolbarProps}
+          canInterrupt={!isShellView && canInterrupt}
+          interruptLabel={interruptLabel}
+          onInterrupt={onInterrupt}
+        />
       }
       goalSlot={goalSlot}
       shellPromptSlot={shellPromptSlot}

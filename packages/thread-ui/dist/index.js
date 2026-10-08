@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-MIDUEPF2.js";
+} from "./chunk-OV72CVLQ.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-DYJLM3AH.js";
+} from "./chunk-IFNWVAHZ.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -62,12 +62,15 @@ styleInject('.thread-export-dialog-root {\n  --export-bg: rgb(248 250 252);\n  -
 // src/styles/matter-workbench.css
 styleInject('.matter-thread-menu {\n  position: relative;\n}\n.matter-thread-menu > summary {\n  list-style: none;\n  display: grid;\n  place-items: center;\n  width: 30px;\n  height: 30px;\n  border-radius: 8px;\n  cursor: pointer;\n}\n.matter-thread-menu > summary::-webkit-details-marker {\n  display: none;\n}\n.matter-thread-menu > summary:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-menu > div {\n  position: absolute;\n  top: 34px;\n  right: 0;\n  width: min(270px, calc(100vw - 24px));\n  z-index: 80;\n  padding: 6px;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .matter-thread-menu > div > button {\n  display: flex;\n  width: 100%;\n  height: 36px;\n  gap: 10px;\n  justify-content: flex-start;\n  padding: 0 9px;\n  font-size: 12px;\n}\n.thread-execution-step-count {\n  display: none;\n}\n.matter-workbench .thread-execution-step-count {\n  display: inline;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell.thread-ui-shell,\n.thread-graph-dialog.matter-settings-dialog {\n  padding: 0;\n  background: var(--matter-chrome);\n  --thread-gc-bg: oklch(0.915 0.007 145);\n  --thread-gc-panel: oklch(0.946 0.006 145);\n  --thread-gc-workspace: oklch(0.895 0.008 145);\n  --thread-gc-surface: oklch(0.929 0.006 145);\n  --thread-gc-muted: oklch(0.875 0.008 145);\n  --thread-gc-hover: oklch(0.865 0.009 145);\n  --thread-gc-border: oklch(0.83 0.008 145);\n  --thread-gc-border-strong: oklch(0.76 0.009 145);\n  --thread-gc-border-contrast: #828a92;\n  --thread-gc-fg: #121416;\n  --thread-gc-fg-soft: #5b6269;\n  --thread-gc-fg-muted: oklch(0.47 0.013 155);\n  --thread-gc-primary: #00a764;\n  --thread-gc-primary-hover: #00975a;\n  --thread-gc-primary-fg: #fff;\n  --thread-gc-accent-soft: #e5f8f0;\n  --thread-gc-accent-strong: #008b53;\n  --thread-gc-accent-border: #bee9d8;\n  --matter-chrome: oklch(0.885 0.008 145);\n  --matter-composer-shadow: 0 18px 44px rgb(25 40 33 / 19%), 0 4px 12px rgb(25 40 33 / 10%);\n  --matter-glass-highlight: oklch(0.98 0.005 145 / 75%);\n  font-family:\n    "DM Sans",\n    Inter,\n    ui-sans-serif,\n    system-ui,\n    sans-serif;\n}\n.thread-ui-shell.thread-ui-shell[data-theme-effective=dark],\n.thread-graph-dialog.matter-settings-dialog[data-theme-effective=dark] {\n  --thread-gc-bg: #0c0f11;\n  --thread-gc-panel: #0f1317;\n  --thread-gc-workspace: #141b20;\n  --thread-gc-surface: #1c242a;\n  --thread-gc-muted: #1c242a;\n  --thread-gc-hover: #202a30;\n  --thread-gc-border: #263038;\n  --thread-gc-border-strong: #36434d;\n  --thread-gc-border-contrast: #737f87;\n  --thread-gc-fg: #f4f7f6;\n  --thread-gc-fg-soft: #c1cad1;\n  --thread-gc-fg-muted: #a2afb9;\n  --thread-gc-primary: #00cc76;\n  --thread-gc-primary-hover: #16de89;\n  --thread-gc-primary-fg: #082016;\n  --thread-gc-accent-soft: #102b23;\n  --thread-gc-accent-strong: #00cc76;\n  --thread-gc-accent-border: #215240;\n  --matter-chrome: #141a1f;\n  --matter-composer-shadow: 0 22px 52px rgb(3 8 6 / 48%), 0 4px 14px rgb(3 8 6 / 30%);\n  --matter-glass-highlight: oklch(0.8 0.014 155 / 15%);\n}\n.thread-ui-shell .matter-workbench {\n  display: grid;\n  height: 100%;\n  min-height: 0;\n  grid-template-columns: 49px 236px minmax(0, 1fr);\n  grid-template-rows: 40px minmax(0, 1fr);\n  background: var(--matter-chrome);\n  font-size: 13px;\n}\n.thread-ui-shell .matter-workbench svg {\n  stroke-width: 1.65;\n}\n.thread-ui-shell .matter-workbench :where(button, a):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n.thread-ui-shell .matter-workbench :where(button, a) {\n  -webkit-tap-highlight-color: transparent;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a),\n.matter-new-thread {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  justify-content: center;\n  width: 30px;\n  height: 30px;\n  border: 0;\n  border-radius: 8px;\n  background: transparent;\n  color: var(--theme-fg-soft);\n  box-shadow: none;\n  transition: background 120ms, color 120ms;\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) :where(button, a):hover,\n.matter-new-thread:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.thread-ui-shell .matter-workbench :is(.matter-rail, .matter-topbar, .matter-breadcrumb, .matter-sidebar-heading, .matter-explorer-heading, .matter-notifications-heading) svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-rail {\n  grid-row: 1 / -1;\n  border-right: 1px solid var(--theme-border);\n  display: flex;\n  align-items: center;\n  flex-direction: column;\n  gap: 8px;\n  padding: 4px 0 10px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > .matter-brand {\n  height: 32px;\n  margin-bottom: 12px;\n  font-size: 22px;\n  font-weight: 700;\n  letter-spacing: -3px;\n  color: var(--theme-fg);\n}\n.matter-brand span {\n  color: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .matter-rail > button {\n  width: 35px;\n  height: 35px;\n}\n.thread-ui-shell .matter-workbench .matter-rail > button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-rail-bottom {\n  margin-top: auto;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 8px;\n}\n.matter-watches-toggle {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  padding: 0 8px;\n  flex-shrink: 0;\n  height: 34px;\n  color: var(--theme-fg-muted);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-watches-toggle:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n@media (min-width: 640px) {\n  .matter-explorer .thread-graph-workspace-resizable > [data-panel]:has(> .thread-graph-workspace-explorer-pane) {\n    min-width: 144px !important;\n  }\n}\n.matter-topbar {\n  grid-column: 2 / -1;\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  padding: 0 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-topbar-brand {\n  font-weight: 600;\n  font-size: 12px;\n  margin: 0 10px;\n}\n.matter-topbar-separator {\n  height: 15px;\n  width: 1px;\n  background: var(--theme-border-strong);\n  margin-right: 7px;\n}\n.thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n  width: auto;\n  gap: 8px;\n  padding: 0 10px;\n  margin-left: 8px;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.matter-topbar-end {\n  margin-left: auto;\n  display: flex;\n  align-items: center;\n  gap: 7px;\n}\n.matter-topbar-end > button {\n  position: relative;\n}\n.matter-connection > * {\n  display: flex;\n  align-items: center;\n}\n.matter-connection .device-connection-button {\n  width: 28px;\n  height: 28px;\n}\n.matter-connection .device-connection-button > svg {\n  width: 17px;\n  height: 17px;\n}\n.matter-unread {\n  position: absolute;\n  width: 5px;\n  height: 5px;\n  right: 5px;\n  top: 5px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.matter-sidebar {\n  display: flex;\n  flex-direction: column;\n  min-height: 0;\n  overflow-y: auto;\n  padding: 14px 12px 10px;\n  border-right: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-sidebar-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  height: 30px;\n  margin-bottom: 17px;\n  padding: 0 8px;\n  font-weight: 600;\n}\n.matter-section-heading {\n  display: flex;\n  align-items: center;\n  gap: 7px;\n  height: 34px;\n  flex-shrink: 0;\n  width: 100%;\n  padding: 0 8px;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  text-align: left;\n}\n.matter-section-heading svg {\n  width: 13px;\n  height: 13px;\n}\n.matter-section-heading svg:last-child,\n.matter-section-count {\n  margin-left: auto;\n  color: var(--theme-fg-muted);\n}\n.matter-thread-section {\n  margin-bottom: 14px;\n}\n.matter-sidebar-hint,\n.matter-sidebar-error {\n  padding: 8px 12px;\n  font-size: 12px;\n  line-height: 1.6;\n  color: var(--theme-fg-muted);\n}\n.matter-sidebar-error {\n  color: #c0544b;\n}\n.matter-thread-row {\n  display: flex;\n  align-items: center;\n  gap: 9px;\n  padding: 7px 10px;\n  margin: 2px 0;\n  border: 1px solid transparent;\n  border-radius: 7px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms, border-color 150ms;\n}\n.matter-thread-row:hover {\n  background: var(--theme-hover);\n}\n.matter-thread-row[aria-current=page] {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n  box-shadow: 0 1px 2px rgb(18 24 32 / 3%);\n  color: var(--theme-fg);\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row {\n  color: #c1cad1;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row:hover {\n  background: #202a32;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] {\n  background: #2a3943;\n  border-color: #536977;\n  color: #f4f7f6;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-thread-row[aria-current=page] small {\n  color: #c1ced6;\n}\n.matter-copy-notice {\n  padding: 7px 9px;\n  font-size: 11px;\n  line-height: 1.5;\n  color: var(--theme-fg-muted);\n}\n.thread-graph-dialog.matter-settings-dialog {\n  width: min(640px, calc(100vw - 32px));\n  max-width: min(640px, calc(100vw - 32px));\n  max-height: calc(100dvh - 32px);\n  padding: 22px;\n  border-radius: 14px;\n  background: var(--theme-panel);\n  border-color: var(--theme-border-strong);\n  box-shadow: 0 24px 72px rgb(0 0 0 / 24%);\n  --action-primary-bg: var(--theme-accent-solid);\n  --action-primary-bg-hover: var(--theme-accent-solid-hover);\n  --action-primary-fg: var(--theme-accent-solid-fg);\n  --theme-accent: var(--theme-accent-solid);\n  --theme-accent-fg: var(--theme-accent-solid-fg);\n}\n.matter-settings-overlay {\n  background: rgb(12 18 22 / 40%);\n  backdrop-filter: blur(3px);\n}\n.matter-settings-dialog [data-slot=dialog-header] {\n  gap: 7px;\n  text-align: left;\n  padding-bottom: 4px;\n}\n.matter-settings-dialog [data-slot=dialog-title] {\n  font-size: 16px;\n  font-weight: 600;\n  letter-spacing: -.02em;\n}\n.matter-settings-dialog [data-slot=dialog-description] {\n  font-size: 12px;\n  line-height: 1.6;\n}\n.matter-settings-dialog [data-slot=dialog-close] {\n  display: grid;\n  place-items: center;\n  width: 28px;\n  height: 28px;\n  right: 16px;\n  top: 16px;\n  border-radius: 7px;\n}\n.matter-settings-dialog [data-slot=dialog-close]:hover {\n  background: var(--theme-hover);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-card {\n  padding: 12px 14px;\n  background: var(--theme-panel);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-group, .thread-graph-settings-tabs) {\n  background: var(--theme-surface);\n  border: 1px solid var(--theme-border);\n  padding: 3px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button, .thread-graph-settings-tab-button) {\n  font-size: 12px;\n  min-height: 32px;\n  padding: 6px 12px;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(.thread-graph-theme-mode-button.is-selected, .thread-graph-settings-tab-button.is-active) {\n  background: var(--theme-panel);\n  color: var(--theme-accent-strong);\n  box-shadow: 0 1px 3px rgb(0 0 0 / 12%);\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n  display: grid;\n  grid-template-columns: 110px minmax(0, 1fr);\n  column-gap: 12px;\n  padding-block: 9px;\n  margin: 0;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n  line-height: 1.6;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div:last-child {\n  border-bottom: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dd {\n  margin-top: 0;\n  min-width: 0;\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(input, select, textarea) {\n  accent-color: var(--theme-accent-solid);\n  border-color: var(--theme-border-strong);\n}\n.thread-graph-settings-dialog.matter-settings-dialog :is(button, input, select, textarea):focus-visible {\n  outline: 2px solid var(--theme-accent-solid);\n  outline-offset: 2px;\n}\n@media (max-width: 639px) {\n  .thread-graph-dialog.matter-settings-dialog {\n    padding: 18px;\n  }\n  .thread-graph-settings-dialog.matter-settings-dialog .thread-graph-settings-body dl > div {\n    grid-template-columns: 80px minmax(0, 1fr);\n  }\n}\n.matter-thread-copy {\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n  min-width: 0;\n  line-height: 18px;\n  font-size: 12px;\n}\n.matter-thread-copy > * {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.matter-thread-copy small {\n  font-size: 10.5px;\n  color: var(--theme-fg-muted);\n}\n.matter-status-dot {\n  flex-shrink: 0;\n  display: inline-block;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  border: 1.5px solid var(--theme-border-contrast);\n  background: transparent;\n}\n.matter-status-dot[data-status=running] {\n  width: 12px;\n  height: 12px;\n  border-width: 2.5px;\n  border-color: oklch(0.48 0.19 255);\n  border-top-color: transparent;\n  animation: matter-running 1s linear infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=running] {\n  border-color: oklch(0.8 0.12 245);\n  border-top-color: transparent;\n}\n.matter-status-dot[data-status=agents-running] {\n  width: 10px;\n  height: 10px;\n  border-color: #8066cd;\n  background:\n    radial-gradient(\n      circle,\n      #8066cd 0 2px,\n      transparent 2.5px);\n  animation: matter-agents-running 1.8s ease-in-out infinite;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-status-dot[data-status=agents-running] {\n  border-color: #b39af2;\n  background:\n    radial-gradient(\n      circle,\n      #b39af2 0 2px,\n      transparent 2.5px);\n}\n.matter-status-dot[data-status=unread] {\n  background: var(--theme-accent-solid);\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-accent-solid) 12%, transparent);\n}\n.matter-status-dot:is([data-status=failed], [data-status=error]) {\n  background: #d56b62;\n  border-color: #d56b62;\n  border-radius: 2px;\n  transform: rotate(45deg);\n}\n.matter-status-dot[data-status=unknown] {\n  border-style: dotted;\n  opacity: .6;\n}\n.matter-status-dot[data-status=interrupted] {\n  border-color: #b88b48;\n  border-radius: 2px;\n}\n@keyframes matter-running {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes matter-agents-running {\n  50% {\n    opacity: .45;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-status-dot:is([data-status=running], [data-status=agents-running]) {\n    animation: none;\n  }\n}\n.matter-sidebar-footer {\n  margin-top: auto;\n  padding: 20px 8px 0;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.matter-main {\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-direction: column;\n  background: var(--theme-bg);\n}\n.matter-tabs-row {\n  position: relative;\n  display: flex;\n  min-width: 0;\n  flex-shrink: 0;\n  background: var(--theme-surface);\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle {\n  flex-shrink: 0;\n  width: 36px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  color: var(--theme-fg-soft);\n  border-left: 1px solid var(--theme-border);\n}\n.matter-toolbar-toggle svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-toolbar-toggle:active {\n  background: var(--theme-hover);\n}\n.matter-thread-tabs {\n  flex: 1;\n  min-width: 0;\n  height: 34px;\n  flex-shrink: 0;\n  display: flex;\n  align-items: stretch;\n  overflow-x: auto;\n  overflow-y: hidden;\n  background: var(--theme-surface);\n  scrollbar-width: thin;\n}\n.matter-thread-tabs > a,\n.matter-group-tab {\n  display: flex;\n  align-items: center;\n  flex-shrink: 0;\n  gap: 9px;\n  min-width: 76px;\n  max-width: 180px;\n  padding: 0 10px;\n  border-right: 1px solid var(--theme-border);\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.matter-thread-tabs > a > span:last-child,\n.matter-group-tab > span:last-child {\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.matter-thread-tabs > a[aria-current=page],\n.matter-group-tab[aria-current=page] {\n  background: var(--theme-bg);\n  color: var(--theme-fg);\n  box-shadow: inset 0 -2px var(--theme-accent-solid);\n}\n.matter-group-toggle {\n  display: flex;\n  align-items: center;\n  gap: 4px;\n  flex-shrink: 0;\n  padding: 0 8px;\n  border-right: 1px solid var(--theme-border);\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.matter-group-toggle:hover {\n  background: var(--theme-hover);\n}\n.matter-new-thread {\n  align-self: center;\n  margin: 0 6px;\n}\n.matter-new-thread svg {\n  width: 16px;\n  height: 16px;\n}\n.matter-breadcrumb {\n  position: absolute;\n  top: 100%;\n  inset-inline: 0;\n  z-index: 40;\n  background: var(--theme-surface);\n  box-shadow: 0 4px 12px #0002;\n  display: flex;\n  align-items: center;\n  height: 40px;\n  flex-shrink: 0;\n  gap: 8px;\n  padding: 0 16px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 11.5px;\n  color: var(--theme-fg-soft);\n}\n.matter-workspace-path {\n  flex: 0 1 45%;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-family: ui-monospace, monospace;\n}\n.matter-current-title {\n  flex: 0 1 auto;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.matter-breadcrumb > svg {\n  flex-shrink: 0;\n  width: 12px !important;\n}\n.matter-breadcrumb button[aria-pressed=true] {\n  color: var(--theme-accent-strong);\n}\n@media (hover: none) {\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):not(:active) {\n    background: transparent;\n    box-shadow: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb :is(button, a):active {\n    background: var(--theme-hover);\n  }\n}\n.matter-thread-actions {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n  margin-left: auto;\n  flex-shrink: 0;\n}\n.matter-thread-actions > div {\n  display: flex;\n  align-items: center;\n  gap: 3px;\n}\n.matter-content {\n  display: flex;\n  flex: 1;\n  min-height: 0;\n  position: relative;\n}\n.matter-chat {\n  --matter-reading-width: max(880px, 78%);\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.matter-content.has-explorer .matter-chat {\n  --matter-reading-width: 100%;\n}\n.matter-chat > div {\n  height: 100%;\n}\n.matter-explorer {\n  position: relative;\n  flex-shrink: 0;\n  display: flex;\n  flex-direction: column;\n  width: min(var(--explorer-width, 360px), max(260px, calc(100% - 320px)));\n  min-height: 0;\n  border-left: 1px solid var(--theme-border);\n  background: var(--theme-surface);\n}\n.matter-explorer-resize {\n  position: absolute;\n  z-index: 5;\n  left: -4px;\n  top: 0;\n  bottom: 0;\n  width: 8px;\n  cursor: col-resize;\n  touch-action: none;\n}\n.matter-explorer-resize:hover,\n.matter-explorer-resize:focus-visible {\n  background: color-mix(in srgb, var(--theme-accent-solid) 30%, transparent);\n  outline: none;\n}\n.matter-notification-summary {\n  margin: 5px 0;\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  line-height: 1.5;\n  display: -webkit-box;\n  -webkit-line-clamp: 3;\n  -webkit-box-orient: vertical;\n  overflow: hidden;\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-time-row .thread-graph-message-time {\n  opacity: 1;\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .animate-pulse.rounded-full {\n  background: var(--theme-accent-strong);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button {\n  right: 0 !important;\n  top: 0 !important;\n  width: 32px !important;\n  height: 32px !important;\n  border-radius: 50%;\n  background: color-mix(in srgb, #c83b42 12%, var(--theme-panel));\n  color: #b62f38;\n  border: 1px solid color-mix(in srgb, #c83b42 30%, var(--theme-border)) !important;\n  box-shadow: none;\n}\n.thread-ui-shell[data-theme-effective=dark] .matter-workbench .thread-graph-composer-stop-button {\n  color: #ff9b9f;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-stop-button:hover {\n  background: color-mix(in srgb, #c83b42 22%, var(--theme-panel));\n}\n.thread-ui-shell .matter-workbench :is(.thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n  min-width: 32px !important;\n  min-height: 32px !important;\n}\n.matter-explorer > :last-child {\n  flex: 1;\n  min-height: 0;\n}\n.matter-explorer-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 5px 12px;\n  border-bottom: 1px solid var(--theme-border);\n  font-size: 12px;\n}\n.matter-workbench.is-sidebar-hidden {\n  grid-template-columns: 49px 0 minmax(0, 1fr);\n}\n.matter-workbench.is-sidebar-hidden .matter-sidebar {\n  visibility: hidden;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .matter-mobile-close,\n.matter-sidebar-scrim {\n  display: none;\n}\n.matter-popover-scrim {\n  position: fixed;\n  inset: 0;\n  z-index: 69;\n  cursor: default;\n}\n.matter-notifications {\n  position: absolute;\n  top: 44px;\n  right: 12px;\n  z-index: 70;\n  width: min(360px, calc(100vw - 24px));\n  max-height: 70vh;\n  overflow: auto;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 12px;\n  background: var(--theme-panel);\n  box-shadow: var(--matter-composer-shadow);\n}\n.matter-notifications-heading {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 10px 14px;\n  border-bottom: 1px solid var(--theme-border);\n  font-weight: 600;\n}\n.matter-notifications > p {\n  padding: 24px 18px;\n  font-size: 13px;\n  color: var(--theme-fg-muted);\n  line-height: 1.6;\n}\n.matter-notifications > a {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 14px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.matter-notifications small {\n  display: block;\n  margin-top: 5px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-host {\n  position: absolute;\n  inset: auto 0 16px;\n  z-index: 30;\n  pointer-events: none;\n  background: transparent;\n  border: 0;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  margin: 0 auto;\n  padding: 0 28px;\n  background: transparent;\n  border: 0;\n  pointer-events: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-layer > * {\n  pointer-events: auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-form {\n  padding: 0;\n  border: 0;\n  background: transparent;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 22px;\n  background: color-mix(in srgb, var(--theme-panel) 86%, transparent);\n  backdrop-filter: blur(24px) saturate(135%);\n  -webkit-backdrop-filter: blur(24px) saturate(135%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), var(--matter-composer-shadow);\n  padding: 12px 14px 10px;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n  height: 30px;\n  padding: 3px;\n  gap: 2px;\n  border: 0;\n  border-radius: 999px;\n  background: color-mix(in srgb, var(--theme-panel) 48%, transparent);\n  color: var(--theme-fg-soft);\n  backdrop-filter: blur(18px) saturate(130%);\n  -webkit-backdrop-filter: blur(18px) saturate(130%);\n  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 4px 16px rgb(18 32 25 / 18%);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n  border-radius: 999px;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge > button:hover:not(:disabled) {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-jump-latest-badge.is-active > button[data-action=jump-latest] {\n  color: var(--theme-accent-strong);\n  background: var(--theme-accent-soft);\n}\n.matter-thread-entry {\n  display: flex;\n  align-items: center;\n  min-width: 0;\n  position: relative;\n}\n.matter-thread-entry > .matter-thread-row {\n  flex: 1;\n  min-width: 0;\n  padding-right: 32px;\n}\n.matter-thread-entry > .recent-thread-actions {\n  position: absolute;\n  right: 3px;\n}\n@media (prefers-reduced-transparency: reduce) {\n  .thread-ui-shell .matter-workbench :is(.thread-graph-composer-shell, .thread-jump-latest-badge) {\n    background: var(--theme-panel);\n    backdrop-filter: none;\n  }\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-shell:focus-within {\n  border-color: var(--theme-accent-solid);\n  box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-accent-solid) 10%, transparent), var(--matter-composer-shadow);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input-group {\n  border: 0;\n  padding: 0;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-input {\n  min-height: 64px;\n  max-height: 200px;\n  padding: 3px 42px 8px 2px;\n  font-size: 15px;\n  line-height: 1.5;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-prompt-region {\n  padding: 0;\n  border: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n  padding: 5px 0 0;\n  margin: 0;\n  border: 0;\n  gap: 5px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-icon-button {\n  background: var(--theme-surface-strong);\n  border: 0;\n  width: 32px;\n  height: 32px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-chip-button {\n  background: transparent;\n  border: 0;\n  font-size: 12px;\n  font-weight: 500;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button {\n  width: 32px;\n  height: 32px;\n  border: 0;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  color: var(--theme-accent-solid-fg);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-send-button:disabled {\n  background: var(--theme-surface-strong);\n  color: var(--theme-fg-muted);\n}\n.thread-ui-shell .matter-workbench .thread-graph-composer-toolbar [data-action=switch-to-shell] {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-chat-usage-footer {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-timeline-surface {\n  background: var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group {\n  padding: 6px 0;\n  border: 0;\n  border-radius: 0;\n  background: transparent;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-card {\n  border: 0;\n  background: transparent;\n  box-shadow: none;\n  padding: 2px 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span {\n  width: 18px;\n  height: 24px;\n  background: transparent;\n  border: 0;\n  color: var(--theme-fg-muted);\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon > span > span {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-summary > span {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n  letter-spacing: 0;\n  text-transform: none;\n  border: 0;\n  background: transparent;\n  padding: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list {\n  margin-top: 2px;\n  padding: 0;\n  margin-left: -28px;\n  border-top: 0;\n  border-left: 0;\n  border-radius: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row {\n  position: relative;\n  border: 0;\n  border-radius: 6px;\n  background: transparent;\n  padding: 6px 8px;\n  box-shadow: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row::before {\n  content: none;\n  position: absolute;\n  top: 17px;\n  left: -18px;\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-detail-row:hover {\n  background: var(--theme-surface);\n}\n.thread-ui-shell .matter-workbench .thread-graph-chat-panel,\n.thread-ui-shell .matter-workbench .thread-graph-scroll-container {\n  background: var(--theme-bg);\n}\n.thread-ui-shell[data-theme-effective=light] .matter-workbench .thread-graph-code-block {\n  background: var(--theme-panel);\n  border-color: var(--theme-border);\n}\n.thread-ui-shell .matter-workbench .thread-graph-message-list {\n  width: 100%;\n  max-width: var(--matter-reading-width);\n  padding-inline: 28px;\n  margin: 0 auto;\n}\n.thread-ui-shell .matter-workbench .thread-graph-turn {\n  padding-inline: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-summary {\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-rule {\n  display: none;\n}\n.thread-ui-shell .matter-workbench .thread-graph-worked-label {\n  font-size: 12px;\n  font-weight: 500;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline {\n  position: relative;\n  margin: 2px 0 12px 7px;\n  padding-left: 14px;\n  border-left: 1px solid var(--theme-border-strong);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > * {\n  position: relative;\n  margin-top: 0;\n  margin-bottom: 4px;\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline > *::before {\n  content: "";\n  position: absolute;\n  left: -18px;\n  top: 14px;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: var(--theme-accent-solid);\n  box-shadow: 0 0 0 3px var(--theme-bg);\n}\n.thread-ui-shell .matter-workbench .thread-execution-timeline .thread-graph-message-bubble {\n  font-size: 13px;\n  line-height: 1.6;\n  padding-block: 2px;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-toggle {\n  padding-block: 5px;\n  min-height: 28px;\n}\n.thread-ui-shell .matter-workbench .matter-command-step {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  width: 100%;\n  min-width: 0;\n  min-height: 32px;\n  padding: 5px 7px;\n  border-radius: 5px;\n  text-align: left;\n  line-height: 20px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n  transition: background-color 150ms;\n}\n.matter-command-step:hover {\n  background: var(--theme-hover);\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-list > .matter-command-step {\n  margin-block: 0;\n}\n.matter-step-number {\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-title {\n  min-width: 0;\n  flex: 1;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: var(--theme-fg);\n}\n.matter-step-status {\n  display: flex;\n  flex-shrink: 0;\n}\n.matter-step-status.is-completed {\n  color: var(--theme-accent-strong);\n}\n.matter-step-status.is-failed {\n  color: #d56b62;\n}\n.matter-step-status.is-pending {\n  color: #418ad4;\n}\n.matter-step-time {\n  flex-shrink: 0;\n  font-size: 10px;\n  font-variant-numeric: tabular-nums;\n  color: var(--theme-fg-muted);\n}\n.matter-step-chevron {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n  opacity: 0;\n}\n.thread-diff {\n  font: 12px/1.7 ui-monospace, monospace;\n  min-width: max-content;\n}\n.thread-diff-line {\n  display: flex;\n  min-height: 1.7em;\n  padding-right: 12px;\n}\n.thread-diff-number {\n  width: 4ch;\n  text-align: right;\n  margin-right: 1ch;\n  color: var(--theme-fg-muted);\n  user-select: none;\n}\n.thread-diff-sign {\n  width: 2ch;\n  flex-shrink: 0;\n}\n.thread-diff-line.is-add {\n  background: light-dark(oklch(91% .045 150), oklch(29% .05 150));\n}\n.thread-diff-line.is-remove {\n  background: light-dark(oklch(91% .04 25), oklch(29% .05 25));\n}\n.thread-diff-line.is-add .thread-diff-sign {\n  color: light-dark(oklch(40% .12 150), oklch(77% .14 150));\n}\n.thread-diff-line.is-remove .thread-diff-sign {\n  color: light-dark(oklch(43% .16 25), oklch(77% .12 25));\n}\n.thread-diff-line.is-meta {\n  color: var(--theme-fg-muted);\n}\n.thread-history-direct-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  padding: 3px 0;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.thread-history-direct-action {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  flex: 1;\n  min-width: 0;\n  text-align: left;\n  border-radius: 6px;\n  padding: 4px 2px;\n}\n.thread-history-direct-action:hover {\n  background: var(--theme-hover);\n}\n.thread-history-direct-action:focus-visible {\n  outline: 2px solid var(--theme-accent-border);\n}\n.thread-history-direct-action .thread-graph-history-tool-icon {\n  display: flex;\n  flex-shrink: 0;\n  width: 18px;\n}\n.thread-history-direct-preview {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.thread-history-direct-preview.is-path {\n  direction: rtl;\n  text-align: left;\n}\n.thread-history-direct-preview.is-expanded {\n  direction: ltr;\n  white-space: pre-wrap;\n  overflow-wrap: anywhere;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-icon {\n  margin-top: 0;\n}\n.thread-ui-shell .matter-workbench .thread-graph-history-group-verb {\n  font-weight: 500;\n}\n.matter-command-step:is(:hover, :focus-visible) .matter-step-chevron {\n  opacity: 1;\n}\n@media (max-width: 1000px) and (min-width: 640px) {\n  .thread-ui-shell .matter-workbench {\n    grid-template-columns: 43px 200px minmax(0, 1fr);\n  }\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: 43px 0 minmax(0, 1fr);\n  }\n  .matter-topbar-brand {\n    display: none;\n  }\n  .matter-workspace-path {\n    max-width: 25%;\n  }\n  .matter-current-title {\n    display: none;\n  }\n}\n@media (max-width: 639px) {\n  .thread-ui-shell .matter-workbench,\n  .thread-ui-shell .matter-workbench.is-sidebar-hidden {\n    grid-template-columns: minmax(0, 1fr);\n    grid-template-rows: calc(44px + env(safe-area-inset-top)) minmax(0, 1fr);\n  }\n  .matter-topbar {\n    grid-column: 1;\n    padding: env(safe-area-inset-top) 4px 0;\n    gap: 0;\n  }\n  .matter-topbar-brand,\n  .matter-topbar-separator,\n  .matter-search-trigger span,\n  .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar [data-action=go-forward] {\n    display: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-topbar .matter-search-trigger {\n    width: 36px;\n    padding: 0;\n    margin: 0;\n  }\n  .matter-rail {\n    padding-top: env(safe-area-inset-top);\n  }\n  .matter-main {\n    grid-column: 1;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar {\n    position: fixed;\n    top: 44px;\n    bottom: 0;\n    left: 0;\n    width: min(270px, calc(100vw - 56px));\n    z-index: 65;\n    visibility: hidden;\n    transform: translateX(-120%);\n    transition: transform 160ms;\n    padding: 12px;\n  }\n  .thread-ui-shell .matter-workbench .matter-sidebar.is-open {\n    visibility: visible;\n    transform: none;\n  }\n  .thread-ui-shell .matter-workbench .matter-mobile-close {\n    display: inline-flex;\n  }\n  .matter-sidebar-scrim {\n    display: block;\n    position: fixed;\n    inset: 44px 0 0 0;\n    background: rgb(0 0 0 / 25%);\n    z-index: 64;\n  }\n  .matter-thread-tabs {\n    scrollbar-width: none;\n    height: 36px;\n  }\n  .matter-thread-tabs > a,\n  .matter-group-tab {\n    min-width: 64px;\n    max-width: 140px;\n    padding: 0 8px;\n  }\n  .matter-thread-tabs::-webkit-scrollbar {\n    display: none;\n  }\n  .matter-breadcrumb {\n    height: 42px;\n    padding: 0 5px;\n    gap: 1px;\n  }\n  .matter-current-title,\n  .matter-breadcrumb > svg {\n    display: none;\n  }\n  .matter-workspace-path {\n    flex: 1;\n    max-width: none;\n    font-size: 10px;\n  }\n  .thread-ui-shell .matter-workbench .matter-breadcrumb button {\n    width: 32px;\n    height: 36px;\n  }\n  .matter-thread-actions,\n  .matter-thread-actions > div {\n    gap: 0;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-host {\n    bottom: max(8px, env(safe-area-inset-bottom), var(--thread-composer-keyboard-inset, 0px));\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-layer {\n    padding: 0 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-form {\n    padding-top: 0 !important;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge {\n    height: 18px;\n    min-width: 72px;\n    padding: 1.8px;\n    gap: 1.2px;\n    bottom: 1px;\n    background: color-mix(in srgb, var(--theme-panel) 36%, transparent);\n    box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 2px 8px rgb(18 32 25 / 12%);\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button {\n    width: 24px;\n  }\n  .thread-ui-shell .matter-workbench .thread-jump-latest-badge svg {\n    width: 8.4px;\n    height: 8.4px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-message-list {\n    padding-inline: 9px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-shell {\n    padding: 10px;\n    border-radius: 18px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-input {\n    font-size: 16px;\n    min-height: 54px;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar {\n    flex-wrap: wrap;\n  }\n  .thread-ui-shell .matter-workbench .thread-graph-composer-toolbar > div:last-child {\n    gap: 1px;\n  }\n  .matter-explorer {\n    position: absolute;\n    inset: 0;\n    width: 100%;\n    z-index: 40;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .matter-workbench *,\n  .matter-workbench *::before {\n    transition: none !important;\n    animation: none !important;\n  }\n}\n.workbench-panels {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-context {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  min-height: 44px;\n  padding: 6px 16px;\n  border-bottom: 1px solid var(--theme-border);\n  color: var(--theme-fg-soft);\n  font-size: 12px;\n}\n.workbench-context > strong {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workbench-source-device {\n  max-width: 30%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.workbench-reference-picker {\n  position: relative;\n  flex-shrink: 0;\n}\n.workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n  display: inline-flex;\n  justify-content: center;\n  align-items: center;\n  gap: 6px;\n  min-height: 32px;\n  padding: 5px 9px;\n  border-radius: 7px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n}\n.workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button:hover {\n  background: var(--theme-hover);\n}\n.workbench-reference-menu {\n  position: absolute;\n  right: 0;\n  top: 38px;\n  z-index: 95;\n  width: min(290px, calc(100vw - 32px));\n  padding: 8px;\n  background: var(--theme-panel);\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  box-shadow: var(--matter-composer-shadow);\n}\n.workbench-reference-menu button {\n  width: 100%;\n  justify-content: flex-start;\n}\n.workbench-reference-menu label {\n  display: block;\n  padding: 9px;\n  font-size: 11px;\n}\n.workbench-reference-menu select {\n  display: block;\n  margin-top: 7px;\n  width: 100%;\n  min-height: 36px;\n  padding: 5px;\n  border: 1px solid var(--theme-border);\n  border-radius: 6px;\n  background: var(--theme-surface);\n  color: var(--theme-fg);\n}\n.workbench-pane-grid {\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.workbench-primary,\n.workbench-reference {\n  display: flex;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n  flex: 1;\n}\n.workbench-pane-grid.has-reference > .workbench-primary {\n  flex: 0 0 clamp(360px, var(--primary-ratio), calc(100% - 365px));\n  --matter-reading-width: 100%;\n}\n.workbench-reference {\n  background: var(--theme-surface);\n  --matter-reading-width: 100%;\n}\n.workbench-pane-heading {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  min-height: 40px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-pane-heading > div {\n  flex: 1;\n  min-width: 0;\n}\n.workbench-pane-heading strong {\n  display: block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 13px;\n  font-weight: 600;\n  color: var(--theme-fg);\n}\n.workbench-pane-eyebrow {\n  display: block;\n  margin-bottom: 4px;\n  font-size: 10px;\n  color: var(--theme-accent-strong);\n}\n.workbench-pane-meta {\n  max-width: 35%;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  text-align: right;\n}\n.workbench-pane-body {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.workbench-pane-body > .thread-detail-surface {\n  height: 100%;\n}\n.workbench-pane-resize {\n  width: 5px;\n  flex-shrink: 0;\n  cursor: col-resize;\n  touch-action: none;\n  background: var(--theme-border);\n}\n.workbench-pane-resize:hover,\n.workbench-pane-resize:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.workbench-panels [hidden] {\n  display: none !important;\n}\n.workbench-mobile-views {\n  display: flex;\n  gap: 4px;\n  padding: 4px 12px;\n  border-bottom: 1px solid var(--theme-border);\n}\n.workbench-mobile-views button {\n  flex: 1;\n}\n.workbench-mobile-views button[aria-pressed=true] {\n  background: var(--theme-accent-soft);\n  color: var(--theme-accent-strong);\n}\n.workbench-panels.is-compact .workbench-primary {\n  flex: 1;\n}\n.workbench-panels.is-compact .workbench-pane-resize {\n  display: none;\n}\n.workbench-panels.is-compact .workbench-context {\n  padding-inline: 12px;\n  gap: 6px;\n}\n.workbench-panels.is-compact .workbench-pane-heading {\n  padding-inline: 12px;\n}\n.workbench-collaboration {\n  overflow-y: auto;\n  padding: 18px;\n  gap: 18px;\n}\n.workbench-collaboration h3 {\n  font-size: 12px;\n  font-weight: 600;\n  margin-bottom: 10px;\n}\n.workbench-collaboration p {\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n  line-height: 1.7;\n}\n.workbench-collaboration article {\n  padding: 12px;\n  margin-bottom: 8px;\n  border: 1px solid var(--theme-border);\n  border-radius: 10px;\n  background: var(--theme-panel);\n}\n.workbench-collaboration article header {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  justify-content: space-between;\n  font-size: 12px;\n}\n.workbench-collaboration article strong {\n  overflow-wrap: anywhere;\n}\n.workbench-collaboration article footer {\n  display: flex;\n  gap: 5px;\n  margin-top: 8px;\n}\n.workbench-collaboration [data-status=failed] {\n  color: #d1555f;\n}\n.workbench-collaboration [data-status=running] {\n  color: var(--theme-accent-strong);\n}\n.workbench-reference-status,\n.workbench-persistence-notice {\n  padding: 10px 16px;\n  color: var(--theme-fg-muted);\n  font-size: 11px;\n}\n.workbench-reference .thread-graph-message-list {\n  padding-bottom: 32px;\n}\n.workbench-files .thread-graph-explorer-header h2 {\n  display: none;\n}\n@media (max-width: 639px) {\n  .workbench-panels :is(.workbench-context, .workbench-pane-heading, .workbench-reference-menu, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button {\n    min-height: 44px;\n  }\n  .workbench-reference-menu {\n    top: 48px;\n  }\n  .workbench-pane-heading {\n    min-height: 48px;\n  }\n}\n.workbench-split-picker {\n  display: flex;\n  align-items: center;\n  gap: 5px;\n  margin-left: auto;\n  flex-shrink: 0;\n  color: var(--theme-accent-strong);\n}\n.workbench-split-picker select {\n  max-width: 190px;\n  min-height: 32px;\n  border: 1px solid var(--theme-border);\n  border-radius: 7px;\n  background: var(--theme-panel);\n  color: var(--theme-fg);\n  padding: 4px 7px;\n  font-size: 12px;\n}\n.workbench-composer-target {\n  display: flex;\n  gap: 8px;\n  justify-content: space-between;\n  padding: 3px 12px;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n}\n.workbench-composer-target span {\n  font-size: 10px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n.workbench-mobile-views button {\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n@media (max-width: 639px) {\n  .workbench-split-picker {\n    gap: 3px;\n  }\n  .workbench-split-picker select {\n    max-width: 112px;\n    min-height: 44px;\n    padding-inline: 3px;\n  }\n  .workbench-composer-target span {\n    display: none;\n  }\n}\n');
 
+// src/styles/composer-compact.css
+styleInject("[data-composer-layout] {\n  container-type: inline-size;\n}\n[data-composer-layout] .thread-graph-composer-input-group,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input-group {\n  display: grid;\n  grid-template-columns: minmax(0, 1fr) max-content;\n  align-items: end;\n  column-gap: 8px;\n  height: auto;\n  padding: 0;\n  overflow: visible;\n}\n[data-composer-layout] .thread-graph-composer-prompt-region {\n  min-width: 0;\n  width: auto;\n  grid-column: 1;\n  grid-row: 1;\n  align-self: center;\n}\n[data-composer-layout] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n  grid-column: 2;\n  grid-row: 1;\n  width: max-content;\n  min-width: 0;\n  min-height: 0;\n  display: flex;\n  flex-wrap: nowrap;\n  justify-content: flex-end;\n  align-items: center;\n  padding: 0;\n  gap: 4px;\n  margin: 0;\n}\n[data-composer-layout] :is(.composer-tools, .composer-settings),\n.thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n  flex: 0 0 auto;\n  display: flex;\n  flex-wrap: nowrap;\n  gap: 4px;\n  align-items: center;\n}\n[data-composer-layout] .thread-graph-composer-input,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-input {\n  min-height: 0 !important;\n  max-height: none !important;\n  width: 100%;\n  padding: 0 !important;\n  line-height: 24px;\n  overflow: visible;\n  transition: none;\n}\n[data-composer-layout] .thread-graph-composer-input > [role=textbox] {\n  min-height: 24px !important;\n  max-height: 24px;\n  line-height: 24px;\n  padding: 0;\n  overflow: hidden;\n  scrollbar-width: none;\n}\n[data-composer-layout=expanded] .thread-graph-composer-prompt-region {\n  grid-column: 1 / -1;\n}\n[data-composer-layout=expanded] .thread-graph-composer-toolbar,\n.thread-ui-shell .matter-workbench [data-composer-layout=expanded] .thread-graph-composer-toolbar {\n  grid-row: 2;\n  padding-top: 6px;\n}\n[data-composer-layout=expanded] .thread-graph-composer-input > [role=textbox] {\n  max-height: min(240px, 30dvh);\n  overflow-y: auto;\n  scrollbar-width: thin;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] {\n  max-height: 24px;\n  vertical-align: middle;\n}\n[data-composer-layout] .thread-graph-composer-input [data-segment-type=attachment] img {\n  max-height: 20px;\n  width: auto;\n}\n[data-composer-layout] .composer-model-control > button {\n  max-width: clamp(48px, 16cqi, 150px) !important;\n  padding-inline: 4px !important;\n}\n[data-composer-layout] .composer-sandbox-control > button {\n  padding-inline: 4px !important;\n}\n[data-composer-layout] .thread-graph-composer-stop-button {\n  position: static;\n}\n[data-composer-layout] .thread-graph-composer-shell,\n.thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-shell {\n  padding: 9px 12px;\n}\n@container (max-width: 480px) {\n  [data-composer-layout] .composer-model-control > button {\n    max-width: 54px !important;\n  }\n  [data-composer-layout] :is(.composer-tools, .composer-settings),\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.composer-tools, .composer-settings) {\n    gap: 2px;\n  }\n  [data-composer-layout] .thread-graph-composer-toolbar,\n  .thread-ui-shell .matter-workbench [data-composer-layout] .thread-graph-composer-toolbar {\n    gap: 2px;\n  }\n  [data-composer-layout] .composer-sandbox-control > button {\n    font-size: 10px;\n    padding-inline: 2px !important;\n  }\n}\n[data-composer-layout] .thread-graph-composer-input > span {\n  inset: 0;\n}\n@container (max-width: 300px) {\n  .thread-ui-shell .matter-workbench [data-composer-layout] :is(.thread-graph-composer-icon-button, .thread-graph-composer-stop-button, .thread-graph-composer-send-button) {\n    width: 24px !important;\n    height: 24px !important;\n    min-width: 24px !important;\n    min-height: 24px !important;\n  }\n  [data-composer-layout] .composer-model-control > button {\n    max-width: 42px !important;\n  }\n}\n");
+
 // src/components/ThreadComposer.tsx
 import {
   useCallback as useCallback9,
   useMemo as useMemo2,
   useRef as useRef7,
-  useState as useState13
+  useState as useState14
 } from "react";
 
 // src/components/composer/composerUtils.ts
@@ -1056,6 +1059,109 @@ function restoreSelectionAfterInsertedAttachments(editor, insertedClientIds) {
   return true;
 }
 
+// src/components/composer/useCompactComposer.ts
+import { useLayoutEffect, useState } from "react";
+function promptExceedsCompactLine(editor, group, toolbar) {
+  const text = serializeEditorPrompt(editor);
+  if (!text.trim() && !editor.querySelector('[data-segment-type="attachment"]')) return false;
+  if (/[\r\n]/.test(text)) return true;
+  const groupStyle = getComputedStyle(group);
+  const scale = group.offsetWidth ? group.getBoundingClientRect().width / group.offsetWidth : 1;
+  const gap = Number.parseFloat(groupStyle.columnGap) || 0;
+  const padding = (Number.parseFloat(groupStyle.paddingLeft) || 0) + (Number.parseFloat(groupStyle.paddingRight) || 0);
+  const available = group.getBoundingClientRect().width - toolbar.getBoundingClientRect().width - (gap + padding) * scale;
+  if (group.getBoundingClientRect().width <= 0) return false;
+  const style = getComputedStyle(editor);
+  const measurement = editor.cloneNode(true);
+  measurement.removeAttribute("role");
+  measurement.removeAttribute("contenteditable");
+  measurement.removeAttribute("id");
+  measurement.setAttribute("aria-hidden", "true");
+  measurement.inert = true;
+  Object.assign(measurement.style, {
+    position: "absolute",
+    visibility: "hidden",
+    pointerEvents: "none",
+    width: "max-content",
+    minWidth: "0",
+    maxWidth: "none",
+    height: "auto",
+    minHeight: "0",
+    maxHeight: "none",
+    overflow: "visible",
+    whiteSpace: "pre",
+    padding: "0",
+    margin: "0",
+    border: "0",
+    font: style.font,
+    letterSpacing: style.letterSpacing,
+    wordSpacing: style.wordSpacing,
+    textTransform: style.textTransform
+  });
+  group.append(measurement);
+  const width = measurement.getBoundingClientRect().width;
+  measurement.remove();
+  return width > Math.max(0, available) + 0.5 * scale;
+}
+function useCompactComposer(formRef, enabled) {
+  const [expanded, setExpanded] = useState(false);
+  useLayoutEffect(() => {
+    const form = formRef.current;
+    const editor = form?.querySelector('[role="textbox"][contenteditable]');
+    const group = form?.querySelector('[data-slot="input-group"]');
+    const toolbar = form?.querySelector('[data-slot="input-group-addon"]');
+    if (!enabled || !form || !editor || !group || !toolbar) {
+      setExpanded(false);
+      return;
+    }
+    let frame = 0;
+    let alive = true;
+    const measure = () => {
+      if (!alive || editor.dataset.imeComposing === "true") return;
+      const focused = document.activeElement === editor;
+      const next = focused && promptExceedsCompactLine(editor, group, toolbar);
+      setExpanded((current) => current === next ? current : next);
+      if (!focused) {
+        editor.scrollTop = 0;
+        if (editor.parentElement) editor.parentElement.scrollTop = 0;
+      }
+    };
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+    form.addEventListener("focusin", schedule);
+    form.addEventListener("focusout", schedule);
+    editor.addEventListener("input", schedule);
+    editor.addEventListener("compositionend", schedule);
+    editor.addEventListener("load", schedule, true);
+    const mutation = new MutationObserver(schedule);
+    mutation.observe(editor, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["data-ime-composing"] });
+    const resize = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(schedule);
+    resize?.observe(group);
+    resize?.observe(toolbar);
+    window.addEventListener("resize", schedule);
+    window.visualViewport?.addEventListener("resize", schedule);
+    document.fonts?.addEventListener("loadingdone", schedule);
+    measure();
+    return () => {
+      alive = false;
+      cancelAnimationFrame(frame);
+      mutation.disconnect();
+      resize?.disconnect();
+      form.removeEventListener("focusin", schedule);
+      form.removeEventListener("focusout", schedule);
+      editor.removeEventListener("input", schedule);
+      editor.removeEventListener("compositionend", schedule);
+      editor.removeEventListener("load", schedule, true);
+      window.removeEventListener("resize", schedule);
+      window.visualViewport?.removeEventListener("resize", schedule);
+      document.fonts?.removeEventListener("loadingdone", schedule);
+    };
+  }, [enabled, formRef]);
+  return expanded;
+}
+
 // src/components/graph-ui/InputGroup.tsx
 import { cva } from "class-variance-authority";
 import { jsx as jsx2 } from "react/jsx-runtime";
@@ -1200,7 +1306,7 @@ function ComposerHiddenAttachmentInputs({
 }
 
 // src/components/composer/ComposerSubscriptionUsage.tsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState as useState2 } from "react";
 import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
 function resetLabel(value) {
   if (!value) return translate("chat.resetTimeUnavailable");
@@ -1211,7 +1317,7 @@ function ComposerSubscriptionUsage({
   usage
 }) {
   useI18n();
-  const [detailsVisible, setDetailsVisible] = useState(false);
+  const [detailsVisible, setDetailsVisible] = useState2(false);
   const ref = useRef(null);
   useEffect(() => {
     if (!detailsVisible) return;
@@ -1406,6 +1512,7 @@ function ComposerFrame({
   goalSlot,
   shellPromptSlot
 }) {
+  const expanded = useCompactComposer(formRef, activeView === "chat");
   return /* @__PURE__ */ jsxs5("div", { className: layerClassName, children: [
     /* @__PURE__ */ jsx6(
       ComposerHiddenAttachmentInputs,
@@ -1433,6 +1540,7 @@ function ComposerFrame({
       "form",
       {
         ref: formRef,
+        "data-composer-layout": activeView === "chat" ? expanded ? "expanded" : "collapsed" : void 0,
         "data-testid": activeView === "chat" ? "chat-composer" : void 0,
         onSubmit,
         className: formClassName,
@@ -1460,7 +1568,7 @@ function ComposerFrame({
 
 // src/components/composer/ComposerPendingQueue.tsx
 import { CornerUpRight, Loader2, X } from "lucide-react";
-import { useState as useState2 } from "react";
+import { useState as useState3 } from "react";
 import { Fragment as Fragment2, jsx as jsx7, jsxs as jsxs6 } from "react/jsx-runtime";
 function ComposerPendingQueue({
   prompts,
@@ -1468,7 +1576,7 @@ function ComposerPendingQueue({
   onCancel
 }) {
   useI18n();
-  const [busyIds, setBusyIds] = useState2(() => /* @__PURE__ */ new Set());
+  const [busyIds, setBusyIds] = useState3(() => /* @__PURE__ */ new Set());
   async function runAction(id, action) {
     if (!action || busyIds.has(id)) {
       return;
@@ -1569,7 +1677,7 @@ function ComposerPendingQueue({
 }
 
 // src/components/composer/ComposerMenuSurface.tsx
-import { useLayoutEffect, useRef as useRef2 } from "react";
+import { useLayoutEffect as useLayoutEffect2, useRef as useRef2 } from "react";
 import { jsx as jsx8 } from "react/jsx-runtime";
 function ComposerMenuSurface({
   align = "start",
@@ -1578,7 +1686,7 @@ function ComposerMenuSurface({
   ...props
 }) {
   const menuRef = useRef2(null);
-  useLayoutEffect(() => {
+  useLayoutEffect2(() => {
     const menu = menuRef.current;
     const trigger = menu?.parentElement?.querySelector(
       '[data-composer-menu-trigger="true"]'
@@ -1715,7 +1823,7 @@ function ComposerAttachmentMenu({
 
 // src/components/composer/ComposerSettingsToolbar.tsx
 import { Check, ChevronRight } from "lucide-react";
-import { useState as useState3 } from "react";
+import { useState as useState4 } from "react";
 import { Fragment as Fragment3, jsx as jsx10, jsxs as jsxs8 } from "react/jsx-runtime";
 var sandboxOptions = [
   { mode: "read-only", get label() {
@@ -1769,14 +1877,15 @@ function ComposerSettingsToolbar({
   inlineToggleClassName,
   menuItemClassName: menuItemClassName2,
   sendButtonBaseClassName,
+  beforeSend,
   onSetOpenMenu,
   onUpdateSettings
 }) {
   useI18n();
-  const [settingsSection, setSettingsSection] = useState3(null);
+  const [settingsSection, setSettingsSection] = useState4(null);
   const selectedModelLabel = (modelOptions.find((entry) => entry.model === model)?.displayName || model || translate("chat.selectModel")).replace(/\s+\([^)]+\)\s*$/, "");
   return /* @__PURE__ */ jsxs8(Fragment3, { children: [
-    /* @__PURE__ */ jsxs8("div", { className: "relative min-w-0", children: [
+    /* @__PURE__ */ jsxs8("div", { className: "composer-model-control relative min-w-0", children: [
       /* @__PURE__ */ jsx10(
         InputGroupButton,
         {
@@ -1900,7 +2009,7 @@ function ComposerSettingsToolbar({
         }
       )
     ] }),
-    sandboxModeAvailable && /* @__PURE__ */ jsxs8("div", { className: "relative", children: [
+    sandboxModeAvailable && /* @__PURE__ */ jsxs8("div", { className: "composer-sandbox-control relative", children: [
       /* @__PURE__ */ jsx10(
         InputGroupButton,
         {
@@ -1940,6 +2049,7 @@ function ComposerSettingsToolbar({
         }
       )
     ] }),
+    beforeSend,
     /* @__PURE__ */ jsx10(
       InputGroupButton,
       {
@@ -3116,6 +3226,9 @@ function ComposerSlashToolboxMenu({
 // src/components/composer/ComposerToolbar.tsx
 import { jsx as jsx18, jsxs as jsxs16 } from "react/jsx-runtime";
 function ComposerToolbar({
+  canInterrupt = false,
+  interruptLabel,
+  onInterrupt,
   isShellView,
   canToggleShellView,
   isMobileShell,
@@ -3138,7 +3251,7 @@ function ComposerToolbar({
       align: "block-end",
       className: `${toolbarClassName} relative z-[100] mb-0 flex items-center gap-2 text-xs`,
       children: [
-        /* @__PURE__ */ jsxs16("div", { className: "flex shrink-0 items-center gap-1.5", children: [
+        /* @__PURE__ */ jsxs16("div", { className: "composer-tools flex shrink-0 items-center gap-1.5", children: [
           !isShellView && slashToolboxProps ? /* @__PURE__ */ jsx18(ComposerSlashToolboxMenu, { ...slashToolboxProps }) : null,
           !isShellView && attachmentMenuProps ? /* @__PURE__ */ jsx18(ComposerAttachmentMenu, { ...attachmentMenuProps }) : null,
           canToggleShellView && /* @__PURE__ */ jsx18(
@@ -3156,8 +3269,23 @@ function ComposerToolbar({
             }
           )
         ] }),
-        /* @__PURE__ */ jsxs16("div", { className: "flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5", children: [
-          !isShellView && settingsToolbarProps ? /* @__PURE__ */ jsx18(ComposerSettingsToolbar, { ...settingsToolbarProps }) : null,
+        /* @__PURE__ */ jsxs16("div", { className: "composer-settings flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5", children: [
+          !isShellView && settingsToolbarProps ? /* @__PURE__ */ jsx18(ComposerSettingsToolbar, { ...settingsToolbarProps, beforeSend: canInterrupt ? /* @__PURE__ */ jsx18(
+            InputGroupButton,
+            {
+              type: "button",
+              variant: "ghost",
+              size: "icon-xs",
+              "aria-label": interruptLabel,
+              title: interruptLabel,
+              onClick: (event) => {
+                event.preventDefault();
+                void onInterrupt?.();
+              },
+              className: "thread-graph-composer-stop-button ui-action-danger h-8 w-8 shrink-0 rounded-full",
+              children: /* @__PURE__ */ jsx18("span", { "aria-hidden": "true", className: "block h-2.5 w-2.5 rounded-[2px] bg-current" })
+            }
+          ) : null }) : null,
           isShellView && shellPromptLabel ? /* @__PURE__ */ jsx18(
             InputGroupText,
             {
@@ -3271,7 +3399,7 @@ function useComposerAttachments({
 }
 
 // src/components/composer/useAttachmentPreviewUrls.ts
-import { useEffect as useEffect2, useRef as useRef3, useState as useState4 } from "react";
+import { useEffect as useEffect2, useRef as useRef3, useState as useState5 } from "react";
 function revokeCachedPreviewUrls(previewUrlCache) {
   for (const previewUrl of previewUrlCache.values()) {
     URL.revokeObjectURL(previewUrl);
@@ -3283,7 +3411,7 @@ function useAttachmentPreviewUrls({
   isShellView
 }) {
   const previewUrlCacheRef = useRef3(/* @__PURE__ */ new Map());
-  const [attachmentPreviewUrls, setAttachmentPreviewUrls] = useState4({});
+  const [attachmentPreviewUrls, setAttachmentPreviewUrls] = useState5({});
   useEffect2(() => {
     const previewUrlCache = previewUrlCacheRef.current;
     if (isShellView) {
@@ -3327,9 +3455,9 @@ function useAttachmentPreviewUrls({
 import {
   useCallback as useCallback2,
   useEffect as useEffect3,
-  useLayoutEffect as useLayoutEffect2,
+  useLayoutEffect as useLayoutEffect3,
   useRef as useRef4,
-  useState as useState5
+  useState as useState6
 } from "react";
 var DRAFT_SYNC_DELAY_MS = 180;
 function toComposerDraft(prompt, attachments) {
@@ -3344,11 +3472,12 @@ function useComposerDraft({
   draftAttachments,
   onDraftChange
 }) {
-  const [internalDraft, setInternalDraft] = useState5({
+  const [internalDraft, setInternalDraft] = useState6({
     prompt: "",
     attachments: []
   });
-  const [localControlledDraft, setLocalControlledDraft] = useState5(() => toComposerDraft(draftPrompt, draftAttachments));
+  const [localControlledDraft, setLocalControlledDraft] = useState6(() => toComposerDraft(draftPrompt, draftAttachments));
+  const submittedClearRef = useRef4(null);
   const draftSyncTimerRef = useRef4(null);
   const latestLocalDraftRef = useRef4(localControlledDraft);
   const lastSentDraftSignatureRef = useRef4(draftSignature(localControlledDraft));
@@ -3358,7 +3487,7 @@ function useComposerDraft({
   const lastRenderedControlledPropsSignatureRef = useRef4(
     controlledPropsSignature
   );
-  useLayoutEffect2(() => {
+  useLayoutEffect3(() => {
     if (!isDraftControlled) {
       lastRenderedControlledPropsSignatureRef.current = "";
       pendingHostEchoesRef.current.clear();
@@ -3370,6 +3499,18 @@ function useComposerDraft({
       return;
     }
     lastRenderedControlledPropsSignatureRef.current = hostSignature;
+    if (!hostDraft.prompt && hostDraft.attachments.length === 0 && submittedClearRef.current) {
+      const submitted = submittedClearRef.current;
+      submittedClearRef.current = null;
+      const local = latestLocalDraftRef.current;
+      const localSignature = draftSignature(local);
+      if ((local.prompt || local.attachments.length > 0) && localSignature !== submitted.signature) {
+        lastSentDraftSignatureRef.current = localSignature;
+        pendingHostEchoesRef.current.add(localSignature);
+        onDraftChange?.(() => ({ prompt: local.prompt, attachments: local.attachments }));
+        return;
+      }
+    }
     if (pendingHostEchoesRef.current.delete(hostSignature)) return;
     pendingHostEchoesRef.current.clear();
     lastSentDraftSignatureRef.current = hostSignature;
@@ -3379,7 +3520,7 @@ function useComposerDraft({
       draftSyncTimerRef.current = null;
     }
     setLocalControlledDraft(hostDraft);
-  }, [draftAttachments, draftPrompt, isDraftControlled]);
+  }, [draftAttachments, draftPrompt, isDraftControlled, onDraftChange]);
   const sendDraftToHost = useCallback2((nextDraft) => {
     if (!isDraftControlled || !onDraftChange) {
       return;
@@ -3439,18 +3580,29 @@ function useComposerDraft({
     }
     setInternalDraft((current) => updater(current));
   }, [isDraftControlled, syncControlledDraftToHost]);
+  const captureSubmission = useCallback2((snapshot) => {
+    const token = { signature: draftSignature(snapshot) };
+    submittedClearRef.current = token;
+    return {
+      complete: () => updateDraft((current) => draftSignature(current) === token.signature ? { prompt: "", attachments: [] } : current),
+      cancel: () => {
+        if (submittedClearRef.current === token) submittedClearRef.current = null;
+      }
+    };
+  }, [updateDraft]);
   const currentDraft = isDraftControlled ? localControlledDraft : internalDraft;
   return {
     prompt: currentDraft.prompt,
     attachments: currentDraft.attachments,
     isDraftControlled,
     updateDraft,
-    flushControlledDraftToHost
+    flushControlledDraftToHost,
+    captureSubmission
   };
 }
 
 // src/components/composer/useComposerForkActions.ts
-import { useCallback as useCallback3, useEffect as useEffect4, useRef as useRef5, useState as useState6 } from "react";
+import { useCallback as useCallback3, useEffect as useEffect4, useRef as useRef5, useState as useState7 } from "react";
 function useComposerForkActions({
   slashPanelView,
   onForkLatest,
@@ -3458,8 +3610,8 @@ function useComposerForkActions({
   closeMenu
 }) {
   useI18n();
-  const [forkBusy, setForkBusy] = useState6(false);
-  const [forkError, setForkError] = useState6(null);
+  const [forkBusy, setForkBusy] = useState7(false);
+  const [forkError, setForkError] = useState7(null);
   const inFlight = useRef5(false);
   useEffect4(() => {
     setForkError(null);
@@ -3516,7 +3668,7 @@ function useComposerForkActions({
 // src/components/composer/useComposerGoal.ts
 import {
   useCallback as useCallback4,
-  useState as useState7
+  useState as useState8
 } from "react";
 function useComposerGoal({
   prompt,
@@ -3530,10 +3682,10 @@ function useComposerGoal({
   resetSlashPanel
 }) {
   useI18n();
-  const [goalComposeMode, setGoalComposeMode] = useState7(false);
-  const [goalTokenBudget, setGoalTokenBudget] = useState7("");
-  const [goalBusy, setGoalBusy] = useState7(false);
-  const [goalLocalError, setGoalLocalError] = useState7(null);
+  const [goalComposeMode, setGoalComposeMode] = useState8(false);
+  const [goalTokenBudget, setGoalTokenBudget] = useState8("");
+  const [goalBusy, setGoalBusy] = useState8(false);
+  const [goalLocalError, setGoalLocalError] = useState8(null);
   const submitGoal = useCallback4(async () => {
     const objective = prompt.trim();
     if (!objective) {
@@ -3623,7 +3775,7 @@ import {
   useCallback as useCallback5,
   useEffect as useEffect5,
   useMemo,
-  useState as useState8
+  useState as useState9
 } from "react";
 var FALLBACK_HOOK_COMMAND = `node -e "process.stdin.resume(); process.stdin.on('end', () => console.error('hook ran'))"`;
 function buildHookCommandTemplateMap(hookCommandTemplates) {
@@ -3642,17 +3794,17 @@ function useComposerHookConfig({
   onUntrustHook
 }) {
   useI18n();
-  const [hooksPanelMode, setHooksPanelMode] = useState8("list");
-  const [hookScope, setHookScope] = useState8("project");
-  const [hookEventName, setHookEventName] = useState8("preToolUse");
-  const [hookMatcher, setHookMatcher] = useState8("Bash");
-  const [hookCommand, setHookCommand] = useState8(FALLBACK_HOOK_COMMAND);
-  const [hookTimeoutSec, setHookTimeoutSec] = useState8("30");
-  const [hookStatusMessage, setHookStatusMessage] = useState8("Running hook");
-  const [editingHookTarget, setEditingHookTarget] = useState8(null);
-  const [hookConfigBusy, setHookConfigBusy] = useState8(false);
-  const [hookConfigError, setHookConfigError] = useState8(null);
-  const [hookConfigSuccess, setHookConfigSuccess] = useState8(
+  const [hooksPanelMode, setHooksPanelMode] = useState9("list");
+  const [hookScope, setHookScope] = useState9("project");
+  const [hookEventName, setHookEventName] = useState9("preToolUse");
+  const [hookMatcher, setHookMatcher] = useState9("Bash");
+  const [hookCommand, setHookCommand] = useState9(FALLBACK_HOOK_COMMAND);
+  const [hookTimeoutSec, setHookTimeoutSec] = useState9("30");
+  const [hookStatusMessage, setHookStatusMessage] = useState9("Running hook");
+  const [editingHookTarget, setEditingHookTarget] = useState9(null);
+  const [hookConfigBusy, setHookConfigBusy] = useState9(false);
+  const [hookConfigError, setHookConfigError] = useState9(null);
+  const [hookConfigSuccess, setHookConfigSuccess] = useState9(
     null
   );
   const hookCommandTemplateByEvent = useMemo(
@@ -3870,7 +4022,7 @@ function useComposerHookConfig({
 }
 
 // src/components/composer/useComposerMcpConfig.ts
-import { useCallback as useCallback6, useState as useState9 } from "react";
+import { useCallback as useCallback6, useState as useState10 } from "react";
 var DEFAULT_RAW_MCP_BLOCK = '[mcp_servers.example_stdio]\ncommand = "npx"\nargs = ["-y", "your-mcp-server"]\n';
 var MCP_CONFIG_SUCCESS_MESSAGE_KEY = "chat.mCPEntryWrittenToProviderConfigRestart";
 function useComposerMcpConfig({
@@ -3881,13 +4033,13 @@ function useComposerMcpConfig({
   onOpenMcp
 }) {
   useI18n();
-  const [mcpHttpName, setMcpHttpName] = useState9("");
-  const [mcpHttpUrl, setMcpHttpUrl] = useState9("");
-  const [mcpRawBlock, setMcpRawBlock] = useState9("");
-  const [mcpConfigPath, setMcpConfigPath] = useState9(null);
-  const [mcpConfigBusy, setMcpConfigBusy] = useState9(false);
-  const [mcpConfigError, setMcpConfigError] = useState9(null);
-  const [mcpConfigSuccess, setMcpConfigSuccess] = useState9(null);
+  const [mcpHttpName, setMcpHttpName] = useState10("");
+  const [mcpHttpUrl, setMcpHttpUrl] = useState10("");
+  const [mcpRawBlock, setMcpRawBlock] = useState10("");
+  const [mcpConfigPath, setMcpConfigPath] = useState10(null);
+  const [mcpConfigBusy, setMcpConfigBusy] = useState10(false);
+  const [mcpConfigError, setMcpConfigError] = useState10(null);
+  const [mcpConfigSuccess, setMcpConfigSuccess] = useState10(null);
   const clearMcpConfigStatus = useCallback6(() => {
     setMcpConfigError(null);
     setMcpConfigSuccess(null);
@@ -4033,7 +4185,7 @@ function useComposerMcpConfig({
 import {
   useCallback as useCallback7,
   useEffect as useEffect6,
-  useState as useState10
+  useState as useState11
 } from "react";
 function useComposerMenuLifecycle({
   openMenu,
@@ -4044,7 +4196,7 @@ function useComposerMenuLifecycle({
   clearMcpConfigStatus,
   clearHookConfigStatus
 }) {
-  const [copiedSkillName, setCopiedSkillName] = useState10(null);
+  const [copiedSkillName, setCopiedSkillName] = useState11(null);
   useEffect6(() => {
     if (openMenu !== "slash") {
       setSlashPanelView("root");
@@ -4121,7 +4273,7 @@ function useComposerMenuLifecycle({
 
 // src/components/composer/useComposerPromptDomSync.ts
 import {
-  useLayoutEffect as useLayoutEffect3
+  useLayoutEffect as useLayoutEffect4
 } from "react";
 function createPromptAttachmentToken(segment, attachmentPreviewUrls) {
   const { attachment } = segment;
@@ -4219,7 +4371,7 @@ function useComposerPromptDomSync({
   restoreSelection
 }) {
   useI18n();
-  useLayoutEffect3(() => {
+  useLayoutEffect4(() => {
     const editor = promptRef.current;
     if (!editor || isShellView || editor.dataset.imeComposing === "true") {
       return;
@@ -4309,7 +4461,7 @@ function ComposerGoalComposeCard({
 }
 
 // src/components/composer/ComposerPromptEditor.tsx
-import { useRef as useRef6, useState as useState11 } from "react";
+import { useRef as useRef6, useState as useState12 } from "react";
 import { jsx as jsx20, jsxs as jsxs18 } from "react/jsx-runtime";
 function hasIOSNativeBridge() {
   const nativeWindow = window;
@@ -4320,11 +4472,8 @@ function ComposerPromptEditor({
   prompt,
   disabled,
   promptPlaceholder,
-  canInterrupt,
-  interruptLabel,
   composerPromptRegionClassName,
   graphChatInputClassName,
-  onInterrupt,
   onInput,
   onPointerDown,
   onPaste,
@@ -4339,7 +4488,7 @@ function ComposerPromptEditor({
 }) {
   useI18n();
   const previewTrigger = useRef6(null);
-  const [preview, setPreview] = useState11(null);
+  const [preview, setPreview] = useState12(null);
   function attachmentImage(target) {
     const chip = target instanceof Element ? target.closest('[data-segment-type="attachment"]') : null;
     if (chip?.querySelector("img")) previewTrigger.current = chip;
@@ -4349,13 +4498,13 @@ function ComposerPromptEditor({
     "div",
     {
       "data-slot": "input-group-control",
-      className: `${composerPromptRegionClassName} relative w-full ${canInterrupt ? "z-[90]" : ""}`,
+      className: `${composerPromptRegionClassName} relative w-full`,
       children: [
         /* @__PURE__ */ jsxs18("div", { className: graphChatInputClassName, children: [
           prompt.length === 0 && promptPlaceholder && /* @__PURE__ */ jsx20(
             "span",
             {
-              className: `pointer-events-none absolute left-3 top-3 truncate text-slate-500 sm:left-4 sm:top-4 dark:text-slate-400 ${canInterrupt ? "right-12" : "right-3 sm:right-4"}`,
+              className: `pointer-events-none absolute left-3 top-3 truncate text-slate-500 sm:left-4 sm:top-4 dark:text-slate-400 right-3 sm:right-4`,
               children: promptPlaceholder
             }
           ),
@@ -4412,36 +4561,14 @@ function ComposerPromptEditor({
               onDragOver,
               onDragLeave,
               onDrop,
-              className: `relative z-[1] min-h-[4.25rem] whitespace-pre-wrap break-words pb-2 outline-none sm:min-h-[4.25rem] ${canInterrupt ? "pr-12" : ""} ${disabled ? "cursor-not-allowed text-slate-500" : ""}`
+              className: `relative z-[1] min-h-[4.25rem] whitespace-pre-wrap break-words pb-2 outline-none sm:min-h-[4.25rem] ${disabled ? "cursor-not-allowed text-slate-500" : ""}`
             }
           )
         ] }),
         preview ? /* @__PURE__ */ jsx20(GraphWorkspaceImageLightbox, { src: preview.src, alt: preview.alt, onClose: () => {
           setPreview(null);
           previewTrigger.current?.focus({ preventScroll: true });
-        } }) : null,
-        canInterrupt ? /* @__PURE__ */ jsx20(
-          InputGroupButton,
-          {
-            type: "button",
-            variant: "ghost",
-            size: "icon-xs",
-            "aria-label": interruptLabel,
-            title: interruptLabel,
-            onClick: (event) => {
-              event.preventDefault();
-              void onInterrupt?.();
-            },
-            className: "thread-graph-composer-stop-button ui-action-danger absolute right-2 top-2 z-[90] h-8 w-8 rounded-full text-sm font-medium pointer-events-auto",
-            children: /* @__PURE__ */ jsx20(
-              "span",
-              {
-                "aria-hidden": "true",
-                className: "block h-2.5 w-2.5 rounded-[2px] bg-current"
-              }
-            )
-          }
-        ) : null
+        } }) : null
       ]
     }
   );
@@ -4608,13 +4735,13 @@ function useComposerPromptSlots({
 }
 
 // src/components/composer/useComposerSettingsActions.ts
-import { useCallback as useCallback8, useEffect as useEffect7, useState as useState12 } from "react";
+import { useCallback as useCallback8, useEffect as useEffect7, useState as useState13 } from "react";
 function useComposerSettingsActions({
   collaborationMode,
   onUpdateSettings,
   closeMenu
 }) {
-  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState12(null);
+  const [optimisticCollaborationMode, setOptimisticCollaborationMode] = useState13(null);
   const displayedCollaborationMode = optimisticCollaborationMode ?? collaborationMode;
   useEffect7(() => {
     setOptimisticCollaborationMode(null);
@@ -5016,10 +5143,10 @@ function ThreadComposer({
   onCancelPendingPrompt
 }) {
   useI18n();
-  const [openMenu, setOpenMenu] = useState13(null);
-  const [slashPanelView, setSlashPanelView] = useState13("root");
+  const [openMenu, setOpenMenu] = useState14(null);
+  const [slashPanelView, setSlashPanelView] = useState14("root");
   const submitInFlightRef = useRef7(false);
-  const [mcpPanelMode, setMcpPanelMode] = useState13("list");
+  const [mcpPanelMode, setMcpPanelMode] = useState14("list");
   const slashCapabilities = useMemo2(
     () => ({
       fast: capabilities?.controls.performanceMode ?? false,
@@ -5068,13 +5195,14 @@ function ThreadComposer({
     isShellView && shellControlState?.isMobileShell
   );
   const shellPromptLabel = shellControlState?.promptLabel ?? null;
-  const [isDragTargetActive, setIsDragTargetActive] = useState13(false);
+  const [isDragTargetActive, setIsDragTargetActive] = useState14(false);
   const {
     prompt,
     attachments,
     isDraftControlled,
     updateDraft,
-    flushControlledDraftToHost
+    flushControlledDraftToHost,
+    captureSubmission
   } = useComposerDraft({
     isShellView,
     draftPrompt,
@@ -5379,17 +5507,21 @@ function ThreadComposer({
       if (!submitInput) {
         return;
       }
-      const submitted = await onSubmit({
-        ...submitInput,
-        ...!isShellView && delivery ? { delivery } : {}
-      });
-      if (submitted === false) {
-        return;
+      const submission = captureSubmission({ prompt, attachments });
+      try {
+        const submitted = await onSubmit({
+          ...submitInput,
+          ...!isShellView && delivery ? { delivery } : {}
+        });
+        if (submitted === false) {
+          submission.cancel();
+          return;
+        }
+        submission.complete();
+      } catch (error2) {
+        submission.cancel();
+        throw error2;
       }
-      updateDraft(() => ({
-        prompt: "",
-        attachments: []
-      }));
     } finally {
       submitInFlightRef.current = false;
     }
@@ -5751,7 +5883,15 @@ function ThreadComposer({
           onCancel: onCancelPendingPrompt
         }
       ) : null,
-      toolbarSlot: /* @__PURE__ */ jsx23(ComposerToolbar, { ...toolbarProps }),
+      toolbarSlot: /* @__PURE__ */ jsx23(
+        ComposerToolbar,
+        {
+          ...toolbarProps,
+          canInterrupt: !isShellView && canInterrupt,
+          interruptLabel,
+          onInterrupt
+        }
+      ),
       goalSlot,
       shellPromptSlot
     }
@@ -5759,7 +5899,7 @@ function ThreadComposer({
 }
 
 // src/components/timeline/TokenUsageCost.tsx
-import { useRef as useRef9, useState as useState15 } from "react";
+import { useRef as useRef9, useState as useState16 } from "react";
 import {
   DollarSign,
   ArrowDownToLine,
@@ -5772,9 +5912,9 @@ import {
 // src/components/timeline/tokenFormatting.tsx
 import {
   useEffect as useEffect8,
-  useLayoutEffect as useLayoutEffect4,
+  useLayoutEffect as useLayoutEffect5,
   useRef as useRef8,
-  useState as useState14
+  useState as useState15
 } from "react";
 import { Fragment as Fragment4, jsx as jsx24, jsxs as jsxs20 } from "react/jsx-runtime";
 function TokenInIcon() {
@@ -6010,13 +6150,13 @@ function TurnTokenSummary({ turn }) {
   const { locale: i18nLocale } = useI18n();
   const details = buildTurnTokenDetails(turn);
   const priceBadge = buildTurnPriceBadge(turn);
-  const [isMobileOpen, setIsMobileOpen] = useState14(false);
-  const [isDesktopOpen, setIsDesktopOpen] = useState14(false);
-  const [mobilePopoverShift, setMobilePopoverShift] = useState14(0);
+  const [isMobileOpen, setIsMobileOpen] = useState15(false);
+  const [isDesktopOpen, setIsDesktopOpen] = useState15(false);
+  const [mobilePopoverShift, setMobilePopoverShift] = useState15(0);
   const containerRef = useRef8(null);
   const desktopPriceRef = useRef8(null);
   const mobilePopoverRef = useRef8(null);
-  useLayoutEffect4(() => {
+  useLayoutEffect5(() => {
     if (!isMobileOpen || details.length === 0) {
       setMobilePopoverShift(0);
       return;
@@ -6166,7 +6306,7 @@ function TokenUsageCost({
   tooltipZIndex = 80
 }) {
   useI18n();
-  const [detailsOpen, setDetailsOpen] = useState15(false);
+  const [detailsOpen, setDetailsOpen] = useState16(false);
   const openAtPointerDown = useRef9(false);
   const uncachedInput = usage ? Math.max(
     0,
@@ -6297,11 +6437,11 @@ function TokenUsageCost({
 }
 
 // src/components/SettingsPanels.tsx
-import { useId, useState as useState16 } from "react";
+import { useId, useState as useState17 } from "react";
 import { jsx as jsx26, jsxs as jsxs22 } from "react/jsx-runtime";
 function SettingsPanels({ sections, initialId }) {
   useI18n();
-  const [selected, setSelected] = useState16(initialId ?? sections[0]?.id);
+  const [selected, setSelected] = useState17(initialId ?? sections[0]?.id);
   const scope = useId();
   const active = sections.find((section) => section.id === selected) ?? sections[0];
   if (!active) return null;
@@ -6342,7 +6482,7 @@ function SettingsPanels({ sections, initialId }) {
 }
 
 // src/components/ThreadWorkspaceLayout.tsx
-import { useEffect as useEffect12, useMemo as useMemo3, useRef as useRef14, useState as useState21 } from "react";
+import { useEffect as useEffect12, useMemo as useMemo3, useRef as useRef14, useState as useState22 } from "react";
 import {
   ArrowLeft as ArrowLeft2,
   ChevronsLeft,
@@ -6551,7 +6691,7 @@ function historyItemLabel(kind) {
 import {
   useEffect as useEffect9,
   useRef as useRef10,
-  useState as useState17
+  useState as useState18
 } from "react";
 import { Columns2, FolderOpen, Users, X as X2, RotateCcw } from "lucide-react";
 import { jsx as jsx27, jsxs as jsxs23 } from "react/jsx-runtime";
@@ -6565,11 +6705,11 @@ function WorkbenchPanels({
   const { mode, referenceId, ratio } = o.presentation;
   const root = useRef10(null);
   const referenceTrigger = useRef10(null);
-  const [compact, setCompact] = useState17(() => window.innerWidth < 1e3);
-  const [mobileView, setMobileView] = useState17(
+  const [compact, setCompact] = useState18(() => window.innerWidth < 1e3);
+  const [mobileView, setMobileView] = useState18(
     "primary"
   );
-  const [pickerOpen, setPickerOpen] = useState17(false);
+  const [pickerOpen, setPickerOpen] = useState18(false);
   const previousMode = useRef10(mode);
   useEffect9(() => {
     if (previousMode.current !== mode) {
@@ -6577,9 +6717,9 @@ function WorkbenchPanels({
       if (mode !== "focus") setMobileView("reference");
     }
   }, [mode]);
-  const [filesVisited, setFilesVisited] = useState17(mode === "files");
+  const [filesVisited, setFilesVisited] = useState18(mode === "files");
   const drag = useRef10(null);
-  const [lastReveal, setLastReveal] = useState17(revealExplorer);
+  const [lastReveal, setLastReveal] = useState18(revealExplorer);
   useEffect9(() => {
     if (lastReveal !== revealExplorer) {
       setLastReveal(revealExplorer);
@@ -6876,7 +7016,7 @@ function WorkbenchPanels({
 }
 
 // src/components/MatterWorkbench.tsx
-import { useEffect as useEffect11, useState as useState20, useRef as useRef13 } from "react";
+import { useEffect as useEffect11, useState as useState21, useRef as useRef13 } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -6900,12 +7040,12 @@ import { createContext as createContext2 } from "react";
 var WorkbenchContext = createContext2(false);
 
 // src/components/WorkbenchPath.tsx
-import { useLayoutEffect as useLayoutEffect5, useRef as useRef11, useState as useState18 } from "react";
+import { useLayoutEffect as useLayoutEffect6, useRef as useRef11, useState as useState19 } from "react";
 import { jsx as jsx28 } from "react/jsx-runtime";
 function WorkbenchPath({ path }) {
   const ref = useRef11(null);
-  const [label, setLabel] = useState18(path);
-  useLayoutEffect5(() => {
+  const [label, setLabel] = useState19(path);
+  useLayoutEffect6(() => {
     const node = ref.current;
     if (!node) return;
     const normalized = path.replace(/\\/g, "/").replace(/^(?:\/home\/[^/]+|\/Users\/[^/]+|[A-Za-z]:\/Users\/[^/]+|\/root)(?=\/|$)/, "~");
@@ -6953,7 +7093,7 @@ function WorkbenchPath({ path }) {
 }
 
 // src/components/GroupedThreadTabs.tsx
-import { useEffect as useEffect10, useRef as useRef12, useState as useState19 } from "react";
+import { useEffect as useEffect10, useRef as useRef12, useState as useState20 } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown } from "lucide-react";
 import { Fragment as Fragment5, jsx as jsx29, jsxs as jsxs24 } from "react/jsx-runtime";
@@ -6995,7 +7135,7 @@ function groupThreads(threads) {
 }
 function GroupedThreadTabs({ threads, currentKey, onNavigate }) {
   useI18n();
-  const [menu, setMenu] = useState19(null);
+  const [menu, setMenu] = useState20(null);
   const trigger = useRef12(null);
   const popup = useRef12(null);
   useEffect10(() => {
@@ -7128,9 +7268,9 @@ function MatterWorkbench({
   useEffect11(() => {
     tabsRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [o.currentKey, tabs.length]);
-  const [sidebarOpen, setSidebarOpen] = useState20(false);
-  const [sidebarHidden, setSidebarHidden] = useState20(false);
-  const [mobile, setMobile] = useState20(
+  const [sidebarOpen, setSidebarOpen] = useState21(false);
+  const [sidebarHidden, setSidebarHidden] = useState21(false);
+  const [mobile, setMobile] = useState21(
     () => typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches
   );
   useEffect11(() => {
@@ -7139,18 +7279,18 @@ function MatterWorkbench({
     query.addEventListener("change", change);
     return () => query.removeEventListener("change", change);
   }, []);
-  const [shortcutsOpen, setShortcutsOpen] = useState20(true);
-  const [recentsOpen, setRecentsOpen] = useState20(true);
-  const [bellOpen, setBellOpen] = useState20(false);
-  const [toolbarOpen, setToolbarOpen] = useState20(false);
-  const [legacyExplorerOpen, setLegacyExplorerOpen] = useState20(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState21(true);
+  const [recentsOpen, setRecentsOpen] = useState21(true);
+  const [bellOpen, setBellOpen] = useState21(false);
+  const [toolbarOpen, setToolbarOpen] = useState21(false);
+  const [legacyExplorerOpen, setLegacyExplorerOpen] = useState21(false);
   const explorerOpen = o.panels ? o.panels.presentation.mode === "files" : legacyExplorerOpen;
   const setExplorerOpen = (value) => {
     const next = typeof value === "function" ? value(explorerOpen) : value;
     if (o.panels) o.panels.onPresentationChange({ mode: next ? "files" : "focus", ...next ? { ratio: 35 } : {} });
     else setLegacyExplorerOpen(next);
   };
-  const [explorerWidth, setExplorerWidth] = useState20(() => {
+  const [explorerWidth, setExplorerWidth] = useState21(() => {
     try {
       return Math.max(260, Math.min(800, Number(localStorage.getItem("remote-codex.explorer-width")) || 360));
     } catch {
@@ -7168,7 +7308,7 @@ function MatterWorkbench({
     } catch {
     }
   };
-  const [lastReveal, setLastReveal] = useState20(revealExplorer);
+  const [lastReveal, setLastReveal] = useState21(revealExplorer);
   if (lastReveal !== revealExplorer) {
     setLastReveal(revealExplorer);
     if (revealExplorer > 0 && !o.panels) setLegacyExplorerOpen(true);
@@ -7777,7 +7917,7 @@ function ThreadCard({
   collapsed = false
 }) {
   const { locale: i18nLocale } = useI18n();
-  const [copyState, setCopyState] = useState21(
+  const [copyState, setCopyState] = useState22(
     "idle"
   );
   const resetTimerRef = useRef14(null);
@@ -8032,37 +8172,37 @@ function ThreadWorkspaceLayout({
   const shellNav = useAppShellNav();
   const initialShellMobileViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : layoutMode === "mobile";
   const initialWorkspaceFocusViewport = typeof window !== "undefined" ? window.matchMedia("(max-width: 1023px)").matches : layoutMode === "mobile";
-  const [systemPrefersDark, setSystemPrefersDark] = useState21(
+  const [systemPrefersDark, setSystemPrefersDark] = useState22(
     () => typeof window !== "undefined" ? window.matchMedia("(prefers-color-scheme: dark)").matches : false
   );
   const themeMode = themeModeProp ?? shellNav?.themeMode ?? "system";
   const effectiveTheme = effectiveThemeProp ?? shellNav?.effectiveTheme ?? (themeMode === "system" ? systemPrefersDark ? "dark" : "light" : themeMode);
-  const [mobileRoomsOpen, setMobileRoomsOpen] = useState21(false);
-  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState21(false);
-  const [workspaceCollapsed, setWorkspaceCollapsed] = useState21(
+  const [mobileRoomsOpen, setMobileRoomsOpen] = useState22(false);
+  const [roomsRailCollapsed, setRoomsRailCollapsed] = useState22(false);
+  const [workspaceCollapsed, setWorkspaceCollapsed] = useState22(
     !initialWorkspaceFocusViewport
   );
-  const [isShellMobileViewport, setIsShellMobileViewport] = useState21(
+  const [isShellMobileViewport, setIsShellMobileViewport] = useState22(
     initialShellMobileViewport
   );
-  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState21(
+  const [isWorkspaceFocusViewport, setIsWorkspaceFocusViewport] = useState22(
     initialWorkspaceFocusViewport
   );
-  const [mobileWorkspace, setMobileWorkspace] = useState21(
+  const [mobileWorkspace, setMobileWorkspace] = useState22(
     "chat"
   );
-  const [workspaceVisited, setWorkspaceVisited] = useState21(false);
+  const [workspaceVisited, setWorkspaceVisited] = useState22(false);
   useEffect12(() => {
     if (mobileWorkspace === "workspace") setWorkspaceVisited(true);
   }, [mobileWorkspace]);
-  const [editingThreadId, setEditingThreadId] = useState21(null);
-  const [draftTitle, setDraftTitle] = useState21("");
-  const [renamingThreadId, setRenamingThreadId] = useState21(null);
-  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState21(false);
-  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState21("");
-  const [creatingThread, setCreatingThread] = useState21(false);
-  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState21(false);
-  const [sessionCopyNotice, setSessionCopyNotice] = useState21("");
+  const [editingThreadId, setEditingThreadId] = useState22(null);
+  const [draftTitle, setDraftTitle] = useState22("");
+  const [renamingThreadId, setRenamingThreadId] = useState22(null);
+  const [createThreadDialogOpen, setCreateThreadDialogOpen] = useState22(false);
+  const [newThreadTitleDraft, setNewThreadTitleDraft] = useState22("");
+  const [creatingThread, setCreatingThread] = useState22(false);
+  const [topbarDetailsOpen, setTopbarDetailsOpen] = useState22(false);
+  const [sessionCopyNotice, setSessionCopyNotice] = useState22("");
   useEffect12(() => setSessionCopyNotice(""), [currentThreadId]);
   async function copySessionValue(value, label) {
     try {
@@ -8853,18 +8993,18 @@ function ThreadWorkspaceLayout({
 
 // src/components/ThreadTimeline.tsx
 import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@remote-codex/shared";
-import { memo as memo6, useCallback as useCallback14, useEffect as useEffect23, useMemo as useMemo9, useRef as useRef20, useState as useState36 } from "react";
+import { memo as memo6, useCallback as useCallback14, useEffect as useEffect23, useMemo as useMemo9, useRef as useRef20, useState as useState37 } from "react";
 
 // src/components/LongTextDialog.tsx
 import { useEffect as useEffect14 } from "react";
 import { createPortal as createPortal2 } from "react-dom";
 
 // src/components/DiffDetail.tsx
-import { useEffect as useEffect13, useMemo as useMemo4, useState as useState22 } from "react";
+import { useEffect as useEffect13, useMemo as useMemo4, useState as useState23 } from "react";
 import { jsx as jsx34, jsxs as jsxs28 } from "react/jsx-runtime";
 function DiffDetail({ text }) {
   useI18n();
-  const [highlighter, setHighlighter] = useState22(null);
+  const [highlighter, setHighlighter] = useState23(null);
   const theme = useAppShellNav()?.effectiveTheme ?? (document.documentElement.dataset.themeEffective === "light" ? "light" : "dark");
   useEffect13(() => {
     let active = true;
@@ -8985,7 +9125,7 @@ import {
   memo as memo3,
   useEffect as useEffect19,
   useRef as useRef17,
-  useState as useState28
+  useState as useState29
 } from "react";
 import { Brain as Brain2, Check as Check4, Copy as Copy3 } from "lucide-react";
 
@@ -8995,25 +9135,25 @@ import {
   memo as memo2,
   useCallback as useCallback10,
   useEffect as useEffect18,
-  useLayoutEffect as useLayoutEffect6,
+  useLayoutEffect as useLayoutEffect7,
   useMemo as useMemo7,
   useRef as useRef16,
-  useState as useState26
+  useState as useState27
 } from "react";
 
 // src/components/graph-chat/MessageExpansionScope.tsx
-import { createContext as createContext3, useContext as useContext2, useEffect as useEffect15, useState as useState23 } from "react";
+import { createContext as createContext3, useContext as useContext2, useEffect as useEffect15, useState as useState24 } from "react";
 import { jsx as jsx36 } from "react/jsx-runtime";
 var ExpansionContext = createContext3(null);
 function MessageExpansionScope({ children }) {
-  const [cache] = useState23(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
+  const [cache] = useState24(() => ({ messages: /* @__PURE__ */ new Map(), live: null }));
   return /* @__PURE__ */ jsx36(ExpansionContext.Provider, { value: cache, children });
 }
 function useMessageExpansion(messageId, text, streaming) {
   const cache = useContext2(ExpansionContext);
   const remembered = messageId ? cache?.messages.get(messageId) : void 0;
   const inherited = remembered ?? (cache?.live && text.startsWith(cache.live.text) ? cache.live.expanded : false);
-  const [choice, setChoice] = useState23({ messageId, expanded: inherited });
+  const [choice, setChoice] = useState24({ messageId, expanded: inherited });
   const expanded = choice.messageId === messageId ? choice.expanded : inherited;
   const setExpanded = (next) => {
     if (messageId) cache?.messages.set(messageId, next);
@@ -9069,7 +9209,7 @@ import {
   isValidElement,
   useMemo as useMemo6,
   useRef as useRef15,
-  useState as useState25
+  useState as useState26
 } from "react";
 import { Check as Check3, Copy as Copy2 } from "lucide-react";
 import ReactMarkdown, { defaultUrlTransform } from "react-markdown";
@@ -9266,7 +9406,7 @@ function usePlugins() {
 }
 
 // src/components/graph-chat/GraphChatToolCall.tsx
-import { useEffect as useEffect16, useMemo as useMemo5, useState as useState24 } from "react";
+import { useEffect as useEffect16, useMemo as useMemo5, useState as useState25 } from "react";
 import { CheckCircle2, Loader2 as Loader22, Wrench, XCircle } from "lucide-react";
 
 // src/components/graph-workspace/GraphAccordion.tsx
@@ -9413,7 +9553,7 @@ function GraphChatToolCall({
   );
   const shouldAutoOpen = status === "pending";
   const actionLabel = /(?:exec|command|shell|terminal)/i.test(toolName) ? translate("chat.ran") : translate("chat.used");
-  const [openItem, setOpenItem] = useState24(
+  const [openItem, setOpenItem] = useState25(
     shouldAutoOpen ? "item-1" : void 0
   );
   useEffect16(() => {
@@ -9698,10 +9838,10 @@ var GraphChatMessageContent = memo(function GraphChatMessageContent2({
   const { locale: i18nLocale } = useI18n();
   const rootRef = useRef15(null);
   const plugins = usePlugins();
-  const [highlighter, setHighlighter] = useState25(null);
-  const [copyState, setCopyState] = useState25({});
-  const [touchCode, setTouchCode] = useState25(null);
-  const [dark, setDark] = useState25(false);
+  const [highlighter, setHighlighter] = useState26(null);
+  const [copyState, setCopyState] = useState26({});
+  const [touchCode, setTouchCode] = useState26(null);
+  const [dark, setDark] = useState26(false);
   const { processedContent, resultMap } = useMemo6(
     () => readOnly ? { processedContent: content, resultMap: /* @__PURE__ */ new Map() } : preprocessGraphChatToolBlocks(content),
     [content, readOnly]
@@ -10045,7 +10185,7 @@ var GraphChatMarkdownAwareBody = memo2(
     const displayText = isLargeText && !expanded ? `${text.slice(0, LARGE_MESSAGE_PREVIEW_CHARS).trimEnd()}
 
 ...` : text;
-    const [isActivated, setIsActivated] = useState26(
+    const [isActivated, setIsActivated] = useState27(
       streaming || typeof IntersectionObserver === "undefined"
     );
     const toggleExpanded = useCallback10(() => {
@@ -10056,7 +10196,7 @@ var GraphChatMarkdownAwareBody = memo2(
       scrollAnchorRef.current = root && previousTop !== null ? { root, top: previousTop } : null;
       setExpanded(!expanded);
     }, [expanded, setExpanded, onBeforeResize, scrollRootRef]);
-    useLayoutEffect6(() => {
+    useLayoutEffect7(() => {
       const anchor = scrollAnchorRef.current;
       const message = messageRef.current;
       if (!anchor || !message) {
@@ -10226,7 +10366,7 @@ var GraphChatUserMessageBody = memo2(
 );
 
 // src/components/graph-chat/GraphChatMessageFrame.tsx
-import { useState as useState27 } from "react";
+import { useState as useState28 } from "react";
 import { CheckCircle2 as CheckCircle22, Circle, Loader2 as Loader23, XCircle as XCircle2 } from "lucide-react";
 import { jsx as jsx41, jsxs as jsxs34 } from "react/jsx-runtime";
 function GraphChatRunningDots() {
@@ -10280,7 +10420,7 @@ function GraphChatMessageFrame({
 }) {
   const { locale: i18nLocale } = useI18n();
   const isUser = kind === "userMessage";
-  const [touchActionsVisible, setTouchActionsVisible] = useState27(false);
+  const [touchActionsVisible, setTouchActionsVisible] = useState28(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? "";
   const showStatus = Boolean(
     status && normalizedStatus !== "complete" && normalizedStatus !== "completed"
@@ -10386,10 +10526,10 @@ var GraphChatCompactMessageItem = memo3(
     onBeforeMessageResize
   }) {
     const { locale: i18nLocale } = useI18n();
-    const [copyState, setCopyState] = useState28(
+    const [copyState, setCopyState] = useState29(
       "idle"
     );
-    const [reasoningOpen, setReasoningOpen] = useState28(false);
+    const [reasoningOpen, setReasoningOpen] = useState29(false);
     const resetTimerRef = useRef17(null);
     const reasoningItems = item.kind === "agentMessage" ? item.reasoningItems ?? [] : [];
     const reasoningText = reasoningItems.map((entry) => entry.text.trim()).filter(Boolean).join("\n\n");
@@ -11020,7 +11160,7 @@ function buildActivityNoteAnchors({
 }
 
 // src/components/timeline/TimelineRequestCards.tsx
-import { useState as useState29 } from "react";
+import { useState as useState30 } from "react";
 import { Fragment as Fragment10, jsx as jsx43, jsxs as jsxs36 } from "react/jsx-runtime";
 function PendingRequestCard({
   request,
@@ -11028,9 +11168,9 @@ function PendingRequestCard({
   onRespond
 }) {
   const { locale: i18nLocale } = useI18n();
-  const [answers, setAnswers] = useState29({});
-  const [customAnswers, setCustomAnswers] = useState29({});
-  const [selectedPlanDecision, setSelectedPlanDecision] = useState29(null);
+  const [answers, setAnswers] = useState30({});
+  const [customAnswers, setCustomAnswers] = useState30({});
+  const [selectedPlanDecision, setSelectedPlanDecision] = useState30(null);
   const primaryQuestion = request.questions[0] ?? null;
   const OTHER_SENTINEL = "__other__";
   const isPermissionRequest = request.kind === "permissionRequest";
@@ -11411,7 +11551,7 @@ import {
   useCallback as useCallback11,
   useContext as useContext5,
   useMemo as useMemo8,
-  useState as useState33
+  useState as useState34
 } from "react";
 import { ChevronRight as ChevronRight5 } from "lucide-react";
 
@@ -11482,7 +11622,7 @@ function GraphChatHistoryEntries({
 import {
   memo as memo4,
   useContext as useContext4,
-  useState as useState30
+  useState as useState31
 } from "react";
 import {
   Archive,
@@ -11971,7 +12111,7 @@ function GraphChatHistoryToolFrame({
 }) {
   const { locale: i18nLocale } = useI18n();
   const status = graphHistoryStatusConfig(item.status);
-  const [pathExpanded, setPathExpanded] = useState30(false);
+  const [pathExpanded, setPathExpanded] = useState31(false);
   const isRead = tone === "fileRead";
   return /* @__PURE__ */ jsx47("div", { className: `thread-graph-event thread-graph-history-tool ${graphHistoryToneClassName(tone)} ${className ?? ""}`, children: /* @__PURE__ */ jsxs38("div", { className: "thread-history-direct-row", children: [
     /* @__PURE__ */ jsxs38(
@@ -12351,7 +12491,7 @@ var GraphChatArtifactHistoryItem = memo4(
   }) {
     const { locale: i18nLocale } = useI18n();
     const plugins = usePlugins();
-    const [expanded, setExpanded] = useState30(false);
+    const [expanded, setExpanded] = useState31(false);
     const artifact = item.artifact;
     const rendered = artifact ? plugins.renderArtifact({
       artifact,
@@ -12925,7 +13065,7 @@ function GraphChatTurnFrame({
 }
 
 // src/components/timeline/turnStatus.tsx
-import { useEffect as useEffect20, useState as useState31 } from "react";
+import { useEffect as useEffect20, useState as useState32 } from "react";
 
 // src/components/timeline/TurnUsageInline.tsx
 import { jsx as jsx50, jsxs as jsxs41 } from "react/jsx-runtime";
@@ -13087,7 +13227,7 @@ function deriveDisplayedLivePlan(livePlan, items, turnStatus) {
 }
 function useSecondClock(enabled) {
   const { locale: i18nLocale } = useI18n();
-  const [now, setNow] = useState31(() => Date.now());
+  const [now, setNow] = useState32(() => Date.now());
   useEffect20(() => {
     if (!enabled) {
       return;
@@ -13268,7 +13408,7 @@ function TurnStatusBar({
 }
 
 // src/components/timeline/TimelineTimeToggle.tsx
-import { useState as useState32 } from "react";
+import { useState as useState33 } from "react";
 import { jsx as jsx52 } from "react/jsx-runtime";
 function formatRelativeTurnTime(startedAt, timestamp) {
   const startMillis = Date.parse(startedAt ?? "");
@@ -13299,7 +13439,7 @@ function TimelineTimeToggle({
   turnStartedAt
 }) {
   useI18n();
-  const [showAbsolute, setShowAbsolute] = useState32(false);
+  const [showAbsolute, setShowAbsolute] = useState33(false);
   if (!timestamp) {
     return null;
   }
@@ -13698,7 +13838,7 @@ var ThreadTurnRow = memo5(function ThreadTurnRow2({
     () => parseHookPromptText(visibleLiveOutput),
     [visibleLiveOutput, i18nLocale]
   );
-  const [expandedGroups, setExpandedGroups] = useState33(
+  const [expandedGroups, setExpandedGroups] = useState34(
     {}
   );
   const workbench = useContext5(WorkbenchContext);
@@ -14104,7 +14244,7 @@ function buildSyntheticLiveTurn(turnId, items) {
 }
 
 // src/components/timeline/useDeferredHistoryDetail.ts
-import { useCallback as useCallback12, useEffect as useEffect21, useRef as useRef18, useState as useState34 } from "react";
+import { useCallback as useCallback12, useEffect as useEffect21, useRef as useRef18, useState as useState35 } from "react";
 function inlineDetail(item, title, text) {
   return {
     id: item.id,
@@ -14122,7 +14262,7 @@ function useDeferredHistoryDetail({
   const detailCacheRef = useRef18(
     /* @__PURE__ */ new Map()
   );
-  const [expandedText, setExpandedText] = useState34(
+  const [expandedText, setExpandedText] = useState35(
     null
   );
   useEffect21(() => {
@@ -14256,9 +14396,9 @@ function useDeferredHistoryDetail({
 import {
   useCallback as useCallback13,
   useEffect as useEffect22,
-  useLayoutEffect as useLayoutEffect7,
+  useLayoutEffect as useLayoutEffect8,
   useRef as useRef19,
-  useState as useState35
+  useState as useState36
 } from "react";
 function useChangeRevision(inputs) {
   const previousInputsRef = useRef19(null);
@@ -14301,9 +14441,9 @@ function useTimelineScroll({
   const topLoadArmedRef = useRef19(false);
   const lastTouchYRef = useRef19(null);
   const touchPullDistanceRef = useRef19(0);
-  const [visibleCount, setVisibleCount] = useState35(INITIAL_VISIBLE_TURNS);
-  const [loadMoreClicks, setLoadMoreClicks] = useState35(0);
-  const [isTailVisible, setIsTailVisible] = useState35(true);
+  const [visibleCount, setVisibleCount] = useState36(INITIAL_VISIBLE_TURNS);
+  const [loadMoreClicks, setLoadMoreClicks] = useState36(0);
+  const [isTailVisible, setIsTailVisible] = useState36(true);
   const contentRevision = useChangeRevision(contentRevisionInputs);
   const serverManagedHistory = typeof onLoadEarlier === "function" || totalTurnCount !== void 0;
   const effectiveTotalTurnCount = totalTurnCount ?? turnsLength;
@@ -14464,7 +14604,7 @@ function useTimelineScroll({
   const handleLoadAllClick = useCallback13(() => {
     setVisibleCount(turnsLength);
   }, [turnsLength]);
-  useLayoutEffect7(() => {
+  useLayoutEffect8(() => {
     const intent = scrollIntentRevisionRef.current;
     const frame = window.requestAnimationFrame(() => {
       if (intent === scrollIntentRevisionRef.current) scrollToBottom();
@@ -14484,7 +14624,7 @@ function useTimelineScroll({
       autoLoadedEarlierRef.current = false;
     }
   }, [loadingEarlier, turnsLength]);
-  useLayoutEffect7(() => {
+  useLayoutEffect8(() => {
     const anchor = pendingPrependScrollRef.current;
     const container = scrollContainerRef.current;
     if (!anchor || !container || loadingEarlier) {
@@ -14693,10 +14833,10 @@ function ThreadTimelineComponent({
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const effectiveAutoCollapseCompletedTurns = autoCollapseCompletedTurns ?? shellNav?.autoCollapseCompletedTurns ?? false;
-  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState36(
+  const [collapsedTurnOverrides, setCollapsedTurnOverrides] = useState37(
     {}
   );
-  const [cancelingSteerIds, setCancelingSteerIds] = useState36(
+  const [cancelingSteerIds, setCancelingSteerIds] = useState37(
     () => /* @__PURE__ */ new Set()
   );
   const navigationTargetRef = useRef20(null);
@@ -14706,11 +14846,11 @@ function ThreadTimelineComponent({
   const lastSearchKeyRef = useRef20(null);
   const loadHistoryItemDetail = adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
-  const [loadedTurnDetails, setLoadedTurnDetails] = useState36({});
-  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState36(
+  const [loadedTurnDetails, setLoadedTurnDetails] = useState37({});
+  const [loadingTurnDetailIds, setLoadingTurnDetailIds] = useState37(
     () => /* @__PURE__ */ new Set()
   );
-  const [turnDetailErrors, setTurnDetailErrors] = useState36({});
+  const [turnDetailErrors, setTurnDetailErrors] = useState37({});
   const openLinkedThread = adapter?.onOpenLinkedThread;
   useEffect23(() => {
     if (searchTarget) setCollapsedTurnOverrides((current) => ({ ...current, [searchTarget.turnId]: false }));
@@ -15377,7 +15517,7 @@ import {
   useImperativeHandle as useImperativeHandle2,
   useMemo as useMemo11,
   useRef as useRef23,
-  useState as useState39
+  useState as useState40
 } from "react";
 
 // src/components/shell/ShellPane.tsx
@@ -15388,7 +15528,7 @@ import {
   useImperativeHandle,
   useMemo as useMemo10,
   useRef as useRef21,
-  useState as useState37
+  useState as useState38
 } from "react";
 import "xterm/css/xterm.css";
 
@@ -16767,16 +16907,16 @@ var ShellPane = forwardRef(
         clearTimeout: window.clearTimeout
       })
     );
-    const [terminalHostNode, setTerminalHostNode] = useState37(null);
-    const [terminalReady, setTerminalReady] = useState37(false);
-    const [viewerId, setViewerIdState] = useState37(null);
-    const [isConnecting, setIsConnecting] = useState37(false);
-    const [connectionError, setConnectionError] = useState37(null);
-    const [runtimePromptLabel, setRuntimePromptLabel] = useState37(
+    const [terminalHostNode, setTerminalHostNode] = useState38(null);
+    const [terminalReady, setTerminalReady] = useState38(false);
+    const [viewerId, setViewerIdState] = useState38(null);
+    const [isConnecting, setIsConnecting] = useState38(false);
+    const [connectionError, setConnectionError] = useState38(null);
+    const [runtimePromptLabel, setRuntimePromptLabel] = useState38(
       null
     );
-    const [isCommandRunning, setIsCommandRunning] = useState37(false);
-    const [reconnectKey, setReconnectKey] = useState37(0);
+    const [isCommandRunning, setIsCommandRunning] = useState38(false);
+    const [reconnectKey, setReconnectKey] = useState38(0);
     const shellStatus = shell?.status ?? "not_created";
     const canAttachShell = shellCanAttach({ shell, workspacePathMissing });
     const fallbackPromptLabel = useMemo10(
@@ -17306,13 +17446,13 @@ var ShellPane = forwardRef(
 );
 
 // src/components/shell/ShellTouchControls.tsx
-import { useEffect as useEffect26, useRef as useRef22, useState as useState38 } from "react";
+import { useEffect as useEffect26, useRef as useRef22, useState as useState39 } from "react";
 import { ArrowDown, ArrowLeft as ArrowLeft3, ArrowRight as ArrowRight2, ArrowUp, MessageSquare as MessageSquare3, PanelsTopLeft, Pencil as Pencil2, Trash2 as Trash22, Plus as Plus2 } from "lucide-react";
 import { Fragment as Fragment16, jsx as jsx57, jsxs as jsxs47 } from "react/jsx-runtime";
 function useShellKeyboardLayout(visible, mobile) {
   const { locale: i18nLocale } = useI18n();
   const panelRef = useRef22(null);
-  const [layout, setLayout] = useState38({ height: 0, inset: 0 });
+  const [layout, setLayout] = useState39({ height: 0, inset: 0 });
   useEffect26(() => {
     const panel = panelRef.current;
     if (!visible || !mobile || !panel) {
@@ -17361,11 +17501,11 @@ function useShellKeyboardLayout(visible, mobile) {
 }
 function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus, onChat, onRename, onKill, sessions, activeId, onSelect, onCreate, busy }) {
   const { locale: i18nLocale } = useI18n();
-  const [open, setOpen] = useState38(false);
-  const [editing, setEditing] = useState38(null);
-  const [name, setName] = useState38("");
-  const [saving, setSaving] = useState38(false);
-  const [error, setError] = useState38(null);
+  const [open, setOpen] = useState39(false);
+  const [editing, setEditing] = useState39(null);
+  const [name, setName] = useState39("");
+  const [saving, setSaving] = useState39(false);
+  const [error, setError] = useState39(null);
   async function rename(shell) {
     setSaving(true);
     setError(null);
@@ -17482,20 +17622,20 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   const terminalSplitHostRef = useRef23(null);
   const dragFrameRef = useRef23(null);
   const createShellInFlightRef = useRef23(false);
-  const [shellState, setShellState] = useState39(null);
-  const [loading, setLoading] = useState39(true);
-  const [busy, setBusy] = useState39(false);
-  const [error, setError] = useState39(null);
-  const [activePaneId, setActivePaneId] = useState39("primary");
-  const [primaryShellId, setPrimaryShellId] = useState39(null);
-  const [secondaryShellId, setSecondaryShellId] = useState39(null);
-  const [splitMode, setSplitMode] = useState39("single");
-  const [splitRatio, setSplitRatio] = useState39(50);
-  const [renamingShellId, setRenamingShellId] = useState39(null);
-  const [renameDraft, setRenameDraft] = useState39("");
-  const [isMobileShell, setIsMobileShell] = useState39(false);
+  const [shellState, setShellState] = useState40(null);
+  const [loading, setLoading] = useState40(true);
+  const [busy, setBusy] = useState40(false);
+  const [error, setError] = useState40(null);
+  const [activePaneId, setActivePaneId] = useState40("primary");
+  const [primaryShellId, setPrimaryShellId] = useState40(null);
+  const [secondaryShellId, setSecondaryShellId] = useState40(null);
+  const [splitMode, setSplitMode] = useState40("single");
+  const [splitRatio, setSplitRatio] = useState40(50);
+  const [renamingShellId, setRenamingShellId] = useState40(null);
+  const [renameDraft, setRenameDraft] = useState40("");
+  const [isMobileShell, setIsMobileShell] = useState40(false);
   const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(isVisible, isMobileShell);
-  const [ctrlPressed, setCtrlPressed] = useState39(false);
+  const [ctrlPressed, setCtrlPressed] = useState40(false);
   const ctrlRef = useRef23(false);
   const transformInput = useCallback16((data) => {
     if (!ctrlRef.current) return data;
@@ -17503,12 +17643,12 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     setCtrlPressed(false);
     return data.length === 1 ? controlSequenceForLetter(data) ?? data : data;
   }, []);
-  const [toolboxOpen, setToolboxOpen] = useState39(false);
-  const [paneRuntime, setPaneRuntime] = useState39({
+  const [toolboxOpen, setToolboxOpen] = useState40(false);
+  const [paneRuntime, setPaneRuntime] = useState40({
     primary: EMPTY_SHELL_PANE_RUNTIME_STATE,
     secondary: EMPTY_SHELL_PANE_RUNTIME_STATE
   });
-  const [toolboxFeedback, setToolboxFeedback] = useState39(null);
+  const [toolboxFeedback, setToolboxFeedback] = useState40(null);
   const status = shellState?.state ?? "not_created";
   const shells = useMemo11(() => shellState?.shells ?? [], [shellState?.shells]);
   const liveShells = useMemo11(
@@ -18455,7 +18595,7 @@ var MemoizedThreadGraphWorkspacePanel = memo7(
 
 // src/components/ExportTranscriptDialog.tsx
 import { Users as Users2, Link2, FileCode, Pencil as Pencil3 } from "lucide-react";
-import { useEffect as useEffect28, useMemo as useMemo12, useState as useState40 } from "react";
+import { useEffect as useEffect28, useMemo as useMemo12, useState as useState41 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
 import { Fragment as Fragment18, jsx as jsx60, jsxs as jsxs49 } from "react/jsx-runtime";
 function formatTurnTime(value) {
@@ -18543,19 +18683,19 @@ function ThreadActionsDialog({
 }) {
   useI18n();
   const turns = useMemo12(() => turnsState.data?.turns ?? [], [turnsState.data?.turns]);
-  const [actionMode, setActionMode] = useState40(initialMode);
-  const [turnSelection, setTurnSelection] = useState40("latest-10");
-  const [selectedTurnIds, setSelectedTurnIds] = useState40(
+  const [actionMode, setActionMode] = useState41(initialMode);
+  const [turnSelection, setTurnSelection] = useState41("latest-10");
+  const [selectedTurnIds, setSelectedTurnIds] = useState41(
     () => /* @__PURE__ */ new Set()
   );
-  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState40(true);
-  const [targetIdentifier, setTargetIdentifier] = useState40("");
-  const [threadAccess, setThreadAccess] = useState40("read");
-  const [workspaceAccess, setWorkspaceAccess] = useState40("none");
-  const [shareLabel, setShareLabel] = useState40("");
-  const [shareDevice, setShareDevice] = useState40(false);
-  const [editingShare, setEditingShare] = useState40(null);
-  const [effectiveTheme, setEffectiveTheme] = useState40(
+  const [includeTokenAndPrice, setIncludeTokenAndPrice] = useState41(true);
+  const [targetIdentifier, setTargetIdentifier] = useState41("");
+  const [threadAccess, setThreadAccess] = useState41("read");
+  const [workspaceAccess, setWorkspaceAccess] = useState41("none");
+  const [shareLabel, setShareLabel] = useState41("");
+  const [shareDevice, setShareDevice] = useState41(false);
+  const [editingShare, setEditingShare] = useState41(null);
+  const [effectiveTheme, setEffectiveTheme] = useState41(
     () => typeof document !== "undefined" && !document.documentElement.classList.contains("dark") ? "light" : "dark"
   );
   useEffect28(() => {
@@ -18991,10 +19131,10 @@ import {
 import {
   useCallback as useCallback17,
   useEffect as useEffect29,
-  useLayoutEffect as useLayoutEffect8,
+  useLayoutEffect as useLayoutEffect9,
   useMemo as useMemo13,
   useRef as useRef24,
-  useState as useState41
+  useState as useState42
 } from "react";
 import { jsx as jsx61, jsxs as jsxs50 } from "react/jsx-runtime";
 function GraphChatThreadChatPanel({
@@ -19013,11 +19153,11 @@ function GraphChatThreadChatPanel({
   composerHostRef
 }) {
   useI18n();
-  const [isMobileViewport, setIsMobileViewport] = useState41(false);
-  const [mobileComposerHeight, setMobileComposerHeight] = useState41(0);
-  const [mobileComposerOverlap, setMobileComposerOverlap] = useState41(0);
-  const [mobileKeyboardInset, setMobileKeyboardInset] = useState41(0);
-  const [mobilePromptFocused, setMobilePromptFocused] = useState41(false);
+  const [isMobileViewport, setIsMobileViewport] = useState42(false);
+  const [mobileComposerHeight, setMobileComposerHeight] = useState42(0);
+  const [mobileComposerOverlap, setMobileComposerOverlap] = useState42(0);
+  const [mobileKeyboardInset, setMobileKeyboardInset] = useState42(0);
+  const [mobilePromptFocused, setMobilePromptFocused] = useState42(false);
   const internalComposerHostRef = useRef24(null);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
@@ -19115,7 +19255,7 @@ function GraphChatThreadChatPanel({
       window.removeEventListener("resize", updateKeyboardInset);
     };
   }, []);
-  useLayoutEffect8(() => {
+  useLayoutEffect9(() => {
     const node = internalComposerHostRef.current;
     if (!node || !isMobileViewport && !floatingDesktopComposer) {
       setMobileComposerHeight(0);
@@ -19134,7 +19274,7 @@ function GraphChatThreadChatPanel({
       observer.disconnect();
     };
   }, [isMobileViewport, floatingDesktopComposer, composerProps, hasPendingRequests]);
-  useLayoutEffect8(() => {
+  useLayoutEffect9(() => {
     const node = internalComposerHostRef.current;
     if (!node || !isMobileViewport) {
       setMobileComposerOverlap(0);
@@ -19645,7 +19785,7 @@ import {
   useCallback as useCallback18,
   useEffect as useEffect30,
   useMemo as useMemo15,
-  useState as useState42
+  useState as useState43
 } from "react";
 import { jsx as jsx63 } from "react/jsx-runtime";
 var DEFAULT_PLUGIN_PROVIDER_ADAPTER = {};
@@ -19656,11 +19796,11 @@ function PluginProvider({
   children
 }) {
   useI18n();
-  const [plugins, setPlugins] = useState42(
+  const [plugins, setPlugins] = useState43(
     () => mergePluginState(builtinPlugins, [])
   );
-  const [loading, setLoading] = useState42(false);
-  const [error, setError] = useState42(null);
+  const [loading, setLoading] = useState43(false);
+  const [error, setError] = useState43(null);
   const refresh = useCallback18(async () => {
     setLoading(true);
     setError(null);
@@ -19816,7 +19956,7 @@ function PluginProvider({
 }
 
 // src/app-shell/AppShellNavigation.tsx
-import { useEffect as useEffect31, useRef as useRef25, useState as useState43 } from "react";
+import { useEffect as useEffect31, useRef as useRef25, useState as useState44 } from "react";
 import { jsx as jsx64, jsxs as jsxs52 } from "react/jsx-runtime";
 function MenuIcon() {
   const { locale: i18nLocale } = useI18n();
@@ -19978,8 +20118,8 @@ function AppShellSettingsDialog({
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
   const plugins = usePlugins();
-  const [pluginImportDraft, setPluginImportDraft] = useState43("");
-  const [pluginImportState, setPluginImportState] = useState43({
+  const [pluginImportDraft, setPluginImportDraft] = useState44("");
+  const [pluginImportState, setPluginImportState] = useState44({
     busy: false,
     message: null,
     error: null
@@ -20356,7 +20496,7 @@ function ConversationSearchExcerpt({ text, query }) {
 }
 
 // src/components/workbench/presentation.ts
-import { useCallback as useCallback19, useRef as useRef26, useState as useState44 } from "react";
+import { useCallback as useCallback19, useRef as useRef26, useState as useState45 } from "react";
 var defaultPresentation = {
   referenceId: null,
   mode: "focus",
@@ -20389,7 +20529,7 @@ function useWorkbenchPresentation(scope) {
   const owner = useRef26({ scope });
   if (owner.current.scope !== scope) owner.current = { scope };
   const generation = owner.current;
-  const [stored, setStored] = useState44(() => ({
+  const [stored, setStored] = useState45(() => ({
     generation,
     value: read(scope),
     storageFailed: false

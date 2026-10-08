@@ -1116,6 +1116,16 @@ var devicesEn = {
 
 // src/i18n/files.en.ts
 var filesEn = {
+  "files.newFile": "New file",
+  "files.createFile": "Create",
+  "files.newFilePath": "File path",
+  "files.newFileDescription": "Enter a workspace-relative file path. Its parent folder must exist. The new file opens directly; existing files are never overwritten.",
+  "files.invalidNewFilePath": "Enter a valid relative file path without empty segments, .., backslashes or control characters.",
+  "files.fileAlreadyExists": "A file or folder already exists at this path. Choose another name.",
+  "files.createPermissionDenied": "You do not have permission to create a file in this folder.",
+  "files.createUnavailable": "This device does not support file creation yet. Update its runtime and try again.",
+  "files.createdButOpenFailed": "File {{path}} was created but could not be opened: {{error}}. Refresh the file tree and open it.",
+  "files.createHasDraft": "This path has an unsaved draft. Save or resolve it first.",
   "files.safeReason.permissionDenied": "Write permission was revoked; your draft is preserved",
   "files.safeAdoptedSnapshot": "Adopted snapshot \xB7 check disk for latest",
   "files.safeUnknownEncoding": "Encoding unknown",
@@ -3508,6 +3518,16 @@ var devicesZhCN = {
 
 // src/i18n/files.zh-CN.ts
 var filesZhCN = {
+  "files.newFile": "\u65B0\u5EFA\u6587\u4EF6",
+  "files.createFile": "\u521B\u5EFA",
+  "files.newFilePath": "\u6587\u4EF6\u8DEF\u5F84",
+  "files.newFileDescription": "\u8F93\u5165\u76F8\u5BF9\u5DE5\u4F5C\u533A\u7684\u6587\u4EF6\u8DEF\u5F84\u3002\u7236\u76EE\u5F55\u987B\u5DF2\u5B58\u5728\uFF1B\u521B\u5EFA\u540E\u76F4\u63A5\u6253\u5F00\uFF0C\u4E0D\u8986\u76D6\u540C\u540D\u6587\u4EF6\u3002",
+  "files.invalidNewFilePath": "\u8BF7\u8F93\u5165\u6709\u6548\u7684\u76F8\u5BF9\u6587\u4EF6\u8DEF\u5F84\uFF0C\u4E0D\u80FD\u5305\u542B\u7A7A\u76EE\u5F55\u6BB5\u3001..\u3001\u53CD\u659C\u6760\u6216\u63A7\u5236\u5B57\u7B26\u3002",
+  "files.fileAlreadyExists": "\u540C\u540D\u6587\u4EF6\u6216\u6587\u4EF6\u5939\u5DF2\u5B58\u5728\uFF0C\u8BF7\u4F7F\u7528\u5176\u4ED6\u540D\u79F0\u3002",
+  "files.createPermissionDenied": "\u6CA1\u6709\u5728\u6B64\u76EE\u5F55\u521B\u5EFA\u6587\u4EF6\u7684\u6743\u9650\u3002",
+  "files.createUnavailable": "\u5F53\u524D\u8BBE\u5907\u5C1A\u4E0D\u652F\u6301\u65B0\u5EFA\u6587\u4EF6\uFF0C\u8BF7\u66F4\u65B0\u8FD0\u884C\u65F6\u540E\u91CD\u8BD5\u3002",
+  "files.createdButOpenFailed": "\u6587\u4EF6 {{path}} \u5DF2\u521B\u5EFA\uFF0C\u4F46\u6253\u5F00\u5931\u8D25\uFF1A{{error}}\u3002\u8BF7\u5237\u65B0\u6587\u4EF6\u6811\u540E\u6253\u5F00\u3002",
+  "files.createHasDraft": "\u6B64\u8DEF\u5F84\u5DF2\u6709\u672A\u4FDD\u5B58\u8349\u7A3F\uFF0C\u8BF7\u5148\u4FDD\u5B58\u6216\u5904\u7406\u8349\u7A3F\u3002",
   "files.safeReason.permissionDenied": "\u5199\u5165\u6743\u9650\u5DF2\u64A4\u9500\uFF1B\u8349\u7A3F\u5DF2\u4FDD\u7559",
   "files.safeAdoptedSnapshot": "\u5DF2\u91C7\u7528\u5FEB\u7167 \xB7 \u8BF7\u68C0\u67E5\u6700\u65B0\u78C1\u76D8\u7248\u672C",
   "files.safeUnknownEncoding": "\u7F16\u7801\u672A\u77E5",
