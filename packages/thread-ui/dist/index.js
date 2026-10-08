@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-JRM5WYX6.js";
+} from "./chunk-UVPF3V5M.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-EEMBST6M.js";
+} from "./chunk-3Y6Q7NIJ.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -1922,7 +1922,10 @@ function ComposerSettingsToolbar({
         {
           type: "button",
           "data-composer-menu-trigger": "true",
-          "aria-label": translate("chat.modelAndEffort", { value1: selectedModelLabel, value2: formatReasoningEffortLabel(reasoningEffort) }),
+          "aria-label": translate("chat.modelAndEffort", {
+            value1: selectedModelLabel,
+            value2: formatReasoningEffortLabel(reasoningEffort)
+          }),
           "aria-haspopup": "menu",
           "aria-expanded": openMenu === "model",
           disabled: modelControlsDisabled || settingsBusy || modelOptions.length === 0,
@@ -1935,17 +1938,53 @@ ${modelContextTitle}`,
         }
       ),
       model ? /* @__PURE__ */ jsx10(ContextProgressBar, { contextUsage }) : null,
-      openMenu === "model" && /* @__PURE__ */ jsxs8(ComposerMenuSurface, { align: "end", className: "w-[min(19rem,calc(100vw-2rem))] rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-1.5 text-[var(--theme-fg)] shadow-xl", children: [
-        /* @__PURE__ */ jsx10("p", { className: "px-3 py-2 text-xs text-[var(--theme-fg-muted)]", children: translate("chat.model") }),
-        /* @__PURE__ */ jsx10("div", { className: "max-h-[min(280px,35dvh)] overflow-y-auto", children: modelOptions.map((entry) => /* @__PURE__ */ jsxs8("button", { type: "button", role: "menuitemradio", "aria-checked": entry.model === model, disabled: modelControlsDisabled || settingsBusy, onClick: () => onUpdateSettings({ model: entry.model, reasoningEffort: entry.defaultReasoningEffort ?? null }), className: "flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed", children: [
-          /* @__PURE__ */ jsx10("span", { children: entry.displayName }),
-          entry.model === model && /* @__PURE__ */ jsx10(Check, { size: 14, className: "shrink-0" })
-        ] }, entry.id)) }),
-        supportedEfforts.length > 0 && /* @__PURE__ */ jsxs8("div", { className: "mt-1 border-t border-[var(--theme-border)] pt-1", children: [
-          /* @__PURE__ */ jsx10("p", { className: "px-3 py-2 text-xs text-[var(--theme-fg-muted)]", children: translate("chat.effort") }),
-          /* @__PURE__ */ jsx10("div", { className: "flex flex-wrap gap-1 px-2 pb-2", children: supportedEfforts.map((entry) => /* @__PURE__ */ jsx10("button", { type: "button", role: "menuitemradio", "aria-checked": entry.reasoningEffort === reasoningEffort, disabled: effortControlsDisabled || settingsBusy, onClick: () => onUpdateSettings({ reasoningEffort: entry.reasoningEffort }), className: `cursor-pointer rounded-md px-2.5 py-1.5 text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed ${entry.reasoningEffort === reasoningEffort ? "bg-[var(--theme-hover)]" : ""}`, children: formatReasoningEffortLabel(entry.reasoningEffort) }, entry.reasoningEffort)) })
-        ] })
-      ] })
+      openMenu === "model" && /* @__PURE__ */ jsxs8(
+        ComposerMenuSurface,
+        {
+          align: "end",
+          className: "w-[min(19rem,calc(100vw-2rem))] rounded-xl border border-[var(--theme-border)] bg-[var(--theme-panel)] p-1.5 text-[var(--theme-fg)] shadow-xl",
+          children: [
+            /* @__PURE__ */ jsx10("p", { className: "px-3 py-2 text-xs text-[var(--theme-fg-muted)]", children: translate("chat.model") }),
+            /* @__PURE__ */ jsx10("div", { className: "max-h-[min(280px,35dvh)] overflow-y-auto", children: modelOptions.map((entry) => /* @__PURE__ */ jsxs8(
+              "button",
+              {
+                type: "button",
+                role: "menuitemradio",
+                "aria-checked": entry.model === model,
+                disabled: modelControlsDisabled || settingsBusy,
+                onClick: () => onUpdateSettings({
+                  model: entry.model,
+                  reasoningEffort: entry.defaultReasoningEffort ?? null
+                }),
+                className: "flex w-full cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed",
+                children: [
+                  /* @__PURE__ */ jsx10("span", { children: entry.displayName }),
+                  entry.model === model && /* @__PURE__ */ jsx10(Check, { size: 14, className: "shrink-0" })
+                ]
+              },
+              entry.id
+            )) }),
+            supportedEfforts.length > 0 && /* @__PURE__ */ jsxs8("div", { className: "mt-1 border-t border-[var(--theme-border)] pt-1", children: [
+              /* @__PURE__ */ jsx10("p", { className: "px-3 py-2 text-xs text-[var(--theme-fg-muted)]", children: translate("chat.effort") }),
+              /* @__PURE__ */ jsx10("div", { className: "flex flex-wrap gap-1 px-2 pb-2", children: supportedEfforts.map((entry) => /* @__PURE__ */ jsx10(
+                "button",
+                {
+                  type: "button",
+                  role: "menuitemradio",
+                  "aria-checked": entry.reasoningEffort === reasoningEffort,
+                  disabled: effortControlsDisabled || settingsBusy,
+                  onClick: () => onUpdateSettings({
+                    reasoningEffort: entry.reasoningEffort
+                  }),
+                  className: `cursor-pointer rounded-md px-2.5 py-1.5 text-xs hover:bg-[var(--theme-hover)] disabled:cursor-not-allowed ${entry.reasoningEffort === reasoningEffort ? "bg-[var(--theme-hover)]" : ""}`,
+                  children: formatReasoningEffortLabel(entry.reasoningEffort)
+                },
+                entry.reasoningEffort
+              )) })
+            ] })
+          ]
+        }
+      )
     ] }),
     beforeSend,
     /* @__PURE__ */ jsx10(
