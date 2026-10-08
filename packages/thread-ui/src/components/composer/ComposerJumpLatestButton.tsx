@@ -52,7 +52,7 @@ export function ComposerJumpLatestButton({
         <span aria-hidden="true" className="w-px bg-current opacity-20" />
         <button
           type="button"
-          aria-label={translate("chat.jumpToLatest")}
+          data-action="jump-latest" aria-label={translate("chat.jumpToLatest")}
           title={followTail ? translate("chat.latestMessagesAreInView") : translate("chat.jumpToTheBottom")}
           onClick={() => onToggleFollow?.()}
           className="inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70"

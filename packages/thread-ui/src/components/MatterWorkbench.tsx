@@ -1,3 +1,4 @@
+import { WorkbenchPanels, type WorkbenchPanelsOptions } from './workbench/WorkbenchPanels';
 import { getLocale } from '../i18n';
 import { translate, useI18n } from '../i18n';
 import { useEffect, useState, useRef, type ReactNode, type CSSProperties } from 'react';
@@ -40,6 +41,7 @@ export interface WorkbenchNotification {
   summary?: string;
 }
 export interface MatterWorkbenchOptions {
+  panels?: WorkbenchPanelsOptions;
   statusActions?: ReactNode;
   emptyWorkspace?: boolean;
   navigationReady?: boolean;
@@ -116,7 +118,13 @@ export function MatterWorkbench({
   const [recentsOpen, setRecentsOpen] = useState(true);
   const [bellOpen, setBellOpen] = useState(false);
   const [toolbarOpen, setToolbarOpen] = useState(false);
-  const [explorerOpen, setExplorerOpen] = useState(false);
+  const [legacyExplorerOpen, setLegacyExplorerOpen] = useState(false);
+  const explorerOpen = o.panels ? o.panels.presentation.mode === 'files' : legacyExplorerOpen;
+  const setExplorerOpen = (value: boolean | ((open: boolean) => boolean)) => {
+    const next = typeof value === 'function' ? value(explorerOpen) : value;
+    if (o.panels) o.panels.onPresentationChange({ mode: next ? 'files' : 'focus' });
+    else setLegacyExplorerOpen(next);
+  };
   const [explorerWidth, setExplorerWidth] = useState(() => {
     try { return Math.max(260, Math.min(800, Number(localStorage.getItem('remote-codex.explorer-width')) || 360)); } catch { return 360; }
   });
@@ -131,7 +139,7 @@ export function MatterWorkbench({
   const [lastReveal, setLastReveal] = useState(revealExplorer);
   if (lastReveal !== revealExplorer) {
     setLastReveal(revealExplorer);
-    if (revealExplorer > 0) setExplorerOpen(true);
+    if (revealExplorer > 0 && !o.panels) setLegacyExplorerOpen(true);
   }
   const navigate = (href: string) => {
     setSidebarOpen(false);
@@ -240,7 +248,7 @@ export function MatterWorkbench({
         <button aria-label={translate("workbench.goBack")} onClick={() => history.back()}>
           <ArrowLeft />
         </button>
-        <button aria-label={translate("workbench.goForward")} onClick={() => history.forward()}>
+        <button data-action="go-forward" aria-label={translate("workbench.goForward")} onClick={() => history.forward()}>
           <ArrowRight />
         </button>
         <a href={homeHref} aria-label={translate("workbench.backToWorkspaces")} title={translate("workbench.workspaces")}>
@@ -376,6 +384,7 @@ export function MatterWorkbench({
           </div>
         </div>}
         </div>
+        {o.panels ? <WorkbenchContext.Provider value={true}><WorkbenchPanels options={o.panels} explorer={explorer} revealExplorer={revealExplorer}>{children}</WorkbenchPanels></WorkbenchContext.Provider> : (
         <div ref={contentRef} style={{ '--explorer-width': `${explorerWidth}px` } as CSSProperties} className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
           <div className="matter-chat">
             <WorkbenchContext.Provider value={true}>
@@ -403,6 +412,7 @@ export function MatterWorkbench({
             </aside>
           )}
         </div>
+        )}
       </main>
       {bellOpen && (
         <>

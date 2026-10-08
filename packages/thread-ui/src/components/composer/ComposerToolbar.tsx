@@ -85,6 +85,7 @@ export function ComposerToolbar({
             type="button"
             variant="ghost"
             size="icon-xs"
+            data-action={isShellView ? "switch-to-chat" : "switch-to-shell"}
             aria-label={isShellView ? translate("chat.switchToChat") : translate("chat.switchToShell")}
             title={isShellView ? translate("chat.switchToChat") : translate("chat.switchToShell")}
             onClick={() => onToggleView?.()}
