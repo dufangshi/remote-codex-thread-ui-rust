@@ -268,3 +268,19 @@ it('resolves Windows Markdown resources with case-insensitive roots and browser 
     expect(resolveWorkspaceMarkdownPath({markdownPath:'C:\\Work\\demo\\docs\\readme.md', resourceUrl, workspaceRootPath:'c:\\work\\demo'})).toBe('assets/a.png');
   }
 });
+
+it('renders draw.io in a sandbox by default and preserves source/preview switching', () => {
+  const node: WorkspaceTreeNode = {id:'diagram',name:'architecture.drawio',path:'docs/architecture.drawio',kind:'file',children:[]};
+  const element = render(<GraphWorkspacePreviewPane plugins={createDefaultPluginContextValue()}
+    selectedTarget={{kind:'workspace-file',node}}
+    previewFile={{path:node.path,name:node.name,content:'<mxfile><diagram/></mxfile>',size:35,language:'xml',truncated:false,nextOffset:35}} />);
+  const frame = element.querySelector('iframe');
+  expect(frame?.getAttribute('title')).toBe('Draw.io preview: architecture.drawio');
+  expect(frame?.getAttribute('sandbox')).toBe('allow-scripts');
+  expect(frame?.getAttribute('srcdoc')).toContain('GraphViewer.createViewerForElement');
+  act(() => element.querySelector<HTMLButtonElement>('[aria-label="Diagram source"]')!.click());
+  expect(element.querySelector('iframe')).toBeNull();
+  expect(element.querySelector('[aria-label="Source code"]')).toBeTruthy();
+  act(() => element.querySelector<HTMLButtonElement>('[aria-label="Diagram preview"]')!.click());
+  expect(element.querySelector('iframe')).toBeTruthy();
+});

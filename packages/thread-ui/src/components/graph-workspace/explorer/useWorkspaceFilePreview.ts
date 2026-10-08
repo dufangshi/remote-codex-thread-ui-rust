@@ -12,7 +12,7 @@ import {
 import type { WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerIdentity } from './useWorkspaceExplorerPersistence';
 
-import { isBinaryPreview, isDownloadOnlyPath } from './filePreviewPolicy';
+import { DRAWIO_MAX_BYTES, isBinaryPreview, isDownloadOnlyPath, isDrawioPath } from './filePreviewPolicy';
 
 const PREVIEW_CHUNK_BYTES = 24_000;
 
@@ -64,6 +64,9 @@ export function useWorkspaceFilePreview({
           return;
         }
         const extension = extensionOf(currentPath);
+        if (isDrawioPath(currentPath) && (activeNode?.size ?? 0) > DRAWIO_MAX_BYTES) {
+          throw new Error('Diagram preview supports files up to 8 MiB. Download this file to view it locally.');
+        }
         const rawUrl = currentAdapter.getRawFileUrl?.({
           ...identity,
           path: currentPath,
@@ -83,7 +86,7 @@ export function useWorkspaceFilePreview({
         const file = await currentAdapter.readFile({
           ...identity,
           path: currentPath,
-          limit: PREVIEW_CHUNK_BYTES,
+          limit: isDrawioPath(currentPath) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES,
         });
         if (!cancelled) {
           if (isBinaryPreview(file.content)) setDownloadOnly(true);
@@ -153,7 +156,7 @@ export function useWorkspaceFilePreview({
     const file = await adapter.readFile({
       ...identity,
       path: input.path,
-      limit: PREVIEW_CHUNK_BYTES,
+      limit: isDrawioPath(input.path) ? DRAWIO_MAX_BYTES : PREVIEW_CHUNK_BYTES,
     });
     setPreviewFile(file);
   }

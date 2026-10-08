@@ -38,6 +38,8 @@ import {
 } from './workspaceTree';
 import { WorkspaceInfoCard } from './GraphWorkspaceCards';
 import { GraphMoleculeViewer } from './GraphMoleculeViewer';
+import { GraphDrawioPreview } from './GraphDrawioPreview';
+import { isDrawioPath } from './explorer/filePreviewPolicy';
 import {
   WorkspaceFileTabs,
   type WorkspaceFileTab,
@@ -440,6 +442,8 @@ export function GraphWorkspacePreviewPane({
     previewFile?.language || languageForPath(previewFile?.path ?? '');
   const extension = previewFile ? extensionOf(previewFile.path) : '';
   const isMarkdownFile = MARKDOWN_EXTENSIONS.has(extension);
+  const isDrawioFile = isDrawioPath(previewFile?.path ?? '');
+  const renderedViewLabel = isDrawioFile ? 'Diagram' : 'Markdown';
   const title = previewTargetTitle(selectedTarget);
   const canEditFile =
     Boolean(previewFile && onSaveFile) &&
@@ -527,13 +531,13 @@ export function GraphWorkspacePreviewPane({
         .filter(Boolean)
     : [];
   const fileToolbar =
-    previewFile && (isMarkdownFile || canEditFile) ? (
+    previewFile && (isMarkdownFile || isDrawioFile || canEditFile) ? (
       <div className="flex shrink-0 items-center gap-1">
-        {isMarkdownFile && !editing ? (
+        {(isMarkdownFile || isDrawioFile) && !editing ? (
           <div
             className="thread-graph-markdown-view-switch inline-flex items-center rounded border p-px"
             role="group"
-            aria-label="Markdown view"
+            aria-label={`${renderedViewLabel} view`}
           >
             <button
               type="button"
@@ -542,8 +546,8 @@ export function GraphWorkspacePreviewPane({
                 markdownView === 'preview' ? 'is-active' : ''
               }`}
               aria-pressed={markdownView === 'preview'}
-              title="Markdown preview"
-              aria-label="Markdown preview"
+              title={`${renderedViewLabel} preview`}
+              aria-label={`${renderedViewLabel} preview`}
             >
               <BookOpen className="h-3 w-3" />
             </button>
@@ -554,8 +558,8 @@ export function GraphWorkspacePreviewPane({
                 markdownView === 'source' ? 'is-active' : ''
               }`}
               aria-pressed={markdownView === 'source'}
-              title="Markdown source"
-              aria-label="Markdown source"
+              title={`${renderedViewLabel} source`}
+              aria-label={`${renderedViewLabel} source`}
             >
               <Code2 className="h-3 w-3" />
             </button>
@@ -753,6 +757,8 @@ export function GraphWorkspacePreviewPane({
                 aria-label="Workspace file editor"
                 className="thread-graph-file-editor min-h-0 flex-1 resize-none border-0 bg-transparent p-4 font-mono text-[12px] leading-5 text-slate-900 outline-none dark:text-slate-100"
               />
+            ) : isDrawioFile && markdownView === 'preview' && !editing ? (
+              <GraphDrawioPreview content={previewFile.content} name={previewFile.name} truncated={previewFile.truncated} />
             ) : isMarkdownFile && markdownView === 'preview' && !editing ? (
               <GraphWorkspaceMarkdownPreview
                 content={previewFile.content}
