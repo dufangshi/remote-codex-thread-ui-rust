@@ -20527,7 +20527,7 @@ function ConversationSearchExcerpt({ text, query }) {
 }
 
 // src/components/workbench/presentation.ts
-import { useCallback as useCallback19, useRef as useRef27, useState as useState45 } from "react";
+import { useCallback as useCallback19, useEffect as useEffect32, useRef as useRef27, useState as useState45 } from "react";
 var defaultPresentation = {
   referenceId: null,
   mode: "focus",
@@ -20556,18 +20556,48 @@ function read(scope) {
   };
   return normalizePresentation(parse("members"), parse("arrangement"));
 }
-function useWorkbenchPresentation(scope) {
-  const owner = useRef27({ scope });
-  if (owner.current.scope !== scope) owner.current = { scope };
+function write(scope, value, patch) {
+  try {
+    if ("referenceId" in patch)
+      localStorage.setItem(
+        `${scope}.members`,
+        JSON.stringify({ schemaVersion: 1, referenceId: value.referenceId })
+      );
+    localStorage.setItem(
+      `${scope}.arrangement`,
+      JSON.stringify({
+        schemaVersion: 1,
+        mode: value.mode,
+        ratio: value.ratio
+      })
+    );
+    return false;
+  } catch {
+    return true;
+  }
+}
+function useWorkbenchPresentation(scope, contextKey = null) {
+  const owner = useRef27({ scope, contextKey });
+  if (owner.current.scope !== scope || owner.current.contextKey !== contextKey)
+    owner.current = { scope, contextKey };
   const generation = owner.current;
   const [stored, setStored] = useState45(() => ({
     generation,
     value: read(scope),
-    storageFailed: false
+    storageFailed: false,
+    pending: null
   }));
+  const pending = stored.generation.scope === null && stored.generation.contextKey === contextKey ? stored.pending : null;
+  const value = stored.generation === generation ? stored.value : { ...read(scope), ...pending };
   if (stored.generation !== generation)
-    setStored({ generation, value: read(scope), storageFailed: false });
-  const value = stored.generation === generation ? stored.value : read(scope);
+    setStored({ generation, value, storageFailed: false, pending });
+  useEffect32(() => {
+    if (!scope || stored.generation !== generation || !stored.pending) return;
+    const storageFailed = write(scope, stored.value, stored.pending);
+    setStored(
+      (previous) => previous === stored ? { ...previous, pending: null, storageFailed } : previous
+    );
+  }, [scope, stored, generation]);
   const update = useCallback19(
     (patch) => {
       if (owner.current !== generation) return;
@@ -20577,29 +20607,12 @@ function useWorkbenchPresentation(scope) {
           ...previous.generation === generation ? previous.value : read(scope),
           ...patch
         };
-        let storageFailed = false;
-        if (scope)
-          try {
-            if ("referenceId" in patch)
-              localStorage.setItem(
-                `${scope}.members`,
-                JSON.stringify({
-                  schemaVersion: 1,
-                  referenceId: next.referenceId
-                })
-              );
-            localStorage.setItem(
-              `${scope}.arrangement`,
-              JSON.stringify({
-                schemaVersion: 1,
-                mode: next.mode,
-                ratio: next.ratio
-              })
-            );
-          } catch {
-            storageFailed = true;
-          }
-        return { generation, value: next, storageFailed };
+        return {
+          generation,
+          value: next,
+          storageFailed: scope ? write(scope, next, patch) : false,
+          pending: scope ? null : { ...previous.pending, ...patch }
+        };
       });
     },
     [generation, scope]

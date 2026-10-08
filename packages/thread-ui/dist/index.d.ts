@@ -144,8 +144,8 @@ interface WorkbenchPresentation {
     mode: ReferenceMode;
     ratio: number;
 }
-/** Members and arrangement are independent: a damaged ratio/mode never removes a reference. No transcript or drafts are written here. */
-declare function useWorkbenchPresentation(scope: string | null): {
+/** Members and arrangement are independent. Pending identity never discards an explicit layout action. */
+declare function useWorkbenchPresentation(scope: string | null, contextKey?: string | null): {
     value: WorkbenchPresentation;
     update: (patch: Partial<WorkbenchPresentation>) => void;
     storageFailed: boolean;

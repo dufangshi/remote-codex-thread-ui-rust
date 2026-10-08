@@ -1,0 +1,83 @@
+// @vitest-environment jsdom
+
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { act } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
+import { defaultPresentation, useWorkbenchPresentation } from './presentation';
+
+Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+let root: Root;
+let host: HTMLDivElement;
+let current: ReturnType<typeof useWorkbenchPresentation>;
+function Probe({
+  scope,
+  contextKey,
+}: {
+  scope: string | null;
+  contextKey: string | null;
+}) {
+  current = useWorkbenchPresentation(scope, contextKey);
+  return null;
+}
+function render(scope: string | null, contextKey: string | null = null) {
+  act(() => root.render(<Probe scope={scope} contextKey={contextKey} />));
+}
+beforeEach(() => {
+  localStorage.clear();
+  host = document.createElement('div');
+  document.body.append(host);
+  root = createRoot(host);
+});
+afterEach(() => {
+  act(() => root.unmount());
+  host.remove();
+});
+describe('pending workbench identity', () => {
+  it('discards pending actions if the device or workspace changes before identity resolves', () => {
+    render(null, 'device-a/workspace-a');
+    act(() => current.update({ mode: 'files', referenceId: 'thread-a' }));
+    const stale = current.update;
+    render(null, 'device-b/workspace-b');
+    act(() => stale({ mode: 'thread', referenceId: 'late-a' }));
+    render('account-device-b', 'device-b/workspace-b');
+    expect(current.value).toEqual(defaultPresentation);
+    expect(localStorage.getItem('account-device-b.members')).toBeNull();
+  });
+  it('keeps an early Explorer action when account identity resolves and saves it', () => {
+    localStorage.setItem(
+      'account-a.members',
+      JSON.stringify({ schemaVersion: 1, referenceId: 'thread-b' }),
+    );
+    render(null);
+    act(() => current.update({ mode: 'files', ratio: 35 }));
+    render('account-a');
+    expect(current.value).toEqual({
+      referenceId: 'thread-b',
+      mode: 'files',
+      ratio: 35,
+    });
+    expect(
+      JSON.parse(localStorage.getItem('account-a.arrangement')!),
+    ).toMatchObject({ mode: 'files', ratio: 35 });
+    expect(
+      JSON.parse(localStorage.getItem('account-a.members')!),
+    ).toMatchObject({ referenceId: 'thread-b' });
+  });
+  it('does not carry a resolved account layout or late callback into another scope', () => {
+    render('account-a');
+    act(() =>
+      current.update({
+        mode: 'files',
+        referenceId: 'private-thread',
+        ratio: 35,
+      }),
+    );
+    const stale = current.update;
+    render(null);
+    expect(current.value).toEqual(defaultPresentation);
+    act(() => stale({ referenceId: 'late-thread', mode: 'thread' }));
+    render('account-b');
+    expect(current.value).toEqual(defaultPresentation);
+    expect(localStorage.getItem('account-b.members')).toBeNull();
+  });
+});

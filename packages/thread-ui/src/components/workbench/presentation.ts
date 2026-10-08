@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type ReferenceMode = 'focus' | 'thread' | 'files' | 'collaboration';
 export interface WorkbenchPresentation {
@@ -57,19 +57,68 @@ function read(scope: string | null): WorkbenchPresentation {
   };
   return normalizePresentation(parse('members'), parse('arrangement'));
 }
-/** Members and arrangement are independent: a damaged ratio/mode never removes a reference. No transcript or drafts are written here. */
-export function useWorkbenchPresentation(scope: string | null) {
-  const owner = useRef({ scope });
-  if (owner.current.scope !== scope) owner.current = { scope };
+function write(
+  scope: string,
+  value: WorkbenchPresentation,
+  patch: Partial<WorkbenchPresentation>,
+): boolean {
+  try {
+    // Do not rewrite membership for a resize or mode change.
+    if ('referenceId' in patch)
+      localStorage.setItem(
+        `${scope}.members`,
+        JSON.stringify({ schemaVersion: 1, referenceId: value.referenceId }),
+      );
+    localStorage.setItem(
+      `${scope}.arrangement`,
+      JSON.stringify({
+        schemaVersion: 1,
+        mode: value.mode,
+        ratio: value.ratio,
+      }),
+    );
+    return false;
+  } catch {
+    return true;
+  }
+}
+/** Members and arrangement are independent. Pending identity never discards an explicit layout action. */
+export function useWorkbenchPresentation(
+  scope: string | null,
+  contextKey: string | null = null,
+) {
+  const owner = useRef({ scope, contextKey });
+  if (owner.current.scope !== scope || owner.current.contextKey !== contextKey)
+    owner.current = { scope, contextKey };
   const generation = owner.current;
   const [stored, setStored] = useState(() => ({
     generation,
     value: read(scope),
     storageFailed: false,
+    pending: null as Partial<WorkbenchPresentation> | null,
   }));
+  // Only actions made in the current unresolved profile can cross into its resolved
+  // identity. A previous account/device's resolved layout never crosses scopes.
+  const pending =
+    stored.generation.scope === null &&
+    stored.generation.contextKey === contextKey
+      ? stored.pending
+      : null;
+  const value =
+    stored.generation === generation
+      ? stored.value
+      : { ...read(scope), ...pending };
   if (stored.generation !== generation)
-    setStored({ generation, value: read(scope), storageFailed: false });
-  const value = stored.generation === generation ? stored.value : read(scope);
+    setStored({ generation, value, storageFailed: false, pending });
+  useEffect(() => {
+    if (!scope || stored.generation !== generation || !stored.pending) return;
+    const storageFailed = write(scope, stored.value, stored.pending);
+    setStored((previous) =>
+      previous === stored
+        ? { ...previous, pending: null, storageFailed }
+        : previous,
+    );
+  }, [scope, stored, generation]);
   const update = useCallback(
     (patch: Partial<WorkbenchPresentation>) => {
       if (owner.current !== generation) return;
@@ -81,30 +130,12 @@ export function useWorkbenchPresentation(scope: string | null) {
             : read(scope)),
           ...patch,
         };
-        let storageFailed = false;
-        if (scope)
-          try {
-            // Do not rewrite membership for a resize or mode change.
-            if ('referenceId' in patch)
-              localStorage.setItem(
-                `${scope}.members`,
-                JSON.stringify({
-                  schemaVersion: 1,
-                  referenceId: next.referenceId,
-                }),
-              );
-            localStorage.setItem(
-              `${scope}.arrangement`,
-              JSON.stringify({
-                schemaVersion: 1,
-                mode: next.mode,
-                ratio: next.ratio,
-              }),
-            );
-          } catch {
-            storageFailed = true;
-          }
-        return { generation, value: next, storageFailed };
+        return {
+          generation,
+          value: next,
+          storageFailed: scope ? write(scope, next, patch) : false,
+          pending: scope ? null : { ...previous.pending, ...patch },
+        };
       });
     },
     [generation, scope],
