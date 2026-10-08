@@ -17,7 +17,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-7DJHCK33.js";
+} from "./chunk-7VRWEQK6.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -35,7 +35,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-OFUL6MFA.js";
+} from "./chunk-37PRWPV6.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -19968,12 +19968,63 @@ function PublicTranscript({ snapshot }) {
     })
   ] }) });
 }
+
+// src/components/ConversationSearchControls.tsx
+import { Fragment as Fragment19, jsx as jsx65, jsxs as jsxs53 } from "react/jsx-runtime";
+function ConversationSearchScopePicker({ value, onChange, labels, allowGlobal }) {
+  return /* @__PURE__ */ jsxs53(
+    "select",
+    {
+      className: "workbench-search-scope",
+      "aria-label": labels.scope,
+      value,
+      onChange: (event) => onChange(event.target.value),
+      children: [
+        /* @__PURE__ */ jsx65("option", { value: "thread", children: labels.thread }),
+        allowGlobal && /* @__PURE__ */ jsxs53(Fragment19, { children: [
+          /* @__PURE__ */ jsx65("option", { value: "workspace", children: labels.workspace }),
+          /* @__PURE__ */ jsx65("option", { value: "device", children: labels.device })
+        ] })
+      ]
+    }
+  );
+}
+function searchHighlightParts(text, query) {
+  const foldedQuery = query.trim().toLowerCase();
+  const found = foldedQuery ? text.toLowerCase().indexOf(foldedQuery) : -1;
+  if (found < 0) return { before: text, match: "", after: "" };
+  const chars = Array.from(text);
+  let folded = 0, first = -1, last = 0;
+  for (let i = 0; i < chars.length; i++) {
+    const next = folded + chars[i].toLowerCase().length;
+    if (next > found && first < 0) first = i;
+    if (folded < found + foldedQuery.length) last = i + 1;
+    folded = next;
+    if (folded >= found + foldedQuery.length) break;
+  }
+  const start = Math.max(0, first - 80), finish = Math.min(chars.length, last + 180);
+  return {
+    before: `${start ? "\u2026" : ""}${chars.slice(start, first).join("")}`,
+    match: chars.slice(first, last).join(""),
+    after: `${chars.slice(last, finish).join("")}${finish < chars.length ? "\u2026" : ""}`
+  };
+}
+function ConversationSearchExcerpt({ text, query }) {
+  const parts = searchHighlightParts(text, query);
+  return /* @__PURE__ */ jsxs53("p", { children: [
+    parts.before,
+    parts.match && /* @__PURE__ */ jsx65("mark", { children: parts.match }),
+    parts.after
+  ] });
+}
 export {
   AppShellMenuButton,
   AppShellNavContext,
   AppShellNavigationMenu,
   AppShellSettingsDialog,
   ConfirmDialog,
+  ConversationSearchExcerpt,
+  ConversationSearchScopePicker,
   DEFAULT_LOCALE,
   Dialog,
   DialogContent,

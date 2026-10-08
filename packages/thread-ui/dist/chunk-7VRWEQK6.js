@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-OFUL6MFA.js";
+} from "./chunk-37PRWPV6.js";
 
 // src/components/ConfirmDialog.tsx
 import { useEffect } from "react";

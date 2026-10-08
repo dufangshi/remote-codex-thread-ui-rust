@@ -1,6 +1,36 @@
 // src/i18n/index.tsx
 import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } from "react";
 
+// src/i18n/search.en.ts
+var searchEn = {
+  "search.trigger": "Search conversation",
+  "search.input": "Search messages",
+  "search.close": "Close search",
+  "search.placeholder": "Search conversation\u2026",
+  "search.globalPlaceholder": "Search titles and messages\u2026",
+  "search.scope": "Search scope",
+  "search.thread": "Current conversation",
+  "search.workspace": "This workspace",
+  "search.device": "This device",
+  "search.results": "Conversation search results",
+  "search.matches": "Matching messages",
+  "search.opening": "Opening message\u2026",
+  "search.searching": "Searching\u2026",
+  "search.empty": "No matching messages or titles.",
+  "search.scopeUnavailable": "This search scope is currently unavailable on this device. Update the device runtime, verify the workspace still exists, or choose Current conversation search.",
+  "search.failed": "Search failed.",
+  "search.openFailed": "Could not open this message.",
+  "search.count": "{{count}}{{more}} matches",
+  "search.more": "Next results",
+  "search.previous": "Previous results",
+  "search.refine": "Showing the first 50 matches. Refine your search for more.",
+  "search.localScope": "Searches saved conversations on this device only.",
+  "search.you": "You",
+  "search.assistant": "Assistant",
+  "search.title": "Title",
+  "search.localDevice": "Local device"
+};
+
 // src/i18n/auth.en.ts
 var authEn = {
   "auth.connectingThread": "Connecting thread",
@@ -2282,7 +2312,38 @@ var en = {
   ...filesEn,
   ...settingsEn,
   ...sharingEn,
-  ...workbenchEn
+  ...workbenchEn,
+  ...searchEn
+};
+
+// src/i18n/search.zh-CN.ts
+var searchZhCN = {
+  "search.trigger": "\u641C\u7D22\u4F1A\u8BDD",
+  "search.input": "\u641C\u7D22\u6D88\u606F",
+  "search.close": "\u5173\u95ED\u641C\u7D22",
+  "search.placeholder": "\u641C\u7D22\u5F53\u524D\u4F1A\u8BDD\u2026",
+  "search.globalPlaceholder": "\u641C\u7D22\u6807\u9898\u548C\u6D88\u606F\u2026",
+  "search.scope": "\u641C\u7D22\u8303\u56F4",
+  "search.thread": "\u5F53\u524D\u4F1A\u8BDD",
+  "search.workspace": "\u6B64\u5DE5\u4F5C\u533A",
+  "search.device": "\u6B64\u8BBE\u5907",
+  "search.results": "\u4F1A\u8BDD\u641C\u7D22\u7ED3\u679C",
+  "search.matches": "\u5339\u914D\u6D88\u606F",
+  "search.opening": "\u6B63\u5728\u6253\u5F00\u6D88\u606F\u2026",
+  "search.searching": "\u6B63\u5728\u641C\u7D22\u2026",
+  "search.empty": "\u6CA1\u6709\u5339\u914D\u7684\u6D88\u606F\u6216\u6807\u9898\u3002",
+  "search.scopeUnavailable": "\u6B64\u8BBE\u5907\u4E0A\u7684\u641C\u7D22\u8303\u56F4\u6682\u4E0D\u53EF\u7528\u3002\u8BF7\u66F4\u65B0\u8BBE\u5907\u8FD0\u884C\u65F6\u3001\u68C0\u67E5\u5DE5\u4F5C\u533A\u662F\u5426\u4ECD\u5B58\u5728\uFF0C\u6216\u9009\u62E9\u5F53\u524D\u4F1A\u8BDD\u641C\u7D22\u3002",
+  "search.failed": "\u641C\u7D22\u5931\u8D25\u3002",
+  "search.openFailed": "\u65E0\u6CD5\u6253\u5F00\u6B64\u6D88\u606F\u3002",
+  "search.count": "{{count}}{{more}} \u6761\u7ED3\u679C",
+  "search.more": "\u4E0B\u4E00\u9875",
+  "search.previous": "\u4E0A\u4E00\u9875",
+  "search.refine": "\u5DF2\u663E\u793A\u524D 50 \u6761\u7ED3\u679C\uFF0C\u8BF7\u7EC6\u5316\u641C\u7D22\u8BCD\u3002",
+  "search.localScope": "\u4EC5\u641C\u7D22\u6B64\u8BBE\u5907\u5DF2\u4FDD\u5B58\u7684\u4F1A\u8BDD\u3002",
+  "search.you": "\u4F60",
+  "search.assistant": "\u52A9\u624B",
+  "search.title": "\u6807\u9898",
+  "search.localDevice": "\u672C\u5730\u8BBE\u5907"
 };
 
 // src/i18n/auth.zh-CN.ts
@@ -4566,7 +4627,8 @@ var zhCN = {
   ...filesZhCN,
   ...settingsZhCN,
   ...sharingZhCN,
-  ...workbenchZhCN
+  ...workbenchZhCN,
+  ...searchZhCN
 };
 
 // src/i18n/locales.ts

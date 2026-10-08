@@ -32,12 +32,12 @@ import {
   relativeWorkspacePath,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-7DJHCK33.js";
+} from "./chunk-7VRWEQK6.js";
 import {
   getLocale,
   translate,
   useI18n
-} from "./chunk-OFUL6MFA.js";
+} from "./chunk-37PRWPV6.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect9, useMemo as useMemo10, useState as useState11 } from "react";
@@ -3539,7 +3539,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-N62MN5IQ.js")
+  () => import("./GraphWorkspaceMonacoEditor-ALTVD5RV.js")
 );
 function DownloadFilePreview({ node, onDownload }) {
   const { locale: i18nLocale } = useI18n();
