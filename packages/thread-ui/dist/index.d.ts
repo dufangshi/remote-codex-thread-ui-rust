@@ -138,6 +138,38 @@ declare function SettingsPanels({ sections, initialId }: {
     initialId?: string;
 }): react.JSX.Element | null;
 
+type ReferenceMode = 'focus' | 'thread' | 'files' | 'collaboration';
+interface WorkbenchPresentation {
+    referenceId: string | null;
+    mode: ReferenceMode;
+    ratio: number;
+}
+/** Members and arrangement are independent: a damaged ratio/mode never removes a reference. No transcript or drafts are written here. */
+declare function useWorkbenchPresentation(scope: string | null): {
+    value: WorkbenchPresentation;
+    update: (patch: Partial<WorkbenchPresentation>) => void;
+    storageFailed: boolean;
+};
+
+interface WorkbenchPanelsOptions {
+    deviceLabel: string;
+    workspaceLabel: string;
+    primaryTitle: string;
+    primaryStatus: string;
+    primaryHarness: string;
+    presentation: WorkbenchPresentation;
+    onPresentationChange: (patch: Partial<WorkbenchPresentation>) => void;
+    candidates: Array<{
+        id: string;
+        title: string;
+    }>;
+    referenceTitle?: string;
+    referenceContent?: ReactNode;
+    collaborationContent?: ReactNode;
+    onMakePrimary: () => void;
+    storageFailed?: boolean;
+}
+
 interface WorkbenchThread {
     key: string;
     title: string;
@@ -156,6 +188,7 @@ interface WorkbenchNotification {
     summary?: string;
 }
 interface MatterWorkbenchOptions {
+    panels?: WorkbenchPanelsOptions;
     statusActions?: ReactNode;
     emptyWorkspace?: boolean;
     navigationReady?: boolean;
@@ -688,4 +721,4 @@ declare function ConversationSearchExcerpt({ text, query }: {
 /** Drafts are only in memory; confirm before intentional app/source navigation. */
 declare function confirmWorkspaceDocumentLeave(): boolean;
 
-export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, type ComposerSendShortcut, ConfirmDialog, ConversationSearchExcerpt, type ConversationSearchScope, ConversationSearchScopePicker, type CreateThreadShareInput, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MatterWorkbench, type MatterWorkbenchOptions, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, SettingsPanels, type SettingsSection, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, TokenUsageCost, type TokenUsageCostProps, type WorkbenchNotification, type WorkbenchThread, confirmWorkspaceDocumentLeave, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, transcriptSnapshot, turnStatusLabel, useAppShellNav, usePlugins };
+export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, type ComposerSendShortcut, ConfirmDialog, ConversationSearchExcerpt, type ConversationSearchScope, ConversationSearchScopePicker, type CreateThreadShareInput, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MatterWorkbench, type MatterWorkbenchOptions, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ReferenceMode, SettingsPanels, type SettingsSection, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceLayout, TokenUsageCost, type TokenUsageCostProps, type WorkbenchNotification, type WorkbenchPanelsOptions, type WorkbenchPresentation, type WorkbenchThread, confirmWorkspaceDocumentLeave, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, transcriptSnapshot, turnStatusLabel, useAppShellNav, usePlugins, useWorkbenchPresentation };

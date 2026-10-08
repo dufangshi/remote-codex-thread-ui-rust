@@ -58,7 +58,7 @@ export function WorkbenchPanels({
     if (lastReveal !== revealExplorer) {
       setLastReveal(revealExplorer);
       if (revealExplorer > 0) {
-        o.onPresentationChange({ mode: 'files' });
+        o.onPresentationChange({ mode: 'files', ratio: 35 });
         setMobileView('reference');
       }
     }
@@ -100,7 +100,9 @@ export function WorkbenchPanels({
     };
   }, [compact, mobileView, showReference]);
   const selectMode = (next: 'thread' | 'files' | 'collaboration') => {
-    o.onPresentationChange({ mode: next });
+    // File mode includes both a tree and an editor; give it more initial room
+    // than a read-only conversation so the inner toolbar stays usable.
+    o.onPresentationChange({ mode: next, ...(next === 'files' ? { ratio: 35 } : {}) });
     setPickerOpen(false);
     setMobileView('reference');
   };
