@@ -18,7 +18,11 @@
       "import": "./dist/workspace-panel.js"
     },
     "./styles.css": "./src/styles.css",
-    "./settings.css": "./src/styles/settings.css"
+    "./settings.css": "./src/styles/settings.css",
+    "./i18n": {
+      "types": "./dist/i18n.d.ts",
+      "import": "./dist/i18n.js"
+    }
   },
   "files": [
     "dist/",

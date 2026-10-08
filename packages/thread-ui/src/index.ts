@@ -104,3 +104,6 @@ export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } f
 
 export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./components/graph-ui/Dialog";
 export { SettingsPanels, type SettingsSection } from './components/SettingsPanels';
+
+export { I18nProvider, LanguageSwitcher, useI18n, initializeI18n, getLocale, setLocale, translate, t, formatDate, formatNumber, normalizeLocale, detectLocale, LOCALE_STORAGE_KEY, LOCALE_OPTIONS, SUPPORTED_LOCALES, DEFAULT_LOCALE } from './i18n';
+export type { Locale, TranslationKey, TranslationValues } from './i18n';
