@@ -408,6 +408,13 @@ export function useWorkspaceExplorerController({
           }
           nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
         }
+        const target = findWorkspaceExplorerNodeByPath(nextModel, targetPath);
+        if (target?.kind === 'directory') {
+          const loadedNode = workspaceTreeNodeToGraphNode(await workspaceAdapter.listTree({ ...workspaceIdentity, path: targetPath }));
+          if (!isCurrent()) return;
+          nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
+          setExpandedPaths(current => new Set(current).add(targetPath));
+        }
         adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
         if (!hasWorkspaceExplorerPath(nextModel, targetPath)) {

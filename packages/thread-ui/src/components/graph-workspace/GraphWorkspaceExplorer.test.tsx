@@ -402,11 +402,12 @@ describe('GraphWorkspaceExplorer', () => {
     await renderExplorer(capableAdapter);
     await vi.waitFor(() => expect(listTree).toHaveBeenCalled());
 
-    await act(async () => {
-      host
-        ?.querySelector<HTMLButtonElement>('[aria-label="Download README.md"]')
-        ?.click();
-    });
+    const more = host!.querySelector<HTMLButtonElement>('[aria-label="More actions for README.md"]');
+    expect(more).not.toBeNull();
+    await act(async () => { more!.click(); });
+    const download = document.querySelector<HTMLButtonElement>('[role="menuitem"]');
+    expect(download?.textContent).toBe('Download file');
+    await act(async () => { download!.click(); });
     expect(downloadNode).toHaveBeenCalledWith({
       threadId: 'thread-1',
       workspaceId: 'workspace-1',

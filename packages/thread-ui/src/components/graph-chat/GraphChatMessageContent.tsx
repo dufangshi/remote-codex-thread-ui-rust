@@ -25,6 +25,8 @@ import 'katex/dist/katex.min.css';
 import { localFileHref, relativeWorkspacePath } from '../workspacePaths';
 import { ZoomableImage } from '../ZoomableImage';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
+import { VerifiedWorkspacePath } from '../VerifiedWorkspacePath';
+import { parseWorkspacePathText, remarkWorkspacePaths, type WorkspacePathResolver } from '../workspacePathLinks';
 import { Button } from '../graph-ui/Button';
 import { usePlugins } from '../../plugins/usePlugins';
 import { GraphChatToolCall } from './GraphChatToolCall';
@@ -43,13 +45,17 @@ import {
 type CodeRendererProps = ComponentProps<'code'> & {
   inline?: boolean | undefined;
   node?: unknown;
+  insideMarkdownLink?: boolean;
 };
 
 // Keep ReactMarkdown's component identity stable as streamed text, highlighting,
 // copy state and theme change, so interactive diagrams retain their state.
 const CodeRendererContext = createContext<((props: CodeRendererProps) => ReactElement | null) | null>(null);
+const MarkdownLinkContext = createContext(false);
 function StableCodeRenderer(props: CodeRendererProps) {
-  return useContext(CodeRendererContext)?.(props) ?? null;
+  const render = useContext(CodeRendererContext);
+  const insideMarkdownLink = useContext(MarkdownLinkContext);
+  return render?.({ ...props, insideMarkdownLink }) ?? null;
 }
 
 type OpenWorkspaceFileHandler = (input: {
@@ -154,6 +160,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   readOnly = false,
   streaming = false,
   onOpenWorkspaceFile,
+  resolveWorkspacePath,
   workspaceRootPath,
   resolveHref,
 }: {
@@ -162,6 +169,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   readOnly?: boolean;
   streaming?: boolean;
   onOpenWorkspaceFile?: OpenWorkspaceFileHandler | undefined;
+  resolveWorkspacePath?: WorkspacePathResolver | undefined;
   workspaceRootPath?: string | undefined;
   resolveHref?: ((href: string) => string) | undefined;
 }) {
@@ -245,6 +253,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
     className: codeClassName,
     inline,
     node,
+    insideMarkdownLink,
     ...props
   }: CodeRendererProps): ReactElement | null => {
   const { locale: i18nLocale } = useI18n();
@@ -401,7 +410,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
     }
 
     const inlineDisplayText = textFromReactNode(children).replace(/`+/g, '');
-    return (
+    const inlineCode = (
       <code
         className={`thread-graph-inline-code rounded px-1 py-0.5 font-mono font-normal text-[0.9em] ${
           codeClassName || ''
@@ -411,17 +420,30 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
         {inlineDisplayText}
       </code>
     );
+    const target = parseWorkspacePathText(inlineDisplayText, workspaceRootPath);
+    return !readOnly && !insideMarkdownLink && target && resolveWorkspacePath && onOpenWorkspaceFile
+      ? <VerifiedWorkspacePath target={target} resolve={resolveWorkspacePath} onOpen={onOpenWorkspaceFile}>{inlineCode}</VerifiedWorkspacePath>
+      : inlineCode;
   };
 
   return (
     <div ref={rootRef} data-markdown-ready={highlighter ? 'true' : 'false'} className={`thread-graph-message-markdown ${className}`}>
       <CodeRendererContext.Provider value={CodeBlockRenderer}>
       <ReactMarkdown
-        urlTransform={url => !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
-        remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly]}
+        urlTransform={url => !readOnly && url.startsWith('workspace-auto:') ? url : !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
+        remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly, ...(!readOnly && resolveWorkspacePath ? [remarkWorkspacePaths] : [])]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          a({ href, children, ...props }) {
+          a({ href, children: originalChildren, ...props }) {
+            const children = <MarkdownLinkContext.Provider value={true}>{originalChildren}</MarkdownLinkContext.Provider>;
+            if (href?.startsWith('workspace-auto:')) {
+              let value = '';
+              try { value = decodeURIComponent(href.slice('workspace-auto:'.length)); } catch { /* Invalid path remains plain text. */ }
+              const target = parseWorkspacePathText(value, workspaceRootPath);
+              return !readOnly && target && resolveWorkspacePath && onOpenWorkspaceFile
+                ? <VerifiedWorkspacePath target={target} resolve={resolveWorkspacePath} onOpen={onOpenWorkspaceFile}>{children}</VerifiedWorkspacePath>
+                : <>{children}</>;
+            }
             if (readOnly && (!href || !/^https?:\/\//i.test(href))) return <span>{children}</span>;
             const workspaceTarget = parseWorkspaceFileHref(href, workspaceRootPath);
             if (workspaceTarget && onOpenWorkspaceFile) {

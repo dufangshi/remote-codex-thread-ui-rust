@@ -123,3 +123,5 @@ export type { WorkbenchPresentation, ReferenceMode } from "./components/workbenc
 export type { WorkbenchPanelsOptions } from "./components/workbench/WorkbenchPanels";
 
 export { SettingsDialog } from './components/SettingsDialog';
+
+export { createWorkspacePathResolver } from './components/workspacePathLinks';

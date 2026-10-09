@@ -67,6 +67,53 @@ export function WorkbenchPanels({
   }, [mode, compact, o.onFocusPane]);
   const [filesVisited, setFilesVisited] = useState(mode === 'files');
   const drag = useRef<{ x: number; ratio: number; width: number } | null>(null);
+  const [drawerWidth, setDrawerWidth] = useState(() => {
+    try {
+      const saved = Number(localStorage.getItem('remote-codex.explorer-width'));
+      return Number.isFinite(saved) && saved > 0 ? Math.max(360, saved) : 560;
+    } catch { return 560; }
+  });
+  const [rootWidth, setRootWidth] = useState(window.innerWidth);
+  const drawerDrag = useRef<{ x: number; width: number } | null>(null);
+  const visibleDrawerWidth = Math.min(drawerWidth, Math.max(360, rootWidth - 280));
+  const resizeDrawer = (width: number) => {
+    const next = Math.round(Math.max(360, Math.min(Math.max(360, rootWidth - 280), width)));
+    setDrawerWidth(next);
+    try { localStorage.setItem('remote-codex.explorer-width', String(next)); } catch { /* Optional preference. */ }
+  };
+  const drawerResizeHandle = () => !compact && (
+    <div
+      role="separator"
+      tabIndex={0}
+      aria-label={t('workbench.resizeExplorer')}
+      aria-orientation="vertical"
+      aria-valuemin={360}
+      aria-valuemax={Math.max(360, rootWidth - 280)}
+      aria-valuenow={visibleDrawerWidth}
+      className="workbench-tool-resize"
+      onPointerDown={(event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        drawerDrag.current = { x: event.clientX, width: visibleDrawerWidth };
+      }}
+      onPointerMove={(event) => {
+        if (drawerDrag.current) resizeDrawer(drawerDrag.current.width + drawerDrag.current.x - event.clientX);
+      }}
+      onPointerUp={(event) => {
+        drawerDrag.current = null;
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+      }}
+      onPointerCancel={() => { drawerDrag.current = null; }}
+      onLostPointerCapture={() => { drawerDrag.current = null; }}
+      onKeyDown={(event) => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+          event.preventDefault();
+          resizeDrawer(visibleDrawerWidth + (event.key === 'ArrowLeft' ? 24 : -24));
+        }
+      }}
+    />
+  );
   const [lastReveal, setLastReveal] = useState(revealExplorer);
   useEffect(() => {
     if (lastReveal !== revealExplorer) {
@@ -81,9 +128,11 @@ export function WorkbenchPanels({
   }, [mode]);
   useEffect(() => {
     if (!root.current) return;
-    const observer = new ResizeObserver((entries) =>
-      setCompact(entries[0].contentRect.width < 800),
-    );
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      setCompact(width < 800);
+      setRootWidth(width);
+    });
     observer.observe(root.current);
     return () => observer.disconnect();
   }, []);
@@ -152,7 +201,7 @@ export function WorkbenchPanels({
       className={`workbench-panels ${compact ? 'is-compact' : ''}`}
       data-testid="workbench-panels"
       data-mode={mode}
-      style={{ '--primary-ratio': `${ratio}%` } as CSSProperties}
+      style={{ '--primary-ratio': `${ratio}%`, '--workbench-tool-width': `${visibleDrawerWidth}px` } as CSSProperties}
     >
       {o.storageFailed && (
         <p role="status" className="workbench-persistence-notice">
@@ -184,6 +233,7 @@ export function WorkbenchPanels({
           </button>
         </nav>
       )}
+      <div className="workbench-content">
       <div
         className={`workbench-pane-grid ${showReference ? 'has-reference' : ''}`}
       >
@@ -322,7 +372,7 @@ export function WorkbenchPanels({
           role="region"
           aria-label={t('workbench.referenceFiles')}
           className="workbench-tool-drawer"
-          hidden={mode !== 'files'}
+          hidden={mode !== 'files' || Boolean(o.toolsOpen && o.toolContent)}
           onKeyDown={(event) => {
             if (event.key === 'Escape' && !event.defaultPrevented) {
               event.preventDefault();
@@ -331,6 +381,7 @@ export function WorkbenchPanels({
             }
           }}
         >
+          {drawerResizeHandle()}
           <header>
             <div>
               <strong>{t('workbench.referenceFiles')}</strong>
@@ -361,6 +412,7 @@ export function WorkbenchPanels({
             }
           }}
         >
+          {drawerResizeHandle()}
           <header>
             <div>
               <strong>{o.toolTitle ?? t('workbench.terminal')}</strong>
@@ -377,6 +429,7 @@ export function WorkbenchPanels({
           <div className="workbench-pane-body">{o.toolContent}</div>
         </aside>
       )}
+      </div>
     </div>
   );
 }

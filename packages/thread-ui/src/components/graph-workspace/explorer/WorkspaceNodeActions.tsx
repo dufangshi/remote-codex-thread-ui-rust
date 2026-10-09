@@ -66,7 +66,7 @@ export function WorkspaceNodeActions({
     };
   }, [menu]);
   const actionClass =
-    'thread-graph-tree-action flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition sm:h-7 sm:w-7';
+    'thread-graph-tree-action flex shrink-0 items-center justify-center rounded transition';
   const mutate = async () => {
     setBusy(true);
     setError(null);
@@ -85,20 +85,10 @@ export function WorkspaceNodeActions({
   };
   return (
     <div
-      className="thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1"
+      className="thread-graph-tree-actions flex shrink-0 items-center gap-0.5"
+      onDoubleClick={(event) => event.stopPropagation()}
       onKeyDown={(event) => event.stopPropagation()}
     >
-      {onDownload && (
-        <button
-          type="button"
-          onClick={() => onDownload(node)}
-          className={`${actionClass} workspace-node-quick-action`}
-          title={translate("files.download", { value1: node.name })}
-          aria-label={translate("files.download", { value1: node.name })}
-        >
-          <Download size={14} />
-        </button>
-      )}
       {onCopyPath && (
         <>
           <button
@@ -128,7 +118,7 @@ export function WorkspaceNodeActions({
           aria-label={translate("files.moreActionsFor", { value1: node.name })}
           aria-haspopup="menu"
           aria-expanded={!!menu}
-          className={`${actionClass} ${!onRename && !onDelete ? "workspace-node-mobile-only" : ""}`}
+          className={actionClass}
           onClick={() => {
             const box = trigger.current!.getBoundingClientRect();
             setMenu(
@@ -173,10 +163,10 @@ export function WorkspaceNodeActions({
               boxShadow: '0 8px 24px #0004',
             }}
           >
-            {onDownload && <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onDownload(node); close(); }}><Download size={16} />{translate('files.downloadFile')}</button>}
+            {onDownload && <button role="menuitem" type="button" onClick={() => { onDownload(node); close(); }}><Download size={16} />{translate('files.downloadFile')}</button>}
             {onCopyPath && <>
-              <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onCopyPath(node, 'relative'); close(); }}><Copy size={16} />{translate('files.copyRelativePathFor', { value1: node.name })}</button>
-              <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onCopyPath(node, 'absolute'); close(); }}><ClipboardCopy size={16} />{translate('files.copyAbsolutePathFor', { value1: node.name })}</button>
+              <button role="menuitem" type="button" onClick={() => { onCopyPath(node, 'relative'); close(); }}><Copy size={16} />{translate('files.copyRelativePathFor', { value1: node.name })}</button>
+              <button role="menuitem" type="button" onClick={() => { onCopyPath(node, 'absolute'); close(); }}><ClipboardCopy size={16} />{translate('files.copyAbsolutePathFor', { value1: node.name })}</button>
             </>}
             {onRename && (
               <button

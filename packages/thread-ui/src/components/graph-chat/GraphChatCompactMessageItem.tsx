@@ -235,6 +235,7 @@ export const GraphChatCompactMessageItem = memo(
         {item.kind === 'agentMessage' ? (
           <GraphChatAgentMessageBody
             workspaceRootPath={adapter?.workspaceRootPath}
+            resolveWorkspacePath={adapter?.resolveWorkspacePath}
             messageId={item.id}
             text={item.text}
             scrollRootRef={scrollRootRef}

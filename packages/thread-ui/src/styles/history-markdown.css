@@ -226,12 +226,15 @@
 }
 
 .thread-ui-shell .thread-graph-tree-action {
+  width: 22px;
+  height: 22px;
+  background: color-mix(in srgb, var(--theme-panel) 55%, transparent);
   color: var(--theme-fg-muted);
 }
 
 .thread-ui-shell .thread-graph-tree-actions {
-  z-index: 1;
-  background: var(--thread-graph-tree-row-background);
+  margin-right: 3px;
+  background: transparent;
   opacity: 0;
   pointer-events: none;
   transition: opacity 160ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -3035,16 +3038,18 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
   .thread-ui-shell .thread-graph-turn-footer .thread-turn-usage { font-size: .625rem; }
 }
 
-.workspace-node-mobile-action, .workspace-node-mobile-only { display: none !important; }
+/* Narrow trees keep a single menu instead of sacrificing the filename. */
+@container (max-width: 280px) {
+  .thread-ui-shell .workspace-node-quick-action { display: none; }
+}
 @media (max-width: 639px) {
   .thread-ui-shell .thread-graph-explorer-header { min-height: 48px; padding: 0 6px; }
   .thread-ui-shell .thread-graph-explorer-icon-button,
   .thread-ui-shell .thread-graph-explorer-collapse-button { width: 36px; height: 44px; }
-  .thread-ui-shell .thread-graph-tree-row { padding-right: 44px !important; min-height: 44px; }
-  .thread-ui-shell .thread-graph-tree-actions { position: absolute; padding: 0; opacity: 1; }
+  .thread-ui-shell .thread-graph-tree-row { min-height: 44px; }
+  .thread-ui-shell .thread-graph-tree-actions { opacity: 1; }
+  .thread-ui-shell .thread-graph-tree-action { width: 32px; height: 36px; }
   .thread-ui-shell .workspace-node-quick-action { display: none; }
-  .thread-ui-shell .workspace-node-mobile-only { display: inline-flex !important; }
-  .workspace-node-menu .workspace-node-mobile-action { display: flex !important; }
   .workspace-node-menu button { min-height: 44px; height: auto; white-space: normal; }
   .thread-ui-shell .thread-graph-editor-tab { height: 44px; }
   .thread-ui-shell .thread-graph-editor-tab-close { width: 32px; height: 40px; }

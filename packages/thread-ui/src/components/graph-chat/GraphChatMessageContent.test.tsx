@@ -205,3 +205,22 @@ it('keeps Windows drive and file URLs through Markdown sanitization and opens th
   expect(open.mock.calls).toEqual([[{path:'a.png'}],[{path:'a.png'}],[{path:'a.png'}]]);
   expect(links[3]!.getAttribute('href')).not.toContain('javascript:');
 });
+
+it('makes verified inline and plain paths clickable while leaving missing paths, URLs and fences intact', async () => {
+  const open = vi.fn();
+  const resolve = vi.fn(async (path: string) => ['docs/assets', 'docs/readme.md'].includes(path));
+  let element!: HTMLDivElement;
+  await act(async () => {
+    element = render(<GraphChatMessageContent workspaceRootPath="/code" resolveWorkspacePath={resolve} onOpenWorkspaceFile={open}
+      content={'Files: `docs/assets/`, docs/readme.md. Missing `docs/no.txt`. [Web](https://example.com/docs/readme.md) [`docs/readme.md`](docs/readme.md)\n\n```sh\ncat docs/readme.md\n```'} />);
+  });
+  const links = Array.from(element.querySelectorAll('a'));
+  expect(links.map(link => link.textContent)).toEqual(['docs/assets/', 'docs/readme.md', 'Web', 'docs/readme.md']);
+  expect(element.querySelector('a a')).toBeNull();
+  expect(element.querySelector('pre a')).toBeNull();
+  expect(resolve).not.toHaveBeenCalledWith('https://example.com/docs/readme.md');
+  act(() => links[0]!.click());
+  expect(open).toHaveBeenCalledWith({ path: 'docs/assets' });
+  act(() => links[1]!.click());
+  expect(open).toHaveBeenCalledWith({ path: 'docs/readme.md' });
+});
