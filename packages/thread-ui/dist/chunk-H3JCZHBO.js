@@ -1820,6 +1820,17 @@ var filesEn = {
 
 // src/i18n/settings.en.ts
 var settingsEn = {
+  "settings.upstreamsTab": "Upstreams",
+  "settings.upstreamsDescription": "Switch API providers for the harnesses installed on this device.",
+  "settings.upstreamsChooseDevice": "Open a device to manage its upstreams.",
+  "settings.upstreamsInventoryError": "Unable to check installed harnesses. Refresh to try again.",
+  "settings.upstreamsRefresh": "Refresh harnesses",
+  "settings.upstreamsNoInstalled": "No harnesses are installed on this device. Install one in Harnesses to manage its upstreams.",
+  "settings.upstreamsSearch": "Search upstreams",
+  "settings.upstreamsNoMatches": "No upstreams match your search.",
+  "settings.upstreamsDirect": "Direct connection",
+  "settings.upstreamsMoreActions": "More actions for {{name}}",
+  "settings.upstreamsHarness": "Harness",
   "settings.messageShortcuts": "Message shortcuts",
   "settings.savedToYourAccountAndAppliedAcross": "Saved to your account and applied across devices and browsers. On Mac, Command also works in place of Ctrl.",
   "settings.ctrlEnterToSend": "Ctrl+Enter to send",
@@ -4376,6 +4387,17 @@ var filesZhCN = {
 
 // src/i18n/settings.zh-CN.ts
 var settingsZhCN = {
+  "settings.upstreamsTab": "\u4E0A\u6E38",
+  "settings.upstreamsDescription": "\u4E3A\u6B64\u8BBE\u5907\u4E0A\u5DF2\u5B89\u88C5\u7684 harness \u5207\u6362 API \u4E0A\u6E38\u3002",
+  "settings.upstreamsChooseDevice": "\u8BF7\u6253\u5F00\u8BBE\u5907\u4EE5\u7BA1\u7406\u5176\u4E0A\u6E38\u3002",
+  "settings.upstreamsInventoryError": "\u65E0\u6CD5\u68C0\u67E5\u5DF2\u5B89\u88C5\u7684 harness\uFF0C\u8BF7\u5237\u65B0\u91CD\u8BD5\u3002",
+  "settings.upstreamsRefresh": "\u5237\u65B0 harness",
+  "settings.upstreamsNoInstalled": "\u6B64\u8BBE\u5907\u5C1A\u672A\u5B89\u88C5 harness\u3002\u8BF7\u5148\u5728\u300CHarnesses\u300D\u4E2D\u5B89\u88C5\uFF0C\u518D\u7BA1\u7406\u5176\u4E0A\u6E38\u3002",
+  "settings.upstreamsSearch": "\u641C\u7D22\u4E0A\u6E38",
+  "settings.upstreamsNoMatches": "\u6CA1\u6709\u5339\u914D\u7684\u4E0A\u6E38\u3002",
+  "settings.upstreamsDirect": "\u76F4\u8FDE",
+  "settings.upstreamsMoreActions": "{{name}} \u7684\u66F4\u591A\u64CD\u4F5C",
+  "settings.upstreamsHarness": "Harness",
   "settings.messageShortcuts": "\u6D88\u606F\u5FEB\u6377\u952E",
   "settings.savedToYourAccountAndAppliedAcross": "\u4FDD\u5B58\u5230\u8D26\u53F7\u5E76\u5728\u8BBE\u5907\u548C\u6D4F\u89C8\u5668\u95F4\u540C\u6B65\u3002Mac \u4E0A\u4E5F\u53EF\u7528 Command \u4EE3\u66FF Ctrl\u3002",
   "settings.ctrlEnterToSend": "Ctrl+Enter \u53D1\u9001",
