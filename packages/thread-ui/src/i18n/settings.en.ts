@@ -230,4 +230,6 @@ export const settingsEn = {
   "settings.harnessMaintenanceDescription": "Install and update harnesses and their ACP adapters. Manage providers in Upstreams.",
   "settings.upstreamsDeepSeekOfficial": "DeepSeek API",
   "settings.upstreamsResponses": "Responses",
+  "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})",
+  "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load"
 } as const;

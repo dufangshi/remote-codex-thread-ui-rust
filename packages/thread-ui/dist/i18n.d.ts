@@ -844,6 +844,8 @@ declare const en: {
     readonly "settings.harnessMaintenanceDescription": "Install and update harnesses and their ACP adapters. Manage providers in Upstreams.";
     readonly "settings.upstreamsDeepSeekOfficial": "DeepSeek API";
     readonly "settings.upstreamsResponses": "Responses";
+    readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
+    readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
     readonly "files.backToFiles": "Back to files";
     readonly "files.newFile": "New file";
     readonly "files.createFile": "Create";
@@ -3452,6 +3454,8 @@ declare const zhCN: {
     "settings.harnessMaintenanceDescription": "安装和更新 harness 及其 ACP 适配器。请在「上游」中管理 provider。";
     "settings.upstreamsDeepSeekOfficial": "DeepSeek 官方 API";
     "settings.upstreamsResponses": "Responses";
+    "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
+    "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
     "files.backToFiles": "返回文件列表";
     "files.newFile": "新建文件";
     "files.createFile": "创建";
@@ -6082,6 +6086,8 @@ declare const resources: {
         readonly "settings.harnessMaintenanceDescription": "Install and update harnesses and their ACP adapters. Manage providers in Upstreams.";
         readonly "settings.upstreamsDeepSeekOfficial": "DeepSeek API";
         readonly "settings.upstreamsResponses": "Responses";
+        readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
+        readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
         readonly "files.backToFiles": "Back to files";
         readonly "files.newFile": "New file";
         readonly "files.createFile": "Create";
@@ -8689,6 +8695,8 @@ declare const resources: {
         "settings.harnessMaintenanceDescription": "安装和更新 harness 及其 ACP 适配器。请在「上游」中管理 provider。";
         "settings.upstreamsDeepSeekOfficial": "DeepSeek 官方 API";
         "settings.upstreamsResponses": "Responses";
+        "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
+        "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
         "files.backToFiles": "返回文件列表";
         "files.newFile": "新建文件";
         "files.createFile": "创建";

@@ -2050,7 +2050,9 @@ var settingsEn = {
   "settings.upstreamsKeepEditing": "Keep editing",
   "settings.harnessMaintenanceDescription": "Install and update harnesses and their ACP adapters. Manage providers in Upstreams.",
   "settings.upstreamsDeepSeekOfficial": "DeepSeek API",
-  "settings.upstreamsResponses": "Responses"
+  "settings.upstreamsResponses": "Responses",
+  "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})",
+  "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load"
 };
 
 // src/i18n/sharing.en.ts
@@ -4709,7 +4711,9 @@ var settingsZhCN = {
   "settings.upstreamsKeepEditing": "\u7EE7\u7EED\u7F16\u8F91",
   "settings.harnessMaintenanceDescription": "\u5B89\u88C5\u548C\u66F4\u65B0 harness \u53CA\u5176 ACP \u9002\u914D\u5668\u3002\u8BF7\u5728\u300C\u4E0A\u6E38\u300D\u4E2D\u7BA1\u7406 provider\u3002",
   "settings.upstreamsDeepSeekOfficial": "DeepSeek \u5B98\u65B9 API",
-  "settings.upstreamsResponses": "Responses"
+  "settings.upstreamsResponses": "Responses",
+  "settings.dshRunModeBroken": "{{value1}}\uFF08\u4E0D\u53EF\u7528\uFF1A{{value2}}\uFF09",
+  "settings.dshRunModeBrokenUnknown": "DSH \u62A5\u544A\u65E0\u6CD5\u52A0\u8F7D"
 };
 
 // src/i18n/sharing.zh-CN.ts

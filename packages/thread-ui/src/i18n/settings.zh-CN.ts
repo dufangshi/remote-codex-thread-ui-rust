@@ -230,4 +230,6 @@ export const settingsZhCN = {
   "settings.harnessMaintenanceDescription": "安装和更新 harness 及其 ACP 适配器。请在「上游」中管理 provider。",
   "settings.upstreamsDeepSeekOfficial": "DeepSeek 官方 API",
   "settings.upstreamsResponses": "Responses",
+  "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）",
+  "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载"
 } as const;
