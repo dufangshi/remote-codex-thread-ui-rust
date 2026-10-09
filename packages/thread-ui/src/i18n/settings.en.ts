@@ -157,5 +157,6 @@ export const settingsEn = {
   "settings.dshRestartRequired": "Saved. The change applies after this thread reconnects.",
   "settings.dshReconnect": "Reconnect to apply",
   "settings.dshEnable": "Enable {{value1}}",
-  "settings.dshManaged": "Managed by DSH"
+  "settings.dshManaged": "Managed by DSH",
+  "settings.dshAfterReconnect": "applies after reconnect"
 } as const;

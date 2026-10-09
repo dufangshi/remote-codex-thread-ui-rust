@@ -1973,7 +1973,8 @@ var settingsEn = {
   "settings.dshRestartRequired": "Saved. The change applies after this thread reconnects.",
   "settings.dshReconnect": "Reconnect to apply",
   "settings.dshEnable": "Enable {{value1}}",
-  "settings.dshManaged": "Managed by DSH"
+  "settings.dshManaged": "Managed by DSH",
+  "settings.dshAfterReconnect": "applies after reconnect"
 };
 
 // src/i18n/sharing.en.ts
@@ -4549,7 +4550,8 @@ var settingsZhCN = {
   "settings.dshRestartRequired": "\u5DF2\u4FDD\u5B58\u3002\u672C\u7EBF\u7A0B\u91CD\u8FDE\u540E\u751F\u6548\u3002",
   "settings.dshReconnect": "\u91CD\u8FDE\u4EE5\u751F\u6548",
   "settings.dshEnable": "\u542F\u7528 {{value1}}",
-  "settings.dshManaged": "\u7531 DSH \u7BA1\u7406"
+  "settings.dshManaged": "\u7531 DSH \u7BA1\u7406",
+  "settings.dshAfterReconnect": "\u91CD\u8FDE\u540E\u751F\u6548"
 };
 
 // src/i18n/sharing.zh-CN.ts

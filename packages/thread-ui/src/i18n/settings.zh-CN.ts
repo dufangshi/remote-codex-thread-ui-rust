@@ -157,5 +157,6 @@ export const settingsZhCN = {
   "settings.dshRestartRequired": "已保存。本线程重连后生效。",
   "settings.dshReconnect": "重连以生效",
   "settings.dshEnable": "启用 {{value1}}",
-  "settings.dshManaged": "由 DSH 管理"
+  "settings.dshManaged": "由 DSH 管理",
+  "settings.dshAfterReconnect": "重连后生效"
 } as const;

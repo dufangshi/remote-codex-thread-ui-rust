@@ -766,6 +766,7 @@ declare const en: {
     readonly "settings.dshReconnect": "Reconnect to apply";
     readonly "settings.dshEnable": "Enable {{value1}}";
     readonly "settings.dshManaged": "Managed by DSH";
+    readonly "settings.dshAfterReconnect": "applies after reconnect";
     readonly "files.backToFiles": "Back to files";
     readonly "files.newFile": "New file";
     readonly "files.createFile": "Create";
@@ -3291,6 +3292,7 @@ declare const zhCN: {
     "settings.dshReconnect": "重连以生效";
     "settings.dshEnable": "启用 {{value1}}";
     "settings.dshManaged": "由 DSH 管理";
+    "settings.dshAfterReconnect": "重连后生效";
     "files.backToFiles": "返回文件列表";
     "files.newFile": "新建文件";
     "files.createFile": "创建";
@@ -5838,6 +5840,7 @@ declare const resources: {
         readonly "settings.dshReconnect": "Reconnect to apply";
         readonly "settings.dshEnable": "Enable {{value1}}";
         readonly "settings.dshManaged": "Managed by DSH";
+        readonly "settings.dshAfterReconnect": "applies after reconnect";
         readonly "files.backToFiles": "Back to files";
         readonly "files.newFile": "New file";
         readonly "files.createFile": "Create";
@@ -8362,6 +8365,7 @@ declare const resources: {
         "settings.dshReconnect": "重连以生效";
         "settings.dshEnable": "启用 {{value1}}";
         "settings.dshManaged": "由 DSH 管理";
+        "settings.dshAfterReconnect": "重连后生效";
         "files.backToFiles": "返回文件列表";
         "files.newFile": "新建文件";
         "files.createFile": "创建";
