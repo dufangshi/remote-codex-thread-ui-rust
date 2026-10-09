@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-RI7HMVYH.js";
+} from "./chunk-ASZ75X4T.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-JE26ELYQ.js";
+} from "./chunk-IJ4AB7XA.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -7657,6 +7657,17 @@ ${thread.subtitle} \xB7 ${activity.label}`,
               children: /* @__PURE__ */ jsx33(Terminal, {})
             }
           ),
+          o.toolPanels?.map((panel) => /* @__PURE__ */ jsx33(
+            "button",
+            {
+              "aria-label": panel.label,
+              title: panel.label,
+              "aria-pressed": panel.active,
+              onClick: panel.onToggle,
+              children: panel.icon
+            },
+            panel.id
+          )),
           /* @__PURE__ */ jsx33(
             "button",
             {
@@ -7709,6 +7720,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
             mobile && /* @__PURE__ */ jsxs28(Fragment6, { children: [
               /* @__PURE__ */ jsx33("button", { "aria-label": translate("workbench.chat"), "aria-pressed": o.activeView === "chat", onClick: () => o.onViewChange("chat"), children: /* @__PURE__ */ jsx33(MessageSquare, {}) }),
               o.terminalEnabled && /* @__PURE__ */ jsx33("button", { "aria-label": translate("workbench.terminal"), "aria-pressed": o.activeView === "shell", onClick: () => o.onViewChange("shell"), children: /* @__PURE__ */ jsx33(Terminal, {}) }),
+              o.toolPanels?.map((panel) => /* @__PURE__ */ jsx33("button", { "aria-label": panel.label, title: panel.label, "aria-pressed": panel.active, onClick: panel.onToggle, children: panel.icon }, panel.id)),
               /* @__PURE__ */ jsx33("button", { "aria-label": translate("workbench.toggleExplorer"), "aria-pressed": explorerOpen, "aria-expanded": explorerOpen, title: translate("workbench.explorer"), onClick: () => setExplorerOpen((open) => !open), children: /* @__PURE__ */ jsx33(FolderOpen2, {}) }),
               settings
             ] }),
@@ -9461,6 +9473,8 @@ import { createContext as createContext4 } from "react";
 function mergePluginState(modules, serverPlugins) {
   const byId = new Map(serverPlugins.map((plugin) => [plugin.id, plugin]));
   const merged = modules.map((module) => ({
+    // Keep the device's availability report (for example a missing harness).
+    ...byId.get(module.manifest.id),
     ...module.manifest,
     enabled: byId.get(module.manifest.id)?.enabled ?? true,
     source: byId.get(module.manifest.id)?.source ?? "builtin"

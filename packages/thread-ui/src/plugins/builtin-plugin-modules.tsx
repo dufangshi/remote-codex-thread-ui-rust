@@ -1,5 +1,6 @@
 import { translate, useI18n } from '../i18n';
 import { terminalPluginManifest } from '@remote-codex/plugin-terminal';
+import { deepseekHarnessPlugin } from './deepseek-harness-plugin';
 import type { FrontendPluginModule } from './plugin-types';
 
 export const builtinFrontendPlugins: FrontendPluginModule[] = [
@@ -13,4 +14,5 @@ export const builtinFrontendPlugins: FrontendPluginModule[] = [
       },
     ],
   },
+  deepseekHarnessPlugin,
 ];

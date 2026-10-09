@@ -32,6 +32,8 @@ export function mergePluginState(
 ): PluginDto[] {
   const byId = new Map(serverPlugins.map((plugin) => [plugin.id, plugin]));
   const merged: PluginDto[] = modules.map((module) => ({
+    // Keep the device's availability report (for example a missing harness).
+    ...byId.get(module.manifest.id),
     ...module.manifest,
     enabled: byId.get(module.manifest.id)?.enabled ?? true,
     source: byId.get(module.manifest.id)?.source ?? 'builtin',

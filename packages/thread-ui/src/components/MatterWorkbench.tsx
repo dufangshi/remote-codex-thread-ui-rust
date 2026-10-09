@@ -40,6 +40,14 @@ export interface WorkbenchNotification {
   occurredAt: string;
   summary?: string;
 }
+/** A plugin's thread panel in the workbench rail (it opens in the tools drawer). */
+export interface WorkbenchToolPanel {
+  id: string;
+  label: string;
+  icon: ReactNode;
+  active: boolean;
+  onToggle: () => void;
+}
 export interface MatterWorkbenchOptions {
   panels?: WorkbenchPanelsOptions;
   statusActions?: ReactNode;
@@ -57,6 +65,7 @@ export interface MatterWorkbenchOptions {
   activeView: 'chat' | 'shell';
   terminalEnabled: boolean;
   onViewChange: (view: 'chat' | 'shell') => void;
+  toolPanels?: WorkbenchToolPanel[];
   onToggleFavorite: () => void;
   onNavigate: (href: string) => void;
   onSearch: () => void;
@@ -228,6 +237,10 @@ export function MatterWorkbench({
             <Terminal />
           </button>
         )}
+        {o.toolPanels?.map(panel => (
+          <button key={panel.id} aria-label={panel.label} title={panel.label}
+            aria-pressed={panel.active} onClick={panel.onToggle}>{panel.icon}</button>
+        ))}
         <button aria-label={translate("workbench.toggleExplorer")} aria-pressed={explorerOpen} aria-expanded={explorerOpen}
           title={translate("workbench.explorer")} onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
         <div className="matter-rail-bottom">{deviceMonitor}{settings}</div>
@@ -268,6 +281,7 @@ export function MatterWorkbench({
           {mobile && <>
             <button aria-label={translate("workbench.chat")} aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
             {o.terminalEnabled && <button aria-label={translate("workbench.terminal")} aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
+            {o.toolPanels?.map(panel => <button key={panel.id} aria-label={panel.label} title={panel.label} aria-pressed={panel.active} onClick={panel.onToggle}>{panel.icon}</button>)}
             <button aria-label={translate("workbench.toggleExplorer")} aria-pressed={explorerOpen} aria-expanded={explorerOpen} title={translate("workbench.explorer")} onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
             {settings}
           </>}
