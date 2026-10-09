@@ -1,4 +1,9 @@
 export const chatZhCN = {
+  "chat.diagram": "图表",
+  "chat.diagramSource": "查看图表源码",
+  "chat.showDiagram": "显示图表",
+  "chat.expandDiagram": "放大图表",
+  "chat.diagramUnavailable": "图表暂无法渲染 · 已保留源码",
   "chat.tokenSpeedUnits": "每秒输出 token 数",
   "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。",
   "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。",

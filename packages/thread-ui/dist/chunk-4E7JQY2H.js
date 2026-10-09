@@ -331,6 +331,11 @@ var authEn = {
 
 // src/i18n/chat.en.ts
 var chatEn = {
+  "chat.diagram": "Diagram",
+  "chat.diagramSource": "View diagram source",
+  "chat.showDiagram": "Show diagram",
+  "chat.expandDiagram": "Expand diagram",
+  "chat.diagramUnavailable": "Unable to render diagram \xB7 Source preserved",
   "chat.tokenSpeedUnits": "Output tokens per second",
   "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.",
   "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.",
@@ -2882,6 +2887,11 @@ var authZhCN = {
 
 // src/i18n/chat.zh-CN.ts
 var chatZhCN = {
+  "chat.diagram": "\u56FE\u8868",
+  "chat.diagramSource": "\u67E5\u770B\u56FE\u8868\u6E90\u7801",
+  "chat.showDiagram": "\u663E\u793A\u56FE\u8868",
+  "chat.expandDiagram": "\u653E\u5927\u56FE\u8868",
+  "chat.diagramUnavailable": "\u56FE\u8868\u6682\u65E0\u6CD5\u6E32\u67D3 \xB7 \u5DF2\u4FDD\u7559\u6E90\u7801",
   "chat.tokenSpeedUnits": "\u6BCF\u79D2\u8F93\u51FA token \u6570",
   "chat.unableToReadYourMessageShortcuts": "\u65E0\u6CD5\u8BFB\u53D6\u6D88\u606F\u5FEB\u6377\u952E\u3002",
   "chat.loadedTurnDetailDidNotMatchThe": "\u52A0\u8F7D\u7684\u8F6E\u6B21\u8BE6\u60C5\u4E0E\u6240\u8BF7\u6C42\u7684\u8F6E\u6B21\u4E0D\u5339\u914D\u3002",

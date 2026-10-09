@@ -248,6 +248,7 @@ export const GraphChatMarkdownAwareBody = memo(
         {isActivated && shouldRenderMarkdown ? (
           <GraphChatMessageContent
             content={displayText}
+            streaming={streaming}
             className={markdownClassName}
             workspaceRootPath={workspaceRootPath}
             onOpenWorkspaceFile={onOpenWorkspaceFile}

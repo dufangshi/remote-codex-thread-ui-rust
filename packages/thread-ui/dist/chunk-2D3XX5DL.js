@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-MVQFHWO3.js";
+} from "./chunk-4E7JQY2H.js";
 
 // src/components/graph-workspace/explorer/workspaceDocuments.ts
 var storeKey = /* @__PURE__ */ Symbol.for("remote-codex.workspace-documents");
@@ -881,6 +881,7 @@ function clampImageLightboxScale(scale) {
 }
 function GraphWorkspaceImageLightbox({
   alt,
+  backgroundColor,
   onClose,
   src
 }) {
@@ -972,6 +973,7 @@ function GraphWorkspaceImageLightbox({
       "div",
       {
         className: "thread-graph-image-lightbox",
+        style: backgroundColor ? { backgroundColor } : void 0,
         role: "dialog",
         "aria-modal": "true",
         "aria-label": translate("files.imagePreview", { value1: alt || translate("files.workspaceImage") }),

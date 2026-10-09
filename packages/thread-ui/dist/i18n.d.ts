@@ -1783,6 +1783,11 @@ declare const en: {
         readonly one: "{{count}} item";
         readonly other: "{{count}} items";
     };
+    readonly "chat.diagram": "Diagram";
+    readonly "chat.diagramSource": "View diagram source";
+    readonly "chat.showDiagram": "Show diagram";
+    readonly "chat.expandDiagram": "Expand diagram";
+    readonly "chat.diagramUnavailable": "Unable to render diagram · Source preserved";
     readonly "chat.tokenSpeedUnits": "Output tokens per second";
     readonly "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.";
     readonly "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.";
@@ -4283,6 +4288,11 @@ declare const zhCN: {
         readonly one: "{{count}} 项";
         readonly other: "{{count}} 项";
     };
+    "chat.diagram": "图表";
+    "chat.diagramSource": "查看图表源码";
+    "chat.showDiagram": "显示图表";
+    "chat.expandDiagram": "放大图表";
+    "chat.diagramUnavailable": "图表暂无法渲染 · 已保留源码";
     "chat.tokenSpeedUnits": "每秒输出 token 数";
     "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。";
     "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。";
@@ -6805,6 +6815,11 @@ declare const resources: {
             readonly one: "{{count}} item";
             readonly other: "{{count}} items";
         };
+        readonly "chat.diagram": "Diagram";
+        readonly "chat.diagramSource": "View diagram source";
+        readonly "chat.showDiagram": "Show diagram";
+        readonly "chat.expandDiagram": "Expand diagram";
+        readonly "chat.diagramUnavailable": "Unable to render diagram · Source preserved";
         readonly "chat.tokenSpeedUnits": "Output tokens per second";
         readonly "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.";
         readonly "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.";
@@ -9304,6 +9319,11 @@ declare const resources: {
             readonly one: "{{count}} 项";
             readonly other: "{{count}} 项";
         };
+        "chat.diagram": "图表";
+        "chat.diagramSource": "查看图表源码";
+        "chat.showDiagram": "显示图表";
+        "chat.expandDiagram": "放大图表";
+        "chat.diagramUnavailable": "图表暂无法渲染 · 已保留源码";
         "chat.tokenSpeedUnits": "每秒输出 token 数";
         "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。";
         "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。";

@@ -7,6 +7,7 @@ import './styles/export-dialog.css';
 import './styles/matter-workbench.css';
 import './styles/composer-compact.css';
 import './styles/composer-reasoning.css';
+import './styles/mermaid-diagrams.css';
 
 export type {
   ShellSocketConnection,
