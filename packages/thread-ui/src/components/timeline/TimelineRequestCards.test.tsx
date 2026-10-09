@@ -54,7 +54,7 @@ function renderPermission(onRespond = vi.fn()) {
   return { view: container, onRespond };
 }
 
-function renderOtherAnswer(onRespond = vi.fn()) {
+function renderOtherAnswer(onRespond = vi.fn(), multiSelect = false) {
   const request: ThreadActionRequestDto = {
     id: "input-7",
     kind: "requestUserInput",
@@ -70,6 +70,7 @@ function renderOtherAnswer(onRespond = vi.fn()) {
         question: "行数上限",
         isOther: true,
         isSecret: false,
+        multiSelect,
         options: [
           { label: "上限提到 55k", description: "raise limit" },
           { label: "保持 50k", description: "keep limit" },
@@ -110,6 +111,24 @@ describe("PendingRequestCard permissions", () => {
 });
 
 describe("PendingRequestCard custom answers", () => {
+  it.each([false, true])("submits an option with an empty optional field (multiSelect=%s)", (multiSelect) => {
+    const { view, onRespond } = renderOtherAnswer(vi.fn(), multiSelect);
+    const option = Array.from(view.querySelectorAll("button")).find(
+      (button) => button.textContent === "上限提到 55k",
+    );
+    const submit = Array.from(view.querySelectorAll("button")).find(
+      (button) => button.textContent === "Submit",
+    );
+    expect(submit?.disabled).toBe(true);
+    flushSync(() => option?.click());
+    expect(view.querySelector("input")?.value).toBe("");
+    expect(submit?.disabled).toBe(false);
+    flushSync(() => submit?.click());
+    expect(onRespond).toHaveBeenCalledWith("input-7", {
+      answers: { limit: { answers: ["上限提到 55k"] } },
+    });
+  });
+
   it("allows submitting a custom Other answer without selecting an option", () => {
     const { view, onRespond } = renderOtherAnswer();
     const input = view.querySelector<HTMLInputElement>(
