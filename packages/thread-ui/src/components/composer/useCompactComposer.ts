@@ -114,7 +114,10 @@ export function useCompactComposer(
         pendingPointerEvent = null;
       }
       const focused = focusWithin;
-      const next = focused && promptExceedsCompactLine(editor, group, toolbar);
+      const overflowing = promptExceedsCompactLine(editor, group, toolbar);
+      // Apply the fade only when real content exceeds the compact budget.
+      form.toggleAttribute("data-composer-overflow", overflowing);
+      const next = focused && overflowing;
       setExpanded((current) => (current === next ? current : next));
       if (!focused) {
         editor.scrollTop = 0;
@@ -182,6 +185,7 @@ export function useCompactComposer(
     return () => {
       alive = false;
       cancelAnimationFrame(frame);
+      form.removeAttribute("data-composer-overflow");
       mutation.disconnect();
       resize?.disconnect();
       document.removeEventListener("pointerdown", onPointerDown, true);

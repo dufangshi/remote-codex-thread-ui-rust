@@ -198,7 +198,7 @@ export function WorkspaceExplorerRow({
         type="button"
         tabIndex={-1}
         className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-2 pr-2 text-left sm:min-h-7 sm:py-1"
-        onClick={() => onSelect(node)}
+        onClick={() => { onSelect(node); if (canToggleDirectory && window.matchMedia?.('(max-width: 639px)').matches) onToggle(node.path); }}
       >
         {iconForNode(node, expanded)}
         <span className="min-w-0 flex-1 truncate" title={displayName}>

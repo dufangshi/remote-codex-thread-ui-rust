@@ -1,4 +1,5 @@
 export const chatZhCN = {
+  "chat.tokenSpeedUnits": "每秒输出 token 数",
   "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。",
   "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。",
   "chat.loadingEarlier": "正在加载更早消息…",

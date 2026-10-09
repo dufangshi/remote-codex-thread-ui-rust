@@ -39,13 +39,13 @@ import {
   settleSave,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-UVPF3V5M.js";
+} from "./chunk-NNNGDQA2.js";
 import {
   en,
   getLocale,
   translate,
   useI18n
-} from "./chunk-3Y6Q7NIJ.js";
+} from "./chunk-MVQFHWO3.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect10, useMemo as useMemo10, useState as useState11 } from "react";
@@ -1667,7 +1667,7 @@ function WorkspaceNodeActions({
           {
             type: "button",
             onClick: () => onDownload(node),
-            className: actionClass,
+            className: `${actionClass} workspace-node-quick-action`,
             title: translate("files.download", { value1: node.name }),
             "aria-label": translate("files.download", { value1: node.name }),
             children: /* @__PURE__ */ jsx(Download, { size: 14 })
@@ -1679,7 +1679,7 @@ function WorkspaceNodeActions({
             {
               type: "button",
               onClick: () => onCopyPath(node, "relative"),
-              className: actionClass,
+              className: `${actionClass} workspace-node-quick-action`,
               title: translate("files.copyRelativePathFor", { value1: node.name }),
               "aria-label": translate("files.copyRelativePathFor", { value1: node.name }),
               children: /* @__PURE__ */ jsx(Copy, { size: 14 })
@@ -1690,14 +1690,14 @@ function WorkspaceNodeActions({
             {
               type: "button",
               onClick: () => onCopyPath(node, "absolute"),
-              className: actionClass,
+              className: `${actionClass} workspace-node-quick-action`,
               title: translate("files.copyAbsolutePathFor", { value1: node.name }),
               "aria-label": translate("files.copyAbsolutePathFor", { value1: node.name }),
               children: /* @__PURE__ */ jsx(ClipboardCopy, { size: 14 })
             }
           )
         ] }),
-        (onRename || onDelete) && /* @__PURE__ */ jsx(
+        (onRename || onDelete || onCopyPath || onDownload) && /* @__PURE__ */ jsx(
           "button",
           {
             ref: trigger,
@@ -1705,18 +1705,18 @@ function WorkspaceNodeActions({
             "aria-label": translate("files.moreActionsFor", { value1: node.name }),
             "aria-haspopup": "menu",
             "aria-expanded": !!menu,
-            className: actionClass,
+            className: `${actionClass} ${!onRename && !onDelete ? "workspace-node-mobile-only" : ""}`,
             onClick: () => {
               const box = trigger.current.getBoundingClientRect();
               setMenu(
                 menu ? null : {
                   left: Math.max(
                     8,
-                    Math.min(box.right - 176, window.innerWidth - 184)
+                    Math.min(box.right - 208, window.innerWidth - 216)
                   ),
                   top: Math.max(
                     8,
-                    Math.min(box.bottom + 4, window.innerHeight - 104)
+                    Math.min(box.bottom + 4, window.innerHeight - 260)
                   )
                 }
               );
@@ -1737,7 +1737,9 @@ function WorkspaceNodeActions({
                 left: menu.left,
                 top: menu.top,
                 zIndex: 1e3,
-                width: 176,
+                width: 208,
+                maxHeight: "calc(100dvh - 16px)",
+                overflowY: "auto",
                 background: "var(--theme-panel)",
                 color: "var(--theme-fg)",
                 border: "1px solid var(--theme-border)",
@@ -1746,6 +1748,29 @@ function WorkspaceNodeActions({
                 boxShadow: "0 8px 24px #0004"
               },
               children: [
+                onDownload && /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                  onDownload(node);
+                  close();
+                }, children: [
+                  /* @__PURE__ */ jsx(Download, { size: 16 }),
+                  translate("files.downloadFile")
+                ] }),
+                onCopyPath && /* @__PURE__ */ jsxs(Fragment, { children: [
+                  /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                    onCopyPath(node, "relative");
+                    close();
+                  }, children: [
+                    /* @__PURE__ */ jsx(Copy, { size: 16 }),
+                    translate("files.copyRelativePathFor", { value1: node.name })
+                  ] }),
+                  /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                    onCopyPath(node, "absolute");
+                    close();
+                  }, children: [
+                    /* @__PURE__ */ jsx(ClipboardCopy, { size: 16 }),
+                    translate("files.copyAbsolutePathFor", { value1: node.name })
+                  ] })
+                ] }),
                 onRename && /* @__PURE__ */ jsxs(
                   "button",
                   {
@@ -1960,7 +1985,10 @@ function WorkspaceExplorerRow({
             type: "button",
             tabIndex: -1,
             className: "flex min-h-11 min-w-0 flex-1 items-center gap-2 py-2 pr-2 text-left sm:min-h-7 sm:py-1",
-            onClick: () => onSelect(node),
+            onClick: () => {
+              onSelect(node);
+              if (canToggleDirectory && window.matchMedia?.("(max-width: 639px)").matches) onToggle(node.path);
+            },
             children: [
               iconForNode(node, expanded),
               /* @__PURE__ */ jsx2("span", { className: "min-w-0 flex-1 truncate", title: displayName, children: label })
@@ -2566,6 +2594,7 @@ import {
   useState as useState9
 } from "react";
 import {
+  ArrowLeft,
   BookOpen,
   ChevronRight as ChevronRight2,
   Code2,
@@ -3809,7 +3838,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-2P7UNTRD.js")
+  () => import("./GraphWorkspaceMonacoEditor-4ZJMDR4W.js")
 );
 function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
@@ -3853,7 +3882,7 @@ function translateReadOnly(reason) {
   const key = `files.safeReason.${reason}`;
   return Object.hasOwn(en, key) ? translate(key) : reason;
 }
-var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-PND5QDML.js"));
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-U42XYGRC.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -4077,6 +4106,7 @@ function GraphWorkspacePreviewPane({
   onSaveAndClose,
   onCloseFileTab,
   onDirtyChange,
+  mobileNavigation = false,
   onExpandExplorer,
   onOpenWorkspaceFile,
   onLoadMore,
@@ -4273,7 +4303,14 @@ function GraphWorkspacePreviewPane({
       className: "thread-graph-viewer flex h-full min-h-0 flex-col overflow-hidden rounded-md",
       "data-preview-target-kind": selectedTarget?.kind ?? "none",
       children: [
-        selectedTarget?.kind !== "workspace-file" ? /* @__PURE__ */ jsxs11("div", { className: "thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5", children: [
+        mobileNavigation && onExpandExplorer ? /* @__PURE__ */ jsxs11("div", { className: "thread-graph-mobile-file-navigation flex min-h-11 shrink-0 items-center gap-2 border-b border-[var(--theme-border)] px-2", children: [
+          /* @__PURE__ */ jsxs11("button", { type: "button", onClick: onExpandExplorer, "data-testid": "expand-explorer", className: "inline-flex min-h-11 shrink-0 items-center gap-1 px-2 text-sm", "aria-label": translate("files.backToFiles"), children: [
+            /* @__PURE__ */ jsx15(ArrowLeft, { size: 18 }),
+            translate("files.explorer")
+          ] }),
+          /* @__PURE__ */ jsx15("span", { className: "min-w-0 flex-1 truncate text-xs text-[var(--theme-fg-muted)]", title: activeFilePath ?? "", children: activeFilePath ?? title })
+        ] }) : null,
+        !mobileNavigation && selectedTarget?.kind !== "workspace-file" ? /* @__PURE__ */ jsxs11("div", { className: "thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5", children: [
           /* @__PURE__ */ jsx15("span", { className: "min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]", children: title ?? translate("files.preview_f1fbb2") }),
           viewerPaneToggle
         ] }) : null,
@@ -4289,7 +4326,7 @@ function GraphWorkspacePreviewPane({
             blockedClosePaths: new Set([...documents?.documents ?? []].filter(([, doc]) => ["saving", "unknown"].includes(doc.phase)).map(([path]) => path)),
             trailingAction: fileToolbar || viewerPaneToggle ? /* @__PURE__ */ jsxs11(Fragment4, { children: [
               fileToolbar,
-              viewerPaneToggle
+              !mobileNavigation && viewerPaneToggle
             ] }) : null
           }
         ) : null,
@@ -4534,7 +4571,7 @@ function GraphEmptyGarbageDialog({
 }
 
 // src/components/graph-workspace/GraphWorkspaceExplorer.tsx
-import { jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
+import { Fragment as Fragment5, jsx as jsx17, jsxs as jsxs13 } from "react/jsx-runtime";
 function GraphWorkspaceExplorer({
   activeView,
   detail,
@@ -4668,7 +4705,7 @@ function GraphWorkspaceExplorer({
   useEffect8(() => {
     setFileTabs((tabs) => tabs.map((tab) => dirtyFilePaths.has(tab.path) ? { ...tab, pinned: true } : tab));
   }, [dirtyKey]);
-  const [isMobileViewport, setIsMobileViewport] = useState10(false);
+  const [isMobileViewport, setIsMobileViewport] = useState10(() => typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(max-width: 639px)").matches);
   const explorerScrollerRef = useRef8(null);
   const explorerScrollTopRef = useRef8(0);
   const restoredRevealRef = useRef8(null);
@@ -4747,9 +4784,9 @@ function GraphWorkspaceExplorer({
   useEffect8(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
-      setCollapsedPanel(null);
+      setCollapsedPanel(isMobileViewport ? "explorer" : null);
     }
-  }, [focusPathRequest]);
+  }, [focusPathRequest, isMobileViewport]);
   function rememberExplorerScroll() {
     const currentScrollTop = explorerScrollerRef.current?.scrollTop ?? explorerScrollTopRef.current;
     explorerScrollTopRef.current = currentScrollTop;
@@ -4763,9 +4800,23 @@ function GraphWorkspaceExplorer({
       return;
     }
     let frame = 0;
+    const cancel = () => {
+      ++scrollRestoreGenerationRef.current;
+      pendingExplorerScrollRestoreRef.current = null;
+      removeListeners();
+    };
+    const removeListeners = () => {
+      scroller.removeEventListener("wheel", cancel);
+      scroller.removeEventListener("touchstart", cancel);
+      scroller.removeEventListener("pointerdown", cancel);
+    };
+    scroller.addEventListener("wheel", cancel, { passive: true });
+    scroller.addEventListener("touchstart", cancel, { passive: true });
+    scroller.addEventListener("pointerdown", cancel, { passive: true });
     const restore = () => {
       const current = explorerScrollerRef.current;
       if (!current || generation !== scrollRestoreGenerationRef.current) {
+        removeListeners();
         return;
       }
       current.scrollTop = Math.min(
@@ -4778,6 +4829,7 @@ function GraphWorkspaceExplorer({
         window.requestAnimationFrame(restore);
       } else {
         pendingExplorerScrollRestoreRef.current = null;
+        removeListeners();
       }
     };
     window.requestAnimationFrame(restore);
@@ -4886,7 +4938,9 @@ function GraphWorkspaceExplorer({
       filterQuery,
       initialLoading: Boolean(workspaceAdapter && !adapterModel && loadingTree),
       rootError: workspaceAdapter && !adapterModel ? workspaceError : null,
-      ...collapsedPanel === "viewer" ? { onExpandViewer: () => setCollapsedPanel(null) } : {
+      ...collapsedPanel === "viewer" ? { onExpandViewer: () => {
+        if (!isMobileViewport || activeNode?.kind === "file") setCollapsedPanel(isMobileViewport ? "explorer" : null);
+      } } : {
         onCollapse: () => {
           rememberExplorerScroll();
           setCollapsedPanel("explorer");
@@ -4917,7 +4971,6 @@ function GraphWorkspaceExplorer({
       onToggle: (path) => {
         toggleDirectory(path);
         setFocusedLine(null);
-        setSelectedNodeId(`workspace:${path}`);
       },
       selectedNodeId: activeNode?.id ?? null,
       revealRequestKey: focusPathRequest?.requestId,
@@ -4928,6 +4981,7 @@ function GraphWorkspaceExplorer({
   const viewerPanel = /* @__PURE__ */ jsx17(
     GraphWorkspacePreviewPane,
     {
+      mobileNavigation: isMobileViewport,
       activeFilePath: activeNode?.kind === "file" ? activeNode.path : null,
       dirtyFilePaths,
       error: workspaceError,
@@ -4939,7 +4993,7 @@ function GraphWorkspaceExplorer({
       focusLine: focusedLine,
       onOpenWorkspaceFile: (path) => {
         setFocusedLine(null);
-        setCollapsedPanel(null);
+        setCollapsedPanel(isMobileViewport ? "explorer" : null);
         void focusWorkspacePath(path);
       },
       ...workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {},
@@ -4951,7 +5005,7 @@ function GraphWorkspaceExplorer({
       onSaveAndClose: async (path) => {
         if (await documents.save(path)) handleCloseTab(path);
       },
-      ...collapsedPanel === "explorer" ? { onExpandExplorer: () => setCollapsedPanel(null) } : {
+      ...collapsedPanel === "explorer" || isMobileViewport ? { onExpandExplorer: () => setCollapsedPanel(isMobileViewport ? "viewer" : null) } : {
         onCollapse: () => {
           rememberExplorerScroll();
           setCollapsedPanel("viewer");
@@ -4971,7 +5025,12 @@ function GraphWorkspaceExplorer({
       workspaceRootPath: detail.workspace.absPath
     }
   );
-  if (collapsedPanel === "explorer") {
+  const overlays = /* @__PURE__ */ jsxs13(Fragment5, { children: [
+    /* @__PURE__ */ jsx17("input", { ref: fileInputRef, type: "file", "aria-label": translate("files.workspaceUploadFileInput"), "data-testid": "workspace-upload-file-input", className: "hidden", onChange: (event) => void handleUpload(event) }),
+    showGarbageDialog && /* @__PURE__ */ jsx17(GraphEmptyGarbageDialog, { files: garbageFiles, onCancel: () => setShowGarbageDialog(false), onConfirm: () => void handleConfirmEmptyGarbage() }),
+    createDialog
+  ] });
+  if (collapsedPanel === "explorer" || isMobileViewport && collapsedPanel === null && activeNode?.kind === "file") {
     return /* @__PURE__ */ jsxs13(
       "div",
       {
@@ -4979,12 +5038,12 @@ function GraphWorkspaceExplorer({
         className: "relative h-full min-h-0 w-full overflow-hidden p-1",
         children: [
           viewerPanel,
-          createDialog
+          overlays
         ]
       }
     );
   }
-  if (collapsedPanel === "viewer") {
+  if (collapsedPanel === "viewer" || isMobileViewport) {
     return /* @__PURE__ */ jsxs13(
       "div",
       {
@@ -4992,7 +5051,7 @@ function GraphWorkspaceExplorer({
         className: "relative h-full min-h-0 w-full overflow-hidden p-1",
         children: [
           explorerPanel,
-          createDialog
+          overlays
         ]
       }
     );
@@ -5003,26 +5062,7 @@ function GraphWorkspaceExplorer({
       "data-testid": "workspace-panel",
       className: "flex h-full min-h-0 w-full overflow-hidden bg-transparent p-1",
       children: [
-        showGarbageDialog ? /* @__PURE__ */ jsx17(
-          GraphEmptyGarbageDialog,
-          {
-            files: garbageFiles,
-            onCancel: () => setShowGarbageDialog(false),
-            onConfirm: () => void handleConfirmEmptyGarbage()
-          }
-        ) : null,
-        isMobileViewport ? /* @__PURE__ */ jsxs13(
-          ResizablePanelGroup,
-          {
-            direction: "vertical",
-            className: "thread-graph-workspace-mobile-stack",
-            children: [
-              /* @__PURE__ */ jsx17(ResizablePanel, { defaultSize: 42, minSize: 18, children: /* @__PURE__ */ jsx17("div", { className: "thread-graph-workspace-mobile-explorer h-full min-h-0 overflow-hidden", children: explorerPanel }) }),
-              /* @__PURE__ */ jsx17(ResizableHandle, { className: "thread-graph-workspace-resize-handle h-1 bg-transparent after:h-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" }),
-              /* @__PURE__ */ jsx17(ResizablePanel, { defaultSize: 58, minSize: 18, children: /* @__PURE__ */ jsx17("div", { className: "thread-graph-workspace-mobile-viewer h-full min-h-0 overflow-hidden", children: viewerPanel }) })
-            ]
-          }
-        ) : /* @__PURE__ */ jsxs13(
+        /* @__PURE__ */ jsxs13(
           ResizablePanelGroup,
           {
             direction: "horizontal",
@@ -5034,18 +5074,7 @@ function GraphWorkspaceExplorer({
             ]
           }
         ),
-        /* @__PURE__ */ jsx17(
-          "input",
-          {
-            ref: fileInputRef,
-            type: "file",
-            "aria-label": translate("files.workspaceUploadFileInput"),
-            "data-testid": "workspace-upload-file-input",
-            className: "hidden",
-            onChange: (event) => void handleUpload(event)
-          }
-        ),
-        createDialog
+        overlays
       ]
     }
   );

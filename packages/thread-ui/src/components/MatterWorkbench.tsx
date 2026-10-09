@@ -268,6 +268,7 @@ export function MatterWorkbench({
           {mobile && <>
             <button aria-label={translate("workbench.chat")} aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
             {o.terminalEnabled && <button aria-label={translate("workbench.terminal")} aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
+            <button aria-label={translate("workbench.toggleExplorer")} aria-pressed={explorerOpen} aria-expanded={explorerOpen} title={translate("workbench.explorer")} onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
             {settings}
           </>}
           <div className="matter-connection">{connection}</div>

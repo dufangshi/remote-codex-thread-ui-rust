@@ -512,3 +512,8 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+
+/* Icons keep token metrics compact without hiding their meaning from assistive tools. */
+.thread-ui-shell .thread-turn-usage-tokens > span,
+.thread-ui-shell .thread-turn-token-speed { display: inline-flex; align-items: center; gap: 3px; }
+.thread-token-metric-icon { flex: none; opacity: .8; }

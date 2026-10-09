@@ -1,4 +1,5 @@
 export const chatEn = {
+  "chat.tokenSpeedUnits": "Output tokens per second",
   "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.",
   "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.",
   "chat.loadingEarlier": "Loading earlier…",

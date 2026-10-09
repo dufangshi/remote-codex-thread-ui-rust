@@ -20,11 +20,13 @@ vi.mock('./GraphWorkspacePreviewPane', () => ({
   ) => (node ? { kind: node.kind, node } : null),
   GraphWorkspacePreviewPane: ({
     focusLine,
+    mobileNavigation,
     onCollapse,
     onExpandExplorer,
     previewFile,
   }: {
     focusLine?: number | null;
+    mobileNavigation?: boolean;
     onCollapse?: () => void;
     onExpandExplorer?: () => void;
     previewFile?: ThreadWorkspaceFilePreview | null;
@@ -37,7 +39,7 @@ vi.mock('./GraphWorkspacePreviewPane', () => ({
       {onExpandExplorer ? (
         <button
           type="button"
-          aria-label="Show Explorer"
+          aria-label={mobileNavigation ? "Back to files" : "Show Explorer"}
           onClick={onExpandExplorer}
         />
       ) : null}
@@ -448,6 +450,11 @@ describe('GraphWorkspaceExplorer', () => {
     expect(
       host?.querySelector('[data-testid="preview-file"]')?.textContent,
     ).toBe('README.md');
+    expect(host?.querySelector('[role="tree"]')).toBeNull();
+    await act(async () => host!.querySelector<HTMLButtonElement>('[aria-label="Back to files"]')!.click());
+    expect(host?.querySelector('[role="tree"]')).toBeTruthy();
+    expect(host?.querySelector('[data-testid="preview-file"]')).toBeNull();
+    expect(host?.querySelector('[data-testid="workspace-upload-file-input"]')).toBeTruthy();
   });
 
   it('restores split view after either pane is hidden', async () => {

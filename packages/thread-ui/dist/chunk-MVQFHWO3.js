@@ -152,6 +152,11 @@ var searchEn = {
 
 // src/i18n/auth.en.ts
 var authEn = {
+  "auth.avatar": "Profile avatar",
+  "auth.uploadAvatar": "Upload avatar",
+  "auth.removeAvatar": "Remove avatar",
+  "auth.avatarHint": "PNG, JPEG or WebP, up to 5 MB. Resized automatically.",
+  "auth.avatarInvalid": "Choose a valid PNG, JPEG or WebP image smaller than 5 MB.",
   "auth.connectingThread": "Connecting thread",
   "auth.connectThread": "Connect thread",
   "auth.closeConnectionInformation": "Close connection information",
@@ -326,6 +331,7 @@ var authEn = {
 
 // src/i18n/chat.en.ts
 var chatEn = {
+  "chat.tokenSpeedUnits": "Output tokens per second",
   "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.",
   "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.",
   "chat.loadingEarlier": "Loading earlier\u2026",
@@ -1235,6 +1241,7 @@ var devicesEn = {
 
 // src/i18n/files.en.ts
 var filesEn = {
+  "files.backToFiles": "Back to files",
   "files.newFile": "New file",
   "files.createFile": "Create",
   "files.newFilePath": "File path",
@@ -2696,6 +2703,11 @@ var searchZhCN = {
 
 // src/i18n/auth.zh-CN.ts
 var authZhCN = {
+  "auth.avatar": "\u4E2A\u4EBA\u5934\u50CF",
+  "auth.uploadAvatar": "\u4E0A\u4F20\u5934\u50CF",
+  "auth.removeAvatar": "\u79FB\u9664\u5934\u50CF",
+  "auth.avatarHint": "\u652F\u6301 PNG\u3001JPEG\u3001WebP\uFF0C\u6700\u5927 5 MB\uFF0C\u81EA\u52A8\u7F29\u5C0F\u3002",
+  "auth.avatarInvalid": "\u8BF7\u9009\u62E9\u5C0F\u4E8E 5 MB \u7684\u6709\u6548 PNG\u3001JPEG \u6216 WebP \u56FE\u7247\u3002",
   "auth.connectingThread": "\u6B63\u5728\u8FDE\u63A5\u7EBF\u7A0B",
   "auth.connectThread": "\u8FDE\u63A5\u7EBF\u7A0B",
   "auth.closeConnectionInformation": "\u5173\u95ED\u8FDE\u63A5\u4FE1\u606F",
@@ -2870,6 +2882,7 @@ var authZhCN = {
 
 // src/i18n/chat.zh-CN.ts
 var chatZhCN = {
+  "chat.tokenSpeedUnits": "\u6BCF\u79D2\u8F93\u51FA token \u6570",
   "chat.unableToReadYourMessageShortcuts": "\u65E0\u6CD5\u8BFB\u53D6\u6D88\u606F\u5FEB\u6377\u952E\u3002",
   "chat.loadedTurnDetailDidNotMatchThe": "\u52A0\u8F7D\u7684\u8F6E\u6B21\u8BE6\u60C5\u4E0E\u6240\u8BF7\u6C42\u7684\u8F6E\u6B21\u4E0D\u5339\u914D\u3002",
   "chat.loadingEarlier": "\u6B63\u5728\u52A0\u8F7D\u66F4\u65E9\u6D88\u606F\u2026",
@@ -3779,6 +3792,7 @@ var devicesZhCN = {
 
 // src/i18n/files.zh-CN.ts
 var filesZhCN = {
+  "files.backToFiles": "\u8FD4\u56DE\u6587\u4EF6\u5217\u8868",
   "files.newFile": "\u65B0\u5EFA\u6587\u4EF6",
   "files.createFile": "\u521B\u5EFA",
   "files.newFilePath": "\u6587\u4EF6\u8DEF\u5F84",

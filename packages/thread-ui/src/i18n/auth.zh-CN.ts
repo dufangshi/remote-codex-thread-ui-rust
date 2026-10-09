@@ -1,4 +1,9 @@
 export const authZhCN = {
+  "auth.avatar": "个人头像",
+  "auth.uploadAvatar": "上传头像",
+  "auth.removeAvatar": "移除头像",
+  "auth.avatarHint": "支持 PNG、JPEG、WebP，最大 5 MB，自动缩小。",
+  "auth.avatarInvalid": "请选择小于 5 MB 的有效 PNG、JPEG 或 WebP 图片。",
   "auth.connectingThread": "正在连接线程",
   "auth.connectThread": "连接线程",
   "auth.closeConnectionInformation": "关闭连接信息",

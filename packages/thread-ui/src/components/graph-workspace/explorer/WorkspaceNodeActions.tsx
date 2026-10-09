@@ -92,7 +92,7 @@ export function WorkspaceNodeActions({
         <button
           type="button"
           onClick={() => onDownload(node)}
-          className={actionClass}
+          className={`${actionClass} workspace-node-quick-action`}
           title={translate("files.download", { value1: node.name })}
           aria-label={translate("files.download", { value1: node.name })}
         >
@@ -104,7 +104,7 @@ export function WorkspaceNodeActions({
           <button
             type="button"
             onClick={() => onCopyPath(node, 'relative')}
-            className={actionClass}
+            className={`${actionClass} workspace-node-quick-action`}
             title={translate("files.copyRelativePathFor", { value1: node.name })}
             aria-label={translate("files.copyRelativePathFor", { value1: node.name })}
           >
@@ -113,7 +113,7 @@ export function WorkspaceNodeActions({
           <button
             type="button"
             onClick={() => onCopyPath(node, 'absolute')}
-            className={actionClass}
+            className={`${actionClass} workspace-node-quick-action`}
             title={translate("files.copyAbsolutePathFor", { value1: node.name })}
             aria-label={translate("files.copyAbsolutePathFor", { value1: node.name })}
           >
@@ -121,14 +121,14 @@ export function WorkspaceNodeActions({
           </button>
         </>
       )}
-      {(onRename || onDelete) && (
+      {(onRename || onDelete || onCopyPath || onDownload) && (
         <button
           ref={trigger}
           type="button"
           aria-label={translate("files.moreActionsFor", { value1: node.name })}
           aria-haspopup="menu"
           aria-expanded={!!menu}
-          className={actionClass}
+          className={`${actionClass} ${!onRename && !onDelete ? "workspace-node-mobile-only" : ""}`}
           onClick={() => {
             const box = trigger.current!.getBoundingClientRect();
             setMenu(
@@ -137,11 +137,11 @@ export function WorkspaceNodeActions({
                 : {
                     left: Math.max(
                       8,
-                      Math.min(box.right - 176, window.innerWidth - 184),
+                      Math.min(box.right - 208, window.innerWidth - 216),
                     ),
                     top: Math.max(
                       8,
-                      Math.min(box.bottom + 4, window.innerHeight - 104),
+                      Math.min(box.bottom + 4, window.innerHeight - 260),
                     ),
                   },
             );
@@ -162,7 +162,9 @@ export function WorkspaceNodeActions({
               left: menu.left,
               top: menu.top,
               zIndex: 1000,
-              width: 176,
+              width: 208,
+              maxHeight: 'calc(100dvh - 16px)',
+              overflowY: 'auto',
               background: 'var(--theme-panel)',
               color: 'var(--theme-fg)',
               border: '1px solid var(--theme-border)',
@@ -171,6 +173,11 @@ export function WorkspaceNodeActions({
               boxShadow: '0 8px 24px #0004',
             }}
           >
+            {onDownload && <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onDownload(node); close(); }}><Download size={16} />{translate('files.downloadFile')}</button>}
+            {onCopyPath && <>
+              <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onCopyPath(node, 'relative'); close(); }}><Copy size={16} />{translate('files.copyRelativePathFor', { value1: node.name })}</button>
+              <button className="workspace-node-mobile-action" role="menuitem" type="button" onClick={() => { onCopyPath(node, 'absolute'); close(); }}><ClipboardCopy size={16} />{translate('files.copyAbsolutePathFor', { value1: node.name })}</button>
+            </>}
             {onRename && (
               <button
                 role="menuitem"

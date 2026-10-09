@@ -741,6 +741,7 @@ declare const en: {
     readonly "settings.previousConfigurationRestoredTheNextTurnReloads": "Previous configuration restored. The next turn reloads it.";
     readonly "settings.upstreamRemoved": "Upstream removed.";
     readonly "settings.listTruncated": " (list truncated)";
+    readonly "files.backToFiles": "Back to files";
     readonly "files.newFile": "New file";
     readonly "files.createFile": "Create";
     readonly "files.newFilePath": "File path";
@@ -1782,6 +1783,7 @@ declare const en: {
         readonly one: "{{count}} item";
         readonly other: "{{count}} items";
     };
+    readonly "chat.tokenSpeedUnits": "Output tokens per second";
     readonly "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.";
     readonly "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.";
     readonly "chat.loadingEarlier": "Loading earlier…";
@@ -2207,6 +2209,11 @@ declare const en: {
     readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
     readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
     readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
+    readonly "auth.avatar": "Profile avatar";
+    readonly "auth.uploadAvatar": "Upload avatar";
+    readonly "auth.removeAvatar": "Remove avatar";
+    readonly "auth.avatarHint": "PNG, JPEG or WebP, up to 5 MB. Resized automatically.";
+    readonly "auth.avatarInvalid": "Choose a valid PNG, JPEG or WebP image smaller than 5 MB.";
     readonly "auth.connectingThread": "Connecting thread";
     readonly "auth.connectThread": "Connect thread";
     readonly "auth.closeConnectionInformation": "Close connection information";
@@ -3234,6 +3241,7 @@ declare const zhCN: {
     "settings.previousConfigurationRestoredTheNextTurnReloads": "已恢复先前配置，下个轮次重新加载。";
     "settings.upstreamRemoved": "已移除上游。";
     "settings.listTruncated": "（列表已截断）";
+    "files.backToFiles": "返回文件列表";
     "files.newFile": "新建文件";
     "files.createFile": "创建";
     "files.newFilePath": "文件路径";
@@ -4275,6 +4283,7 @@ declare const zhCN: {
         readonly one: "{{count}} 项";
         readonly other: "{{count}} 项";
     };
+    "chat.tokenSpeedUnits": "每秒输出 token 数";
     "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。";
     "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。";
     "chat.loadingEarlier": "正在加载更早消息…";
@@ -4700,6 +4709,11 @@ declare const zhCN: {
     "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
     "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
     "chat.workedForSeconds": "工作了 {{seconds}} 秒";
+    "auth.avatar": "个人头像";
+    "auth.uploadAvatar": "上传头像";
+    "auth.removeAvatar": "移除头像";
+    "auth.avatarHint": "支持 PNG、JPEG、WebP，最大 5 MB，自动缩小。";
+    "auth.avatarInvalid": "请选择小于 5 MB 的有效 PNG、JPEG 或 WebP 图片。";
     "auth.connectingThread": "正在连接线程";
     "auth.connectThread": "连接线程";
     "auth.closeConnectionInformation": "关闭连接信息";
@@ -5749,6 +5763,7 @@ declare const resources: {
         readonly "settings.previousConfigurationRestoredTheNextTurnReloads": "Previous configuration restored. The next turn reloads it.";
         readonly "settings.upstreamRemoved": "Upstream removed.";
         readonly "settings.listTruncated": " (list truncated)";
+        readonly "files.backToFiles": "Back to files";
         readonly "files.newFile": "New file";
         readonly "files.createFile": "Create";
         readonly "files.newFilePath": "File path";
@@ -6790,6 +6805,7 @@ declare const resources: {
             readonly one: "{{count}} item";
             readonly other: "{{count}} items";
         };
+        readonly "chat.tokenSpeedUnits": "Output tokens per second";
         readonly "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.";
         readonly "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.";
         readonly "chat.loadingEarlier": "Loading earlier…";
@@ -7215,6 +7231,11 @@ declare const resources: {
         readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
         readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
         readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
+        readonly "auth.avatar": "Profile avatar";
+        readonly "auth.uploadAvatar": "Upload avatar";
+        readonly "auth.removeAvatar": "Remove avatar";
+        readonly "auth.avatarHint": "PNG, JPEG or WebP, up to 5 MB. Resized automatically.";
+        readonly "auth.avatarInvalid": "Choose a valid PNG, JPEG or WebP image smaller than 5 MB.";
         readonly "auth.connectingThread": "Connecting thread";
         readonly "auth.connectThread": "Connect thread";
         readonly "auth.closeConnectionInformation": "Close connection information";
@@ -8241,6 +8262,7 @@ declare const resources: {
         "settings.previousConfigurationRestoredTheNextTurnReloads": "已恢复先前配置，下个轮次重新加载。";
         "settings.upstreamRemoved": "已移除上游。";
         "settings.listTruncated": "（列表已截断）";
+        "files.backToFiles": "返回文件列表";
         "files.newFile": "新建文件";
         "files.createFile": "创建";
         "files.newFilePath": "文件路径";
@@ -9282,6 +9304,7 @@ declare const resources: {
             readonly one: "{{count}} 项";
             readonly other: "{{count}} 项";
         };
+        "chat.tokenSpeedUnits": "每秒输出 token 数";
         "chat.unableToReadYourMessageShortcuts": "无法读取消息快捷键。";
         "chat.loadedTurnDetailDidNotMatchThe": "加载的轮次详情与所请求的轮次不匹配。";
         "chat.loadingEarlier": "正在加载更早消息…";
@@ -9707,6 +9730,11 @@ declare const resources: {
         "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
         "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
         "chat.workedForSeconds": "工作了 {{seconds}} 秒";
+        "auth.avatar": "个人头像";
+        "auth.uploadAvatar": "上传头像";
+        "auth.removeAvatar": "移除头像";
+        "auth.avatarHint": "支持 PNG、JPEG、WebP，最大 5 MB，自动缩小。";
+        "auth.avatarInvalid": "请选择小于 5 MB 的有效 PNG、JPEG 或 WebP 图片。";
         "auth.connectingThread": "正在连接线程";
         "auth.connectThread": "连接线程";
         "auth.closeConnectionInformation": "关闭连接信息";

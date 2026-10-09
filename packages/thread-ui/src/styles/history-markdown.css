@@ -3022,3 +3022,33 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
 @keyframes thread-operation-sheen { from { background-position:150% 0; } to { background-position:-150% 0; } }
 .is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { background-image:linear-gradient(105deg,var(--theme-fg-muted) 35%,var(--theme-fg) 50%,var(--theme-fg-muted) 65%); background-size:250% 100%; background-clip:text; -webkit-background-clip:text; color:transparent; animation:thread-operation-sheen 2.4s linear infinite; }
 @media(prefers-reduced-motion:reduce) { .is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { animation:none; color:var(--theme-fg); background:none; } }
+
+.thread-ui-shell .thread-graph-turn-footer { flex-wrap: nowrap; gap: 8px; }
+.thread-ui-shell .thread-graph-turn-footer-runtime { flex: 1 1 0; flex-wrap: nowrap; align-items: center; gap: 6px; }
+.thread-ui-shell .thread-graph-turn-footer-runtime > :first-child { flex-shrink: 0; }
+.thread-ui-shell .thread-graph-turn-footer .thread-turn-usage { flex: 1; flex-wrap: nowrap; gap: 6px; }
+.thread-ui-shell .thread-graph-turn-footer .thread-turn-usage-model { display: flex; flex: 1 1 auto; white-space: nowrap; overflow: hidden; }
+.thread-ui-shell .thread-graph-turn-footer .thread-turn-usage-model-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.thread-ui-shell .thread-graph-turn-footer .thread-turn-usage-effort { flex-shrink: 0; }
+.thread-ui-shell .thread-graph-turn-footer-meta { flex: none; }
+@media (max-width: 639px) {
+  .thread-ui-shell .thread-graph-turn-footer .thread-turn-usage { font-size: .625rem; }
+}
+
+.workspace-node-mobile-action, .workspace-node-mobile-only { display: none !important; }
+@media (max-width: 639px) {
+  .thread-ui-shell .thread-graph-explorer-header { min-height: 48px; padding: 0 6px; }
+  .thread-ui-shell .thread-graph-explorer-icon-button,
+  .thread-ui-shell .thread-graph-explorer-collapse-button { width: 36px; height: 44px; }
+  .thread-ui-shell .thread-graph-tree-row { padding-right: 44px !important; min-height: 44px; }
+  .thread-ui-shell .thread-graph-tree-actions { position: absolute; padding: 0; opacity: 1; }
+  .thread-ui-shell .workspace-node-quick-action { display: none; }
+  .thread-ui-shell .workspace-node-mobile-only { display: inline-flex !important; }
+  .workspace-node-menu .workspace-node-mobile-action { display: flex !important; }
+  .workspace-node-menu button { min-height: 44px; height: auto; white-space: normal; }
+  .thread-ui-shell .thread-graph-editor-tab { height: 44px; }
+  .thread-ui-shell .thread-graph-editor-tab-close { width: 32px; height: 40px; }
+  .thread-ui-shell .thread-graph-editor-tabs-action { height: 44px; }
+  .thread-ui-shell .thread-graph-editor-toolbar-button { width: 32px; height: 44px; }
+  .thread-ui-shell .thread-graph-workspace-tree-scroll { overscroll-behavior: contain; touch-action: pan-y; }
+}

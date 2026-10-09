@@ -1,4 +1,9 @@
 export const authEn = {
+  "auth.avatar": "Profile avatar",
+  "auth.uploadAvatar": "Upload avatar",
+  "auth.removeAvatar": "Remove avatar",
+  "auth.avatarHint": "PNG, JPEG or WebP, up to 5 MB. Resized automatically.",
+  "auth.avatarInvalid": "Choose a valid PNG, JPEG or WebP image smaller than 5 MB.",
   "auth.connectingThread": "Connecting thread",
   "auth.connectThread": "Connect thread",
   "auth.closeConnectionInformation": "Close connection information",

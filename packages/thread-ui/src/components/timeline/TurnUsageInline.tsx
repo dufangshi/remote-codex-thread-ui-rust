@@ -1,5 +1,6 @@
 import { getLocale } from '../../i18n';
 import { translate, useI18n } from '../../i18n';
+import { TokenMetricIcon } from './TokenMetricIcon';
 import { TokenUsageCost } from './TokenUsageCost';
 import type { TimelineTurn } from './timelineItems';
 import { formatCompactTokenCount } from './tokenFormatting';
@@ -56,15 +57,15 @@ export function TurnUsageInline({
       {usage ? (
         <span
           className="thread-turn-usage-tokens"
-          aria-label={translate("chat.turnTokenUsage")}
+          aria-label={translate("chat.totalTokens", { value1: usage.totalTokens.toLocaleString(getLocale()) })}
         >
           <span
             title={translate("chat.totalTokens", { value1: usage.totalTokens.toLocaleString(getLocale()) })}
           >
+            <TokenMetricIcon />
             <span className="thread-turn-usage-value">
               {formatCompactTokenCount(usage.totalTokens)}
-            </span>{' '}
-            tok
+            </span>
           </span>
         </span>
       ) : null}
@@ -80,15 +81,15 @@ export function TurnUsageInline({
                 : translate("chat.recentOutputTokenSpeed")
               : translate("chat.averageOutputTokenSpeed")
           }
-          title={`${speedTitle}${rate == null ? translate("chat.waitingForTheFirstOutputTokenUsage") : ''}`}
+          title={`${translate("chat.tokenSpeedUnits")} · ${speedTitle}${rate == null ? translate("chat.waitingForTheFirstOutputTokenUsage") : ''}`}
         >
+          <TokenMetricIcon speed />
           {rate != null && Number.isFinite(rate) && rate >= 0
             ? rate.toLocaleString(getLocale(), {
                 maximumFractionDigits: 1,
                 minimumFractionDigits: 1,
               })
-            : '—'}{' '}
-          tok/s
+            : '—'}
         </span>
       ) : null}
     </span>

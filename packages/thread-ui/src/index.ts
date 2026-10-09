@@ -120,3 +120,5 @@ export { confirmWorkspaceDocumentLeave } from "./components/graph-workspace/expl
 export { useWorkbenchPresentation } from "./components/workbench/presentation";
 export type { WorkbenchPresentation, ReferenceMode } from "./components/workbench/presentation";
 export type { WorkbenchPanelsOptions } from "./components/workbench/WorkbenchPanels";
+
+export { SettingsDialog } from './components/SettingsDialog';

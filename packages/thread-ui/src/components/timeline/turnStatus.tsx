@@ -12,7 +12,6 @@ import {
 import { formatTurnRuntimeSummary, TurnUsageInline } from './TurnUsageInline';
 import {
   formatLongTimestamp,
-  formatShortTimestamp,
   turnStatusLabel,
 } from '../threadPresentation';
 
@@ -201,7 +200,7 @@ function formatElapsedDuration(
   now: number,
 ) {
   const startedAtMillis = Date.parse(startedAt ?? '');
-  if (!Number.isFinite(startedAtMillis)) {
+  if (!Number.isFinite(startedAtMillis) || !Number.isFinite(now)) {
     return null;
   }
 
@@ -317,7 +316,7 @@ export function TurnStatusBar({
   const runtimeSummary = formatTurnRuntimeSummary(turn);
   const active = isActiveTurnStatus(turn.status);
   const now = useSecondClock(active && variant === 'footer');
-  const elapsedLabel = active ? formatElapsedDuration(turn.startedAt, now) : null;
+  const elapsedLabel = formatElapsedDuration(turn.startedAt, active ? now : Date.parse(turn.completedAt ?? turn.startedAt ?? ''));
   const effectiveLastActivityAt = lastActivityAt ?? turn.startedAt;
   const progressAge = effectiveLastActivityAt ? Math.max(0, Math.floor((now - Date.parse(effectiveLastActivityAt)) / 1000)) : null;
   const toneClassName =
@@ -341,16 +340,8 @@ export function TurnStatusBar({
           <TurnUsageInline turn={turn} />
         </div>
         <div className="thread-graph-turn-footer-meta timeline-meta-text flex min-w-0 shrink items-center justify-end gap-1 whitespace-nowrap">
-          {effectiveLastActivityAt ? (
-            <time
-              dateTime={effectiveLastActivityAt}
-              title={translate("chat.lastActivity", { value1: formatLongTimestamp(effectiveLastActivityAt) })}
-            >
-              {formatShortTimestamp(effectiveLastActivityAt)}
-            </time>
-          ) : null}
           {elapsedLabel ? (
-            <span aria-label={translate("chat.runningFor", { value1: elapsedLabel })}>· {elapsedLabel}</span>
+            <span aria-label={translate("chat.runningFor", { value1: elapsedLabel })}>{elapsedLabel}</span>
           ) : null}
         </div>
       </div>

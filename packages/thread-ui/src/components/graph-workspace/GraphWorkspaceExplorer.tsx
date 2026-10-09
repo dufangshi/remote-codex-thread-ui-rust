@@ -156,7 +156,7 @@ export function GraphWorkspaceExplorer({
   useEffect(() => {
     setFileTabs(tabs => tabs.map(tab => dirtyFilePaths.has(tab.path) ? {...tab,pinned:true}:tab));
   }, [dirtyKey]);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 639px)').matches);
   const explorerScrollerRef = useRef<HTMLDivElement | null>(null);
   const explorerScrollTopRef = useRef(0);
   const restoredRevealRef = useRef<number | null>(null);
@@ -237,9 +237,9 @@ export function GraphWorkspaceExplorer({
   useEffect(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
-      setCollapsedPanel(null);
+      setCollapsedPanel(isMobileViewport ? 'explorer' : null);
     }
-  }, [focusPathRequest]);
+  }, [focusPathRequest, isMobileViewport]);
 
   function rememberExplorerScroll() {
     const currentScrollTop =
@@ -258,9 +258,23 @@ export function GraphWorkspaceExplorer({
     }
 
     let frame = 0;
+    const cancel = () => {
+      ++scrollRestoreGenerationRef.current;
+      pendingExplorerScrollRestoreRef.current = null;
+      removeListeners();
+    };
+    const removeListeners = () => {
+      scroller.removeEventListener('wheel', cancel);
+      scroller.removeEventListener('touchstart', cancel);
+      scroller.removeEventListener('pointerdown', cancel);
+    };
+    scroller.addEventListener('wheel', cancel, { passive: true });
+    scroller.addEventListener('touchstart', cancel, { passive: true });
+    scroller.addEventListener('pointerdown', cancel, { passive: true });
     const restore = () => {
       const current = explorerScrollerRef.current;
       if (!current || generation !== scrollRestoreGenerationRef.current) {
+        removeListeners();
         return;
       }
       current.scrollTop = Math.min(
@@ -273,6 +287,7 @@ export function GraphWorkspaceExplorer({
         window.requestAnimationFrame(restore);
       } else {
         pendingExplorerScrollRestoreRef.current = null;
+        removeListeners();
       }
     };
     window.requestAnimationFrame(restore);
@@ -398,7 +413,7 @@ export function GraphWorkspaceExplorer({
       initialLoading={Boolean(workspaceAdapter && !adapterModel && loadingTree)}
       rootError={workspaceAdapter && !adapterModel ? workspaceError : null}
       {...(collapsedPanel === 'viewer'
-        ? { onExpandViewer: () => setCollapsedPanel(null) }
+        ? { onExpandViewer: () => { if (!isMobileViewport || activeNode?.kind === 'file') setCollapsedPanel(isMobileViewport ? 'explorer' : null); } }
         : {
             onCollapse: () => {
               rememberExplorerScroll();
@@ -430,7 +445,6 @@ export function GraphWorkspaceExplorer({
       onToggle={(path) => {
         toggleDirectory(path);
         setFocusedLine(null);
-        setSelectedNodeId(`workspace:${path}`);
       }}
       selectedNodeId={activeNode?.id ?? null}
       revealRequestKey={focusPathRequest?.requestId}
@@ -441,6 +455,7 @@ export function GraphWorkspaceExplorer({
 
   const viewerPanel = (
     <GraphWorkspacePreviewPane
+      mobileNavigation={isMobileViewport}
       activeFilePath={activeNode?.kind === 'file' ? activeNode.path : null}
       dirtyFilePaths={dirtyFilePaths}
       error={workspaceError}
@@ -454,7 +469,7 @@ export function GraphWorkspaceExplorer({
       focusLine={focusedLine}
       onOpenWorkspaceFile={(path) => {
         setFocusedLine(null);
-        setCollapsedPanel(null);
+        setCollapsedPanel(isMobileViewport ? 'explorer' : null);
         void focusWorkspacePath(path);
       }}
       {...(workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {})}
@@ -464,8 +479,8 @@ export function GraphWorkspaceExplorer({
       resourceScopeKey={documents.source}
       canSaveDocument={Boolean(workspaceAdapter?.saveDocument)}
       onSaveAndClose={async (path) => { if (await documents.save(path)) handleCloseTab(path); }}
-      {...(collapsedPanel === 'explorer'
-        ? { onExpandExplorer: () => setCollapsedPanel(null) }
+      {...(collapsedPanel === 'explorer' || isMobileViewport
+        ? { onExpandExplorer: () => setCollapsedPanel(isMobileViewport ? 'viewer' : null) }
         : {
             onCollapse: () => {
               rememberExplorerScroll();
@@ -490,26 +505,32 @@ export function GraphWorkspaceExplorer({
     />
   );
 
-  if (collapsedPanel === 'explorer') {
+  const overlays = <>
+    <input ref={fileInputRef} type="file" aria-label={translate("files.workspaceUploadFileInput")} data-testid="workspace-upload-file-input" className="hidden" onChange={event => void handleUpload(event)} />
+    {showGarbageDialog && <GraphEmptyGarbageDialog files={garbageFiles} onCancel={() => setShowGarbageDialog(false)} onConfirm={() => void handleConfirmEmptyGarbage()} />}
+    {createDialog}
+  </>;
+
+  if (collapsedPanel === 'explorer' || (isMobileViewport && collapsedPanel === null && activeNode?.kind === 'file')) {
     return (
       <div
         data-testid="workspace-panel"
         className="relative h-full min-h-0 w-full overflow-hidden p-1"
       >
         {viewerPanel}
-        {createDialog}
+        {overlays}
       </div>
     );
   }
 
-  if (collapsedPanel === 'viewer') {
+  if (collapsedPanel === 'viewer' || isMobileViewport) {
     return (
       <div
         data-testid="workspace-panel"
         className="relative h-full min-h-0 w-full overflow-hidden p-1"
       >
         {explorerPanel}
-        {createDialog}
+        {overlays}
       </div>
     );
   }
@@ -519,32 +540,7 @@ export function GraphWorkspaceExplorer({
       data-testid="workspace-panel"
       className="flex h-full min-h-0 w-full overflow-hidden bg-transparent p-1"
     >
-      {showGarbageDialog ? (
-        <GraphEmptyGarbageDialog
-          files={garbageFiles}
-          onCancel={() => setShowGarbageDialog(false)}
-          onConfirm={() => void handleConfirmEmptyGarbage()}
-        />
-      ) : null}
-      {isMobileViewport ? (
-        <ResizablePanelGroup
-          direction="vertical"
-          className="thread-graph-workspace-mobile-stack"
-        >
-          <ResizablePanel defaultSize={42} minSize={18}>
-            <div className="thread-graph-workspace-mobile-explorer h-full min-h-0 overflow-hidden">
-              {explorerPanel}
-            </div>
-          </ResizablePanel>
-          <ResizableHandle className="thread-graph-workspace-resize-handle h-1 bg-transparent after:h-px after:bg-slate-200/80 after:transition-colors hover:after:bg-slate-300 dark:after:bg-[#303642] dark:hover:after:bg-[#475063]" />
-          <ResizablePanel defaultSize={58} minSize={18}>
-            <div className="thread-graph-workspace-mobile-viewer h-full min-h-0 overflow-hidden">
-              {viewerPanel}
-            </div>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      ) : (
-        <ResizablePanelGroup
+      <ResizablePanelGroup
           direction="horizontal"
           className="thread-graph-workspace-resizable"
         >
@@ -560,16 +556,7 @@ export function GraphWorkspaceExplorer({
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
-      )}
-      <input
-        ref={fileInputRef}
-        type="file"
-        aria-label={translate("files.workspaceUploadFileInput")}
-        data-testid="workspace-upload-file-input"
-        className="hidden"
-        onChange={(event) => void handleUpload(event)}
-      />
-      {createDialog}
+      {overlays}
     </div>
   );
 }

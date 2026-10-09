@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../i18n';
-import { SettingsPanels } from "./SettingsPanels";
+import { SettingsDialog } from "./SettingsDialog";
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
@@ -804,37 +804,17 @@ export function ThreadWorkspaceLayout({
     ];
 
     return (
-      <Dialog
-        {...(settingsDialogOpen !== undefined
-          ? { open: settingsDialogOpen }
-          : {})}
-        {...(onSettingsDialogOpenChange
-          ? { onOpenChange: onSettingsDialogOpenChange }
-          : {})}
-      >
-        <DialogTrigger asChild>
-          <button
-            type="button"
-            aria-label={translate("files.openSettings")}
-            title={translate("files.settings")}
-            className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-          >
-            <Settings className="h-4 w-4" />
-          </button>
-        </DialogTrigger>
-        <DialogContent
-          data-testid="settings-dialog"
-          data-theme-effective={effectiveTheme}
-          data-theme-mode={themeMode}
-          className={`thread-graph-settings-dialog thread-graph-dialog ${workbench ? 'matter-settings-dialog' : ''}`}
-          {...(workbench ? { overlayClassName: 'matter-settings-overlay' } : {})}
-        >
-          <DialogHeader>
-            <DialogTitle>{translate("files.settings")}</DialogTitle>
-            <DialogDescription>
-              {translate("files.yourWorkspaceConnectedDeviceAndPersonalPreferences")}</DialogDescription>
-          </DialogHeader>
-          {canUpdateThemeMode && !settingsSections ? (
+      <SettingsDialog
+        {...(settingsDialogOpen !== undefined ? { open: settingsDialogOpen } : {})}
+        {...(onSettingsDialogOpenChange ? { onOpenChange: onSettingsDialogOpenChange } : {})}
+        themeMode={themeMode} effectiveTheme={effectiveTheme}
+        contentProps={{ 'data-testid': 'settings-dialog' }}
+        sections={sections}
+        trigger={<button type="button" aria-label={translate("files.openSettings")} title={translate("files.settings")}
+          className="thread-icon-button inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full">
+          <Settings className="h-4 w-4" />
+        </button>}
+        extraContent={canUpdateThemeMode && !settingsSections ? (
             <div className="thread-graph-settings-card rounded-lg border p-3">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
@@ -874,9 +854,7 @@ export function ThreadWorkspaceLayout({
               </div>
             </div>
           ) : null}
-          <SettingsPanels sections={sections} initialId="preferences" />
-        </DialogContent>
-      </Dialog>
+      />
     );
   }
 

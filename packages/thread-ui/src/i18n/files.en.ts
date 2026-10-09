@@ -1,4 +1,5 @@
 export const filesEn = {
+  "files.backToFiles": "Back to files",
   "files.newFile": "New file",
   "files.createFile": "Create",
   "files.newFilePath": "File path",

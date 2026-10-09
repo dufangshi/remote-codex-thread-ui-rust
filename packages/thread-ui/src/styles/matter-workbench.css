@@ -1294,3 +1294,10 @@
 
 .workbench-tool-drawer > header > div { flex: 1; min-width: 0; }
 .workbench-tool-drawer > header small { display: block; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 10px; color: var(--theme-fg-muted); }
+
+@media (max-width: 639px) {
+  .matter-topbar-end { gap: 0; }
+  .thread-ui-shell .matter-workbench .matter-topbar-end > button,
+  .thread-ui-shell .matter-workbench .matter-topbar-end > [data-slot='dialog-trigger'] { width: 34px; min-width: 34px; margin: 0; padding: 0; }
+  .matter-topbar-end .matter-connection:empty { display: none; }
+}

@@ -15,6 +15,7 @@ import {
   useState,
 } from 'react';
 import {
+  ArrowLeft,
   BookOpen,
   ChevronRight,
   Code2,
@@ -390,6 +391,7 @@ export function GraphWorkspacePreviewPane({
   onSaveAndClose,
   onCloseFileTab,
   onDirtyChange,
+  mobileNavigation = false,
   onExpandExplorer,
   onOpenWorkspaceFile,
   onLoadMore,
@@ -418,6 +420,7 @@ export function GraphWorkspacePreviewPane({
   onSaveAndClose?: (path: string) => Promise<void>;
   onCloseFileTab?: (path: string) => void;
   onDirtyChange?: (path: string, dirty: boolean) => void;
+  mobileNavigation?: boolean;
   onExpandExplorer?: () => void;
   onOpenWorkspaceFile?: (path: string) => void;
   onLoadMore?: () => void;
@@ -633,7 +636,13 @@ export function GraphWorkspacePreviewPane({
       className="thread-graph-viewer flex h-full min-h-0 flex-col overflow-hidden rounded-md"
       data-preview-target-kind={selectedTarget?.kind ?? 'none'}
     >
-      {selectedTarget?.kind !== 'workspace-file' ? (
+      {mobileNavigation && onExpandExplorer ? (
+        <div className="thread-graph-mobile-file-navigation flex min-h-11 shrink-0 items-center gap-2 border-b border-[var(--theme-border)] px-2">
+          <button type="button" onClick={onExpandExplorer} data-testid="expand-explorer" className="inline-flex min-h-11 shrink-0 items-center gap-1 px-2 text-sm" aria-label={translate('files.backToFiles')}><ArrowLeft size={18} />{translate('files.explorer')}</button>
+          <span className="min-w-0 flex-1 truncate text-xs text-[var(--theme-fg-muted)]" title={activeFilePath ?? ''}>{activeFilePath ?? title}</span>
+        </div>
+      ) : null}
+      {!mobileNavigation && selectedTarget?.kind !== 'workspace-file' ? (
         <div className="thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5">
           <span className="min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]">
             {title ?? translate("files.preview_f1fbb2")}
@@ -654,7 +663,7 @@ export function GraphWorkspacePreviewPane({
             fileToolbar || viewerPaneToggle ? (
               <>
                 {fileToolbar}
-                {viewerPaneToggle}
+                {!mobileNavigation && viewerPaneToggle}
               </>
             ) : null
           }

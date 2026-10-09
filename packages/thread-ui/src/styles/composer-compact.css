@@ -72,3 +72,9 @@
 @container (max-width: 300px) {
   .thread-ui-shell .matter-workbench [data-composer-layout] :is(.thread-graph-composer-icon-button, .thread-graph-composer-stop-button, .thread-graph-composer-send-button) { width: 24px !important; height: 24px !important; min-width: 24px !important; min-height: 24px !important; }
 }
+
+/* Fade clipped text into the actual surface in either theme, leaving controls crisp. */
+[data-composer-layout='collapsed'][data-composer-overflow] .thread-graph-composer-input > [role='textbox'] {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - min(48px, 30%)), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - min(48px, 30%)), transparent 100%);
+}

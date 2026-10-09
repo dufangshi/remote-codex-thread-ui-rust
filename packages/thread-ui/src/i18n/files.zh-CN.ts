@@ -1,4 +1,5 @@
 export const filesZhCN = {
+  "files.backToFiles": "返回文件列表",
   "files.newFile": "新建文件",
   "files.createFile": "创建",
   "files.newFilePath": "文件路径",
