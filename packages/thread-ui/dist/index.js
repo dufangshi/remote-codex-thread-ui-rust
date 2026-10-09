@@ -10181,8 +10181,11 @@ ${mergedPayload}
 // src/components/graph-chat/GraphChatMessageContent.tsx
 import { Fragment as Fragment9, jsx as jsx43, jsxs as jsxs35 } from "react/jsx-runtime";
 var CodeRendererContext = createContext5(null);
+var MarkdownLinkContext = createContext5(false);
 function StableCodeRenderer(props) {
-  return useContext4(CodeRendererContext)?.(props) ?? null;
+  const render = useContext4(CodeRendererContext);
+  const insideMarkdownLink = useContext4(MarkdownLinkContext);
+  return render?.({ ...props, insideMarkdownLink }) ?? null;
 }
 function ensureTransparentShikiBg(html) {
   return html.replace(/background-color:[^;"]+;?/g, "background-color: transparent;").replace(/background:[^;"]+;?/g, "background: transparent;");
@@ -10319,6 +10322,7 @@ var GraphChatMessageContent = memo2(function GraphChatMessageContent2({
     className: codeClassName,
     inline,
     node,
+    insideMarkdownLink,
     ...props
   }) => {
     const { locale: i18nLocale2 } = useI18n();
@@ -10459,7 +10463,7 @@ var GraphChatMessageContent = memo2(function GraphChatMessageContent2({
       }
     );
     const target = parseWorkspacePathText(inlineDisplayText, workspaceRootPath);
-    return !readOnly && target && resolveWorkspacePath && onOpenWorkspaceFile ? /* @__PURE__ */ jsx43(VerifiedWorkspacePath, { target, resolve: resolveWorkspacePath, onOpen: onOpenWorkspaceFile, children: inlineCode }) : inlineCode;
+    return !readOnly && !insideMarkdownLink && target && resolveWorkspacePath && onOpenWorkspaceFile ? /* @__PURE__ */ jsx43(VerifiedWorkspacePath, { target, resolve: resolveWorkspacePath, onOpen: onOpenWorkspaceFile, children: inlineCode }) : inlineCode;
   };
   return /* @__PURE__ */ jsx43("div", { ref: rootRef, "data-markdown-ready": highlighter ? "true" : "false", className: `thread-graph-message-markdown ${className}`, children: /* @__PURE__ */ jsx43(CodeRendererContext.Provider, { value: CodeBlockRenderer, children: /* @__PURE__ */ jsx43(
     ReactMarkdown,
@@ -10468,7 +10472,8 @@ var GraphChatMessageContent = memo2(function GraphChatMessageContent2({
       remarkPlugins: [remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly, ...!readOnly && resolveWorkspacePath ? [remarkWorkspacePaths] : []],
       rehypePlugins: [rehypeKatex],
       components: {
-        a({ href, children, ...props }) {
+        a({ href, children: originalChildren, ...props }) {
+          const children = /* @__PURE__ */ jsx43(MarkdownLinkContext.Provider, { value: true, children: originalChildren });
           if (href?.startsWith("workspace-auto:")) {
             let value = "";
             try {

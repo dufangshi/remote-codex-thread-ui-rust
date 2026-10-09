@@ -45,13 +45,17 @@ import {
 type CodeRendererProps = ComponentProps<'code'> & {
   inline?: boolean | undefined;
   node?: unknown;
+  insideMarkdownLink?: boolean;
 };
 
 // Keep ReactMarkdown's component identity stable as streamed text, highlighting,
 // copy state and theme change, so interactive diagrams retain their state.
 const CodeRendererContext = createContext<((props: CodeRendererProps) => ReactElement | null) | null>(null);
+const MarkdownLinkContext = createContext(false);
 function StableCodeRenderer(props: CodeRendererProps) {
-  return useContext(CodeRendererContext)?.(props) ?? null;
+  const render = useContext(CodeRendererContext);
+  const insideMarkdownLink = useContext(MarkdownLinkContext);
+  return render?.({ ...props, insideMarkdownLink }) ?? null;
 }
 
 type OpenWorkspaceFileHandler = (input: {
@@ -249,6 +253,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
     className: codeClassName,
     inline,
     node,
+    insideMarkdownLink,
     ...props
   }: CodeRendererProps): ReactElement | null => {
   const { locale: i18nLocale } = useI18n();
@@ -416,7 +421,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       </code>
     );
     const target = parseWorkspacePathText(inlineDisplayText, workspaceRootPath);
-    return !readOnly && target && resolveWorkspacePath && onOpenWorkspaceFile
+    return !readOnly && !insideMarkdownLink && target && resolveWorkspacePath && onOpenWorkspaceFile
       ? <VerifiedWorkspacePath target={target} resolve={resolveWorkspacePath} onOpen={onOpenWorkspaceFile}>{inlineCode}</VerifiedWorkspacePath>
       : inlineCode;
   };
@@ -429,7 +434,8 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
         remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly, ...(!readOnly && resolveWorkspacePath ? [remarkWorkspacePaths] : [])]}
         rehypePlugins={[rehypeKatex]}
         components={{
-          a({ href, children, ...props }) {
+          a({ href, children: originalChildren, ...props }) {
+            const children = <MarkdownLinkContext.Provider value={true}>{originalChildren}</MarkdownLinkContext.Provider>;
             if (href?.startsWith('workspace-auto:')) {
               let value = '';
               try { value = decodeURIComponent(href.slice('workspace-auto:'.length)); } catch { /* Invalid path remains plain text. */ }

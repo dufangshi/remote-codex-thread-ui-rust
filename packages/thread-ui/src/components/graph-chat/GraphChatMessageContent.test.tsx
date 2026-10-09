@@ -212,10 +212,11 @@ it('makes verified inline and plain paths clickable while leaving missing paths,
   let element!: HTMLDivElement;
   await act(async () => {
     element = render(<GraphChatMessageContent workspaceRootPath="/code" resolveWorkspacePath={resolve} onOpenWorkspaceFile={open}
-      content={'Files: `docs/assets/`, docs/readme.md. Missing `docs/no.txt`. [Web](https://example.com/docs/readme.md)\n\n```sh\ncat docs/readme.md\n```'} />);
+      content={'Files: `docs/assets/`, docs/readme.md. Missing `docs/no.txt`. [Web](https://example.com/docs/readme.md) [`docs/readme.md`](docs/readme.md)\n\n```sh\ncat docs/readme.md\n```'} />);
   });
   const links = Array.from(element.querySelectorAll('a'));
-  expect(links.map(link => link.textContent)).toEqual(['docs/assets/', 'docs/readme.md', 'Web']);
+  expect(links.map(link => link.textContent)).toEqual(['docs/assets/', 'docs/readme.md', 'Web', 'docs/readme.md']);
+  expect(element.querySelector('a a')).toBeNull();
   expect(element.querySelector('pre a')).toBeNull();
   expect(resolve).not.toHaveBeenCalledWith('https://example.com/docs/readme.md');
   act(() => links[0]!.click());
