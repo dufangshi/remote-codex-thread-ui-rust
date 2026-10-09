@@ -442,4 +442,10 @@ export const workbenchEn = {
   "workbench.splitOnline": "Online",
   "workbench.splitOffline": "Offline",
   "workbench.splitUntitled": "Untitled conversation",
+  "workbench.dshRunModeNotApplied": "The thread was created, but its run mode was not applied: {{value1}}",
+  "workbench.retryRunMode": "Retry run mode",
+  "workbench.openCreatedThread": "Open thread",
+  "workbench.deepseekHarness": "DeepSeek Harness",
+  "workbench.deepseekHarnessPluginDescription": "Run modes, DSH plugins, profile settings, commands and the native DSH console for DeepSeek Harness threads.",
+  "workbench.deepseekHarnessNotRunning": "This thread's DSH session is not running yet.",
 } as const;

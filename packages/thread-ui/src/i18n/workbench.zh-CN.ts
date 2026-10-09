@@ -442,4 +442,10 @@ export const workbenchZhCN = {
   "workbench.splitOnline": "在线",
   "workbench.splitOffline": "离线",
   "workbench.splitUntitled": "未命名会话",
+  "workbench.dshRunModeNotApplied": "线程已创建，但运行模式没有生效：{{value1}}",
+  "workbench.retryRunMode": "重试运行模式",
+  "workbench.openCreatedThread": "打开线程",
+  "workbench.deepseekHarness": "DeepSeek Harness",
+  "workbench.deepseekHarnessPluginDescription": "为 DeepSeek Harness 线程提供运行模式、DSH 插件、配置项、命令和 DSH 原生控制台。",
+  "workbench.deepseekHarnessNotRunning": "本线程的 DSH 会话尚未运行。",
 } as const;

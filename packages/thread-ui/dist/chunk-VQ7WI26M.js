@@ -1974,7 +1974,33 @@ var settingsEn = {
   "settings.dshReconnect": "Reconnect to apply",
   "settings.dshEnable": "Enable {{value1}}",
   "settings.dshManaged": "Managed by DSH",
-  "settings.dshAfterReconnect": "applies after reconnect"
+  "settings.dshAfterReconnect": "applies after reconnect",
+  "settings.dshRunMode": "Run mode",
+  "settings.dshRunModeDefault": "{{value1}} (default)",
+  "settings.dshRunModeStandard": "Standard",
+  "settings.dshRunModeStandardHint": "DSH's full coding tool set for code, files and research. Suits most tasks.",
+  "settings.dshRunModePtc": "PTC",
+  "settings.dshRunModePtcHint": "Programmatic tool calling: Standard's tools, called from TypeScript programs the agent writes. Suits batch work that filters or summarizes many results.",
+  "settings.dshRunModeMinimal": "Minimal",
+  "settings.dshRunModeMinimalHint": "Only a persistent terminal. For baselines and model comparisons.",
+  "settings.dshRunModeCordis": "Creator",
+  "settings.dshRunModeCordisHint": "Standard plus DSH authoring: the agent can write DSH plugins, add UI, and compose its own run modes.",
+  "settings.dshRunModeLocked": "Fixed once the first turn starts. Start a new DeepSeek Harness thread to use another run mode.",
+  "settings.dshRunModeUnavailable": "This DSH install offers no run modes or native console here (plain ACP profile).",
+  "settings.dshCommands": "Commands",
+  "settings.dshCommandsNotice": "Runs in this thread's DSH session, including commands added by DSH plugins. Plan mode, permissions, goals and compaction stay on the thread's own controls.",
+  "settings.dshCommandArguments": "Arguments for /{{value1}}",
+  "settings.dshRunCommand": "Run /{{value1}}",
+  "settings.dshRun": "Run",
+  "settings.dshCommandDone": "/{{value1}} finished.",
+  "settings.dshThreadControl": "Thread control",
+  "settings.dshInConsole": "In the native console",
+  "settings.dshConsole": "Native DSH console",
+  "settings.dshConsoleNotice": "Opens DSH's own Web UI from this thread's DSH process in a new tab, with interfaces added by DSH plugins and DSH's editors. Keep chatting here; prompts sent from the console are not recorded in this thread.",
+  "settings.dshOpenConsole": "Open console",
+  "settings.dshConsoleLoopbackOnly": "The DSH console listens on the device's loopback address. Open Remote Codex on the device itself (localhost) or through Remote Codex Relay.",
+  "settings.dshFeedbackNotice": "Sends your text and this session's history to DeepSeek, unless DSH telemetry is turned off on this device (DSH_TELEMETRY_DISABLED).",
+  "settings.dshFeedbackConfirm": "DSH will send your feedback and this session's history to DeepSeek unless DSH telemetry is turned off on this device. Send it?"
 };
 
 // src/i18n/sharing.en.ts
@@ -2561,7 +2587,13 @@ var workbenchEn = {
   "workbench.splitNoDevices": "No other devices available",
   "workbench.splitOnline": "Online",
   "workbench.splitOffline": "Offline",
-  "workbench.splitUntitled": "Untitled conversation"
+  "workbench.splitUntitled": "Untitled conversation",
+  "workbench.dshRunModeNotApplied": "The thread was created, but its run mode was not applied: {{value1}}",
+  "workbench.retryRunMode": "Retry run mode",
+  "workbench.openCreatedThread": "Open thread",
+  "workbench.deepseekHarness": "DeepSeek Harness",
+  "workbench.deepseekHarnessPluginDescription": "Run modes, DSH plugins, profile settings, commands and the native DSH console for DeepSeek Harness threads.",
+  "workbench.deepseekHarnessNotRunning": "This thread's DSH session is not running yet."
 };
 
 // src/i18n/en.ts
@@ -4551,7 +4583,33 @@ var settingsZhCN = {
   "settings.dshReconnect": "\u91CD\u8FDE\u4EE5\u751F\u6548",
   "settings.dshEnable": "\u542F\u7528 {{value1}}",
   "settings.dshManaged": "\u7531 DSH \u7BA1\u7406",
-  "settings.dshAfterReconnect": "\u91CD\u8FDE\u540E\u751F\u6548"
+  "settings.dshAfterReconnect": "\u91CD\u8FDE\u540E\u751F\u6548",
+  "settings.dshRunMode": "\u8FD0\u884C\u6A21\u5F0F",
+  "settings.dshRunModeDefault": "{{value1}}\uFF08\u9ED8\u8BA4\uFF09",
+  "settings.dshRunModeStandard": "\u6807\u51C6\u6A21\u5F0F",
+  "settings.dshRunModeStandardHint": "\u4F7F\u7528 DSH \u5B8C\u6574\u7684\u7F16\u7801\u5DE5\u5177\u5904\u7406\u4EE3\u7801\u3001\u6587\u4EF6\u548C\u8D44\u6599\uFF0C\u9002\u5408\u5927\u591A\u6570\u4EFB\u52A1\u3002",
+  "settings.dshRunModePtc": "PTC \u6A21\u5F0F",
+  "settings.dshRunModePtcHint": "\u7A0B\u5E8F\u5316\u5DE5\u5177\u8C03\u7528\uFF1A\u5DE5\u5177\u4E0E\u6807\u51C6\u6A21\u5F0F\u76F8\u540C\uFF0C\u7531 Agent \u7F16\u5199\u7684 TypeScript \u7A0B\u5E8F\u6279\u91CF\u8C03\u7528\uFF0C\u9002\u5408\u5BF9\u5927\u91CF\u7ED3\u679C\u8FDB\u884C\u7B5B\u9009\u3001\u6C47\u603B\u7684\u4EFB\u52A1\u3002",
+  "settings.dshRunModeMinimal": "\u6781\u7B80\u6A21\u5F0F",
+  "settings.dshRunModeMinimalHint": "\u53EA\u6709\u4E00\u4E2A\u6301\u4E45\u7EC8\u7AEF\uFF0C\u9002\u5408\u505A\u57FA\u7EBF\u6D4B\u8BD5\u548C\u6A21\u578B\u5BF9\u6BD4\u3002",
+  "settings.dshRunModeCordis": "\u521B\u9020\u6A21\u5F0F",
+  "settings.dshRunModeCordisHint": "\u5728\u6807\u51C6\u6A21\u5F0F\u57FA\u7840\u4E0A\u53EF\u4EE5\u5B9A\u5236 DSH\uFF1AAgent \u80FD\u7F16\u5199 DSH \u63D2\u4EF6\u3001\u6DFB\u52A0\u754C\u9762\uFF0C\u5E76\u7EC4\u5408\u51FA\u81EA\u5DF1\u7684\u8FD0\u884C\u6A21\u5F0F\u3002",
+  "settings.dshRunModeLocked": "\u7B2C\u4E00\u8F6E\u5BF9\u8BDD\u5F00\u59CB\u540E\u56FA\u5B9A\u3002\u8981\u4F7F\u7528\u5176\u4ED6\u8FD0\u884C\u6A21\u5F0F\uFF0C\u8BF7\u65B0\u5EFA\u4E00\u4E2A DeepSeek Harness \u7EBF\u7A0B\u3002",
+  "settings.dshRunModeUnavailable": "\u5F53\u524D DSH \u5728\u8FD9\u91CC\u4E0D\u63D0\u4F9B\u8FD0\u884C\u6A21\u5F0F\u548C\u539F\u751F\u63A7\u5236\u53F0\uFF08\u7EAF ACP \u914D\u7F6E\uFF09\u3002",
+  "settings.dshCommands": "\u547D\u4EE4",
+  "settings.dshCommandsNotice": "\u5728\u672C\u7EBF\u7A0B\u7684 DSH \u4F1A\u8BDD\u4E2D\u8FD0\u884C\uFF0C\u5305\u62EC DSH \u63D2\u4EF6\u6DFB\u52A0\u7684\u547D\u4EE4\u3002\u8BA1\u5212\u6A21\u5F0F\u3001\u6743\u9650\u3001\u76EE\u6807\u548C\u538B\u7F29\u4ECD\u7531\u7EBF\u7A0B\u81EA\u5DF1\u7684\u63A7\u4EF6\u7BA1\u7406\u3002",
+  "settings.dshCommandArguments": "/{{value1}} \u7684\u53C2\u6570",
+  "settings.dshRunCommand": "\u8FD0\u884C /{{value1}}",
+  "settings.dshRun": "\u8FD0\u884C",
+  "settings.dshCommandDone": "/{{value1}} \u5DF2\u5B8C\u6210\u3002",
+  "settings.dshThreadControl": "\u7531\u7EBF\u7A0B\u63A7\u4EF6\u7BA1\u7406",
+  "settings.dshInConsole": "\u5728\u539F\u751F\u63A7\u5236\u53F0\u4E2D\u4F7F\u7528",
+  "settings.dshConsole": "DSH \u539F\u751F\u63A7\u5236\u53F0",
+  "settings.dshConsoleNotice": "\u5728\u65B0\u6807\u7B7E\u9875\u6253\u5F00\u672C\u7EBF\u7A0B DSH \u8FDB\u7A0B\u81EA\u5E26\u7684 Web \u754C\u9762\uFF0C\u5305\u542B DSH \u63D2\u4EF6\u63D0\u4F9B\u7684\u754C\u9762\u548C DSH \u81EA\u5DF1\u7684\u7F16\u8F91\u5668\u3002\u5BF9\u8BDD\u8BF7\u7EE7\u7EED\u5728\u8FD9\u91CC\u8FDB\u884C\uFF1B\u4ECE\u63A7\u5236\u53F0\u53D1\u51FA\u7684\u6D88\u606F\u4E0D\u4F1A\u8BB0\u5F55\u5230\u672C\u7EBF\u7A0B\u3002",
+  "settings.dshOpenConsole": "\u6253\u5F00\u63A7\u5236\u53F0",
+  "settings.dshConsoleLoopbackOnly": "DSH \u63A7\u5236\u53F0\u53EA\u76D1\u542C\u8BBE\u5907\u7684\u56DE\u73AF\u5730\u5740\u3002\u8BF7\u5728\u8BBE\u5907\u672C\u673A\uFF08localhost\uFF09\u6216\u901A\u8FC7 Remote Codex Relay \u6253\u5F00 Remote Codex\u3002",
+  "settings.dshFeedbackNotice": "\u4F1A\u628A\u4F60\u7684\u6587\u5B57\u548C\u672C\u4F1A\u8BDD\u7684\u5386\u53F2\u53D1\u9001\u7ED9 DeepSeek\uFF0C\u9664\u975E\u672C\u8BBE\u5907\u5173\u95ED\u4E86 DSH \u9065\u6D4B\uFF08DSH_TELEMETRY_DISABLED\uFF09\u3002",
+  "settings.dshFeedbackConfirm": "\u9664\u975E\u672C\u8BBE\u5907\u5173\u95ED\u4E86 DSH \u9065\u6D4B\uFF0CDSH \u4F1A\u628A\u4F60\u7684\u53CD\u9988\u548C\u672C\u4F1A\u8BDD\u7684\u5386\u53F2\u53D1\u9001\u7ED9 DeepSeek\u3002\u786E\u5B9A\u53D1\u9001\u5417\uFF1F"
 };
 
 // src/i18n/sharing.zh-CN.ts
@@ -5138,7 +5196,13 @@ var workbenchZhCN = {
   "workbench.splitNoDevices": "\u6682\u65E0\u5176\u4ED6\u53EF\u7528\u8BBE\u5907",
   "workbench.splitOnline": "\u5728\u7EBF",
   "workbench.splitOffline": "\u79BB\u7EBF",
-  "workbench.splitUntitled": "\u672A\u547D\u540D\u4F1A\u8BDD"
+  "workbench.splitUntitled": "\u672A\u547D\u540D\u4F1A\u8BDD",
+  "workbench.dshRunModeNotApplied": "\u7EBF\u7A0B\u5DF2\u521B\u5EFA\uFF0C\u4F46\u8FD0\u884C\u6A21\u5F0F\u6CA1\u6709\u751F\u6548\uFF1A{{value1}}",
+  "workbench.retryRunMode": "\u91CD\u8BD5\u8FD0\u884C\u6A21\u5F0F",
+  "workbench.openCreatedThread": "\u6253\u5F00\u7EBF\u7A0B",
+  "workbench.deepseekHarness": "DeepSeek Harness",
+  "workbench.deepseekHarnessPluginDescription": "\u4E3A DeepSeek Harness \u7EBF\u7A0B\u63D0\u4F9B\u8FD0\u884C\u6A21\u5F0F\u3001DSH \u63D2\u4EF6\u3001\u914D\u7F6E\u9879\u3001\u547D\u4EE4\u548C DSH \u539F\u751F\u63A7\u5236\u53F0\u3002",
+  "workbench.deepseekHarnessNotRunning": "\u672C\u7EBF\u7A0B\u7684 DSH \u4F1A\u8BDD\u5C1A\u672A\u8FD0\u884C\u3002"
 };
 
 // src/i18n/zh-CN.ts

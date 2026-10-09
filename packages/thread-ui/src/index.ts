@@ -100,7 +100,7 @@ export {
   type AppShellNavigationMenuProps,
   type AppShellSettingsDialogProps,
 } from './app-shell/AppShellNavigation';
-export type { MatterWorkbenchOptions, WorkbenchThread, WorkbenchNotification } from './components/MatterWorkbench';
+export type { MatterWorkbenchOptions, WorkbenchThread, WorkbenchNotification, WorkbenchToolPanel } from './components/MatterWorkbench';
 export { MatterWorkbench } from './components/MatterWorkbench';
 export { PublicTranscript, transcriptSnapshot, type PublicTranscriptSnapshot } from './components/PublicTranscript';
 
