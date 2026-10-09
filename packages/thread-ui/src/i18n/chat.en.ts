@@ -1,4 +1,9 @@
 export const chatEn = {
+  "chat.diagram": "Diagram",
+  "chat.diagramSource": "View diagram source",
+  "chat.showDiagram": "Show diagram",
+  "chat.expandDiagram": "Expand diagram",
+  "chat.diagramUnavailable": "Unable to render diagram · Source preserved",
   "chat.tokenSpeedUnits": "Output tokens per second",
   "chat.unableToReadYourMessageShortcuts": "Unable to read your message shortcuts.",
   "chat.loadedTurnDetailDidNotMatchThe": "Loaded turn detail did not match the requested turn.",

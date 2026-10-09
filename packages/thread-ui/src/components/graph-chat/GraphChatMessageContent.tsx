@@ -2,6 +2,8 @@ import { translate, useI18n } from '../../i18n';
 import { externalLinkProps } from '../externalLinkProps';
 import {
   memo,
+  createContext,
+  useContext,
   useEffect,
   isValidElement,
   useMemo,
@@ -27,6 +29,8 @@ import { Button } from '../graph-ui/Button';
 import { usePlugins } from '../../plugins/usePlugins';
 import { GraphChatToolCall } from './GraphChatToolCall';
 import { getGraphChatHighlighter } from './graphChatShiki';
+import { GraphChatMermaidDiagram } from './GraphChatMermaidDiagram';
+import { hasClosedMarkdownFence, isMermaidCode } from './graphChatMermaid';
 import {
   createEmptyGraphChatToolResultState,
   getGraphChatToolUiStatus,
@@ -40,6 +44,13 @@ type CodeRendererProps = ComponentProps<'code'> & {
   inline?: boolean | undefined;
   node?: unknown;
 };
+
+// Keep ReactMarkdown's component identity stable as streamed text, highlighting,
+// copy state and theme change, so interactive diagrams retain their state.
+const CodeRendererContext = createContext<((props: CodeRendererProps) => ReactElement | null) | null>(null);
+function StableCodeRenderer(props: CodeRendererProps) {
+  return useContext(CodeRendererContext)?.(props) ?? null;
+}
 
 type OpenWorkspaceFileHandler = (input: {
   path: string;
@@ -110,7 +121,9 @@ function parseWorkspaceFileHref(href: string | undefined, workspaceRootPath?: st
 
 function PreRenderer({ children, ...props }: ComponentProps<'pre'>) {
   const { locale: i18nLocale } = useI18n();
-  if (isToolCodeElement(children)) {
+  const code = isValidElement<{ className?: string; children?: ReactNode }>(children) ? children.props : undefined;
+  const language = /language-([\w-]+)/.exec(code?.className ?? '')?.[1] ?? '';
+  if (isToolCodeElement(children) || (code && isMermaidCode(language, textFromReactNode(code.children)))) {
     return <>{children}</>;
   }
 
@@ -139,6 +152,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   className = 'thread-graph-markdown',
   content,
   readOnly = false,
+  streaming = false,
   onOpenWorkspaceFile,
   workspaceRootPath,
   resolveHref,
@@ -146,6 +160,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
   className?: string;
   content: string;
   readOnly?: boolean;
+  streaming?: boolean;
   onOpenWorkspaceFile?: OpenWorkspaceFileHandler | undefined;
   workspaceRootPath?: string | undefined;
   resolveHref?: ((href: string) => string) | undefined;
@@ -242,6 +257,11 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       Boolean(codeClassName) ||
       textContent.includes('\n') ||
       startLine !== endLine;
+
+    if (isFencedOrBlockCode && isMermaidCode(language, textContent)) {
+      return <GraphChatMermaidDiagram source={textContent} dark={dark}
+        pending={streaming && !hasClosedMarkdownFence(processedContent, startLine, endLine)} />;
+    }
 
     if (!readOnly && language === 'tool-merged') {
       let data: GraphChatToolMergedPayload = {
@@ -395,6 +415,7 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
 
   return (
     <div ref={rootRef} data-markdown-ready={highlighter ? 'true' : 'false'} className={`thread-graph-message-markdown ${className}`}>
+      <CodeRendererContext.Provider value={CodeBlockRenderer}>
       <ReactMarkdown
         urlTransform={url => !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
         remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly]}
@@ -425,12 +446,13 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
             if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || translate("chat.imageUnavailable")}</span>;
             return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} /> : <span>{alt || translate("chat.imageUnavailable")}</span>;
           },
-          code: CodeBlockRenderer,
+          code: StableCodeRenderer,
           pre: PreRenderer,
         }}
       >
         {processedContent}
       </ReactMarkdown>
+      </CodeRendererContext.Provider>
     </div>
   );
 });

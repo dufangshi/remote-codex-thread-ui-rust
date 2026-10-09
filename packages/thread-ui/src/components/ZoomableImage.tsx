@@ -16,10 +16,12 @@ function clampImageLightboxScale(scale: number) {
 
 export function GraphWorkspaceImageLightbox({
   alt,
+  backgroundColor,
   onClose,
   src,
 }: {
   alt: string;
+  backgroundColor?: string;
   onClose: () => void;
   src: string;
 }) {
@@ -127,6 +129,7 @@ export function GraphWorkspaceImageLightbox({
   return createPortal(
     <div
       className="thread-graph-image-lightbox"
+      style={backgroundColor ? { backgroundColor } : undefined}
       role="dialog"
       aria-modal="true"
       aria-label={translate("files.imagePreview", { value1: alt || translate("files.workspaceImage") })}
@@ -249,4 +252,3 @@ export function ZoomableImage({
     </>
   );
 }
-
