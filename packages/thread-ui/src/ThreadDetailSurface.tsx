@@ -1,3 +1,4 @@
+import { createWorkspacePathResolver } from './components/workspacePathLinks';
 import { translate, useI18n } from './i18n';
 import {
   useMemo,
@@ -326,6 +327,7 @@ export function ThreadDetailSurface({
         return adapter.workspace.getRawFileUrl({threadId: detail.thread.id, workspaceId: detail.workspace.id, path: relative ?? path});
       },
       workspaceRootPath: detail?.workspace.absPath,
+      ...(detail && adapter.workspace ? { resolveWorkspacePath: createWorkspacePathResolver(adapter.workspace, { threadId: detail.thread.id, workspaceId: detail.workspace.id }, detail.workspace.absPath) } : {}),
       onOpenLinkedThread: openThread,
       ...(openWorkspaceFile ? { onOpenWorkspaceFile: openWorkspaceFile } : {}),
       ...(loadHistoryItemDetail

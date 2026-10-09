@@ -28,6 +28,7 @@ interface ThreadShellControlState {
 }
 
 interface ThreadTimelineAdapter {
+    resolveWorkspacePath?: (path: string) => Promise<boolean>;
     workspaceRootPath?: string | undefined;
     getImageAssetUrl?: (input: {
         threadId: string;
@@ -306,4 +307,4 @@ interface ThreadGraphWorkspaceFeatures {
 declare function ThreadGraphWorkspacePanel({ detail, status, plugins, workspaceAdapter, metaContent, settingsContent, activeView, features: featureConfig, focusPathRequest, }: ThreadGraphWorkspacePanelProps): react.JSX.Element | null;
 declare const MemoizedThreadGraphWorkspacePanel: react.MemoExoticComponent<typeof ThreadGraphWorkspacePanel>;
 
-export { MemoizedThreadGraphWorkspacePanel as M, type PromptAttachmentUpload as P, type SendPromptInput as S, type ThreadShellControlState as T, type WorkspaceDocumentSaveInput as W, type ThreadTimelineAdapter as a, type ThreadShellAdapter as b, type ThreadGraphWorkspacePanelProps as c, type PluginContextValue as d, type ThreadDetailUiAdapter as e, type ThreadGraphWorkspaceFeatures as f, PluginContext as g, type ShellSocketConnection as h, type ShellSocketHandlers as i, type ThreadWorkspaceAdapter as j, type WorkspaceDocumentSnapshot as k, type WorkspaceSaveReceipt as l, type WorkspaceTab as m, createDefaultPluginContextValue as n, mergePluginState as o, ThreadGraphWorkspacePanel as p };
+export { MemoizedThreadGraphWorkspacePanel as M, type PromptAttachmentUpload as P, type SendPromptInput as S, type ThreadShellControlState as T, type WorkspaceDocumentSaveInput as W, type ThreadTimelineAdapter as a, type ThreadShellAdapter as b, type ThreadGraphWorkspacePanelProps as c, type PluginContextValue as d, type ThreadDetailUiAdapter as e, type ThreadGraphWorkspaceFeatures as f, type ThreadWorkspaceAdapter as g, PluginContext as h, type ShellSocketConnection as i, type ShellSocketHandlers as j, type WorkspaceDocumentSnapshot as k, type WorkspaceSaveReceipt as l, type WorkspaceTab as m, createDefaultPluginContextValue as n, mergePluginState as o, ThreadGraphWorkspacePanel as p };

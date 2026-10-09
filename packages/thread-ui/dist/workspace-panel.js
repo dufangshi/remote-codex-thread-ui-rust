@@ -821,6 +821,13 @@ function useWorkspaceExplorerController({
           }
           nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
         }
+        const target = findWorkspaceExplorerNodeByPath(nextModel, targetPath);
+        if (target?.kind === "directory") {
+          const loadedNode = workspaceTreeNodeToGraphNode(await workspaceAdapter.listTree({ ...workspaceIdentity, path: targetPath }));
+          if (!isCurrent()) return;
+          nextModel = mergeWorkspaceExplorerSubtree(nextModel, loadedNode);
+          setExpandedPaths((current) => new Set(current).add(targetPath));
+        }
         adapterModelRef.current = nextModel;
         setAdapterModel(nextModel);
         if (!hasWorkspaceExplorerPath(nextModel, targetPath)) {
@@ -1639,7 +1646,7 @@ function WorkspaceNodeActions({
       window.removeEventListener("resize", resize);
     };
   }, [menu]);
-  const actionClass = "thread-graph-tree-action flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition sm:h-7 sm:w-7";
+  const actionClass = "thread-graph-tree-action flex shrink-0 items-center justify-center rounded transition";
   const mutate = async () => {
     setBusy(true);
     setError(null);
@@ -1659,20 +1666,10 @@ function WorkspaceNodeActions({
   return /* @__PURE__ */ jsxs(
     "div",
     {
-      className: "thread-graph-tree-actions absolute inset-y-0 right-1 flex items-center gap-0.5 pl-1",
+      className: "thread-graph-tree-actions flex shrink-0 items-center gap-0.5",
+      onDoubleClick: (event) => event.stopPropagation(),
       onKeyDown: (event) => event.stopPropagation(),
       children: [
-        onDownload && /* @__PURE__ */ jsx(
-          "button",
-          {
-            type: "button",
-            onClick: () => onDownload(node),
-            className: `${actionClass} workspace-node-quick-action`,
-            title: translate("files.download", { value1: node.name }),
-            "aria-label": translate("files.download", { value1: node.name }),
-            children: /* @__PURE__ */ jsx(Download, { size: 14 })
-          }
-        ),
         onCopyPath && /* @__PURE__ */ jsxs(Fragment, { children: [
           /* @__PURE__ */ jsx(
             "button",
@@ -1705,7 +1702,7 @@ function WorkspaceNodeActions({
             "aria-label": translate("files.moreActionsFor", { value1: node.name }),
             "aria-haspopup": "menu",
             "aria-expanded": !!menu,
-            className: `${actionClass} ${!onRename && !onDelete ? "workspace-node-mobile-only" : ""}`,
+            className: actionClass,
             onClick: () => {
               const box = trigger.current.getBoundingClientRect();
               setMenu(
@@ -1748,7 +1745,7 @@ function WorkspaceNodeActions({
                 boxShadow: "0 8px 24px #0004"
               },
               children: [
-                onDownload && /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                onDownload && /* @__PURE__ */ jsxs("button", { role: "menuitem", type: "button", onClick: () => {
                   onDownload(node);
                   close();
                 }, children: [
@@ -1756,14 +1753,14 @@ function WorkspaceNodeActions({
                   translate("files.downloadFile")
                 ] }),
                 onCopyPath && /* @__PURE__ */ jsxs(Fragment, { children: [
-                  /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                  /* @__PURE__ */ jsxs("button", { role: "menuitem", type: "button", onClick: () => {
                     onCopyPath(node, "relative");
                     close();
                   }, children: [
                     /* @__PURE__ */ jsx(Copy, { size: 16 }),
                     translate("files.copyRelativePathFor", { value1: node.name })
                   ] }),
-                  /* @__PURE__ */ jsxs("button", { className: "workspace-node-mobile-action", role: "menuitem", type: "button", onClick: () => {
+                  /* @__PURE__ */ jsxs("button", { role: "menuitem", type: "button", onClick: () => {
                     onCopyPath(node, "absolute");
                     close();
                   }, children: [
@@ -4784,9 +4781,9 @@ function GraphWorkspaceExplorer({
   useEffect8(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
-      setCollapsedPanel(isMobileViewport ? "explorer" : null);
+      setCollapsedPanel(isMobileViewport && activeNode?.kind !== "directory" ? "explorer" : null);
     }
-  }, [focusPathRequest, isMobileViewport]);
+  }, [focusPathRequest, isMobileViewport, activeNode?.kind]);
   function rememberExplorerScroll() {
     const currentScrollTop = explorerScrollerRef.current?.scrollTop ?? explorerScrollTopRef.current;
     explorerScrollTopRef.current = currentScrollTop;

@@ -1186,6 +1186,7 @@
 .workbench-panels { display: flex; flex: 1; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
 .workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button { display: inline-flex; justify-content: center; align-items: center; gap: 6px; min-height: 32px; padding: 5px 9px; border-radius: 7px; font-size: 12px; color: var(--theme-fg-soft); }
 .workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button:hover { background: var(--theme-hover); }
+.workbench-content { position: relative; display: flex; flex: 1; min-width: 0; min-height: 0; }
 .workbench-pane-grid { display: flex; flex: 1; min-width: 0; min-height: 0; }
 .workbench-primary, .workbench-reference { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; flex: 1; }
 .workbench-pane-grid.has-reference > .workbench-primary { flex: 0 0 clamp(360px, var(--primary-ratio), calc(100% - 365px)); --matter-reading-width: 100%; }
@@ -1275,7 +1276,7 @@
 @keyframes workbench-picker-enter { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes workbench-picker-spin { to { transform: rotate(360deg); } }
 .workbench-panels { position: relative; }
-.workbench-tool-drawer { position: absolute; inset: 0 0 0 auto; z-index: 90; display: flex; flex-direction: column; width: min(560px, 100%); min-height: 0; border-left: 1px solid var(--theme-border-strong); background: var(--theme-panel); box-shadow: -12px 0 36px rgb(0 0 0 / .12); }
+.workbench-tool-drawer { position: relative; display: flex; flex: 0 0 min(var(--workbench-tool-width, 560px), calc(100% - 280px)); flex-direction: column; width: min(var(--workbench-tool-width, 560px), calc(100% - 280px)); min-width: 0; min-height: 0; border-left: 1px solid var(--theme-border-strong); background: var(--theme-panel); }
 .workbench-tool-drawer > header { display: flex; align-items: center; gap: 12px; min-height: 42px; padding: 5px 12px; border-bottom: 1px solid var(--theme-border); }
 .workbench-tool-drawer > header strong { flex: 1; font-size: 12px; font-weight: 600; }
 .workbench-tool-drawer > header button { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 7px; color: var(--theme-fg-muted); }
@@ -1301,3 +1302,10 @@
   .thread-ui-shell .matter-workbench .matter-topbar-end > [data-slot='dialog-trigger'] { width: 34px; min-width: 34px; margin: 0; padding: 0; }
   .matter-topbar-end .matter-connection:empty { display: none; }
 }
+
+/* Keep the drawer boundary draggable even when its contents fill the panel. */
+.workbench-tool-resize { position: absolute; inset: 0 auto 0 -4px; width: 8px; z-index: 2; cursor: col-resize; touch-action: none; user-select: none; }
+.workbench-tool-resize::after { content: ''; position: absolute; inset: 0 auto 0 3px; width: 2px; background: transparent; transition: background 120ms; }
+.workbench-tool-resize:hover::after, .workbench-tool-resize:focus-visible::after { background: var(--theme-accent-solid); }
+.workbench-tool-resize:focus-visible { outline: none; }
+.workbench-panels.is-compact .workbench-tool-drawer { position: absolute; inset: 0; z-index: 90; width: 100%; }

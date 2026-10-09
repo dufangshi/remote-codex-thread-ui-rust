@@ -1,3 +1,4 @@
+import { hasWorkspacePathSyntax } from '../workspacePathLinks';
 import { translate, useI18n } from '../../i18n';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import {
@@ -149,6 +150,7 @@ export const GraphChatMarkdownAwareBody = memo(
     onBeforeResize,
     onOpenWorkspaceFile,
     workspaceRootPath,
+    resolveWorkspacePath,
     resolveHref,
   }: {
     messageId?: string | undefined;
@@ -161,6 +163,7 @@ export const GraphChatMarkdownAwareBody = memo(
     onBeforeResize?: () => void;
     onOpenWorkspaceFile?: ThreadTimelineAdapter['onOpenWorkspaceFile'] | undefined;
     workspaceRootPath?: string | undefined;
+    resolveWorkspacePath?: ThreadTimelineAdapter['resolveWorkspacePath'] | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
   const { locale: i18nLocale } = useI18n();
@@ -170,7 +173,7 @@ export const GraphChatMarkdownAwareBody = memo(
       top: number;
     } | null>(null);
     const [expanded, setExpanded] = useMessageExpansion(messageId, text, streaming);
-    const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text);
+    const shouldRenderMarkdown = hasLikelyMarkdownSyntax(text) || Boolean(resolveWorkspacePath && hasWorkspacePathSyntax(text));
     const isLargeText = !streaming && text.length > LARGE_MESSAGE_PREVIEW_CHARS;
     const displayText =
       isLargeText && !expanded
@@ -251,6 +254,7 @@ export const GraphChatMarkdownAwareBody = memo(
             streaming={streaming}
             className={markdownClassName}
             workspaceRootPath={workspaceRootPath}
+            resolveWorkspacePath={resolveWorkspacePath}
             onOpenWorkspaceFile={onOpenWorkspaceFile}
             resolveHref={resolveHref}
           />
@@ -284,6 +288,7 @@ export const GraphChatAgentMessageBody = memo(
     onBeforeResize,
     onOpenWorkspaceFile,
     workspaceRootPath,
+    resolveWorkspacePath,
     resolveHref,
   }: {
     messageId?: string | undefined;
@@ -293,6 +298,7 @@ export const GraphChatAgentMessageBody = memo(
     onBeforeResize?: () => void;
     onOpenWorkspaceFile?: ThreadTimelineAdapter['onOpenWorkspaceFile'] | undefined;
     workspaceRootPath?: string | undefined;
+    resolveWorkspacePath?: ThreadTimelineAdapter['resolveWorkspacePath'] | undefined;
     resolveHref?: ThreadTimelineAdapter['resolveHref'] | undefined;
   }) {
   const { locale: i18nLocale } = useI18n();
@@ -305,6 +311,7 @@ export const GraphChatAgentMessageBody = memo(
         containerClassName="thread-graph-message-prose"
         {...(onBeforeResize ? { onBeforeResize } : {})}
         workspaceRootPath={workspaceRootPath}
+            resolveWorkspacePath={resolveWorkspacePath}
         {...(onOpenWorkspaceFile ? { onOpenWorkspaceFile } : {})}
         {...(resolveHref ? { resolveHref } : {})}
       />

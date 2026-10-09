@@ -237,9 +237,9 @@ export function GraphWorkspaceExplorer({
   useEffect(() => {
     if (focusPathRequest) {
       setFocusedLine(focusPathRequest.line ?? null);
-      setCollapsedPanel(isMobileViewport ? 'explorer' : null);
+      setCollapsedPanel(isMobileViewport && activeNode?.kind !== 'directory' ? 'explorer' : null);
     }
-  }, [focusPathRequest, isMobileViewport]);
+  }, [focusPathRequest, isMobileViewport, activeNode?.kind]);
 
   function rememberExplorerScroll() {
     const currentScrollTop =
