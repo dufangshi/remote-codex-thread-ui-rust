@@ -10,12 +10,14 @@ import {
   memo,
   Suspense,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import {
   ArrowLeft,
+  ArrowRight,
   BookOpen,
   ChevronRight,
   Code2,
@@ -310,17 +312,42 @@ const GraphWorkspaceMarkdownPreview = memo(
   function GraphWorkspaceMarkdownPreview({
     content,
     markdownPath,
+    readingPositions,
     onOpenWorkspaceFile,
     resolveWorkspaceFileUrl,
     workspaceRootPath,
   }: {
     content: string;
     markdownPath: string;
+    readingPositions?: Map<string, number>;
     onOpenWorkspaceFile?: (path: string) => void;
     resolveWorkspaceFileUrl?: (path: string) => string | null;
     workspaceRootPath?: string;
   }) {
   const { locale: i18nLocale } = useI18n();
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+    const lastScrollTop = useRef(0);
+    useLayoutEffect(() => {
+      const element = scrollRef.current;
+      if (!element) return;
+      const target = readingPositions?.get(markdownPath) ?? 0;
+      lastScrollTop.current = target;
+      let restoring = true;
+      const restore = () => { if (restoring) element.scrollTop = target; };
+      restore();
+      // Images and fonts can change document height after the first layout.
+      const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(restore);
+      if (element.firstElementChild) observer?.observe(element.firstElementChild);
+      const stop = () => { restoring = false; observer?.disconnect(); };
+      for (const type of ['wheel', 'touchstart', 'pointerdown', 'keydown']) element.addEventListener(type, stop, { passive: true });
+      element.addEventListener('load', restore, true);
+      return () => {
+        readingPositions?.set(markdownPath, lastScrollTop.current);
+        observer?.disconnect();
+        for (const type of ['wheel', 'touchstart', 'pointerdown', 'keydown']) element.removeEventListener(type, stop);
+        element.removeEventListener('load', restore, true);
+      };
+    }, [markdownPath, readingPositions]);
     const resolvePath = (resourceUrl: string | undefined) =>
       resourceUrl
         ? resolveWorkspaceMarkdownPath({
@@ -331,7 +358,8 @@ const GraphWorkspaceMarkdownPreview = memo(
         : null;
 
     return (
-      <div className="thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6">
+      <div ref={scrollRef} onScroll={event => { lastScrollTop.current = event.currentTarget.scrollTop; readingPositions?.set(markdownPath, lastScrollTop.current); }} className="thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6">
+        <div className="thread-graph-markdown-document">
         <ReactMarkdown
           urlTransform={url => localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
           remarkPlugins={[remarkGfm]}
@@ -370,6 +398,7 @@ const GraphWorkspaceMarkdownPreview = memo(
         >
           {content}
         </ReactMarkdown>
+        </div>
       </div>
     );
   },
@@ -392,6 +421,10 @@ export function GraphWorkspacePreviewPane({
   onCloseFileTab,
   onDirtyChange,
   mobileNavigation = false,
+  readingPositions,
+  onNavigateBack,
+  previousFilePath,
+  onNavigateForward,
   onExpandExplorer,
   onOpenWorkspaceFile,
   onLoadMore,
@@ -421,6 +454,10 @@ export function GraphWorkspacePreviewPane({
   onCloseFileTab?: (path: string) => void;
   onDirtyChange?: (path: string, dirty: boolean) => void;
   mobileNavigation?: boolean;
+  readingPositions?: Map<string, number>;
+  onNavigateBack?: () => void;
+  previousFilePath?: string;
+  onNavigateForward?: () => void;
   onExpandExplorer?: () => void;
   onOpenWorkspaceFile?: (path: string) => void;
   onLoadMore?: () => void;
@@ -606,6 +643,11 @@ export function GraphWorkspacePreviewPane({
         ) : null}
       </div>
     ) : null;
+  const backLabel = previousFilePath ? translate('files.backToDocument', { name: previousFilePath.split('/').pop() ?? previousFilePath }) : translate('workbench.goBack');
+  const navigationControls = <>
+    {onNavigateBack && <button type="button" onClick={onNavigateBack} aria-label={backLabel} title={backLabel} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowLeft size={14} /></button>}
+    {onNavigateForward && <button type="button" onClick={onNavigateForward} aria-label={translate('files.goForward')} title={translate('files.goForward')} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowRight size={14} /></button>}
+  </>;
   const viewerPaneToggle = onExpandExplorer ? (
     <button
       type="button"
@@ -638,8 +680,10 @@ export function GraphWorkspacePreviewPane({
     >
       {mobileNavigation && onExpandExplorer ? (
         <div className="thread-graph-mobile-file-navigation flex min-h-11 shrink-0 items-center gap-2 border-b border-[var(--theme-border)] px-2">
-          <button type="button" onClick={onExpandExplorer} data-testid="expand-explorer" className="inline-flex min-h-11 shrink-0 items-center gap-1 px-2 text-sm" aria-label={translate('files.backToFiles')}><ArrowLeft size={18} />{translate('files.explorer')}</button>
+          <button type="button" onClick={onNavigateBack ?? onExpandExplorer} data-testid={onNavigateBack ? 'preview-back' : 'expand-explorer'} className="inline-flex min-h-11 shrink-0 items-center gap-1 px-2 text-sm" aria-label={onNavigateBack ? backLabel : translate('files.backToFiles')} title={onNavigateBack ? backLabel : undefined}><ArrowLeft size={18} />{onNavigateBack ? translate('workbench.goBack') : translate('files.explorer')}</button>
           <span className="min-w-0 flex-1 truncate text-xs text-[var(--theme-fg-muted)]" title={activeFilePath ?? ''}>{activeFilePath ?? title}</span>
+          {onNavigateForward && <button type="button" onClick={onNavigateForward} aria-label={translate('files.goForward')} className="inline-flex h-11 w-9 shrink-0 items-center justify-center"><ArrowRight size={18} /></button>}
+          {onNavigateBack && <button type="button" onClick={onExpandExplorer} aria-label={translate('files.backToFiles')} data-testid="expand-explorer" className="inline-flex h-11 w-9 shrink-0 items-center justify-center"><PanelLeftOpen size={18} /></button>}
         </div>
       ) : null}
       {!mobileNavigation && selectedTarget?.kind !== 'workspace-file' ? (
@@ -660,8 +704,9 @@ export function GraphWorkspacePreviewPane({
           {...(onSaveAndClose ? { onSaveAndClose } : {})}
           blockedClosePaths={new Set([...documents?.documents ?? []].filter(([,doc]) => ['saving','unknown'].includes(doc.phase)).map(([path]) => path))}
           trailingAction={
-            fileToolbar || viewerPaneToggle ? (
+            fileToolbar || viewerPaneToggle || onNavigateBack || onNavigateForward ? (
               <>
+                {!mobileNavigation && navigationControls}
                 {fileToolbar}
                 {!mobileNavigation && viewerPaneToggle}
               </>
@@ -790,8 +835,10 @@ export function GraphWorkspacePreviewPane({
               <GraphDrawioPreview content={previewFile.content} name={previewFile.name} truncated={previewFile.truncated} />
             ) : isMarkdownFile && markdownView === 'preview' && !editing ? (
               <GraphWorkspaceMarkdownPreview
+                key={previewFile.path}
                 content={previewFile.content}
                 markdownPath={previewFile.path}
+                {...(readingPositions ? { readingPositions } : {})}
                 {...(onOpenWorkspaceFile ? { onOpenWorkspaceFile } : {})}
                 {...(resolveWorkspaceFileUrl
                   ? { resolveWorkspaceFileUrl }

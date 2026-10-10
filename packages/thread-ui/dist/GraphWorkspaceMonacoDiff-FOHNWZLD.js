@@ -1,7 +1,7 @@
-import "./chunk-A5EWE2XU.js";
+import "./chunk-G22Z6YTU.js";
 import {
   translate
-} from "./chunk-JG4BL3OC.js";
+} from "./chunk-3CKDHMEY.js";
 import {
   editor
 } from "./chunk-JXQIYSAV.js";

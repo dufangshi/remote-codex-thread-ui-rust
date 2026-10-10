@@ -3,7 +3,7 @@ import { isProtected } from "./explorer/workspaceDocuments";
 import { translate, useI18n } from '../../i18n';
 import { relativeWorkspacePath } from '../workspacePaths';
 import { RenameDialog } from '../RenameDialog';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type {
   AgentRuntimeStatusDto,
@@ -90,6 +90,26 @@ export function GraphWorkspaceExplorer({
   const [focusedLine, setFocusedLine] = useState<number | null>(null);
   const [fileTabs, setFileTabs] = useState<WorkspaceFileTab[]>([]);
   const documents = useWorkspaceDocuments(workspaceAdapter, workspaceIdentity);
+  const readingPositions = useMemo(() => new Map<string, number>(), [documents.source]);
+  const [navigation, setNavigation] = useState<{ scope: string; paths: string[]; index: number }>({ scope: documents.source, paths: [], index: -1 });
+  const selectedFilePath = activeNode?.kind === 'file' ? activeNode.path : null;
+  useLayoutEffect(() => {
+    setNavigation(current => {
+      if (current.scope !== documents.source) return { scope: documents.source, paths: selectedFilePath ? [selectedFilePath] : [], index: selectedFilePath ? 0 : -1 };
+      if (!selectedFilePath || current.paths[current.index] === selectedFilePath) return current;
+      const paths = [...current.paths.slice(0, current.index + 1), selectedFilePath].slice(-100);
+      return { ...current, paths, index: paths.length - 1 };
+    });
+  }, [documents.source, selectedFilePath]);
+  function navigatePreview(direction: -1 | 1) {
+    const index = navigation.index + direction;
+    const path = navigation.paths[index];
+    if (!path) return;
+    setNavigation(current => ({ ...current, index }));
+    setFocusedLine(null);
+    setCollapsedPanel(isMobileViewport ? 'explorer' : null);
+    void focusWorkspacePath(path);
+  }
   const [newFilePath, setNewFilePath] = useState<string | null>(null);
   const [createError, setCreateError] = useState<string | null>(null);
   const [creatingFile, setCreatingFile] = useState(false);
@@ -456,6 +476,9 @@ export function GraphWorkspaceExplorer({
   const viewerPanel = (
     <GraphWorkspacePreviewPane
       mobileNavigation={isMobileViewport}
+      readingPositions={readingPositions}
+      {...(navigation.index > 0 ? { onNavigateBack: () => navigatePreview(-1), previousFilePath: navigation.paths[navigation.index - 1] } : {})}
+      {...(navigation.index < navigation.paths.length - 1 ? { onNavigateForward: () => navigatePreview(1) } : {})}
       activeFilePath={activeNode?.kind === 'file' ? activeNode.path : null}
       dirtyFilePaths={dirtyFilePaths}
       error={workspaceError}
@@ -468,6 +491,9 @@ export function GraphWorkspaceExplorer({
       loadingMore={loadingMore}
       focusLine={focusedLine}
       onOpenWorkspaceFile={(path) => {
+        // Returning to the directory ends a preview chain. A link opened from
+        // that same document starts a fresh chain with its current position.
+        if (selectedFilePath) setNavigation(current => current.index < 0 ? { ...current, paths: [selectedFilePath], index: 0 } : current);
         setFocusedLine(null);
         setCollapsedPanel(isMobileViewport ? 'explorer' : null);
         void focusWorkspacePath(path);
@@ -480,7 +506,7 @@ export function GraphWorkspaceExplorer({
       canSaveDocument={Boolean(workspaceAdapter?.saveDocument)}
       onSaveAndClose={async (path) => { if (await documents.save(path)) handleCloseTab(path); }}
       {...(collapsedPanel === 'explorer' || isMobileViewport
-        ? { onExpandExplorer: () => setCollapsedPanel(isMobileViewport ? 'viewer' : null) }
+        ? { onExpandExplorer: () => { setNavigation(current => ({ ...current, paths: [], index: -1 })); setCollapsedPanel(isMobileViewport ? 'viewer' : null); } }
         : {
             onCollapse: () => {
               rememberExplorerScroll();

@@ -1,4 +1,8 @@
 export const workbenchEn = {
+  "workbench.subagentsRunning": "Subagents · {{count}} running",
+  "workbench.subagentCurrent": "Current",
+  "workbench.subagentUnread": "Unread",
+  "workbench.subagentRead": "Read history",
   "workbench.adapterInstallTitle": "Install ACP adapter?",
   "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Pockymoe. Install it now?",
   "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.",

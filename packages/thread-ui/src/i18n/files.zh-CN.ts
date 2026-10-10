@@ -1,4 +1,6 @@
 export const filesZhCN = {
+  "files.backToDocument": "返回 {{name}}",
+  "files.goForward": "前进",
   "files.backToFiles": "返回文件列表",
   "files.newFile": "新建文件",
   "files.createFile": "创建",

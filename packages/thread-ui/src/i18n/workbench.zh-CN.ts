@@ -1,4 +1,8 @@
 export const workbenchZhCN = {
+  "workbench.subagentsRunning": "子智能体 · {{count}} 个运行中",
+  "workbench.subagentCurrent": "进行中",
+  "workbench.subagentUnread": "未读",
+  "workbench.subagentRead": "已读记录",
   "workbench.adapterInstallTitle": "安装 ACP 适配器？",
   "workbench.adapterInstallDescription": "已检测到 {{agent}}，还需要 ACP 适配器才能连接 Pockymoe。是否一键安装？",
   "workbench.adapterInstallNotReady": "安装已完成，但 ACP 适配器尚未就绪，请重试。",

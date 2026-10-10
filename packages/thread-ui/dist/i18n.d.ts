@@ -28,6 +28,10 @@ declare const en: {
     readonly 'search.assistant': "Assistant";
     readonly 'search.title': "Title";
     readonly 'search.localDevice': "Local device";
+    readonly "workbench.subagentsRunning": "Subagents · {{count}} running";
+    readonly "workbench.subagentCurrent": "Current";
+    readonly "workbench.subagentUnread": "Unread";
+    readonly "workbench.subagentRead": "Read history";
     readonly "workbench.adapterInstallTitle": "Install ACP adapter?";
     readonly "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Pockymoe. Install it now?";
     readonly "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.";
@@ -897,6 +901,8 @@ declare const en: {
     readonly "settings.upstreamsResponses": "Responses";
     readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
     readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
+    readonly "files.backToDocument": "Back to {{name}}";
+    readonly "files.goForward": "Forward";
     readonly "files.backToFiles": "Back to files";
     readonly "files.newFile": "New file";
     readonly "files.createFile": "Create";
@@ -2636,6 +2642,10 @@ declare const zhCN: {
     'search.assistant': "助手";
     'search.title': "标题";
     'search.localDevice': "本地设备";
+    "workbench.subagentsRunning": "子智能体 · {{count}} 个运行中";
+    "workbench.subagentCurrent": "进行中";
+    "workbench.subagentUnread": "未读";
+    "workbench.subagentRead": "已读记录";
     "workbench.adapterInstallTitle": "安装 ACP 适配器？";
     "workbench.adapterInstallDescription": "已检测到 {{agent}}，还需要 ACP 适配器才能连接 Pockymoe。是否一键安装？";
     "workbench.adapterInstallNotReady": "安装已完成，但 ACP 适配器尚未就绪，请重试。";
@@ -3505,6 +3515,8 @@ declare const zhCN: {
     "settings.upstreamsResponses": "Responses";
     "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
     "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
+    "files.backToDocument": "返回 {{name}}";
+    "files.goForward": "前进";
     "files.backToFiles": "返回文件列表";
     "files.newFile": "新建文件";
     "files.createFile": "创建";
@@ -5248,6 +5260,10 @@ declare const resources: {
         readonly 'search.assistant': "Assistant";
         readonly 'search.title': "Title";
         readonly 'search.localDevice': "Local device";
+        readonly "workbench.subagentsRunning": "Subagents · {{count}} running";
+        readonly "workbench.subagentCurrent": "Current";
+        readonly "workbench.subagentUnread": "Unread";
+        readonly "workbench.subagentRead": "Read history";
         readonly "workbench.adapterInstallTitle": "Install ACP adapter?";
         readonly "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Pockymoe. Install it now?";
         readonly "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.";
@@ -6117,6 +6133,8 @@ declare const resources: {
         readonly "settings.upstreamsResponses": "Responses";
         readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
         readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
+        readonly "files.backToDocument": "Back to {{name}}";
+        readonly "files.goForward": "Forward";
         readonly "files.backToFiles": "Back to files";
         readonly "files.newFile": "New file";
         readonly "files.createFile": "Create";
@@ -7855,6 +7873,10 @@ declare const resources: {
         'search.assistant': "助手";
         'search.title': "标题";
         'search.localDevice': "本地设备";
+        "workbench.subagentsRunning": "子智能体 · {{count}} 个运行中";
+        "workbench.subagentCurrent": "进行中";
+        "workbench.subagentUnread": "未读";
+        "workbench.subagentRead": "已读记录";
         "workbench.adapterInstallTitle": "安装 ACP 适配器？";
         "workbench.adapterInstallDescription": "已检测到 {{agent}}，还需要 ACP 适配器才能连接 Pockymoe。是否一键安装？";
         "workbench.adapterInstallNotReady": "安装已完成，但 ACP 适配器尚未就绪，请重试。";
@@ -8724,6 +8746,8 @@ declare const resources: {
         "settings.upstreamsResponses": "Responses";
         "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
         "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
+        "files.backToDocument": "返回 {{name}}";
+        "files.goForward": "前进";
         "files.backToFiles": "返回文件列表";
         "files.newFile": "新建文件";
         "files.createFile": "创建";

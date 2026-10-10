@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-J6SOFK4T.js";
+} from "./chunk-BYZ2BAP3.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-JG4BL3OC.js";
+} from "./chunk-3CKDHMEY.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";

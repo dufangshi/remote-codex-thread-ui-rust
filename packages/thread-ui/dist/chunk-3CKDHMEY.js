@@ -1176,6 +1176,8 @@ var devicesEn = {
 
 // src/i18n/files.en.ts
 var filesEn = {
+  "files.backToDocument": "Back to {{name}}",
+  "files.goForward": "Forward",
   "files.backToFiles": "Back to files",
   "files.newFile": "New file",
   "files.createFile": "Create",
@@ -2123,6 +2125,10 @@ var sharingEn = {
 
 // src/i18n/workbench.en.ts
 var workbenchEn = {
+  "workbench.subagentsRunning": "Subagents \xB7 {{count}} running",
+  "workbench.subagentCurrent": "Current",
+  "workbench.subagentUnread": "Unread",
+  "workbench.subagentRead": "Read history",
   "workbench.adapterInstallTitle": "Install ACP adapter?",
   "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Pockymoe. Install it now?",
   "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.",
@@ -3814,6 +3820,8 @@ var devicesZhCN = {
 
 // src/i18n/files.zh-CN.ts
 var filesZhCN = {
+  "files.backToDocument": "\u8FD4\u56DE {{name}}",
+  "files.goForward": "\u524D\u8FDB",
   "files.backToFiles": "\u8FD4\u56DE\u6587\u4EF6\u5217\u8868",
   "files.newFile": "\u65B0\u5EFA\u6587\u4EF6",
   "files.createFile": "\u521B\u5EFA",
@@ -4761,6 +4769,10 @@ var sharingZhCN = {
 
 // src/i18n/workbench.zh-CN.ts
 var workbenchZhCN = {
+  "workbench.subagentsRunning": "\u5B50\u667A\u80FD\u4F53 \xB7 {{count}} \u4E2A\u8FD0\u884C\u4E2D",
+  "workbench.subagentCurrent": "\u8FDB\u884C\u4E2D",
+  "workbench.subagentUnread": "\u672A\u8BFB",
+  "workbench.subagentRead": "\u5DF2\u8BFB\u8BB0\u5F55",
   "workbench.adapterInstallTitle": "\u5B89\u88C5 ACP \u9002\u914D\u5668\uFF1F",
   "workbench.adapterInstallDescription": "\u5DF2\u68C0\u6D4B\u5230 {{agent}}\uFF0C\u8FD8\u9700\u8981 ACP \u9002\u914D\u5668\u624D\u80FD\u8FDE\u63A5 Pockymoe\u3002\u662F\u5426\u4E00\u952E\u5B89\u88C5\uFF1F",
   "workbench.adapterInstallNotReady": "\u5B89\u88C5\u5DF2\u5B8C\u6210\uFF0C\u4F46 ACP \u9002\u914D\u5668\u5C1A\u672A\u5C31\u7EEA\uFF0C\u8BF7\u91CD\u8BD5\u3002",
