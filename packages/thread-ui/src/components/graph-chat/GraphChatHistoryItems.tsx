@@ -19,6 +19,7 @@ import {
   Image as ImageIconLucide,
   Info,
   Loader2,
+  Layers3,
   PackageOpen,
   Search,
   Sparkles,
@@ -1337,7 +1338,7 @@ export const GraphChatAgentActivityGroupItem = memo(
   }) {
   const { locale: i18nLocale } = useI18n();
     const countLabel =
-      itemCount === 1 ? '1 operation' : `${itemCount} operations`;
+      translate('chat.operationCount', { count: itemCount });
     return (
       <GraphChatHistoryGroupFrame
         className={`thread-graph-history-group-activity ${running ? 'is-running-batch' : ''}`}
@@ -1346,12 +1347,12 @@ export const GraphChatAgentActivityGroupItem = memo(
         desktopIconClassName="border-slate-300/30 bg-slate-300/[0.14] text-slate-100"
         expanded={expanded}
         expandedListClassName="border-slate-300/12"
-        icon={<Bot className="h-3.5 w-3.5" />}
+        icon={<Layers3 className="h-3.5 w-3.5" />}
         onToggleExpanded={onToggleExpanded}
         summary={
           <>
             <span className="thread-graph-history-group-verb">
-              {translate("chat.worked")}</span>
+              {translate(running ? "chat.performingOperations" : "chat.performedOperations")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>

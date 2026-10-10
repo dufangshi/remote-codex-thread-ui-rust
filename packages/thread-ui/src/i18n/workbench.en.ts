@@ -1,4 +1,10 @@
 export const workbenchEn = {
+  "workbench.adapterInstallTitle": "Install ACP adapter?",
+  "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Remote Codex. Install it now?",
+  "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.",
+  "workbench.adapterInstallFailed": "Unable to install the ACP adapter.",
+  "workbench.adapterInstallConfirm": "Install adapter",
+  "workbench.adapterInstallRetry": "Retry installation",
   "workbench.subagentBack": "Back to subagents",
   "workbench.subagentDetails": "Agent details",
   "workbench.subagentCounts": "{{running}} running · {{total}} total",
@@ -488,4 +494,7 @@ export const workbenchEn = {
   "workbench.terminalDisconnected": "Disconnected",
   "workbench.terminalReconnect": "Reconnect",
   "workbench.terminalStatusConnected": "Connected",
+  'workbench.subagentCreated': 'Created',
+  'workbench.subagentUpdated': 'Updated',
+  'workbench.subagentLoadEarlier': 'Load earlier activity',
 } as const;

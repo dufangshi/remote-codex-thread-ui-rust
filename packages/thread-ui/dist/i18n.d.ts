@@ -28,6 +28,12 @@ declare const en: {
     readonly 'search.assistant': "Assistant";
     readonly 'search.title': "Title";
     readonly 'search.localDevice': "Local device";
+    readonly "workbench.adapterInstallTitle": "Install ACP adapter?";
+    readonly "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Remote Codex. Install it now?";
+    readonly "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.";
+    readonly "workbench.adapterInstallFailed": "Unable to install the ACP adapter.";
+    readonly "workbench.adapterInstallConfirm": "Install adapter";
+    readonly "workbench.adapterInstallRetry": "Retry installation";
     readonly "workbench.subagentBack": "Back to subagents";
     readonly "workbench.subagentDetails": "Agent details";
     readonly "workbench.subagentCounts": "{{running}} running · {{total}} total";
@@ -516,6 +522,9 @@ declare const en: {
     readonly "workbench.terminalDisconnected": "Disconnected";
     readonly "workbench.terminalReconnect": "Reconnect";
     readonly "workbench.terminalStatusConnected": "Connected";
+    readonly 'workbench.subagentCreated': "Created";
+    readonly 'workbench.subagentUpdated': "Updated";
+    readonly 'workbench.subagentLoadEarlier': "Load earlier activity";
     readonly "sharing.open": "Open";
     readonly "sharing.supervisorOfflineReconnectTheDeviceToOpen": "Supervisor offline — reconnect the device to open";
     readonly "sharing.supervisorStatusUnavailable": "Supervisor status unavailable";
@@ -2259,6 +2268,12 @@ declare const en: {
     readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
     readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
     readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
+    readonly 'chat.operationCount': {
+        readonly one: "{{count}} operation";
+        readonly other: "{{count}} operations";
+    };
+    readonly 'chat.performedOperations': "Performed";
+    readonly 'chat.performingOperations': "Working on";
     readonly "auth.avatar": "Profile avatar";
     readonly "auth.uploadAvatar": "Upload avatar";
     readonly "auth.removeAvatar": "Remove avatar";
@@ -2578,6 +2593,12 @@ declare const zhCN: {
     'search.assistant': "助手";
     'search.title': "标题";
     'search.localDevice': "本地设备";
+    "workbench.adapterInstallTitle": "安装 ACP 适配器？";
+    "workbench.adapterInstallDescription": "已检测到 {{agent}}，还需要 ACP 适配器才能连接 Remote Codex。是否一键安装？";
+    "workbench.adapterInstallNotReady": "安装已完成，但 ACP 适配器尚未就绪，请重试。";
+    "workbench.adapterInstallFailed": "ACP 适配器安装失败。";
+    "workbench.adapterInstallConfirm": "一键安装";
+    "workbench.adapterInstallRetry": "重试安装";
     "workbench.subagentBack": "返回子智能体列表";
     "workbench.subagentDetails": "子智能体详情";
     "workbench.subagentCounts": "{{running}} 个运行中 · 共 {{total}} 个";
@@ -3066,6 +3087,9 @@ declare const zhCN: {
     "workbench.terminalDisconnected": "已断开";
     "workbench.terminalReconnect": "重新连接";
     "workbench.terminalStatusConnected": "已连接";
+    'workbench.subagentCreated': "创建于";
+    'workbench.subagentUpdated': "更新于";
+    'workbench.subagentLoadEarlier': "加载更早记录";
     "sharing.open": "打开";
     "sharing.supervisorOfflineReconnectTheDeviceToOpen": "Supervisor 离线，请重新连接设备后打开";
     "sharing.supervisorStatusUnavailable": "Supervisor 状态不可用";
@@ -4809,6 +4833,12 @@ declare const zhCN: {
     "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
     "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
     "chat.workedForSeconds": "工作了 {{seconds}} 秒";
+    'chat.operationCount': {
+        readonly one: "{{count}} 项操作";
+        readonly other: "{{count}} 项操作";
+    };
+    'chat.performedOperations': "已执行";
+    'chat.performingOperations': "正在执行";
     "auth.avatar": "个人头像";
     "auth.uploadAvatar": "上传头像";
     "auth.removeAvatar": "移除头像";
@@ -5150,6 +5180,12 @@ declare const resources: {
         readonly 'search.assistant': "Assistant";
         readonly 'search.title': "Title";
         readonly 'search.localDevice': "Local device";
+        readonly "workbench.adapterInstallTitle": "Install ACP adapter?";
+        readonly "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Remote Codex. Install it now?";
+        readonly "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.";
+        readonly "workbench.adapterInstallFailed": "Unable to install the ACP adapter.";
+        readonly "workbench.adapterInstallConfirm": "Install adapter";
+        readonly "workbench.adapterInstallRetry": "Retry installation";
         readonly "workbench.subagentBack": "Back to subagents";
         readonly "workbench.subagentDetails": "Agent details";
         readonly "workbench.subagentCounts": "{{running}} running · {{total}} total";
@@ -5638,6 +5674,9 @@ declare const resources: {
         readonly "workbench.terminalDisconnected": "Disconnected";
         readonly "workbench.terminalReconnect": "Reconnect";
         readonly "workbench.terminalStatusConnected": "Connected";
+        readonly 'workbench.subagentCreated': "Created";
+        readonly 'workbench.subagentUpdated': "Updated";
+        readonly 'workbench.subagentLoadEarlier': "Load earlier activity";
         readonly "sharing.open": "Open";
         readonly "sharing.supervisorOfflineReconnectTheDeviceToOpen": "Supervisor offline — reconnect the device to open";
         readonly "sharing.supervisorStatusUnavailable": "Supervisor status unavailable";
@@ -7381,6 +7420,12 @@ declare const resources: {
         readonly "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m";
         readonly "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s";
         readonly "chat.workedForSeconds": "Worked for {{seconds}}s";
+        readonly 'chat.operationCount': {
+            readonly one: "{{count}} operation";
+            readonly other: "{{count}} operations";
+        };
+        readonly 'chat.performedOperations': "Performed";
+        readonly 'chat.performingOperations': "Working on";
         readonly "auth.avatar": "Profile avatar";
         readonly "auth.uploadAvatar": "Upload avatar";
         readonly "auth.removeAvatar": "Remove avatar";
@@ -7699,6 +7744,12 @@ declare const resources: {
         'search.assistant': "助手";
         'search.title': "标题";
         'search.localDevice': "本地设备";
+        "workbench.adapterInstallTitle": "安装 ACP 适配器？";
+        "workbench.adapterInstallDescription": "已检测到 {{agent}}，还需要 ACP 适配器才能连接 Remote Codex。是否一键安装？";
+        "workbench.adapterInstallNotReady": "安装已完成，但 ACP 适配器尚未就绪，请重试。";
+        "workbench.adapterInstallFailed": "ACP 适配器安装失败。";
+        "workbench.adapterInstallConfirm": "一键安装";
+        "workbench.adapterInstallRetry": "重试安装";
         "workbench.subagentBack": "返回子智能体列表";
         "workbench.subagentDetails": "子智能体详情";
         "workbench.subagentCounts": "{{running}} 个运行中 · 共 {{total}} 个";
@@ -8187,6 +8238,9 @@ declare const resources: {
         "workbench.terminalDisconnected": "已断开";
         "workbench.terminalReconnect": "重新连接";
         "workbench.terminalStatusConnected": "已连接";
+        'workbench.subagentCreated': "创建于";
+        'workbench.subagentUpdated': "更新于";
+        'workbench.subagentLoadEarlier': "加载更早记录";
         "sharing.open": "打开";
         "sharing.supervisorOfflineReconnectTheDeviceToOpen": "Supervisor 离线，请重新连接设备后打开";
         "sharing.supervisorStatusUnavailable": "Supervisor 状态不可用";
@@ -9930,6 +9984,12 @@ declare const resources: {
         "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟";
         "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒";
         "chat.workedForSeconds": "工作了 {{seconds}} 秒";
+        'chat.operationCount': {
+            readonly one: "{{count}} 项操作";
+            readonly other: "{{count}} 项操作";
+        };
+        'chat.performedOperations': "已执行";
+        'chat.performingOperations': "正在执行";
         "auth.avatar": "个人头像";
         "auth.uploadAvatar": "上传头像";
         "auth.removeAvatar": "移除头像";

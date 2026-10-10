@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-GZXOMVRD.js";
+} from "./chunk-Q6ML2ETM.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-RP43R2N3.js";
+} from "./chunk-IGFF6XID.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -72,7 +72,7 @@ styleInject('@property --effort-color { syntax: "<color>"; inherits: true; initi
 styleInject(".thread-graph-message-markdown .thread-graph-mermaid {\n  min-width: 0;\n  max-width: 100%;\n  margin: 1rem 0;\n  overflow: hidden;\n  border: 1px solid var(--theme-border);\n  border-radius: 14px;\n  background: var(--theme-panel);\n  white-space: normal;\n}\n.thread-graph-mermaid-toolbar {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 6px 10px 6px 14px;\n  border-bottom: 1px solid var(--theme-border);\n  color: var(--theme-fg-muted);\n  font: 500 11px/1.4 system-ui, sans-serif;\n}\n.thread-graph-mermaid-label,\n.thread-graph-mermaid-actions {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.thread-graph-mermaid-actions {\n  gap: 2px;\n}\n.thread-graph-mermaid-actions button {\n  display: grid;\n  place-items: center;\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  border: 0;\n  border-radius: 7px;\n  background: transparent;\n  color: inherit;\n  cursor: pointer;\n}\n.thread-graph-mermaid-actions button:hover,\n.thread-graph-mermaid-actions button[aria-pressed=true] {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.thread-graph-mermaid-actions button:focus-visible {\n  outline: 2px solid var(--theme-accent);\n  outline-offset: 1px;\n}\n.thread-graph-mermaid-canvas {\n  padding: 20px 16px;\n  overflow: auto;\n}\n.thread-graph-mermaid-canvas > svg {\n  display: block;\n  width: 100%;\n  height: auto;\n  max-height: min(600px, 60svh);\n  margin: auto;\n}\n.thread-graph-message-markdown .thread-graph-mermaid-source {\n  margin: 0;\n  padding: 16px;\n  border: 0;\n  border-radius: 0;\n  background: transparent;\n  overflow: auto;\n  white-space: pre;\n  font-size: 12px;\n  line-height: 1.7;\n}\n.thread-graph-mermaid-error {\n  display: block;\n  padding: 0 16px 12px;\n  color: var(--theme-fg-muted);\n  font-size: 12px;\n}\n@media (max-width: 640px) {\n  .thread-graph-mermaid-canvas {\n    padding: 16px 8px;\n  }\n  .thread-graph-mermaid-actions button {\n    width: 36px;\n    height: 36px;\n  }\n}\n");
 
 // src/styles/terminal-panel.css
-styleInject('.terminal-panel {\n  --terminal-bg: #0f1317;\n  --terminal-header-height: 35px;\n  --terminal-tab-height: 26px;\n  --terminal-target-size: 26px;\n  position: relative;\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  color: var(--theme-fg);\n  background: var(--terminal-bg);\n}\n.terminal-panel[data-terminal-theme=light] {\n  --terminal-bg: #ebeeeb;\n}\n.terminal-panel [hidden] {\n  display: none !important;\n}\n.terminal-panel button {\n  font: inherit;\n  color: inherit;\n  background: transparent;\n  border: 0;\n  cursor: pointer;\n}\n.terminal-panel button:disabled {\n  cursor: default;\n  opacity: .42;\n}\n.terminal-panel button:focus-visible,\n.terminal-panel [role=separator]:focus-visible,\n.terminal-tab:focus-visible {\n  outline: 2px solid var(--theme-accent-strong);\n  outline-offset: -2px;\n}\n.terminal-header {\n  display: flex;\n  flex: 0 0 var(--terminal-header-height);\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  padding: 0 4px 0 12px;\n  background: var(--theme-panel);\n  border-bottom: 1px solid var(--theme-border);\n  user-select: none;\n}\n.terminal-title {\n  flex-shrink: 0;\n  margin: 0;\n  font-size: 11px;\n  font-weight: 600;\n  letter-spacing: .06em;\n  text-transform: uppercase;\n  color: var(--theme-fg-soft);\n}\n.terminal-header-active {\n  display: inline-flex;\n  flex-shrink: 1;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  font-size: 12px;\n  color: var(--theme-fg);\n}\n.terminal-header-active > span:last-child {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-target {\n  flex: 0 1 auto;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.terminal-feedback {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-align: right;\n  white-space: nowrap;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.terminal-actions {\n  display: flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 1px;\n  margin-left: auto;\n}\n.terminal-actions-separator {\n  width: 1px;\n  height: 16px;\n  margin: 0 4px;\n  background: var(--theme-border-strong);\n}\n.terminal-icon-button {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  justify-content: center;\n  width: var(--terminal-target-size);\n  height: var(--terminal-target-size);\n  border-radius: 6px;\n  color: var(--theme-fg-muted) !important;\n}\n.terminal-icon-button:not(:disabled):hover,\n.terminal-icon-button[aria-expanded=true] {\n  background: var(--theme-hover) !important;\n  color: var(--theme-fg) !important;\n}\n.terminal-switcher {\n  display: inline-flex;\n  flex: 0 1 auto;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  height: 32px;\n  padding: 0 8px;\n  margin-left: -6px;\n  border-radius: 7px;\n  font-size: 13px;\n  font-weight: 500;\n}\n.terminal-switcher > span:first-of-type {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-switcher:not(:disabled):hover,\n.terminal-switcher[aria-expanded=true] {\n  background: var(--theme-hover) !important;\n}\n.terminal-banner {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 4px 4px 4px 12px;\n  font-size: 12px;\n  color: var(--theme-fg);\n  background: color-mix(in oklch, #d1555f 14%, var(--theme-panel));\n  border-bottom: 1px solid color-mix(in oklch, #d1555f 30%, var(--theme-border));\n}\n.terminal-banner > span {\n  flex: 1;\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n.terminal-body {\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.terminal-groups {\n  position: relative;\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.terminal-groups[data-orientation=vertical] {\n  flex-direction: column;\n}\n.terminal-pane {\n  position: relative;\n  display: flex;\n  flex-basis: 0;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.terminal-pane > .shell-pane {\n  flex: 1;\n}\n.terminal-pane.is-split.is-active::after {\n  content: "";\n  position: absolute;\n  inset: 0;\n  pointer-events: none;\n  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--theme-accent-solid) 45%, transparent);\n}\n.terminal-panel .shell-pane-host {\n  padding: 4px 0 2px 10px;\n  background: var(--terminal-bg);\n}\n.terminal-panel .shell-pane-host .xterm {\n  height: 100%;\n}\n.terminal-panel .shell-pane-host .xterm-viewport {\n  scrollbar-width: thin;\n}\n.terminal-pane-sash {\n  position: relative;\n  flex: 0 0 1px;\n  background: var(--theme-border);\n  touch-action: none;\n  cursor: col-resize;\n}\n.terminal-groups[data-orientation=vertical] > .terminal-pane-sash {\n  cursor: row-resize;\n}\n.terminal-pane-sash::before {\n  content: "";\n  position: absolute;\n  inset: 0 -4px;\n  z-index: 2;\n}\n.terminal-groups[data-orientation=vertical] > .terminal-pane-sash::before {\n  inset: -4px 0;\n}\n.terminal-pane-sash:hover,\n.terminal-pane-sash:active,\n.terminal-pane-sash:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.terminal-pane-status {\n  position: absolute;\n  top: 6px;\n  right: 10px;\n  z-index: 3;\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  max-width: calc(100% - 20px);\n  padding: 3px 4px 3px 10px;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 999px;\n  font-size: 11px;\n  color: var(--theme-fg-soft);\n  background: var(--theme-panel);\n  box-shadow: 0 4px 14px rgb(0 0 0 / .14);\n}\n.terminal-pane-status > span {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-pane-status.is-connecting {\n  padding-right: 10px;\n  opacity: 0;\n  animation: terminal-status-in .2s ease-out .6s forwards;\n}\n.terminal-pane-status button {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 4px;\n  padding: 3px 8px;\n  border-radius: 999px !important;\n  color: var(--theme-accent-strong) !important;\n}\n.terminal-pane-status button:hover {\n  background: var(--theme-hover) !important;\n}\n@keyframes terminal-status-in {\n  to {\n    opacity: 1;\n  }\n}\n.terminal-empty {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 10px;\n  padding: 16px;\n  font-size: 12px;\n  color: var(--theme-fg-muted);\n}\n.terminal-empty button {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  padding: 6px 12px;\n  border: 1px solid var(--theme-border-strong) !important;\n  border-radius: 7px;\n  font-size: 12px;\n  color: var(--theme-fg) !important;\n  background: var(--theme-panel) !important;\n}\n.terminal-empty button:hover {\n  background: var(--theme-hover) !important;\n}\n.terminal-tabs-sash {\n  position: relative;\n  flex: 0 0 1px;\n  background: var(--theme-border);\n  cursor: col-resize;\n  touch-action: none;\n}\n.terminal-tabs-sash::before {\n  content: "";\n  position: absolute;\n  inset: 0 -4px;\n  z-index: 2;\n}\n.terminal-tabs-sash:hover,\n.terminal-tabs-sash:active,\n.terminal-tabs-sash:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.terminal-tabs-host {\n  flex-shrink: 0;\n  min-width: 0;\n  overflow: hidden;\n  background: var(--theme-panel);\n}\n.terminal-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  padding: 4px 0;\n  overflow-y: auto;\n  scrollbar-width: thin;\n}\n.terminal-tab {\n  position: relative;\n  display: flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 6px;\n  height: var(--terminal-tab-height);\n  padding: 0 4px 0 10px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n  cursor: pointer;\n  outline: none;\n}\n.terminal-tabs.is-narrow .terminal-tab {\n  justify-content: center;\n  padding: 0;\n}\n.terminal-tab:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.terminal-tab.is-active {\n  background: var(--theme-accent-soft);\n  color: var(--theme-fg);\n}\n.terminal-tab.is-active::before {\n  content: "";\n  position: absolute;\n  inset: 0 auto 0 0;\n  width: 2px;\n  background: var(--theme-accent-solid);\n}\n.terminal-tab-prefix {\n  flex-shrink: 0;\n  width: 1ch;\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    monospace;\n  color: var(--theme-fg-muted);\n}\n.terminal-tab-icon {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n}\n.terminal-tab.is-active .terminal-tab-icon {\n  color: var(--theme-accent-strong);\n}\n.terminal-tab-label {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-tab-actions {\n  display: none;\n  flex-shrink: 0;\n  align-items: center;\n}\n.terminal-tab:hover .terminal-tab-actions,\n.terminal-tab:focus-within .terminal-tab-actions,\n.terminal-tab.is-active .terminal-tab-actions {\n  display: inline-flex;\n}\n.terminal-tab:hover .terminal-status-dot,\n.terminal-tab:focus-within .terminal-status-dot,\n.terminal-tab.is-active .terminal-status-dot {\n  display: none;\n}\n.terminal-tab-actions button {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  border-radius: 5px;\n  color: var(--theme-fg-muted) !important;\n}\n.terminal-tab-actions button:not(:disabled):hover {\n  background: var(--theme-hover) !important;\n  color: var(--theme-fg) !important;\n}\n.terminal-tab-rename {\n  flex: 1;\n  min-width: 0;\n}\n.terminal-tab-rename input {\n  width: 100%;\n  height: 20px;\n  padding: 0 4px;\n  border: 1px solid var(--theme-accent-solid);\n  border-radius: 4px;\n  font-size: 12px;\n  color: var(--theme-fg);\n  background: var(--theme-bg);\n  outline: none;\n}\n.terminal-status-dot {\n  flex-shrink: 0;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: var(--theme-fg-muted);\n  opacity: .6;\n}\n.terminal-status-dot[data-status=connected] {\n  background: var(--theme-accent-solid);\n  opacity: 1;\n}\n.terminal-status-dot[data-status=connecting] {\n  background: #d29b2c;\n  opacity: 1;\n}\n.terminal-status-dot[data-status=disconnected] {\n  background: transparent;\n  box-shadow: inset 0 0 0 1.5px #d1555f;\n  opacity: 1;\n}\n.terminal-menu {\n  position: fixed;\n  z-index: 260;\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n  min-width: 200px;\n  max-width: min(320px, calc(100vw - 16px));\n  max-height: min(60vh, 420px);\n  padding: 5px;\n  overflow-y: auto;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  color: var(--theme-fg);\n  background: var(--theme-panel);\n  box-shadow: 0 14px 40px rgb(0 0 0 / .22), 0 2px 8px rgb(0 0 0 / .08);\n}\n.terminal-menu-item {\n  display: flex;\n  flex: 1;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  min-height: 30px;\n  padding: 4px 8px;\n  border-radius: 6px;\n  font-size: 12px;\n  text-align: left;\n}\n.terminal-menu-item > span:not(.terminal-status-dot):not(.terminal-tab-prefix) {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-menu-item:not(:disabled):hover,\n.terminal-menu-item:focus-visible {\n  background: var(--theme-hover);\n}\n.terminal-menu-item.is-danger {\n  color: #d1555f;\n}\n.terminal-menu-item[aria-checked=true] {\n  background: var(--theme-accent-soft);\n}\n.terminal-menu-row {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n}\n.terminal-menu-rename {\n  display: flex;\n  flex: 1;\n  gap: 4px;\n  padding: 2px;\n}\n.terminal-menu-rename input {\n  flex: 1;\n  min-width: 0;\n  height: 32px;\n  padding: 0 8px;\n  border: 1px solid var(--theme-accent-solid);\n  border-radius: 6px;\n  font-size: 16px;\n  color: var(--theme-fg);\n  background: var(--theme-bg);\n  outline: none;\n}\n.terminal-panel.is-compact {\n  --terminal-header-height: 40px;\n  --terminal-target-size: 36px;\n}\n.terminal-panel.is-compact .terminal-header {\n  gap: 4px;\n  padding: 0 2px 0 10px;\n}\n.terminal-panel.is-compact .terminal-target {\n  display: none;\n}\n.terminal-panel.is-compact .terminal-feedback {\n  flex: 0 1 auto;\n}\n.terminal-panel.is-compact .shell-pane-host {\n  padding-left: 6px;\n}\n@media (pointer: coarse) {\n  .terminal-panel {\n    --terminal-tab-height: 40px;\n    --terminal-target-size: 36px;\n  }\n  .terminal-tab-actions {\n    display: inline-flex;\n  }\n  .terminal-tab .terminal-status-dot {\n    display: inline-block !important;\n  }\n  .terminal-tab-actions button {\n    width: 32px;\n    height: 32px;\n  }\n  .terminal-menu-item {\n    min-height: 44px;\n    font-size: 14px;\n  }\n  .terminal-pane-sash::before {\n    inset: 0 -10px;\n  }\n  .terminal-groups[data-orientation=vertical] > .terminal-pane-sash::before {\n    inset: -10px 0;\n  }\n  .terminal-tabs-sash::before {\n    inset: 0 -10px;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .terminal-pane-status.is-connecting {\n    animation: none;\n    opacity: 1;\n  }\n}\n');
+styleInject('.terminal-panel {\n  --terminal-bg: #0f1317;\n  --terminal-header-height: 35px;\n  --terminal-tab-height: 26px;\n  --terminal-target-size: 26px;\n  position: relative;\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  min-width: 0;\n  min-height: 0;\n  color: var(--theme-fg);\n  background: var(--terminal-bg);\n}\n.terminal-panel[data-terminal-theme=light] {\n  --terminal-bg: #ebeeeb;\n}\n.terminal-panel [hidden] {\n  display: none !important;\n}\n.terminal-panel button {\n  font: inherit;\n  color: inherit;\n  background: transparent;\n  border: 0;\n  cursor: pointer;\n}\n.terminal-panel button:disabled {\n  cursor: default;\n  opacity: .42;\n}\n.terminal-panel button:focus-visible,\n.terminal-panel [role=separator]:focus-visible,\n.terminal-tab:focus-visible {\n  outline: 2px solid var(--theme-accent-strong);\n  outline-offset: -2px;\n}\n.terminal-header {\n  display: flex;\n  flex: 0 0 var(--terminal-header-height);\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  padding: 0 4px 0 12px;\n  background: var(--theme-panel);\n  border-bottom: 1px solid var(--theme-border);\n  user-select: none;\n}\n.terminal-title {\n  flex-shrink: 0;\n  margin: 0;\n  font-size: 11px;\n  font-weight: 600;\n  letter-spacing: .06em;\n  text-transform: uppercase;\n  color: var(--theme-fg-soft);\n}\n.terminal-header-active {\n  display: inline-flex;\n  flex-shrink: 1;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  font-size: 12px;\n  color: var(--theme-fg);\n}\n.terminal-header-active > span:last-child {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-target {\n  flex: 0 1 auto;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.terminal-feedback {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-align: right;\n  white-space: nowrap;\n  font-size: 11px;\n  color: var(--theme-fg-muted);\n}\n.terminal-actions {\n  display: flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 1px;\n  margin-left: auto;\n}\n.terminal-actions-separator {\n  width: 1px;\n  height: 16px;\n  margin: 0 4px;\n  background: var(--theme-border-strong);\n}\n.terminal-icon-button {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  justify-content: center;\n  width: var(--terminal-target-size);\n  height: var(--terminal-target-size);\n  border-radius: 6px;\n  color: var(--theme-fg-muted) !important;\n}\n.terminal-icon-button:not(:disabled):hover,\n.terminal-icon-button[aria-expanded=true] {\n  background: var(--theme-hover) !important;\n  color: var(--theme-fg) !important;\n}\n.terminal-switcher {\n  display: inline-flex;\n  flex: 0 1 auto;\n  align-items: center;\n  gap: 6px;\n  min-width: 0;\n  height: 32px;\n  padding: 0 8px;\n  margin-left: -6px;\n  border-radius: 7px;\n  font-size: 13px;\n  font-weight: 500;\n}\n.terminal-switcher > span:first-of-type {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-switcher:not(:disabled):hover,\n.terminal-switcher[aria-expanded=true] {\n  background: var(--theme-hover) !important;\n}\n.terminal-banner {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  padding: 4px 4px 4px 12px;\n  font-size: 12px;\n  color: var(--theme-fg);\n  background: color-mix(in oklch, #d1555f 14%, var(--theme-panel));\n  border-bottom: 1px solid color-mix(in oklch, #d1555f 30%, var(--theme-border));\n}\n.terminal-banner > span {\n  flex: 1;\n  min-width: 0;\n  overflow-wrap: anywhere;\n}\n.terminal-body {\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.terminal-groups {\n  position: relative;\n  display: flex;\n  flex: 1;\n  min-width: 0;\n  min-height: 0;\n}\n.terminal-groups[data-orientation=vertical] {\n  flex-direction: column;\n}\n.terminal-pane {\n  position: relative;\n  display: flex;\n  flex-basis: 0;\n  min-width: 0;\n  min-height: 0;\n  overflow: hidden;\n}\n.terminal-pane > .shell-pane {\n  flex: 1;\n}\n.terminal-pane.is-split.is-active::after {\n  content: "";\n  position: absolute;\n  inset: 0;\n  pointer-events: none;\n  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--theme-accent-solid) 45%, transparent);\n}\n.terminal-panel.is-compact .terminal-pane.is-split.is-active::after {\n  display: none;\n}\n.terminal-panel .shell-pane-host {\n  padding: 4px 0 2px 10px;\n  background: var(--terminal-bg);\n}\n.terminal-panel .shell-pane-host .xterm {\n  height: 100%;\n}\n.terminal-panel .shell-pane-host .xterm-viewport {\n  scrollbar-width: thin;\n}\n.terminal-pane-sash {\n  position: relative;\n  flex: 0 0 1px;\n  background: var(--theme-border);\n  touch-action: none;\n  cursor: col-resize;\n}\n.terminal-groups[data-orientation=vertical] > .terminal-pane-sash {\n  cursor: row-resize;\n}\n.terminal-pane-sash::before {\n  content: "";\n  position: absolute;\n  inset: 0 -4px;\n  z-index: 2;\n}\n.terminal-groups[data-orientation=vertical] > .terminal-pane-sash::before {\n  inset: -4px 0;\n}\n.terminal-pane-sash:hover,\n.terminal-pane-sash:active,\n.terminal-pane-sash:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.terminal-pane-status {\n  position: absolute;\n  top: 6px;\n  right: 10px;\n  z-index: 3;\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  max-width: calc(100% - 20px);\n  padding: 3px 4px 3px 10px;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 999px;\n  font-size: 11px;\n  color: var(--theme-fg-soft);\n  background: var(--theme-panel);\n  box-shadow: 0 4px 14px rgb(0 0 0 / .14);\n}\n.terminal-pane-status > span {\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-pane-status.is-connecting {\n  padding-right: 10px;\n  opacity: 0;\n  animation: terminal-status-in .2s ease-out .6s forwards;\n}\n.terminal-pane-status button {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 4px;\n  padding: 3px 8px;\n  border-radius: 999px !important;\n  color: var(--theme-accent-strong) !important;\n}\n.terminal-pane-status button:hover {\n  background: var(--theme-hover) !important;\n}\n@keyframes terminal-status-in {\n  to {\n    opacity: 1;\n  }\n}\n.terminal-empty {\n  display: flex;\n  flex: 1;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  gap: 10px;\n  padding: 16px;\n  font-size: 12px;\n  color: var(--theme-fg-muted);\n}\n.terminal-empty button {\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n  padding: 6px 12px;\n  border: 1px solid var(--theme-border-strong) !important;\n  border-radius: 7px;\n  font-size: 12px;\n  color: var(--theme-fg) !important;\n  background: var(--theme-panel) !important;\n}\n.terminal-empty button:hover {\n  background: var(--theme-hover) !important;\n}\n.terminal-tabs-sash {\n  position: relative;\n  flex: 0 0 1px;\n  background: var(--theme-border);\n  cursor: col-resize;\n  touch-action: none;\n}\n.terminal-tabs-sash::before {\n  content: "";\n  position: absolute;\n  inset: 0 -4px;\n  z-index: 2;\n}\n.terminal-tabs-sash:hover,\n.terminal-tabs-sash:active,\n.terminal-tabs-sash:focus-visible {\n  background: var(--theme-accent-solid);\n}\n.terminal-tabs-host {\n  flex-shrink: 0;\n  min-width: 0;\n  overflow: hidden;\n  background: var(--theme-panel);\n}\n.terminal-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  padding: 4px 0;\n  overflow-y: auto;\n  scrollbar-width: thin;\n}\n.terminal-tab {\n  position: relative;\n  display: flex;\n  flex-shrink: 0;\n  align-items: center;\n  gap: 6px;\n  height: var(--terminal-tab-height);\n  padding: 0 4px 0 10px;\n  font-size: 12px;\n  color: var(--theme-fg-soft);\n  cursor: pointer;\n  outline: none;\n}\n.terminal-tabs.is-narrow .terminal-tab {\n  justify-content: center;\n  padding: 0;\n}\n.terminal-tab:hover {\n  background: var(--theme-hover);\n  color: var(--theme-fg);\n}\n.terminal-tab.is-active {\n  background: var(--theme-accent-soft);\n  color: var(--theme-fg);\n}\n.terminal-tab.is-active::before {\n  content: "";\n  position: absolute;\n  inset: 0 auto 0 0;\n  width: 2px;\n  background: var(--theme-accent-solid);\n}\n.terminal-tab-prefix {\n  flex-shrink: 0;\n  width: 1ch;\n  font-family:\n    ui-monospace,\n    SFMono-Regular,\n    Menlo,\n    monospace;\n  color: var(--theme-fg-muted);\n}\n.terminal-tab-icon {\n  flex-shrink: 0;\n  color: var(--theme-fg-muted);\n}\n.terminal-tab.is-active .terminal-tab-icon {\n  color: var(--theme-accent-strong);\n}\n.terminal-tab-label {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-tab-actions {\n  display: none;\n  flex-shrink: 0;\n  align-items: center;\n}\n.terminal-tab:hover .terminal-tab-actions,\n.terminal-tab:focus-within .terminal-tab-actions,\n.terminal-tab.is-active .terminal-tab-actions {\n  display: inline-flex;\n}\n.terminal-tab:hover .terminal-status-dot,\n.terminal-tab:focus-within .terminal-status-dot,\n.terminal-tab.is-active .terminal-status-dot {\n  display: none;\n}\n.terminal-tab-actions button {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 22px;\n  height: 22px;\n  border-radius: 5px;\n  color: var(--theme-fg-muted) !important;\n}\n.terminal-tab-actions button:not(:disabled):hover {\n  background: var(--theme-hover) !important;\n  color: var(--theme-fg) !important;\n}\n.terminal-tab-rename {\n  flex: 1;\n  min-width: 0;\n}\n.terminal-tab-rename input {\n  width: 100%;\n  height: 20px;\n  padding: 0 4px;\n  border: 1px solid var(--theme-accent-solid);\n  border-radius: 4px;\n  font-size: 12px;\n  color: var(--theme-fg);\n  background: var(--theme-bg);\n  outline: none;\n}\n.terminal-status-dot {\n  flex-shrink: 0;\n  width: 7px;\n  height: 7px;\n  border-radius: 50%;\n  background: var(--theme-fg-muted);\n  opacity: .6;\n}\n.terminal-status-dot[data-status=connected] {\n  background: var(--theme-accent-solid);\n  opacity: 1;\n}\n.terminal-status-dot[data-status=connecting] {\n  background: #d29b2c;\n  opacity: 1;\n}\n.terminal-status-dot[data-status=disconnected] {\n  background: transparent;\n  box-shadow: inset 0 0 0 1.5px #d1555f;\n  opacity: 1;\n}\n.terminal-menu {\n  position: fixed;\n  z-index: 260;\n  display: flex;\n  flex-direction: column;\n  gap: 1px;\n  min-width: 200px;\n  max-width: min(320px, calc(100vw - 16px));\n  max-height: min(60vh, 420px);\n  padding: 5px;\n  overflow-y: auto;\n  border: 1px solid var(--theme-border-strong);\n  border-radius: 10px;\n  color: var(--theme-fg);\n  background: var(--theme-panel);\n  box-shadow: 0 14px 40px rgb(0 0 0 / .22), 0 2px 8px rgb(0 0 0 / .08);\n}\n.terminal-menu-item {\n  display: flex;\n  flex: 1;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n  min-height: 30px;\n  padding: 4px 8px;\n  border-radius: 6px;\n  font-size: 12px;\n  text-align: left;\n}\n.terminal-menu-item > span:not(.terminal-status-dot):not(.terminal-tab-prefix) {\n  flex: 1;\n  min-width: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n.terminal-menu-item:not(:disabled):hover,\n.terminal-menu-item:focus-visible {\n  background: var(--theme-hover);\n}\n.terminal-menu-item.is-danger {\n  color: #d1555f;\n}\n.terminal-menu-item[aria-checked=true] {\n  background: var(--theme-accent-soft);\n}\n.terminal-menu-row {\n  display: flex;\n  align-items: center;\n  gap: 2px;\n}\n.terminal-menu-rename {\n  display: flex;\n  flex: 1;\n  gap: 4px;\n  padding: 2px;\n}\n.terminal-menu-rename input {\n  flex: 1;\n  min-width: 0;\n  height: 32px;\n  padding: 0 8px;\n  border: 1px solid var(--theme-accent-solid);\n  border-radius: 6px;\n  font-size: 16px;\n  color: var(--theme-fg);\n  background: var(--theme-bg);\n  outline: none;\n}\n.terminal-panel.is-compact {\n  --terminal-header-height: 40px;\n  --terminal-target-size: 36px;\n}\n.terminal-panel.is-compact .terminal-header {\n  gap: 4px;\n  padding: 0 2px 0 10px;\n}\n.terminal-panel.is-compact .terminal-target {\n  display: none;\n}\n.terminal-panel.is-compact .terminal-feedback {\n  flex: 0 1 auto;\n}\n.terminal-panel.is-compact .shell-pane-host {\n  padding-left: 6px;\n}\n@media (pointer: coarse) {\n  .terminal-panel {\n    --terminal-tab-height: 40px;\n    --terminal-target-size: 36px;\n  }\n  .terminal-tab-actions {\n    display: inline-flex;\n  }\n  .terminal-tab .terminal-status-dot {\n    display: inline-block !important;\n  }\n  .terminal-tab-actions button {\n    width: 32px;\n    height: 32px;\n  }\n  .terminal-menu-item {\n    min-height: 44px;\n    font-size: 14px;\n  }\n  .terminal-pane-sash::before {\n    inset: 0 -10px;\n  }\n  .terminal-groups[data-orientation=vertical] > .terminal-pane-sash::before {\n    inset: -10px 0;\n  }\n  .terminal-tabs-sash::before {\n    inset: 0 -10px;\n  }\n}\n@media (prefers-reduced-motion: reduce) {\n  .terminal-pane-status.is-connecting {\n    animation: none;\n    opacity: 1;\n  }\n}\n');
 
 // src/components/ThreadComposer.tsx
 import {
@@ -9307,7 +9307,7 @@ function ThreadWorkspaceLayout({
 
 // src/components/ThreadTimeline.tsx
 import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@remote-codex/shared";
-import { memo as memo7, useCallback as useCallback16, useEffect as useEffect26, useMemo as useMemo9, useRef as useRef23, useState as useState40 } from "react";
+import { memo as memo7, useCallback as useCallback16, useEffect as useEffect27, useMemo as useMemo9, useRef as useRef24, useState as useState40 } from "react";
 
 // src/components/LongTextDialog.tsx
 import { useEffect as useEffect15 } from "react";
@@ -11571,9 +11571,6 @@ function containsReasoningEntry(entries) {
     (entry) => entry.kind === "item" && entry.item.kind === "reasoning"
   );
 }
-function isCompletedAgentNarrative(entry) {
-  return entry?.kind === "item" && entry.item.kind === "agentMessage" && entry.item.text.trim().length > 0 && !isRunningHistoryStatus(entry.item.status);
-}
 function entryItemCount(entry) {
   if (entry.kind === "item") {
     return 1;
@@ -11601,7 +11598,7 @@ function groupAgentActivitySequences(entries) {
       (total, entry) => total + entryItemCount(entry),
       0
     );
-    if (containsReasoningEntry(activityEntries) || activityEntries.length > 1 && isCompletedAgentNarrative(entries[index])) {
+    if (containsReasoningEntry(activityEntries) || itemCount >= 2) {
       grouped.push({
         kind: "agentActivityGroup",
         key: `agent-activity:${activityEntries[0].key}`,
@@ -12134,7 +12131,8 @@ function ActivityRequestEntrySection({
 import {
   memo as memo6,
   useCallback as useCallback13,
-  useContext as useContext6,
+  useEffect as useEffect24,
+  useRef as useRef21,
   useMemo as useMemo8,
   useState as useState37
 } from "react";
@@ -12222,6 +12220,7 @@ import {
   Image as ImageIconLucide,
   Info,
   Loader2 as Loader24,
+  Layers3,
   PackageOpen,
   Search as Search2,
   Sparkles,
@@ -13310,7 +13309,7 @@ var GraphChatAgentActivityGroupItem = memo5(
     children
   }) {
     const { locale: i18nLocale } = useI18n();
-    const countLabel = itemCount === 1 ? "1 operation" : `${itemCount} operations`;
+    const countLabel = translate("chat.operationCount", { count: itemCount });
     return /* @__PURE__ */ jsx51(
       GraphChatHistoryGroupFrame,
       {
@@ -13320,10 +13319,10 @@ var GraphChatAgentActivityGroupItem = memo5(
         desktopIconClassName: "border-slate-300/30 bg-slate-300/[0.14] text-slate-100",
         expanded,
         expandedListClassName: "border-slate-300/12",
-        icon: /* @__PURE__ */ jsx51(Bot, { className: "h-3.5 w-3.5" }),
+        icon: /* @__PURE__ */ jsx51(Layers3, { className: "h-3.5 w-3.5" }),
         onToggleExpanded,
         summary: /* @__PURE__ */ jsxs41(Fragment13, { children: [
-          /* @__PURE__ */ jsx51("span", { className: "thread-graph-history-group-verb", children: translate("chat.worked") }),
+          /* @__PURE__ */ jsx51("span", { className: "thread-graph-history-group-verb", children: translate(running ? "chat.performingOperations" : "chat.performedOperations") }),
           /* @__PURE__ */ jsx51("span", { className: "thread-graph-history-group-description", children: countLabel })
         ] }),
         timeMeta,
@@ -14343,6 +14342,11 @@ function formatWorkedDuration(startedAt, completedAt, items) {
   }
   return translate("chat.workedForSeconds", { seconds });
 }
+function historyEntryRunning(entry) {
+  if (entry.kind === "item") return isRunningHistoryStatus(entry.item.status);
+  if (entry.kind === "agentActivityGroup") return entry.entries.some(historyEntryRunning);
+  return entry.items.some((item) => isRunningHistoryStatus(item.status));
+}
 function firstHistoryEntryTimestamp(entry) {
   if (entry.kind === "item") {
     return entry.item.createdAt ?? null;
@@ -14387,6 +14391,7 @@ function collapsedSummaryMessages(entries, active) {
 }
 var ThreadTurnRow = memo6(function ThreadTurnRow2({
   threadId,
+  revealTarget,
   adapter,
   turn,
   absoluteIndex,
@@ -14455,7 +14460,21 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
   const [expandedGroups, setExpandedGroups] = useState37(
     {}
   );
-  const workbench = useContext6(WorkbenchContext);
+  const revealedSearch = useRef21(null);
+  useEffect24(() => {
+    if (!revealTarget || revealedSearch.current === revealTarget.key) return;
+    const keys = [];
+    function contains(entry) {
+      if (entry.kind === "item") return entry.item.id === revealTarget?.itemId;
+      const found = entry.kind === "agentActivityGroup" ? entry.entries.some(contains) : entry.items.some((item) => item.id === revealTarget?.itemId);
+      if (found) keys.push(entry.key);
+      return found;
+    }
+    if (groupedItems.some(contains)) {
+      revealedSearch.current = revealTarget.key;
+      setExpandedGroups((current) => ({ ...current, ...Object.fromEntries(keys.map((key) => [key, true])) }));
+    }
+  }, [groupedItems, revealTarget]);
   const toggleGroupedItem = useCallback13((groupKey) => {
     setExpandedGroups((current) => ({
       ...current,
@@ -14465,7 +14484,7 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
   const renderHistoryEntries = (entries) => /* @__PURE__ */ jsx58(
     TimelineHistoryEntries,
     {
-      entries: workbench ? entries.flatMap((entry) => entry.kind === "agentActivityGroup" ? entry.entries : [entry]) : entries,
+      entries,
       expandedGroups,
       onToggleGroupedItem: toggleGroupedItem,
       threadId,
@@ -14754,7 +14773,7 @@ function TimelineHistoryEntries({
         GraphChatAgentActivityGroupItem,
         {
           itemCount: entry.itemCount,
-          running: autoOpenLatestToolDetails && entry.key === latestEntryKey,
+          running: entry.entries.some(historyEntryRunning),
           expanded,
           onToggleExpanded,
           timeMeta: relativeTimeMeta(
@@ -14858,7 +14877,7 @@ function buildSyntheticLiveTurn(turnId, items) {
 }
 
 // src/components/timeline/useDeferredHistoryDetail.ts
-import { useCallback as useCallback14, useEffect as useEffect24, useRef as useRef21, useState as useState38 } from "react";
+import { useCallback as useCallback14, useEffect as useEffect25, useRef as useRef22, useState as useState38 } from "react";
 function inlineDetail(item, title, text) {
   return {
     id: item.id,
@@ -14872,14 +14891,14 @@ function useDeferredHistoryDetail({
   onSelectHistoryItemDetail
 }) {
   useI18n();
-  const requestIdRef = useRef21(0);
-  const detailCacheRef = useRef21(
+  const requestIdRef = useRef22(0);
+  const detailCacheRef = useRef22(
     /* @__PURE__ */ new Map()
   );
   const [expandedText, setExpandedText] = useState38(
     null
   );
-  useEffect24(() => {
+  useEffect25(() => {
     requestIdRef.current += 1;
     detailCacheRef.current.clear();
     setExpandedText(null);
@@ -15009,14 +15028,14 @@ function useDeferredHistoryDetail({
 // src/components/timeline/useTimelineScroll.ts
 import {
   useCallback as useCallback15,
-  useEffect as useEffect25,
+  useEffect as useEffect26,
   useLayoutEffect as useLayoutEffect8,
-  useRef as useRef22,
+  useRef as useRef23,
   useState as useState39
 } from "react";
 function useChangeRevision(inputs) {
-  const previousInputsRef = useRef22(null);
-  const revisionRef = useRef22(0);
+  const previousInputsRef = useRef23(null);
+  const revisionRef = useRef23(0);
   const previousInputs = previousInputsRef.current;
   const changed = previousInputs === null || previousInputs.length !== inputs.length || inputs.some((input, index) => !Object.is(input, previousInputs[index]));
   if (changed) {
@@ -15036,25 +15055,25 @@ function useTimelineScroll({
   onTailVisibilityChange,
   contentRevisionInputs
 }) {
-  const scrollContainerRef = useRef22(null);
-  const scrollContentRef = useRef22(null);
-  const lastHandledScrollRequestKeyRef = useRef22(scrollRequestKey);
-  const previousContentRevisionRef = useRef22(null);
-  const previousBottomSpacerRef = useRef22(bottomSpacer);
-  const lastObservedScrollHeightRef = useRef22(0);
-  const lastScrollTopRef = useRef22(0);
-  const scrollIntentRevisionRef = useRef22(0);
-  const pendingPrependScrollRef = useRef22(null);
-  const tailSentinelRef = useRef22(null);
-  const topSentinelRef = useRef22(null);
-  const isTailVisibleRef = useRef22(true);
-  const shouldStickToBottomRef = useRef22(true);
-  const userScrolledAwayFromTailRef = useRef22(false);
-  const userScrolledHistoryRef = useRef22(false);
-  const autoLoadedEarlierRef = useRef22(false);
-  const topLoadArmedRef = useRef22(false);
-  const lastTouchYRef = useRef22(null);
-  const touchPullDistanceRef = useRef22(0);
+  const scrollContainerRef = useRef23(null);
+  const scrollContentRef = useRef23(null);
+  const lastHandledScrollRequestKeyRef = useRef23(scrollRequestKey);
+  const previousContentRevisionRef = useRef23(null);
+  const previousBottomSpacerRef = useRef23(bottomSpacer);
+  const lastObservedScrollHeightRef = useRef23(0);
+  const lastScrollTopRef = useRef23(0);
+  const scrollIntentRevisionRef = useRef23(0);
+  const pendingPrependScrollRef = useRef23(null);
+  const tailSentinelRef = useRef23(null);
+  const topSentinelRef = useRef23(null);
+  const isTailVisibleRef = useRef23(true);
+  const shouldStickToBottomRef = useRef23(true);
+  const userScrolledAwayFromTailRef = useRef23(false);
+  const userScrolledHistoryRef = useRef23(false);
+  const autoLoadedEarlierRef = useRef23(false);
+  const topLoadArmedRef = useRef23(false);
+  const lastTouchYRef = useRef23(null);
+  const touchPullDistanceRef = useRef23(0);
   const [visibleCount, setVisibleCount] = useState39(INITIAL_VISIBLE_TURNS);
   const [loadMoreClicks, setLoadMoreClicks] = useState39(0);
   const [isTailVisible, setIsTailVisible] = useState39(true);
@@ -15227,13 +15246,13 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [threadId, scrollToBottom]);
-  useEffect25(() => {
+  useEffect26(() => {
     autoLoadedEarlierRef.current = false;
     userScrolledHistoryRef.current = false;
     topLoadArmedRef.current = false;
     pendingPrependScrollRef.current = null;
   }, [threadId]);
-  useEffect25(() => {
+  useEffect26(() => {
     if (!loadingEarlier) {
       autoLoadedEarlierRef.current = false;
     }
@@ -15259,7 +15278,7 @@ function useTimelineScroll({
     shouldStickToBottomRef.current = false;
     topLoadArmedRef.current = false;
   }, [loadingEarlier, turnsLength]);
-  useEffect25(() => {
+  useEffect26(() => {
     setVisibleCount((current) => {
       if (current >= turnsLength - 1) {
         return turnsLength;
@@ -15267,7 +15286,7 @@ function useTimelineScroll({
       return Math.max(current, INITIAL_VISIBLE_TURNS);
     });
   }, [turnsLength]);
-  useEffect25(() => {
+  useEffect26(() => {
     const container = scrollContainerRef.current;
     if (container) {
       lastObservedScrollHeightRef.current = container.scrollHeight;
@@ -15281,7 +15300,7 @@ function useTimelineScroll({
     }
     recomputeTailVisibility();
   }, [contentRevision, recomputeTailVisibility, visibleCount]);
-  useEffect25(() => {
+  useEffect26(() => {
     const shouldForceScroll = scrollRequestKey !== lastHandledScrollRequestKeyRef.current;
     const contentChanged = previousContentRevisionRef.current !== contentRevision;
     previousContentRevisionRef.current = contentRevision;
@@ -15300,7 +15319,7 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [contentRevision, isTailVisible, scrollToBottom, scrollRequestKey]);
-  useEffect25(() => {
+  useEffect26(() => {
     const container = scrollContainerRef.current;
     const content = scrollContentRef.current;
     if (!container || !content || typeof ResizeObserver === "undefined") {
@@ -15344,7 +15363,7 @@ function useTimelineScroll({
       viewportObserver.disconnect();
     };
   }, [scrollToBottom]);
-  useEffect25(() => {
+  useEffect26(() => {
     if (!shouldStickToBottomRef.current || userScrolledAwayFromTailRef.current) {
       previousBottomSpacerRef.current = bottomSpacer;
       return;
@@ -15360,7 +15379,7 @@ function useTimelineScroll({
       window.cancelAnimationFrame(frame);
     };
   }, [bottomSpacer, scrollToBottom]);
-  useEffect25(() => {
+  useEffect26(() => {
     onTailVisibilityChange?.(isTailVisible);
   }, [isTailVisible, onTailVisibilityChange]);
   return {
@@ -15470,11 +15489,11 @@ function ThreadTimelineComponent({
   const [cancelingSteerIds, setCancelingSteerIds] = useState40(
     () => /* @__PURE__ */ new Set()
   );
-  const navigationTargetRef = useRef23(null);
-  const pendingPreviousNavigationRef = useRef23(false);
-  const navigationResetRef = useRef23({ threadId, scrollRequestKey, searchKey: searchTarget?.key });
-  const handledNavigationRef = useRef23({ previous: previousTurnScrollRequestKey, next: nextTurnScrollRequestKey });
-  const lastSearchKeyRef = useRef23(null);
+  const navigationTargetRef = useRef24(null);
+  const pendingPreviousNavigationRef = useRef24(false);
+  const navigationResetRef = useRef24({ threadId, scrollRequestKey, searchKey: searchTarget?.key });
+  const handledNavigationRef = useRef24({ previous: previousTurnScrollRequestKey, next: nextTurnScrollRequestKey });
+  const lastSearchKeyRef = useRef24(null);
   const loadHistoryItemDetail = adapter?.onLoadHistoryItemDetail ?? onLoadHistoryItemDetail;
   const loadTurnDetail = adapter?.onLoadTurnDetail ?? onLoadTurnDetail;
   const [loadedTurnDetails, setLoadedTurnDetails] = useState40({});
@@ -15483,7 +15502,7 @@ function ThreadTimelineComponent({
   );
   const [turnDetailErrors, setTurnDetailErrors] = useState40({});
   const openLinkedThread = adapter?.onOpenLinkedThread;
-  useEffect26(() => {
+  useEffect27(() => {
     if (searchTarget) setCollapsedTurnOverrides((current) => ({ ...current, [searchTarget.turnId]: false }));
   }, [searchTarget]);
   const {
@@ -15542,13 +15561,13 @@ function ThreadTimelineComponent({
       bottomSpacer
     ]
   });
-  useEffect26(() => {
+  useEffect27(() => {
     setCollapsedTurnOverrides({});
     setLoadedTurnDetails({});
     setLoadingTurnDetailIds(/* @__PURE__ */ new Set());
     setTurnDetailErrors({});
   }, [threadId]);
-  useEffect26(() => {
+  useEffect27(() => {
     if (!searchTarget || lastSearchKeyRef.current === searchTarget.key || collapsedTurnOverrides[searchTarget.turnId] !== false) return;
     preserveScrollPositionForResize();
     const frame = requestAnimationFrame(() => {
@@ -15602,7 +15621,7 @@ function ThreadTimelineComponent({
       });
     });
   }, [loadTurnDetail, loadedTurnDetails, loadingTurnDetailIds, preserveScrollPositionForResize]);
-  useEffect26(() => {
+  useEffect27(() => {
     if (!loadTurnDetail) return;
     for (const turn of turns) {
       const loaded = loadedTurnDetails[turn.id];
@@ -15717,13 +15736,13 @@ function ThreadTimelineComponent({
     handleScroll();
     updateNavigationAvailability();
   }, [handleScroll, updateNavigationAvailability]);
-  useEffect26(() => {
+  useEffect27(() => {
     const previous = navigationResetRef.current;
     if (previous.threadId === threadId && previous.scrollRequestKey === scrollRequestKey && previous.searchKey === searchTarget?.key) return;
     navigationResetRef.current = { threadId, scrollRequestKey, searchKey: searchTarget?.key };
     resetNavigation();
   }, [threadId, scrollRequestKey, searchTarget?.key, resetNavigation]);
-  useEffect26(() => {
+  useEffect27(() => {
     updateNavigationAvailability();
   }, [visibleTurns, updateNavigationAvailability]);
   const navigateToTurn = useCallback16((target) => {
@@ -15735,14 +15754,14 @@ function ThreadTimelineComponent({
     container.scrollTo({ top, behavior: "smooth" });
     updateNavigationAvailability();
   }, [scrollContainerRef, preserveScrollPositionForResize, updateNavigationAvailability]);
-  useEffect26(() => {
+  useEffect27(() => {
     if (!pendingPreviousNavigationRef.current || loadingEarlier) return;
     const target = findTurn(-1);
     if (!target) return;
     pendingPreviousNavigationRef.current = false;
     navigateToTurn(target);
   }, [visibleTurns, loadingEarlier, findTurn, navigateToTurn]);
-  useEffect26(() => {
+  useEffect27(() => {
     const previousChanged = handledNavigationRef.current.previous !== previousTurnScrollRequestKey;
     const nextChanged = handledNavigationRef.current.next !== nextTurnScrollRequestKey;
     handledNavigationRef.current = { previous: previousTurnScrollRequestKey, next: nextTurnScrollRequestKey };
@@ -15885,6 +15904,7 @@ function ThreadTimelineComponent({
                     threadId,
                     ...adapter ? { adapter } : {},
                     turn: displayTurn,
+                    revealTarget: searchTarget?.turnId === displayTurn.id ? searchTarget : void 0,
                     backgroundAgentCount,
                     absoluteIndex: visibleTurnAbsoluteOffset + visibleIndex + 1,
                     isCollapsed: rowCollapsed,
@@ -16160,10 +16180,10 @@ import {
 import {
   forwardRef as forwardRef2,
   useCallback as useCallback18,
-  useEffect as useEffect31,
+  useEffect as useEffect32,
   useImperativeHandle as useImperativeHandle2,
   useMemo as useMemo11,
-  useRef as useRef28,
+  useRef as useRef29,
   useState as useState44
 } from "react";
 
@@ -16171,10 +16191,10 @@ import {
 import {
   forwardRef,
   useCallback as useCallback17,
-  useEffect as useEffect28,
+  useEffect as useEffect29,
   useImperativeHandle,
   useMemo as useMemo10,
-  useRef as useRef24,
+  useRef as useRef25,
   useState as useState41
 } from "react";
 import "xterm/css/xterm.css";
@@ -16844,7 +16864,7 @@ function buildShellControlState({
 
 // src/components/shell/useShellSocketLifecycle.ts
 import {
-  useEffect as useEffect27
+  useEffect as useEffect28
 } from "react";
 
 // src/components/shell/shellSocketSideEffects.ts
@@ -17151,7 +17171,7 @@ function useShellSocketLifecycle({
 }) {
   const shellId = shell?.id;
   const shellCwd = shell?.cwd;
-  useEffect27(() => {
+  useEffect28(() => {
     const terminal = terminalRef.current;
     const baseAttachStartInput = {
       shellId: shellId ?? null,
@@ -17430,37 +17450,37 @@ var ShellPane = forwardRef(
     onFeedback
   }, ref) {
     useI18n();
-    const transformRef = useRef24(inputTransform);
+    const transformRef = useRef25(inputTransform);
     transformRef.current = inputTransform;
-    const terminalRef = useRef24(null);
-    const fitAddonRef = useRef24(null);
-    const socketRef = useRef24(null);
-    const viewerIdRef = useRef24(null);
-    const shellIdRef = useRef24(null);
-    const reconnectTimerRef = useRef24(null);
-    const attachTimeoutRef = useRef24(null);
-    const attachRetryTimerRef = useRef24(null);
-    const intentionalDisconnectRef = useRef24(false);
-    const userDisconnectedShellIdRef = useRef24(null);
-    const shellSnapshotRef = useRef24("");
-    const pendingCommandRef = useRef24(null);
-    const lastCommandOutputRef = useRef24("");
-    const resizeObserverRef = useRef24(null);
-    const lastSentSizeRef = useRef24(null);
-    const snapshotCursorRef = useRef24({
+    const terminalRef = useRef25(null);
+    const fitAddonRef = useRef25(null);
+    const socketRef = useRef25(null);
+    const viewerIdRef = useRef25(null);
+    const shellIdRef = useRef25(null);
+    const reconnectTimerRef = useRef25(null);
+    const attachTimeoutRef = useRef25(null);
+    const attachRetryTimerRef = useRef25(null);
+    const intentionalDisconnectRef = useRef25(false);
+    const userDisconnectedShellIdRef = useRef25(null);
+    const shellSnapshotRef = useRef25("");
+    const pendingCommandRef = useRef25(null);
+    const lastCommandOutputRef = useRef25("");
+    const resizeObserverRef = useRef25(null);
+    const lastSentSizeRef = useRef25(null);
+    const snapshotCursorRef = useRef25({
       cursorX: void 0,
       cursorY: void 0,
       paneHeight: void 0
     });
-    const terminalInitializingRef = useRef24(false);
-    const terminalInputSubscriptionRef = useRef24(null);
-    const isVisibleRef = useRef24(isVisible);
-    const isMobileShellRef = useRef24(isMobileShell);
-    const sendShellInputRef = useRef24(() => false);
-    const syncTerminalSizeRef = useRef24(() => null);
-    const refreshTerminalLayoutRef = useRef24(() => {
+    const terminalInitializingRef = useRef25(false);
+    const terminalInputSubscriptionRef = useRef25(null);
+    const isVisibleRef = useRef25(isVisible);
+    const isMobileShellRef = useRef25(isMobileShell);
+    const sendShellInputRef = useRef25(() => false);
+    const syncTerminalSizeRef = useRef25(() => null);
+    const refreshTerminalLayoutRef = useRef25(() => {
     });
-    const attachPromiseControllerRef = useRef24(
+    const attachPromiseControllerRef = useRef25(
       createShellAttachPromiseController({
         clearTimeout: window.clearTimeout
       })
@@ -17489,13 +17509,13 @@ var ShellPane = forwardRef(
     const settleAttachPromise = useCallback17((connected) => {
       attachPromiseControllerRef.current.settle(connected);
     }, []);
-    useEffect28(() => {
+    useEffect29(() => {
       isVisibleRef.current = isVisible;
     }, [isVisible]);
-    useEffect28(() => {
+    useEffect29(() => {
       isMobileShellRef.current = isMobileShell;
     }, [isMobileShell]);
-    useEffect28(() => {
+    useEffect29(() => {
       shellIdRef.current = shell?.id ?? null;
     }, [shell?.id]);
     const sendShellInput = useCallback17((data) => {
@@ -17513,7 +17533,7 @@ var ShellPane = forwardRef(
       });
       return true;
     }, []);
-    useEffect28(() => {
+    useEffect29(() => {
       sendShellInputRef.current = sendShellInput;
     }, [sendShellInput]);
     const sendShellClear = useCallback17(() => {
@@ -17570,7 +17590,7 @@ var ShellPane = forwardRef(
       },
       [isTerminalVisible]
     );
-    useEffect28(() => {
+    useEffect29(() => {
       syncTerminalSizeRef.current = syncTerminalSize;
     }, [syncTerminalSize]);
     const refreshTerminalLayout = useCallback17(
@@ -17599,10 +17619,10 @@ var ShellPane = forwardRef(
       },
       [isMobileShell, isTerminalVisible, syncTerminalSize, terminalHostNode]
     );
-    useEffect28(() => {
+    useEffect29(() => {
       refreshTerminalLayoutRef.current = () => refreshTerminalLayout();
     }, [refreshTerminalLayout]);
-    useEffect28(() => {
+    useEffect29(() => {
       onRuntimeStateChange({
         status: viewerId ? "attached" : shellStatus,
         shellInputEnabled: Boolean(viewerId && shell),
@@ -17622,7 +17642,7 @@ var ShellPane = forwardRef(
       shellStatus,
       viewerId
     ]);
-    useEffect28(() => {
+    useEffect29(() => {
       if (!terminalHostNode || terminalRef.current || terminalInitializingRef.current) {
         return;
       }
@@ -17698,7 +17718,7 @@ var ShellPane = forwardRef(
         lastSentSizeRef.current = null;
       };
     }, [effectiveTheme, terminalHostNode]);
-    useEffect28(() => {
+    useEffect29(() => {
       const resetAction = deriveShellMissingSessionResetAction({
         hasShell: Boolean(shell)
       });
@@ -17718,21 +17738,21 @@ var ShellPane = forwardRef(
         terminalRef.current?.reset();
       }
     }, [setViewerId, settleAttachPromise, shell]);
-    useEffect28(() => {
+    useEffect29(() => {
       const terminal = terminalRef.current;
       if (!terminal) {
         return;
       }
       terminal.options.theme = terminalThemeFor(effectiveTheme);
     }, [effectiveTheme]);
-    useEffect28(() => {
+    useEffect29(() => {
       const terminal = terminalRef.current;
       if (!terminal) {
         return;
       }
       terminal.options.disableStdin = false;
     }, [isMobileShell]);
-    useEffect28(() => {
+    useEffect29(() => {
       if (!isVisible || !terminalReady) {
         return;
       }
@@ -17746,7 +17766,7 @@ var ShellPane = forwardRef(
         window.cancelAnimationFrame(frame);
       };
     }, [autoFocus, isActive, isVisible, refreshTerminalLayout, shell?.id, terminalReady]);
-    useEffect28(() => {
+    useEffect29(() => {
       const terminal = terminalRef.current;
       if (!terminalReady || !terminal || !isVisible) return;
       let frame = 0;
@@ -17767,7 +17787,7 @@ var ShellPane = forwardRef(
         rendered.dispose();
       };
     }, [terminalReady, isVisible]);
-    useEffect28(() => {
+    useEffect29(() => {
       if (!isMobileShell || !terminalReady || !terminalHostNode) return;
       const viewport = terminalHostNode.querySelector(".xterm-viewport");
       if (!viewport) return;
@@ -17811,7 +17831,7 @@ var ShellPane = forwardRef(
       settleAttachPromise,
       onShellUpdate
     });
-    useEffect28(() => {
+    useEffect29(() => {
       return () => {
         const reconnectTimer = refValue2(reconnectTimerRef);
         const attachTimeout = refValue2(attachTimeoutRef);
@@ -18001,13 +18021,13 @@ var ShellPane = forwardRef(
 );
 
 // src/components/shell/ShellTouchControls.tsx
-import { useEffect as useEffect29, useRef as useRef25, useState as useState42 } from "react";
+import { useEffect as useEffect30, useRef as useRef26, useState as useState42 } from "react";
 import { ArrowDown, ArrowLeft as ArrowLeft3, ArrowRight as ArrowRight2, ArrowUp } from "lucide-react";
 import { jsx as jsx61, jsxs as jsxs49 } from "react/jsx-runtime";
 function useShellKeyboardLayout(visible, mobile) {
-  const panelRef = useRef25(null);
+  const panelRef = useRef26(null);
   const [layout, setLayout] = useState42({ height: 0, inset: 0 });
-  useEffect29(() => {
+  useEffect30(() => {
     const panel = panelRef.current;
     if (!visible || !mobile || !panel) {
       setLayout({ height: 0, inset: 0 });
@@ -18080,7 +18100,7 @@ function ShellTouchControls({ inset, enabled, ctrl, onCtrl, onInput, onFocus }) 
 }
 
 // src/components/shell/TerminalMenu.tsx
-import { useEffect as useEffect30, useLayoutEffect as useLayoutEffect9, useRef as useRef26, useState as useState43 } from "react";
+import { useEffect as useEffect31, useLayoutEffect as useLayoutEffect9, useRef as useRef27, useState as useState43 } from "react";
 import { jsx as jsx62 } from "react/jsx-runtime";
 function TerminalMenu({
   anchor,
@@ -18088,9 +18108,9 @@ function TerminalMenu({
   onClose,
   children
 }) {
-  const ref = useRef26(null);
+  const ref = useRef27(null);
   const [position, setPosition] = useState43(null);
-  const close = useRef26(onClose);
+  const close = useRef27(onClose);
   close.current = onClose;
   useLayoutEffect9(() => {
     const menu = ref.current;
@@ -18106,7 +18126,7 @@ function TerminalMenu({
     setPosition({ left, top });
     menu.querySelector('[role="menuitem"]:not(:disabled), input')?.focus();
   }, [anchor]);
-  useEffect30(() => {
+  useEffect31(() => {
     const outside = (event) => {
       if (!ref.current?.contains(event.target)) close.current();
     };
@@ -18146,7 +18166,7 @@ function TerminalMenu({
 
 // src/components/shell/TerminalTabs.tsx
 import { SquareSplitHorizontal, SquareTerminal, Trash2 as Trash22 } from "lucide-react";
-import { useRef as useRef27 } from "react";
+import { useRef as useRef28 } from "react";
 import { jsx as jsx63, jsxs as jsxs50 } from "react/jsx-runtime";
 var TERMINAL_TABS_NARROW = 46;
 var TERMINAL_TABS_DEFAULT = 148;
@@ -18178,7 +18198,7 @@ function TerminalTabs({
   onContextMenu,
   canSplit
 }) {
-  const list = useRef27(null);
+  const list = useRef28(null);
   const hasText = width >= TERMINAL_TABS_MIDPOINT;
   const order = layout.groups.flatMap((group) => group.shellIds);
   const moveFocus = (id, direction) => {
@@ -18454,7 +18474,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   const [storedLayout, setStoredLayout] = useState44(() => loadTerminalLayout(layoutKey));
   const [runtime, setRuntime] = useState44({});
   const [renamingId, setRenamingId] = useState44(null);
-  const renamingRef = useRef28(null);
+  const renamingRef = useRef29(null);
   const [renameDraft, setRenameDraft] = useState44("");
   const [menu, setMenu] = useState44(null);
   const [tabsWidth, setTabsWidth] = useState44(readTabsWidth);
@@ -18462,19 +18482,19 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   const [focusArmed, setFocusArmed] = useState44(false);
   const [isMobileShell, setIsMobileShell] = useState44(false);
   const [feedback, setFeedback] = useState44(null);
-  const groupsRef = useRef28(null);
-  const paneRefs = useRef28(/* @__PURE__ */ new Map());
-  const createInFlight = useRef28(false);
-  const handledOpenRequest = useRef28(void 0);
-  const pendingAutoCreate = useRef28(openRequest === void 0);
-  const hadLiveShells = useRef28(false);
-  const feedbackTimer = useRef28(null);
+  const groupsRef = useRef29(null);
+  const paneRefs = useRef29(/* @__PURE__ */ new Map());
+  const createInFlight = useRef29(false);
+  const handledOpenRequest = useRef29(void 0);
+  const pendingAutoCreate = useRef29(openRequest === void 0);
+  const hadLiveShells = useRef29(false);
+  const feedbackTimer = useRef29(null);
   const compact = panelControls?.compact ?? isMobileShell;
   const collapsed = panelControls?.collapsed ?? false;
   const panelVisible = isVisible && !collapsed;
   const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(panelVisible, isMobileShell);
   const [ctrlPressed, setCtrlPressed] = useState44(false);
-  const ctrlRef = useRef28(false);
+  const ctrlRef = useRef29(false);
   const transformInput = useCallback18((data) => {
     if (!ctrlRef.current) return data;
     ctrlRef.current = false;
@@ -18487,7 +18507,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   );
   const liveShells = useMemo11(() => shells.filter(isLiveShell), [shells]);
   const liveIds = useMemo11(() => liveShells.map((shell) => shell.id), [liveShells]);
-  const liveIdsRef = useRef28(liveIds);
+  const liveIdsRef = useRef29(liveIds);
   liveIdsRef.current = liveIds;
   const layout = useMemo11(
     () => shellState ? reconcileTerminalLayout(storedLayout, liveIds) : storedLayout,
@@ -18516,7 +18536,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     { id: shell.id, label: labels.get(shell.id) ?? shell.id, status: terminalStatus(shell), detail: `${shell.cwd} \xB7 ${shell.id.slice(0, 8)}` }
   ])), [labels, liveShells, terminalStatus]);
   const activeLabel = activeShell ? labels.get(activeShell.id) ?? null : null;
-  useEffect31(() => {
+  useEffect32(() => {
     if (shellState) saveTerminalLayout(layoutKey, layout);
   }, [layout, layoutKey, shellState]);
   const showFeedback = useCallback18((_tone, text) => {
@@ -18527,7 +18547,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       feedbackTimer.current = null;
     }, 1800);
   }, []);
-  useEffect31(() => () => {
+  useEffect32(() => () => {
     if (feedbackTimer.current !== null) window.clearTimeout(feedbackTimer.current);
   }, []);
   const loadShellState = useCallback18(async () => {
@@ -18541,7 +18561,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       setLoading(false);
     }
   }, [shellAdapter, threadId]);
-  useEffect31(() => {
+  useEffect32(() => {
     setLoading(true);
     void loadShellState();
   }, [loadShellState]);
@@ -18561,7 +18581,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     },
     [loadShellState]
   );
-  const runtimeHandlers = useRef28(/* @__PURE__ */ new Map());
+  const runtimeHandlers = useRef29(/* @__PURE__ */ new Map());
   const runtimeHandler = useCallback18((shellId) => {
     let handler = runtimeHandlers.current.get(shellId);
     if (!handler) {
@@ -18570,7 +18590,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     }
     return handler;
   }, []);
-  const paneRefHandlers = useRef28(/* @__PURE__ */ new Map());
+  const paneRefHandlers = useRef29(/* @__PURE__ */ new Map());
   const paneRef = useCallback18((shellId) => {
     let handler = paneRefHandlers.current.get(shellId);
     if (!handler) {
@@ -18657,23 +18677,23 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
       setError(caught instanceof Error ? caught.message : translate("files.unableToRenameShell"));
     }
   }, [renameDraft, shellAdapter, updateShellEntry]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (!openRequest || openRequest === handledOpenRequest.current) return;
     handledOpenRequest.current = openRequest;
     pendingAutoCreate.current = true;
     setFocusArmed(true);
   }, [openRequest]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (!pendingAutoCreate.current || !panelVisible || !shellState || loading || busy || workspacePathMissing || status === "creating") return;
     pendingAutoCreate.current = false;
     if (liveShells.length === 0) void createTerminal("group");
   }, [busy, createTerminal, liveShells.length, loading, openRequest, panelVisible, shellState, status, workspacePathMissing]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (!shellState || loading) return;
     if (hadLiveShells.current && liveShells.length === 0) onLastTerminalClosed?.();
     hadLiveShells.current = liveShells.length > 0;
   }, [liveShells.length, loading, onLastTerminalClosed, shellState]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (!focusArmed) return;
     const leave = (event) => {
       if (!panelRef.current?.contains(event.target)) setFocusArmed(false);
@@ -18681,12 +18701,12 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     document.addEventListener("focusin", leave);
     return () => document.removeEventListener("focusin", leave);
   }, [focusArmed, panelRef]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (!focusArmed || !panelVisible || isMobileShell || !layout.activeShellId) return;
     const frame = window.requestAnimationFrame(() => paneRefs.current.get(layout.activeShellId)?.focus());
     return () => window.cancelAnimationFrame(frame);
   }, [focusArmed, isMobileShell, layout.activeShellId, panelVisible]);
-  useEffect31(() => {
+  useEffect32(() => {
     if (typeof window.matchMedia !== "function") return;
     const query = window.matchMedia("(max-width: 767px), (hover: none) and (pointer: coarse)");
     const update = () => setIsMobileShell(query.matches);
@@ -18694,7 +18714,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);
-  useEffect31(() => {
+  useEffect32(() => {
     const node = groupsRef.current;
     if (!node) return;
     const observer = new ResizeObserver((entries2) => {
@@ -18730,7 +18750,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
     }
     await activePane()?.reconnect();
   };
-  useEffect31(() => {
+  useEffect32(() => {
     onStateChange?.(buildShellControlState({
       activeRuntime,
       activeShell,
@@ -19163,7 +19183,7 @@ var MemoizedThreadGraphWorkspacePanel = memo8(
 
 // src/components/ExportTranscriptDialog.tsx
 import { Users, Link2, FileCode, Pencil as Pencil3 } from "lucide-react";
-import { useEffect as useEffect32, useMemo as useMemo12, useState as useState45 } from "react";
+import { useEffect as useEffect33, useMemo as useMemo12, useState as useState45 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
 import { Fragment as Fragment19, jsx as jsx66, jsxs as jsxs52 } from "react/jsx-runtime";
 function formatTurnTime(value) {
@@ -19266,7 +19286,7 @@ function ThreadActionsDialog({
   const [effectiveTheme, setEffectiveTheme] = useState45(
     () => typeof document !== "undefined" && !document.documentElement.classList.contains("dark") ? "light" : "dark"
   );
-  useEffect32(() => {
+  useEffect33(() => {
     if (!open) {
       return;
     }
@@ -19281,12 +19301,12 @@ function ThreadActionsDialog({
     setShareDevice(false);
     void onLoadTurns();
   }, [initialMode, onLoadTurns, open]);
-  useEffect32(() => {
+  useEffect33(() => {
     if (open && turns.length > 0) {
       setSelectedTurnIds(new Set(turns.slice(0, 10).map((turn) => turn.turnId)));
     }
   }, [open, turns]);
-  useEffect32(() => {
+  useEffect33(() => {
     if (!open) {
       return;
     }
@@ -19298,7 +19318,7 @@ function ThreadActionsDialog({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [busy, onCancel, open]);
-  useEffect32(() => {
+  useEffect33(() => {
     if (!open) {
       return;
     }
@@ -19698,10 +19718,10 @@ import {
 // src/components/graph-chat/GraphChatThreadChatPanel.tsx
 import {
   useCallback as useCallback19,
-  useEffect as useEffect33,
+  useEffect as useEffect34,
   useLayoutEffect as useLayoutEffect10,
   useMemo as useMemo13,
-  useRef as useRef29,
+  useRef as useRef30,
   useState as useState46
 } from "react";
 import { jsx as jsx67, jsxs as jsxs53 } from "react/jsx-runtime";
@@ -19726,8 +19746,8 @@ function GraphChatThreadChatPanel({
   const [mobileComposerOverlap, setMobileComposerOverlap] = useState46(0);
   const [mobileKeyboardInset, setMobileKeyboardInset] = useState46(0);
   const [mobilePromptFocused, setMobilePromptFocused] = useState46(false);
-  const internalComposerHostRef = useRef29(null);
-  const panelRootRef = useRef29(null);
+  const internalComposerHostRef = useRef30(null);
+  const panelRootRef = useRef30(null);
   const [panelBottomGap, setPanelBottomGap] = useState46(0);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
@@ -19788,7 +19808,7 @@ function GraphChatThreadChatPanel({
     },
     [timelineTailVisibilityChange]
   );
-  useEffect33(() => {
+  useEffect34(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
@@ -19800,7 +19820,7 @@ function GraphChatThreadChatPanel({
       mediaQuery.removeEventListener("change", updateViewport);
     };
   }, []);
-  useEffect33(() => {
+  useEffect34(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -19883,7 +19903,7 @@ function GraphChatThreadChatPanel({
     hasPendingRequests,
     useFloatingMobileComposer
   ]);
-  useEffect33(() => {
+  useEffect34(() => {
     if (!isMobileViewport) {
       setMobilePromptFocused(false);
       return;
@@ -20360,7 +20380,7 @@ function ThreadDetailSurface({
 // src/plugins/PluginProvider.tsx
 import {
   useCallback as useCallback20,
-  useEffect as useEffect34,
+  useEffect as useEffect35,
   useMemo as useMemo15,
   useState as useState47
 } from "react";
@@ -20390,7 +20410,7 @@ function PluginProvider({
       setLoading(false);
     }
   }, [adapter, builtinPlugins]);
-  useEffect34(() => {
+  useEffect35(() => {
     void refresh();
   }, [refresh]);
   const setPluginEnabled = useCallback20(
@@ -20533,7 +20553,7 @@ function PluginProvider({
 }
 
 // src/app-shell/AppShellNavigation.tsx
-import { useEffect as useEffect35, useRef as useRef30, useState as useState48 } from "react";
+import { useEffect as useEffect36, useRef as useRef31, useState as useState48 } from "react";
 import { jsx as jsx70, jsxs as jsxs55 } from "react/jsx-runtime";
 function MenuIcon() {
   const { locale: i18nLocale } = useI18n();
@@ -20602,8 +20622,8 @@ function AppShellNavigationMenu({
 }) {
   const { locale: i18nLocale } = useI18n();
   const shellNav = useAppShellNav();
-  const menuRef = useRef30(null);
-  useEffect35(() => {
+  const menuRef = useRef31(null);
+  useEffect36(() => {
     if (!shellNav?.navOpen) {
       return;
     }
@@ -20704,7 +20724,7 @@ function AppShellSettingsDialog({
   const selectedThemeMode = shellNav?.themeMode ?? "system";
   const effectiveTheme = shellNav?.effectiveTheme ?? "dark";
   const autoCollapseCompletedTurns = shellNav?.autoCollapseCompletedTurns ?? true;
-  useEffect35(() => {
+  useEffect36(() => {
     if (!shellNav?.settingsOpen) {
       return;
     }
@@ -21073,7 +21093,7 @@ function ConversationSearchExcerpt({ text, query }) {
 }
 
 // src/components/workbench/presentation.ts
-import { useCallback as useCallback21, useEffect as useEffect36, useRef as useRef31, useState as useState49 } from "react";
+import { useCallback as useCallback21, useEffect as useEffect37, useRef as useRef32, useState as useState49 } from "react";
 var defaultPresentation = {
   referenceId: null,
   mode: "focus",
@@ -21130,7 +21150,7 @@ function write(scope, value, patch) {
   }
 }
 function useWorkbenchPresentation(scope, contextKey = null) {
-  const owner = useRef31({ scope, contextKey });
+  const owner = useRef32({ scope, contextKey });
   if (owner.current.scope !== scope || owner.current.contextKey !== contextKey)
     owner.current = { scope, contextKey };
   const generation = owner.current;
@@ -21144,7 +21164,7 @@ function useWorkbenchPresentation(scope, contextKey = null) {
   const value = stored.generation === generation ? stored.value : { ...read(scope), ...pending };
   if (stored.generation !== generation)
     setStored({ generation, value, storageFailed: false, pending });
-  useEffect36(() => {
+  useEffect37(() => {
     if (!scope || stored.generation !== generation || !stored.pending) return;
     const storageFailed = write(scope, stored.value, stored.pending);
     setStored(
