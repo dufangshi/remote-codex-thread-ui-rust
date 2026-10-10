@@ -23,9 +23,6 @@ export const workbenchZhCN = {
   "workbench.subagentRefresh": "刷新",
   "workbench.subagentLoading": "加载中…",
 
-  "workbench.startingHostedVM": "正在启动托管虚拟机",
-  "workbench.waitingForTheSupervisorPagesWillResume": "正在等待 Supervisor。页面将自动恢复。",
-  "workbench.check": "检查",
   "workbench.checkingSupervisorAccess": "正在检查 Supervisor 访问权限…",
   "workbench.supervisorAccess": "Supervisor 访问",
   "workbench.unableToReachSupervisor": "无法连接 Supervisor",

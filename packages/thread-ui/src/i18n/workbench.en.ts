@@ -23,9 +23,6 @@ export const workbenchEn = {
   "workbench.subagentRefresh": "Refresh",
   "workbench.subagentLoading": "Loading…",
 
-  "workbench.startingHostedVM": "Starting hosted VM",
-  "workbench.waitingForTheSupervisorPagesWillResume": "Waiting for the supervisor. Pages will resume automatically.",
-  "workbench.check": "Check",
   "workbench.checkingSupervisorAccess": "Checking supervisor access...",
   "workbench.supervisorAccess": "Supervisor Access",
   "workbench.unableToReachSupervisor": "Unable to reach supervisor",
