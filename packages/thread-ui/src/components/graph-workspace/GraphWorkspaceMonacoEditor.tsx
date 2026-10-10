@@ -50,7 +50,7 @@ if (!monaco.languages.getLanguages().some(({ id }) => id === 'json')) {
   });
 }
 
-monaco.editor.defineTheme('remote-codex-dark', {
+monaco.editor.defineTheme('pockymoe-dark', {
   base: 'vs-dark',
   inherit: true,
   rules: [],
@@ -68,7 +68,7 @@ monaco.editor.defineTheme('remote-codex-dark', {
   },
 });
 
-monaco.editor.defineTheme('remote-codex-light', {
+monaco.editor.defineTheme('pockymoe-light', {
   base: 'vs',
   inherit: true,
   rules: [],
@@ -168,8 +168,8 @@ export default function GraphWorkspaceMonacoEditor({
       readOnly: initialReadOnlyRef.current,
       automaticLayout: true,
       theme: initialDarkRef.current
-        ? 'remote-codex-dark'
-        : 'remote-codex-light',
+        ? 'pockymoe-dark'
+        : 'pockymoe-light',
       ariaLabel: translate("files.workspaceEditor", { value1: path }),
       fontFamily:
         '"IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace',
@@ -226,7 +226,7 @@ export default function GraphWorkspaceMonacoEditor({
   }, [content]);
 
   useEffect(() => {
-    monaco.editor.setTheme(dark ? 'remote-codex-dark' : 'remote-codex-light');
+    monaco.editor.setTheme(dark ? 'pockymoe-dark' : 'pockymoe-light');
     editorRef.current?.updateOptions({ readOnly });
   }, [dark, readOnly]);
 

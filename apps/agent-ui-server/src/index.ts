@@ -597,7 +597,7 @@ server.on("error", (error) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-  console.log(`remote-codex agent UI listening on http://127.0.0.1:${port}`);
+  console.log(`pockymoe agent UI listening on http://127.0.0.1:${port}`);
   runtime
     .start()
     .then(async () => {

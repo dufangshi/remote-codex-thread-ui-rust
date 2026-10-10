@@ -4,12 +4,12 @@ import type {
   ThreadArtifactDto,
   ThreadHistoryItemDto,
   ThreadTurnDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
-export type RemoteCodexPluginManifest = PluginManifestDto;
+export type PockymoePluginManifest = PluginManifestDto;
 
 export interface RegisteredPlugin {
-  manifest: RemoteCodexPluginManifest;
+  manifest: PockymoePluginManifest;
   enabledByDefault?: boolean;
   source?: 'builtin' | 'imported';
 }

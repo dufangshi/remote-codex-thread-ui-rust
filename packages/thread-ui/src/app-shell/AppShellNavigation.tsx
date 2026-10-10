@@ -1,7 +1,7 @@
 import { translate, useI18n } from '../i18n';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
-import type { ImportPluginInput } from '@remote-codex/shared';
+import type { ImportPluginInput } from '@pockymoe/shared';
 import { usePlugins } from '../plugins/usePlugins';
 import { type ThemeMode, useAppShellNav } from './AppShellNavContext';
 
@@ -146,7 +146,7 @@ export function AppShellNavigationMenu({
     >
       <div>
         <p className="text-base font-semibold tracking-wide text-[var(--theme-accent-strong)]">
-          Remote Codex
+          Pockymoe
         </p>
         <p className="mt-1 text-xs uppercase tracking-[0.24em] text-[var(--theme-fg-muted)]">
           {translate("files.navigation")}</p>

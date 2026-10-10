@@ -1,4 +1,4 @@
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 
 import type { TimelineTurn } from './timelineItems';
 

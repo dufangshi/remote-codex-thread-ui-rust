@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
   ThreadHistoryItemDetailDto,
   ThreadHistoryItemDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import { useDeferredHistoryDetail } from './useDeferredHistoryDetail';
 
 type HookInput = Parameters<typeof useDeferredHistoryDetail>[0];

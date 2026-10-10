@@ -29,7 +29,7 @@ import {
   XCircle,
 } from 'lucide-react';
 
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 import { usePlugins } from '../../plugins/usePlugins';
 import {
   GraphChatLinkifiedPlainText,

@@ -1,7 +1,7 @@
 import { translate, useI18n } from '../../i18n';
 import { useEffect, useRef, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 import {
   Accordion,
   AccordionContent,
@@ -131,7 +131,7 @@ export function GraphToolUsagePanel({
             type="button"
             className="inline-flex items-center gap-1 rounded px-2 py-1 text-[11px] text-[var(--theme-fg-muted)] opacity-60"
             disabled
-            title={translate("files.remoteCodexStreamsToolHistoryFromThread")}
+            title={translate("files.pockymoeStreamsToolHistoryFromThread")}
           >
             <RefreshCw className="h-3 w-3" />
             {translate("files.reload")}</button>

@@ -5,8 +5,8 @@ import { act, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { terminalPluginManifest } from '@remote-codex/plugin-terminal';
-import type { PluginDto } from '@remote-codex/shared';
+import { terminalPluginManifest } from '@pockymoe/plugin-terminal';
+import type { PluginDto } from '@pockymoe/shared';
 import { PluginProvider, type PluginProviderAdapter } from './PluginProvider';
 import type { PluginContextValue } from './plugin-context';
 import type { FrontendPluginModule } from './plugin-types';

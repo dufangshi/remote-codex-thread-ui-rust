@@ -26,7 +26,7 @@ import {
   X,
 } from "lucide-react";
 
-import type { AgentRuntimeStatusDto, ThreadDto } from "@remote-codex/shared";
+import type { AgentRuntimeStatusDto, ThreadDto } from "@pockymoe/shared";
 import { useAppShellNav } from "../app-shell/AppShellNavContext";
 import {
   formatShortTimestamp,
@@ -1021,7 +1021,7 @@ export function ThreadWorkspaceLayout({
           <div>
             <button disabled={workbench.favoriteBusy} onClick={event => { workbench.onToggleFavorite(); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Star size={14} fill={workbench.favorite ? 'currentColor' : 'none'} />{workbench.favorite ? translate("files.unstarThread") : translate("files.starThread")}</button>
             {onRenameThread && <button onClick={event => { const thread = threads.find(t => t.id === currentThreadId); if (thread) beginRenameThread(thread); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Pencil size={14} />{translate("files.renameThread_1ebf84")}</button>}
-            <button disabled={!currentThreadId} onClick={() => currentThreadId && void copySessionValue(currentThreadId, translate("files.remoteCodexSessionID"))}><Copy size={14} />{translate("files.copyRemoteCodexSessionID")}</button>
+            <button disabled={!currentThreadId} onClick={() => currentThreadId && void copySessionValue(currentThreadId, translate("files.pockymoeSessionID"))}><Copy size={14} />{translate("files.copyPockymoeSessionID")}</button>
             <button disabled={!workbench.harnessSessionId} title={workbench.harnessSessionId ?? translate("files.theHarnessHasNotAssignedASession")} onClick={() => workbench.harnessSessionId && void copySessionValue(workbench.harnessSessionId, translate("files.harnessSessionID"))}><Copy size={14} />{translate("files.copyHarnessSessionID")}</button>
             {workbench.harnessSessionUrl && <button onClick={() => void copySessionValue(workbench.harnessSessionUrl!, translate("files.codexDeeplink"))}><Copy size={14} />{translate("files.copyCodexDeeplink")}</button>}
             {onDeleteThread && <button onClick={event => { const thread = threads.find(t => t.id === currentThreadId); if (thread) onDeleteThread(thread); event.currentTarget.closest('details')?.removeAttribute('open'); }}><Trash2 size={14} />{translate("files.deleteThread_d6d95f")}</button>}

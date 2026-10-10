@@ -3,7 +3,7 @@ import type {
   ShellSessionDto,
   ShellStatusDto,
   ThreadShellStateDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import { basenameFromPath, buildPromptLabel } from './shellPresentation';
 

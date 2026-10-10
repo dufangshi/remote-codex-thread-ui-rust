@@ -4,7 +4,7 @@ import type {
   ImportPluginInput,
   PluginDto,
   ThreadArtifactDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type {
   ArtifactRenderContext,
   FrontendPluginModule,

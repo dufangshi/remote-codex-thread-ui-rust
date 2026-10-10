@@ -9,7 +9,7 @@ import type {
   ThreadExportFormatDto,
   ThreadExportTurnOptionDto,
   ThreadExportTurnOptionsDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 type TurnSelectionMode = 'latest-3' | 'latest-10' | 'latest-20' | 'all-loaded' | 'custom';
 type ThreadActionMode = ThreadExportFormatDto | 'share' | 'link';

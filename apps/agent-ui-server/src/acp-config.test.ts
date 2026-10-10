@@ -123,7 +123,7 @@ test("resolves a requested reasoning effort back to the ACP value id", () => {
   assert.equal(resolveAcpThoughtValue(mapped, "missing"), null);
 });
 
-test("maps usage_update onto the remoteCodex context window DTO", () => {
+test("maps usage_update onto the Pockymoe context window DTO", () => {
   const usage = mapAcpUsageUpdate(
     { used: 32_000, size: 272_000 },
     "2026-08-27T00:00:00.000Z",

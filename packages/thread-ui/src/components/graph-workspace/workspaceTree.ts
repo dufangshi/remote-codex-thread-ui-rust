@@ -5,7 +5,7 @@ import type {
   ThreadArtifactDto,
   ThreadDetailDto,
   ThreadHistoryItemDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type {
   ThreadWorkspaceFilePreview,
   ThreadWorkspaceTreeNode,

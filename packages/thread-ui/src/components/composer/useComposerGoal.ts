@@ -8,7 +8,7 @@ import {
 import type {
   ThreadGoalDto,
   ThreadGoalStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import {
   formatGoalTokenBudgetThousands,
   parseGoalTokenBudgetThousands,

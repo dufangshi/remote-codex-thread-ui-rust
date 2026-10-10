@@ -1,7 +1,7 @@
 import { getLocale } from '../i18n';
 import { translate, useI18n } from '../i18n';
 import { ChevronRight } from 'lucide-react';
-import type { ThreadTurnDto } from '@remote-codex/shared';
+import type { ThreadTurnDto } from '@pockymoe/shared';
 import { GraphChatMessageFrame } from './graph-chat/GraphChatMessageFrame';
 import { GraphChatMessageContent } from './graph-chat/GraphChatMessageContent';
 import { GraphChatUserMessageBody } from './graph-chat/GraphChatMessageBody';

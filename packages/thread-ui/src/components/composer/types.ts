@@ -1,4 +1,4 @@
-import type { CreateThreadHookInput } from '@remote-codex/shared';
+import type { CreateThreadHookInput } from '@pockymoe/shared';
 
 export interface SlashPanelState<T> {
   status: 'idle' | 'loading' | 'ready' | 'failed';

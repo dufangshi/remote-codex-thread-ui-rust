@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ThreadTurnDto } from '@remote-codex/shared';
+import type { ThreadTurnDto } from '@pockymoe/shared';
 import { transcriptSnapshot } from './PublicTranscript';
 
 describe('transcriptSnapshot', () => {

@@ -1,6 +1,6 @@
 import type {
   PromptAttachmentManifestEntryDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 export interface PromptAttachmentUpload
   extends PromptAttachmentManifestEntryDto {
@@ -14,7 +14,7 @@ export type SendPromptInput = {
 };
 
 export interface ThreadShellControlState {
-  status: import('@remote-codex/shared').ShellStatusDto;
+  status: import('@pockymoe/shared').ShellStatusDto;
   connectionButtonDisabled: boolean;
   connectionButtonLabel: string;
   shellInputEnabled: boolean;

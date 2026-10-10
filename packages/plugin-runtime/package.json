@@ -1,5 +1,5 @@
 {
-  "name": "@remote-codex/plugin-runtime",
+  "name": "@pockymoe/plugin-runtime",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -17,7 +17,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@remote-codex/shared": "workspace:*"
+    "@pockymoe/shared": "workspace:*"
   },
   "devDependencies": {
     "vitest": "^3.1.1"

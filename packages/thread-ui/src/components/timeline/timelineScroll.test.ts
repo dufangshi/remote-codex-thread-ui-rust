@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 import {
   FOLLOW_TAIL_THRESHOLD_PX,
   buildSyntheticLiveTurn,

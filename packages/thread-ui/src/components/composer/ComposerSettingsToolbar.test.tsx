@@ -10,7 +10,7 @@ import type {
   ReasoningEffortDto,
   SandboxModeDto,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import type { SettingsMenu } from './types';
 import { ComposerSettingsToolbar } from './ComposerSettingsToolbar';

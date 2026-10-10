@@ -1,5 +1,5 @@
 {
-  "name": "remote-codex-thread-ui-workspace",
+  "name": "pockymoe-thread-ui-workspace",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,11 +12,11 @@
     "typecheck": "pnpm -r --if-present typecheck",
     "lint": "pnpm -r --if-present lint",
     "test": "pnpm -r --if-present test",
-    "dev": "pnpm --filter @remote-codex/thread-ui-playground dev",
-    "preview": "pnpm --filter @remote-codex/thread-ui-playground preview",
-    "agent-ui:build": "pnpm --filter @remote-codex/agent-ui-web build",
-    "agent-ui:test": "pnpm --filter @remote-codex/agent-ui-server test",
-    "agent-ui:start": "pnpm --filter @remote-codex/agent-ui-server start"
+    "dev": "pnpm --filter @pockymoe/thread-ui-playground dev",
+    "preview": "pnpm --filter @pockymoe/thread-ui-playground preview",
+    "agent-ui:build": "pnpm --filter @pockymoe/agent-ui-web build",
+    "agent-ui:test": "pnpm --filter @pockymoe/agent-ui-server test",
+    "agent-ui:start": "pnpm --filter @pockymoe/agent-ui-server start"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

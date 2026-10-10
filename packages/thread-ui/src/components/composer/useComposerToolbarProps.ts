@@ -11,7 +11,7 @@ import type {
   ThreadMcpServersDto,
   ThreadSkillsDto,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import type { ThreadShellControlState } from '../../types';
 import {

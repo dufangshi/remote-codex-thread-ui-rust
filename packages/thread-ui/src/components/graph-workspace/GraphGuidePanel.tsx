@@ -93,7 +93,7 @@ export function GraphGuidePanel() {
       <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-6">
         <Accordion
           type="multiple"
-          defaultValue={['start', 'workspace', 'remote-codex']}
+          defaultValue={['start', 'workspace', 'pockymoe']}
           className="space-y-0"
         >
         <GuideAccordionItem
@@ -133,7 +133,7 @@ export function GraphGuidePanel() {
               <p className="text-[11px] font-medium text-[var(--theme-fg)]">
                 {translate("files.newFilesAndFolders")}</p>
               <p className="text-[11px] leading-5 text-[var(--theme-fg-muted)]">
-                {translate("files.remoteCodexNormallyCreatesFilesThroughTools")}</p>
+                {translate("files.pockymoeNormallyCreatesFilesThroughTools")}</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
@@ -222,7 +222,7 @@ export function GraphGuidePanel() {
                 {translate("files.chatControls")}</p>
               <GuideBullets
                 items={[
-                  translate("files.newChatCreatesAFreshRemoteCodex"),
+                  translate("files.newChatCreatesAFreshPockymoe"),
                   translate("files.interruptCompactGoalControlsAndModelControls"),
                   translate("files.shellViewStaysAvailableWhenAShell"),
                 ]}
@@ -232,8 +232,8 @@ export function GraphGuidePanel() {
         </GuideAccordionItem>
 
         <GuideAccordionItem
-          value="remote-codex"
-          title={translate("files.remoteCodexExtras")}
+          value="pockymoe"
+          title={translate("files.pockymoeExtras")}
           icon={<Code2 className="h-3 w-3" />}
         >
           <GuideBullets

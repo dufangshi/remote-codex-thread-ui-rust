@@ -12,7 +12,7 @@ import type {
   ThreadHooksDto,
   ThreadMcpServersDto,
   ThreadSkillsDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import type { SlashPanelState, SlashPanelView } from './types';
 import { ComposerSlashToolboxMenu } from './ComposerSlashToolboxMenu';

@@ -1,6 +1,6 @@
 import * as Slider from '@radix-ui/react-slider';
 import { useEffect, useState, type CSSProperties } from 'react';
-import type { ModelOptionDto, ReasoningEffortDto } from '@remote-codex/shared';
+import type { ModelOptionDto, ReasoningEffortDto } from '@pockymoe/shared';
 import { translate } from '../../i18n';
 import { formatReasoningEffortLabel } from './composerUtils';
 

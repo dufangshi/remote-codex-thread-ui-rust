@@ -13,9 +13,9 @@ The package exports `./workspace-editor.worker` so bundlers can create the worke
 Validation in this isolated UI worktree:
 
 ```bash
-corepack pnpm --filter @remote-codex/thread-ui typecheck
-corepack pnpm --filter @remote-codex/thread-ui exec vitest run src/components/graph-workspace/explorer/workspaceDocuments.test.ts src/i18n/i18n.test.tsx
-corepack pnpm --filter @remote-codex/thread-ui build
+corepack pnpm --filter @pockymoe/thread-ui typecheck
+corepack pnpm --filter @pockymoe/thread-ui exec vitest run src/components/graph-workspace/explorer/workspaceDocuments.test.ts src/i18n/i18n.test.tsx
+corepack pnpm --filter @pockymoe/thread-ui build
 ```
 
 All pass (3 draft-state tests and 9 i18n tests). Built tracked dist is included. The host refreshed its own file dependency and compared all 33 dist files by hash. Its selected browser tests cover real save/conflict receipts, A/B/A undo, hidden-pane unload protection, later typing during lost save responses and mobile actions. See the host's `docs/narrafork-file-editor-implementation.zh.md` for precise HTTP, filesystem limits and screenshots.

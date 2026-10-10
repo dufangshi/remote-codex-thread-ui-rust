@@ -34,7 +34,7 @@ import type {
   SandboxModeDto,
   UpdateThreadHookInput,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ThreadShellControlState } from '../types';
 import type { PromptAttachmentUpload } from '../types';
 import type {

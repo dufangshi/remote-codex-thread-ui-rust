@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { PluginDto } from '@remote-codex/shared';
+import type { PluginDto } from '@pockymoe/shared';
 import { builtinFrontendPlugins } from '../builtin-plugins';
 import { createDefaultPluginContextValue, mergePluginState } from './plugin-context';
 

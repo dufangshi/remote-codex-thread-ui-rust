@@ -3,7 +3,7 @@ import type {
   AgentRuntimeStatusDto,
   ThreadDetailDto,
   ThreadDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 const now = new Date('2026-06-08T14:20:00.000Z').toISOString();
 
@@ -222,8 +222,8 @@ export const mockDetail: ThreadDetailDto = {
         {
           id: 'item-command-2',
           kind: 'commandExecution',
-          text: 'pnpm --filter @remote-codex/thread-ui test',
-          previewText: 'pnpm --filter @remote-codex/thread-ui test',
+          text: 'pnpm --filter @pockymoe/thread-ui test',
+          previewText: 'pnpm --filter @pockymoe/thread-ui test',
           status: 'completed',
           transcriptOrder: 8,
           sourceTurnId: 'turn-2',

@@ -17,7 +17,7 @@ import type {
   ThreadDetailDto,
   ThreadHistoryItemDto,
   ThreadDto,
-} from "@remote-codex/shared";
+} from "@pockymoe/shared";
 import type { ThreadDetailUiAdapter } from "./adapters";
 import type { ThemeMode } from "./app-shell/AppShellNavContext";
 import {

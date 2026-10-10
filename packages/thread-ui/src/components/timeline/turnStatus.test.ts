@@ -4,7 +4,7 @@ import {
   deriveDisplayedLivePlan,
   normalizePlanStepStatus,
 } from './turnStatus';
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 
 const basePlan = {
   turnId: 'turn-1',

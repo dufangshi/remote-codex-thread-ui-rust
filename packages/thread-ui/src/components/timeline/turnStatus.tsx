@@ -2,7 +2,7 @@ import { translate, useI18n } from '../../i18n';
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../graph-ui/Tooltip';
 
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 
 import {
   isActiveTurnStatus,

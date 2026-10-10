@@ -12,7 +12,7 @@ import type {
   PluginDto,
   UpdatePluginInput,
   ThreadArtifactDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import {
   PluginContext,
   mergePluginState,

@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { AgentHookDto } from '@remote-codex/shared';
+import type { AgentHookDto } from '@pockymoe/shared';
 import {
   FALLBACK_HOOK_COMMAND,
   useComposerHookConfig,

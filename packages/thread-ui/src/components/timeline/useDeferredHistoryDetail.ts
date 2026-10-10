@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   ThreadHistoryItemDetailDto,
   ThreadHistoryItemDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 export interface ExpandedTextState {
   title: string;

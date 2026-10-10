@@ -6,7 +6,7 @@ import type {
   AgentRuntimeStatusDto,
   ThreadArtifactDto,
   ThreadDetailDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ThreadWorkspaceAdapter } from '../../../adapters';
 import {
   ancestorDirectoryPaths,

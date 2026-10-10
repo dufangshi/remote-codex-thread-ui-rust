@@ -4,7 +4,7 @@ import type {
   ThreadActionRequestDto,
   ThreadActivityNoteDto,
   ThreadAnsweredRequestNoteDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { TimelineTurn } from './timelineItems';
 import {
   buildActivityNoteAnchors,

@@ -1,6 +1,6 @@
 import { useCallback, type MutableRefObject } from 'react';
 
-import type { PromptAttachmentKindDto } from '@remote-codex/shared';
+import type { PromptAttachmentKindDto } from '@pockymoe/shared';
 
 import {
   buildAttachmentInsertionDraft,

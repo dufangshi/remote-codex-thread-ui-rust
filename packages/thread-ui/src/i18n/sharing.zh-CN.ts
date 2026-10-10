@@ -19,7 +19,7 @@ export const sharingZhCN = {
   "sharing.noVisitsRecordedYet": "尚无访问记录。",
   "sharing.thisPersonSharedAccessWithYou": "此用户向你共享了访问权限。",
   "sharing.youSharedAccessWithThisPerson": "你向此用户共享了访问权限。",
-  "sharing.remoteCodexAccount": "Remote Codex 账号",
+  "sharing.pockymoeAccount": "Pockymoe 账号",
   "sharing.linkCreatedCopyItUsingTheCopy": "链接已创建。使用复制按钮复制，或选择 URL。",
   "sharing.selectAtLeastOneTurn": "请至少选择一个轮次。",
   "sharing.unableToEnableLiveSharingMakeSure": "无法启用实时共享。请确认设备的 Supervisor 已更新。{{value1}}",

@@ -1,16 +1,16 @@
-# Remote Codex Thread UI
+# Pockymoe Thread UI
 
-Standalone workspace for the Remote Codex thread surface, app shell, built-in UI plugins, and Treer ACP Agent UI recipe.
+Standalone workspace for the Pockymoe thread surface, app shell, built-in UI plugins, and Treer ACP Agent UI recipe.
 
-The shared packages remain UI-only. Runtime integrations translate provider events into the shared thread DTOs consumed by `@remote-codex/thread-ui`. The Treer recipe is a separate app boundary that hosts an ACP runtime and exposes the same surface through `treer.agent-interface/v1`.
+The shared packages remain UI-only. Runtime integrations translate provider events into the shared thread DTOs consumed by `@pockymoe/thread-ui`. The Treer recipe is a separate app boundary that hosts an ACP runtime and exposes the same surface through `treer.agent-interface/v1`.
 
 ## Packages
 
-- `@remote-codex/thread-ui`: React thread/chat/artifact/settings surface.
-- `@remote-codex/shared`: Current DTO contract source copied from Remote Codex. This should be narrowed
-  into a dedicated `@remote-codex/thread-ui-contracts` package before publishing externally.
-- `@remote-codex/plugin-runtime`: Shared plugin/artifact helpers.
-- `@remote-codex/plugin-terminal`: Built-in terminal plugin manifest.
+- `@pockymoe/thread-ui`: React thread/chat/artifact/settings surface.
+- `@pockymoe/shared`: Current DTO contract source copied from Pockymoe. This should be narrowed
+  into a dedicated `@pockymoe/thread-ui-contracts` package before publishing externally.
+- `@pockymoe/plugin-runtime`: Shared plugin/artifact helpers.
+- `@pockymoe/plugin-terminal`: Built-in terminal plugin manifest.
 
 ## Apps
 
@@ -44,7 +44,7 @@ pnpm dev
 ```
 
 The playground is the default place to redesign the UI toward a GraphChat-like product surface without
-pulling in the full Remote Codex control-plane runtime.
+pulling in the full Pockymoe control-plane runtime.
 
 ## Boundary
 

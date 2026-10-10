@@ -241,7 +241,7 @@ export function MatterWorkbench({
         <a
           className="matter-brand"
           href={homeHref}
-          aria-label={translate("workbench.remoteCodexHome")}
+          aria-label={translate("workbench.pockymoeHome")}
         >
           r<span>c</span>
         </a>
@@ -281,7 +281,7 @@ export function MatterWorkbench({
         >
           <PanelLeft />
         </button>
-        <span className="matter-topbar-brand">Remote Codex</span>
+        <span className="matter-topbar-brand">Pockymoe</span>
         <span className="matter-topbar-separator" />
         <button aria-label={translate("workbench.goBack")} onClick={() => history.back()}>
           <ArrowLeft />

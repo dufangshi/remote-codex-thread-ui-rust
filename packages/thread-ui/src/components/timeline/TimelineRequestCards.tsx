@@ -6,7 +6,7 @@ import type {
   ThreadActionRequestDto,
   ThreadActivityNoteDto,
   ThreadAnsweredRequestNoteDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import {
   formatLongTimestamp,
   formatShortTimestamp,

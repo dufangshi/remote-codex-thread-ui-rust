@@ -19,7 +19,7 @@ export const sharingEn = {
   "sharing.noVisitsRecordedYet": "No visits recorded yet.",
   "sharing.thisPersonSharedAccessWithYou": "This person shared access with you.",
   "sharing.youSharedAccessWithThisPerson": "You shared access with this person.",
-  "sharing.remoteCodexAccount": "Remote Codex account",
+  "sharing.pockymoeAccount": "Pockymoe account",
   "sharing.linkCreatedCopyItUsingTheCopy": "Link created. Copy it using the copy button, or select the URL.",
   "sharing.selectAtLeastOneTurn": "Select at least one turn.",
   "sharing.unableToEnableLiveSharingMakeSure": "Unable to enable live sharing. Make sure this device's Supervisor is up to date. {{value1}}",

@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../../i18n';
-import type { ThreadSkillsDto } from '@remote-codex/shared';
+import type { ThreadSkillsDto } from '@pockymoe/shared';
 
 import { ClipboardIcon, skillScopeLabel } from './composerPresentation';
 import type { SlashPanelState } from './types';

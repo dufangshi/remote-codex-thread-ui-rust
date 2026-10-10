@@ -10,7 +10,7 @@ import type {
   ShellEventEnvelope,
   ShellSessionDto,
   ShellStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type {
   ShellSocketConnection,
   ThreadShellAdapter,

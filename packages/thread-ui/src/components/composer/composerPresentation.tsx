@@ -9,7 +9,7 @@ import type {
   ThreadMcpServersDto,
   ThreadSkillsDto,
   UpdateThreadHookInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import { clampPercent } from './composerUtils';
 

@@ -12,7 +12,7 @@ import {
 import type {
   ThreadTurnTokenBreakdownDto,
   ThreadTurnPriceEstimateDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../graph-ui/Tooltip';
 import { formatCompactTokenCount, formatCompactUsd } from './tokenFormatting';
 

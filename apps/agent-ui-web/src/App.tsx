@@ -7,14 +7,14 @@ import type {
   ThreadDetailDto,
   ThreadDto,
   UpdateThreadSettingsInput,
-} from "@remote-codex/shared";
+} from "@pockymoe/shared";
 import {
   AppShellNavContext,
   PluginProvider,
   ThreadDetailSurface,
   type AppShellNavContextValue,
   type ThreadDetailUiAdapter,
-} from "@remote-codex/thread-ui";
+} from "@pockymoe/thread-ui";
 
 import { api, connectEvents, resolvePageHref } from "./api";
 

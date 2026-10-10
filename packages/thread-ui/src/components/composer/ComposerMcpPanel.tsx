@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../../i18n';
-import type { ThreadMcpServersDto } from '@remote-codex/shared';
+import type { ThreadMcpServersDto } from '@pockymoe/shared';
 
 import { authStatusLabel } from './composerPresentation';
 import type { McpPanelMode, SlashPanelState } from './types';

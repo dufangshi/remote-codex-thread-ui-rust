@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type {
   CollaborationModeDto,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import { deriveComposerSettingsUpdateDecision } from './composerUtils';
 
 export interface UseComposerSettingsActionsInput {

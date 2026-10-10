@@ -1,5 +1,5 @@
 {
-  "name": "Remote Codex Agent UI",
+  "name": "Pockymoe Agent UI",
   "description": "Generic Treer iframe UI over Agent Client Protocol. One recipe for Codex, Grok, Cursor, Claude, and other ACP agents. Installs an ACP adapter when the harness is not native ACP.",
   "source": {
     "git": "https://github.com/dufangshi/remote-codex-thread-ui.git",

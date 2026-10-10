@@ -4,7 +4,7 @@ import type {
   AgentHookEventNameDto,
   ThreadHooksDto,
   UpdateThreadHookInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import {
   editableHookTarget,

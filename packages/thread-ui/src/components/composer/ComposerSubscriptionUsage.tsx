@@ -1,7 +1,7 @@
 import { getLocale } from '../../i18n';
 import { translate, useI18n } from '../../i18n';
 import { useEffect, useRef, useState } from 'react';
-import type { AgentSubscriptionUsageDto } from '@remote-codex/shared';
+import type { AgentSubscriptionUsageDto } from '@pockymoe/shared';
 
 function resetLabel(value: string | null) {
   if (!value) return translate("chat.resetTimeUnavailable");

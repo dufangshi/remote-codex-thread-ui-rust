@@ -4,7 +4,7 @@ import type {
   ThreadGoalDto,
   ThreadGoalStatusDto,
   UpdateThreadGoalInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import type { SlashPanelState } from './types';
 

@@ -5,7 +5,7 @@ import type {
   SandboxModeDto,
   ThreadContextUsageDto,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ReactNode } from 'react';
 
 import { InputGroupButton } from '../graph-ui/InputGroup';

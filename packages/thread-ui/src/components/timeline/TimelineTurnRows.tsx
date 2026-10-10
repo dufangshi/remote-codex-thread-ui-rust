@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 
 import type { ThreadTimelineAdapter } from '../../adapters';
 import {

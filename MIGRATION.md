@@ -1,6 +1,6 @@
 # Migration Notes
 
-This workspace was split from `/home/u/dev/remoteCodex-main` on branch `main` at
+This workspace was split from `/home/u/dev/pockymoe-main` on branch `main` at
 commit `66b2317`, including the local uncommitted package changes present in that
 worktree at extraction time.
 
@@ -20,7 +20,7 @@ worktree at extraction time.
 
 ## Intentional Temporary Compromise
 
-`@remote-codex/shared` is still copied in as the DTO source. This keeps the first
+`@pockymoe/shared` is still copied in as the DTO source. This keeps the first
 extraction behavior-compatible and avoids changing thread UI contracts while preparing
 for visual work.
 
@@ -28,7 +28,7 @@ Before publishing this as a durable external package, narrow it into a UI-specif
 contract package such as:
 
 ```text
-@remote-codex/thread-ui-contracts
+@pockymoe/thread-ui-contracts
 ```
 
 That package should contain only the DTOs required by:

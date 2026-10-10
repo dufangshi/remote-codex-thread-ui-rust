@@ -1,7 +1,7 @@
 import type {
   PluginDto,
   PluginManifestDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { RegisteredPlugin } from './types';
 
 export class PluginRegistry {

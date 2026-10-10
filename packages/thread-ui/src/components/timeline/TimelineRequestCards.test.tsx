@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import type { ThreadActionRequestDto } from "@remote-codex/shared";
+import type { ThreadActionRequestDto } from "@pockymoe/shared";
 import { flushSync } from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";

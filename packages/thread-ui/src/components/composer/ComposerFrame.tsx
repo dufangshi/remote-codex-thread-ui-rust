@@ -4,7 +4,7 @@ import type {
   ReactNode,
 } from 'react';
 
-import type { AgentSubscriptionUsageDto, PromptAttachmentKindDto } from '@remote-codex/shared';
+import type { AgentSubscriptionUsageDto, PromptAttachmentKindDto } from '@pockymoe/shared';
 import { useCompactComposer } from './useCompactComposer';
 import { InputGroup } from '../graph-ui/InputGroup';
 import { ComposerHiddenAttachmentInputs } from './ComposerHiddenAttachmentInputs';

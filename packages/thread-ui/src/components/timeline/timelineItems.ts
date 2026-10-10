@@ -1,6 +1,6 @@
 import { translate, useI18n } from '../../i18n';
-import { mergeThreadHistoryItem } from '@remote-codex/shared';
-import type { ThreadHistoryItemDto, ThreadTurnDto } from "@remote-codex/shared";
+import { mergeThreadHistoryItem } from '@pockymoe/shared';
+import type { ThreadHistoryItemDto, ThreadTurnDto } from "@pockymoe/shared";
 
 export interface CommandHistoryItem extends ThreadHistoryItemDto {
   kind: "commandExecution";

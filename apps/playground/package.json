@@ -1,5 +1,5 @@
 {
-  "name": "@remote-codex/thread-ui-playground",
+  "name": "@pockymoe/thread-ui-playground",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,10 +10,10 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
-    "@remote-codex/plugin-runtime": "workspace:*",
-    "@remote-codex/plugin-terminal": "workspace:*",
-    "@remote-codex/shared": "workspace:*",
-    "@remote-codex/thread-ui": "workspace:*",
+    "@pockymoe/plugin-runtime": "workspace:*",
+    "@pockymoe/plugin-terminal": "workspace:*",
+    "@pockymoe/shared": "workspace:*",
+    "@pockymoe/thread-ui": "workspace:*",
     "@vitejs/plugin-react": "^4.3.4",
     "vite": "^6.3.2",
     "react": "^19.1.0",

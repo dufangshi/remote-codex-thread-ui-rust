@@ -1,9 +1,9 @@
 ---
-name: install-remote-codex-agent-ui
-description: Install the Remote Codex generic ACP Agent UI as Treer command Agents. Use when asked to install, import, or apply the Remote Codex Agent UI recipe from git.
+name: install-pockymoe-agent-ui
+description: Install the Pockymoe generic ACP Agent UI as Treer command Agents. Use when asked to install, import, or apply the Pockymoe Agent UI recipe from git.
 ---
 
-# Install Remote Codex Agent UI
+# Install Pockymoe Agent UI
 
 You are the **installer**. The thing you create is a different **command** Agent
 for each ACP harness. Do not run the ACP server or UI in this process.
@@ -33,7 +33,7 @@ the human which agents to install. Do not invent a second install path.
 ```bash
 REPO_URL="$(python3 -c 'import json; print(json.load(open("treer-agent.json"))["source"]["git"])')"
 REF="$(python3 -c 'import json; print(json.load(open("treer-agent.json"))["source"]["ref"])')"
-DEST="${TREER_RECIPE_DIR:-$PWD/remote-codex-thread-ui}"
+DEST="${TREER_RECIPE_DIR:-$PWD/pockymoe-thread-ui}"
 if [ ! -f "$DEST/scripts/apply.sh" ]; then
   git clone --depth 1 --branch "$REF" "$REPO_URL" "$DEST"
 fi

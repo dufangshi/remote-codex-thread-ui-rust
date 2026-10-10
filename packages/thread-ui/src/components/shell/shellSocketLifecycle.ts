@@ -1,7 +1,7 @@
 import type {
   ShellEventEnvelope,
   ShellSessionDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import type {
   NormalizedShellOutputEvent,

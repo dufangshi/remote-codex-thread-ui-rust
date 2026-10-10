@@ -1,4 +1,4 @@
-# Remote Codex Thread UI Code Review And Optimization Plan
+# Pockymoe Thread UI Code Review And Optimization Plan
 
 Date: 2026-06-10
 
@@ -17,14 +17,14 @@ Existing working tree note:
 
 ## Validation Results
 
-- Initial review: `pnpm typecheck` passed, `pnpm test` passed with only plugin-runtime coverage, and `pnpm lint` failed in `@remote-codex/thread-ui`.
+- Initial review: `pnpm typecheck` passed, `pnpm test` passed with only plugin-runtime coverage, and `pnpm lint` failed in `@pockymoe/thread-ui`.
 - Current implementation checkpoint: full workspace `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm build` pass after the latest composer prompt slot split, shell socket side-effect split, secondary built-in plugin entrypoint, bundle-boundary changes, and playground smoke test.
 - Current test coverage includes plugin-runtime artifact extraction plus thread-ui shell snapshot, shell presentation, shell terminal DOM helpers, shell state/control derivation, shell socket lifecycle decision helpers, shell socket side-effect application helpers, timeline item derivation, timeline scroll boundary helpers, timeline scroll/load-earlier hook behavior, timeline token formatting, request/activity note anchoring, deferred history detail loading, composer utility, composer presentation, contenteditable prompt helpers, composer draft-sync tests, composer prompt slot assembly, composer menu lifecycle tests, composer attachment preview URL lifecycle tests, extracted composer slash-panel tests, extracted composer shell tool controls, built-in plugin artifact/inline renderer smoke tests, and playground smoke coverage for render/menu, fake-adapter shell create/attach, plus timeline tail-follow and jump-to-latest behavior.
 
 Implementation checkpoint completed on 2026-06-10:
 
 - Restored lint to green without suppressing the relevant hook/dead-code issues.
-- Fixed `plugin-runtime` package boundary imports to use `@remote-codex/shared`.
+- Fixed `plugin-runtime` package boundary imports to use `@pockymoe/shared`.
 - Extracted shell snapshot/output utilities into `components/shell/shellSnapshot.ts` with focused tests.
 - Extracted timeline item preparation/grouping/live-output utilities into `components/timeline/timelineItems.ts` with focused tests.
 - Extracted timeline token and price formatting plus token summary UI into `components/timeline/tokenFormatting.tsx` with focused tests.
@@ -97,10 +97,10 @@ Implementation checkpoint completed on 2026-06-10:
 - Extended `ShellPane` fake-adapter coverage to backend terminal resize synchronization, asserting `refreshLayout({ syncBackendSize: true })` sends a `shell.resize` message with the current viewer id and changed xterm dimensions.
 - Split `packages/thread-ui/src/styles.css` into smaller imported domain files while preserving the public `./styles.css` entry.
 - Moved `packages/plugin-xyz-viewer` React runtime declarations from `dependencies` to peer plus dev dependencies.
-- Added a `@remote-codex/plugin-xyz-viewer/manifest` export and changed thread-ui built-in plugin registration to import the XYZ manifest from that lightweight subpath.
+- Added a `@pockymoe/plugin-xyz-viewer/manifest` export and changed thread-ui built-in plugin registration to import the XYZ manifest from that lightweight subpath.
 - Lazy-loaded the XYZ molecule viewer frontend and stylesheet from `xyz-plugin-renderers.tsx` so molecule rendering code is fetched only when an XYZ artifact or inline molecule block is expanded/rendered.
-- Moved thread-ui built-in plugin modules and XYZ renderer exports behind the secondary `@remote-codex/thread-ui/builtin-plugins` entrypoint. `PluginProvider` now accepts `builtinPlugins` and defaults to no built-ins, so chat-only root-entry consumers do not statically import built-in XYZ/terminal modules unless they opt in. The playground now imports that secondary entry explicitly.
-- Moved the heavy graph workspace panel implementation behind a secondary `@remote-codex/thread-ui/workspace-panel` entrypoint and changed the root entry to export a lazy wrapper. `ThreadDetailSurface` now loads the default workspace panel through that lazy boundary, while consumers that need a static workspace-panel import can opt into the secondary entry explicitly.
+- Moved thread-ui built-in plugin modules and XYZ renderer exports behind the secondary `@pockymoe/thread-ui/builtin-plugins` entrypoint. `PluginProvider` now accepts `builtinPlugins` and defaults to no built-ins, so chat-only root-entry consumers do not statically import built-in XYZ/terminal modules unless they opt in. The playground now imports that secondary entry explicitly.
+- Moved the heavy graph workspace panel implementation behind a secondary `@pockymoe/thread-ui/workspace-panel` entrypoint and changed the root entry to export a lazy wrapper. `ThreadDetailSurface` now loads the default workspace panel through that lazy boundary, while consumers that need a static workspace-panel import can opt into the secondary entry explicitly.
 - Added playground Vite manual chunk boundaries for React, thread-ui core, workspace panel, xterm, React Flow, markdown, icons, plugins, and 3Dmol. The playground entry chunk is now about 393 kB minified instead of roughly 1.35 MB, the workspace panel is isolated around 89 kB, and the only remaining oversized chunk is the isolated lazy `vendor-3dmol` dependency at about 588 kB.
 - Added a playground-only Rollup warning filter for the known upstream `3dmol` eval warning. All `3dmol` distributed builds in `3dmol@2.5.5` contain the same callback-string `eval` helper, so switching from the package main entry to an ES/minified entry would not remove the underlying warning and risks weakening package/type compatibility. The filter is scoped to `warning.code === 'EVAL'` and ids under `/3dmol/`; other warnings still fail through the normal handler.
 - Extended the playground harness to wire `timelineProps.onTailVisibilityChange`, composer `followTail`, and `onToggleFollow`, then added a second jsdom smoke test that simulates timeline scroll geometry, verifies the jump-to-latest badge leaves the active state when the tail is out of view, and verifies clicking it requests a tail jump and restores the active state.
@@ -178,15 +178,15 @@ Current large-file sizes after the checkpoint:
 
 Current targeted thread-ui validation:
 
-- `pnpm --filter @remote-codex/thread-ui typecheck`: pass.
-- `pnpm --filter @remote-codex/thread-ui lint`: pass.
-- `pnpm --filter @remote-codex/thread-ui test`: pass, 46 files / 237 tests.
-- `pnpm --filter @remote-codex/plugin-xyz-viewer build`: pass and emits the new manifest subpath artifacts.
-- `pnpm --filter @remote-codex/thread-ui build`: pass with the lazy XYZ frontend import preserved in the built output.
-- `pnpm --filter @remote-codex/thread-ui-playground test`: pass, 2 jsdom smoke tests covering playground render, timeline/composer presence, slash menu opening, fake-adapter shell create/attach, and timeline tail-follow/jump-to-latest behavior from mocked scroll geometry.
+- `pnpm --filter @pockymoe/thread-ui typecheck`: pass.
+- `pnpm --filter @pockymoe/thread-ui lint`: pass.
+- `pnpm --filter @pockymoe/thread-ui test`: pass, 46 files / 237 tests.
+- `pnpm --filter @pockymoe/plugin-xyz-viewer build`: pass and emits the new manifest subpath artifacts.
+- `pnpm --filter @pockymoe/thread-ui build`: pass with the lazy XYZ frontend import preserved in the built output.
+- `pnpm --filter @pockymoe/thread-ui-playground test`: pass, 2 jsdom smoke tests covering playground render, timeline/composer presence, slash menu opening, fake-adapter shell create/attach, and timeline tail-follow/jump-to-latest behavior from mocked scroll geometry.
 - Browser smoke: started the playground dev server at `http://localhost:5174/`, opened it through Chrome DevTools, verified the page rendered with nonblank timeline/workspace/plugin content, clicked the shell creation path, and confirmed the fake-adapter shell reached visible live/running state.
 - Browser plugin smoke: in Chrome DevTools on `http://localhost:5174/`, verified the expanded XYZ artifact panel in a WebGL-capable browser, one visible 3Dmol canvas, no WebGL fallback/error text, and a canvas PNG sample with non-background pixels (`dataUrlLength` 63,174; 62 non-background samples out of about 2,003 sampled pixels). This confirms the plugin renders a real molecule canvas in the browser, not just the surrounding panel shell.
-- `pnpm --filter @remote-codex/thread-ui-playground build`: pass. The previous Vite large-chunk warning is gone after isolating thread-ui/workspace/vendor chunks and setting the playground warning limit to 600 kB for the lazy 3Dmol vendor chunk. The playground config now suppresses only the known upstream `3dmol` Rollup `EVAL` warning; the source dependency still contains `eval`, but the example app no longer emits that warning during every build.
+- `pnpm --filter @pockymoe/thread-ui-playground build`: pass. The previous Vite large-chunk warning is gone after isolating thread-ui/workspace/vendor chunks and setting the playground warning limit to 600 kB for the lazy 3Dmol vendor chunk. The playground config now suppresses only the known upstream `3dmol` Rollup `EVAL` warning; the source dependency still contains `eval`, but the example app no longer emits that warning during every build.
 - Build artifact check: `packages/thread-ui/dist/index.js` no longer contains `plugin-xyz-viewer`, `XyzArtifactRenderer`, `builtinFrontendPlugins`, or `LazyXyzMoleculeViewer`; those symbols are isolated in `packages/thread-ui/dist/builtin-plugins.js`.
 - Build artifact check: `packages/thread-ui/dist/index.js` now references `import("./workspace-panel.js")` for the workspace panel lazy boundary, while `@xyflow/react`, `GraphWorkspaceExplorer`, and graph workspace implementation code live in `packages/thread-ui/dist/workspace-panel.js`.
 
@@ -202,7 +202,7 @@ Remaining follow-up work:
 - Continue splitting `ThreadComposer.tsx` into smaller orchestration hooks. Attachment object URL lifecycle, contenteditable selection/restore behavior, contenteditable DOM synchronization, paste/drop insertion draft construction, submit input derivation, paste/drag/drop/keyboard decisions, settings optimistic-mode decisions, settings update wiring, hidden attachment inputs, jump-to-latest overlay, attachment append wiring, attachment picker menu, model/effort/plan/send toolbar controls, slash toolbox shell/routing, toolbox action/status/class derivation, goal compose state/submission, MCP provider-config editing, fork latest/turn actions, hook configuration state/actions, menu lifecycle side effects, goal compose card, shell prompt controls, mobile shell tools, toolbar composition shell, toolbar prop assembly, prompt/goal/shell slot assembly, and outer composer frame are now isolated and tested; the remaining composer work is primarily reducing prompt input/paste/drag-drop event side-effect handlers and final submit orchestration in the main component.
 - Continue hardening timeline scroll behavior with a dedicated real-browser scroll assertion if the playground adopts Playwright or another browser smoke runner. Scroll/load-earlier/tail-follow orchestration, scroll constants, request/activity cards, anchoring, turn status, and turn/history row rendering are now separate, and playground smoke now covers the scroll-geometry-to-follow-tail-to-jump interaction in jsdom.
 - Continue hardening shell terminal lifecycle with deeper browser interactions around reconnect/disconnect controls. `ThreadShellPanel.tsx` is now an orchestration component, while presentation, terminal DOM helpers, shell state/control derivation, socket output parsing, lifecycle event action derivation, reconnect/detach policy, attach-start guard/retry/reuse policy, socket-open attach-message policy, socket-close reconnect policy, socket cleanup policy, socket side-effect application, imperative reconnect request policy, attach-timeout policy, attach-retry timing policy, resize sync policy, missing-session reset policy, unmount timer cleanup policy, snapshot update logic, single-pane terminal UI, socket lifecycle hook, socket event application helpers, and attach/open/close/cleanup application helpers are separate; component-level fake-adapter coverage now includes attach, manual disconnect, reconnect, unexpected close, attach timeout, and backend resize sync, while playground smoke covers the app-level fake-adapter create/attach path.
-- Continue hardening plugin bundle boundaries as new host apps appear. Built-ins and XYZ renderers now live behind `@remote-codex/thread-ui/builtin-plugins`, the graph workspace panel lives behind `@remote-codex/thread-ui/workspace-panel`, the XYZ viewer/CSS are lazy-loaded, the manifest is available through a lightweight subpath, and the playground isolates/suppresses the known 3Dmol dependency warning locally. Remaining work is dependency-level upstream 3Dmol policy only, not a local bundle-blocking issue.
+- Continue hardening plugin bundle boundaries as new host apps appear. Built-ins and XYZ renderers now live behind `@pockymoe/thread-ui/builtin-plugins`, the graph workspace panel lives behind `@pockymoe/thread-ui/workspace-panel`, the XYZ viewer/CSS are lazy-loaded, the manifest is available through a lightweight subpath, and the playground isolates/suppresses the known 3Dmol dependency warning locally. Remaining work is dependency-level upstream 3Dmol policy only, not a local bundle-blocking issue.
 - Convert the manual Chrome DevTools WebGL/plugin smoke into an automated Playwright-style smoke if the repo later adds browser test infrastructure. Playground jsdom smoke now covers render/menu, shell create/attach, and timeline tail-follow/jump-to-latest behavior, thread-ui jsdom smoke covers built-in plugin artifact/inline renderer routing without loading WebGL, manual browser smoke confirms real WebGL canvas output, and `ShellPane` jsdom fake-adapter coverage exercises the high-risk shell lifecycle branches.
 
 Historical initial lint failures and warnings from the first scan:
@@ -497,8 +497,8 @@ import type { ThreadTurnDto } from '../../shared/src/index';
 
 Recommended action:
 
-- Add `@remote-codex/shared` as a workspace dependency/devDependency for `@remote-codex/plugin-runtime`.
-- Import from `@remote-codex/shared`.
+- Add `@pockymoe/shared` as a workspace dependency/devDependency for `@pockymoe/plugin-runtime`.
+- Import from `@pockymoe/shared`.
 
 Why it matters:
 
@@ -515,8 +515,8 @@ Files:
 
 Current shape:
 
-- Initially, `@remote-codex/thread-ui` depended directly on built-in plugin renderer paths and `builtinFrontendPlugins` imported molecule renderers eagerly.
-- Current implementation moves built-ins behind `@remote-codex/thread-ui/builtin-plugins`, keeps `PluginProvider` defaulting to no built-ins, imports the XYZ manifest through `@remote-codex/plugin-xyz-viewer/manifest`, lazy-loads the XYZ frontend/CSS, and isolates 3Dmol in the playground `vendor-3dmol` chunk.
+- Initially, `@pockymoe/thread-ui` depended directly on built-in plugin renderer paths and `builtinFrontendPlugins` imported molecule renderers eagerly.
+- Current implementation moves built-ins behind `@pockymoe/thread-ui/builtin-plugins`, keeps `PluginProvider` defaulting to no built-ins, imports the XYZ manifest through `@pockymoe/plugin-xyz-viewer/manifest`, lazy-loads the XYZ frontend/CSS, and isolates 3Dmol in the playground `vendor-3dmol` chunk.
 - `3dmol@2.5.5` includes the same callback-string `eval` helper in the CommonJS, ES, and minified distributed builds. The local choice is therefore to keep the supported package import and suppress only the known playground Rollup `EVAL` warning; replacing the dependency entry would not remove the underlying code.
 
 Recommended action:
@@ -617,7 +617,7 @@ Files:
 
 Recommended action:
 
-- Use `React.lazy` or a small dynamic import wrapper for `@remote-codex/plugin-xyz-viewer/frontend`.
+- Use `React.lazy` or a small dynamic import wrapper for `@pockymoe/plugin-xyz-viewer/frontend`.
 - Keep inline molecule detection cheap before triggering viewer load.
 
 Why it matters:
@@ -796,7 +796,7 @@ Problems:
 
 Optimizations:
 
-- Import from `@remote-codex/shared`.
+- Import from `@pockymoe/shared`.
 - Build `artifactTypeToPluginId` once in constructor.
 - Keep extraction functions pure and covered by tests.
 

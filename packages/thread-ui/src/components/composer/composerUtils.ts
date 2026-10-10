@@ -5,7 +5,7 @@ import type {
   PromptAttachmentKindDto,
   ReasoningEffortDto,
   ThreadContextUsageDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 export type ComposerAttachmentDraft = {
   clientId: string;

@@ -9,7 +9,7 @@ import type {
   AgentRuntimeStatusDto,
   ThreadArtifactDto,
   ThreadDetailDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ThreadWorkspaceAdapter } from '../../adapters';
 import type { PluginContextValue } from '../../plugins/plugin-context';
 import { type WorkspaceTreeNode } from './workspaceTree';

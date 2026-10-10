@@ -7,7 +7,7 @@ import type {
 import type {
   ShellSessionDto,
   ShellStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ShellSocketConnection } from '../../adapters';
 import {
   deriveShellAttachTimeoutAction,

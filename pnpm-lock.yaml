@@ -90,16 +90,16 @@ importers:
 
   apps/agent-ui-web:
     dependencies:
-      '@remote-codex/plugin-runtime':
+      '@pockymoe/plugin-runtime':
         specifier: workspace:*
         version: link:../../packages/plugin-runtime
-      '@remote-codex/plugin-terminal':
+      '@pockymoe/plugin-terminal':
         specifier: workspace:*
         version: link:../../packages/plugin-terminal
-      '@remote-codex/shared':
+      '@pockymoe/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@remote-codex/thread-ui':
+      '@pockymoe/thread-ui':
         specifier: workspace:*
         version: link:../../packages/thread-ui
       react:
@@ -133,16 +133,16 @@ importers:
 
   apps/playground:
     dependencies:
-      '@remote-codex/plugin-runtime':
+      '@pockymoe/plugin-runtime':
         specifier: workspace:*
         version: link:../../packages/plugin-runtime
-      '@remote-codex/plugin-terminal':
+      '@pockymoe/plugin-terminal':
         specifier: workspace:*
         version: link:../../packages/plugin-terminal
-      '@remote-codex/shared':
+      '@pockymoe/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@remote-codex/thread-ui':
+      '@pockymoe/thread-ui':
         specifier: workspace:*
         version: link:../../packages/thread-ui
       '@vitejs/plugin-react':
@@ -164,7 +164,7 @@ importers:
 
   packages/plugin-runtime:
     dependencies:
-      '@remote-codex/shared':
+      '@pockymoe/shared':
         specifier: workspace:*
         version: link:../shared
     devDependencies:
@@ -273,13 +273,13 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
     devDependencies:
-      '@remote-codex/plugin-runtime':
+      '@pockymoe/plugin-runtime':
         specifier: workspace:*
         version: link:../plugin-runtime
-      '@remote-codex/plugin-terminal':
+      '@pockymoe/plugin-terminal':
         specifier: workspace:*
         version: link:../plugin-terminal
-      '@remote-codex/shared':
+      '@pockymoe/shared':
         specifier: workspace:*
         version: link:../shared
       '@types/react-syntax-highlighter':

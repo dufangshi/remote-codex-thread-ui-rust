@@ -1,7 +1,7 @@
 import { translate, useI18n } from '../../i18n';
 import { useCallback, useState } from 'react';
 
-import type { ProviderHostFileDto } from '@remote-codex/shared';
+import type { ProviderHostFileDto } from '@pockymoe/shared';
 import {
   parseMcpServerName,
   parseMcpServerNameFromBlock,

@@ -12,7 +12,7 @@ import {
   hookTrustLabel,
   skillScopeLabel,
 } from './composerPresentation';
-import type { AgentHookDto } from '@remote-codex/shared';
+import type { AgentHookDto } from '@pockymoe/shared';
 
 function hook(overrides: Partial<AgentHookDto> = {}): AgentHookDto {
   return {

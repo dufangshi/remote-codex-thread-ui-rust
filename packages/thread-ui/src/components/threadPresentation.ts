@@ -4,7 +4,7 @@ import type {
   ThreadDto,
   ThreadHistoryItemDto,
   ThreadTurnDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 export function formatShortTimestamp(value: string | null) {
   if (!value) {

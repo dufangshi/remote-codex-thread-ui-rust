@@ -77,13 +77,13 @@ Checkpoint: 2026-09-02
 
 Checkpoint validation:
 
-- `pnpm --filter @remote-codex/thread-ui typecheck`: pass.
-- `pnpm --filter @remote-codex/thread-ui lint`: pass with three pre-existing
+- `pnpm --filter @pockymoe/thread-ui typecheck`: pass.
+- `pnpm --filter @pockymoe/thread-ui lint`: pass with three pre-existing
   Hook dependency warnings outside the Explorer change.
-- `pnpm --filter @remote-codex/thread-ui test`: pass, 64 files and 341 tests.
-- `pnpm --filter @remote-codex/thread-ui build`: pass; built `dist` refreshed.
-- `pnpm --filter @remote-codex/thread-ui-playground test`: pass, 3 tests.
-- `pnpm --filter @remote-codex/thread-ui-playground build`: pass with the
+- `pnpm --filter @pockymoe/thread-ui test`: pass, 64 files and 341 tests.
+- `pnpm --filter @pockymoe/thread-ui build`: pass; built `dist` refreshed.
+- `pnpm --filter @pockymoe/thread-ui-playground test`: pass, 3 tests.
+- `pnpm --filter @pockymoe/thread-ui-playground build`: pass with the
   existing large-chunk warning for the playground entry and C++ grammar chunk.
 - Browser, 1,280px dark: 10,001 projected nodes produced 23 DOM treeitems and a
   280,044px virtual scroll range.
@@ -120,7 +120,7 @@ Checkpoint validation:
 
 The workspace explorer should be improved by adopting the interaction model and
 internal separation used by the open-source VS Code web workbench, while keeping
-the current Remote Codex React surface, adapter contract, plugin previews, and
+the current Pockymoe React surface, adapter contract, plugin previews, and
 mobile behavior.
 
 The implementation should not import the VS Code workbench or its Explorer view
@@ -208,7 +208,7 @@ The following are explicitly outside the first milestone:
 - Embedding the full Code - OSS workbench.
 - Replacing non-text artifact, image, PDF, Markdown preview, or molecule
   renderers with Monaco Editor.
-- Running VS Code extensions in Remote Codex.
+- Running VS Code extensions in Pockymoe.
 - Recreating the VS Code command palette or activity bar.
 - Git status decorations, source-control commands, or diagnostics badges.
 - Multi-root workspaces.
@@ -286,7 +286,7 @@ These should be represented by small local interfaces and React components.
 VS Code's tree virtualization cannot be reused without its internal list stack.
 Use `@tanstack/react-virtual` for the flattened visible row list once the model
 split is complete. It is headless, MIT licensed, and allows the existing markup
-and styling to remain under Remote Codex control.
+and styling to remain under Pockymoe control.
 
 Implementation constraints:
 
@@ -411,7 +411,7 @@ Keep these existing files:
 - `GraphWorkspaceExplorer.tsx`: composition root for Explorer, Viewer, upload,
   preview loading, panel layout, and adapter integration.
 - `GraphWorkspacePreviewPane.tsx`: Viewer implementation.
-- `workspaceTree.ts`: Remote Codex domain projection for live nodes, artifacts,
+- `workspaceTree.ts`: Pockymoe domain projection for live nodes, artifacts,
   thread events, and fallback trees. Generic workspace tree mutation helpers
   should move to the Explorer model modules.
 
@@ -1084,20 +1084,20 @@ validation because consumers may load `packages/thread-ui/dist/index.js` and
 Required package checks after every implementation phase:
 
 ```bash
-pnpm --filter @remote-codex/thread-ui typecheck
-pnpm --filter @remote-codex/thread-ui lint
-pnpm --filter @remote-codex/thread-ui test
-pnpm --filter @remote-codex/thread-ui build
-pnpm --filter @remote-codex/thread-ui-playground test
-pnpm --filter @remote-codex/thread-ui-playground build
+pnpm --filter @pockymoe/thread-ui typecheck
+pnpm --filter @pockymoe/thread-ui lint
+pnpm --filter @pockymoe/thread-ui test
+pnpm --filter @pockymoe/thread-ui build
+pnpm --filter @pockymoe/thread-ui-playground test
+pnpm --filter @pockymoe/thread-ui-playground build
 ```
 
 Required host checks after rebuilding and updating the consuming checkout:
 
 ```bash
-pnpm --filter @remote-codex/thread-ui build
-pnpm --filter @remote-codex/supervisor-web test
-pnpm --filter @remote-codex/supervisor-web build
+pnpm --filter @pockymoe/thread-ui build
+pnpm --filter @pockymoe/supervisor-web test
+pnpm --filter @pockymoe/supervisor-web build
 ```
 
 Run the relevant Android and iOS WebView checks when interaction or public
@@ -1132,7 +1132,7 @@ Start with phases zero and one only:
 2. Add the normalized model and projection modules.
 3. Route existing loaded trees through the new model.
 4. Preserve the current rendered UI and public adapter contract.
-5. Rebuild `@remote-codex/thread-ui` and verify the playground.
+5. Rebuild `@pockymoe/thread-ui` and verify the playground.
 
 This slice creates the foundation for VS Code-like behavior while keeping the
 first code review focused on data correctness rather than mixing architecture,

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type {
   PluginManifestDto,
   ThreadArtifactDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 export interface ArtifactRenderContext {
   artifact: ThreadArtifactDto;

@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../i18n';
-import { mergeThreadHistoryItem } from '@remote-codex/shared';
+import { mergeThreadHistoryItem } from '@pockymoe/shared';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type {
@@ -11,7 +11,7 @@ import type {
   ThreadHistoryItemDto,
   ThreadPendingSteerDto,
   ThreadTurnDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import { useAppShellNav } from '../app-shell/AppShellNavContext';
 import { LongTextDialog } from './LongTextDialog';
 import type { ThreadTimelineAdapter } from '../adapters';

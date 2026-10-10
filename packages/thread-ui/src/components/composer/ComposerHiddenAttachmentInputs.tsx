@@ -1,6 +1,6 @@
 import type { ChangeEvent, RefObject } from 'react';
 
-import type { PromptAttachmentKindDto } from '@remote-codex/shared';
+import type { PromptAttachmentKindDto } from '@pockymoe/shared';
 
 export function ComposerHiddenAttachmentInputs({
   photoInputRef,

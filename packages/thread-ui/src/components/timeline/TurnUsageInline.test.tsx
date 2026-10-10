@@ -2,7 +2,7 @@
 import { flushSync } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import { describe, expect, it, vi } from 'vitest';
-import type { ThreadTurnDto } from '@remote-codex/shared';
+import type { ThreadTurnDto } from '@pockymoe/shared';
 import { ThreadTimeline } from '../ThreadTimeline';
 import { TurnStatusBar } from './turnStatus';
 import { TurnUsageInline } from './TurnUsageInline';

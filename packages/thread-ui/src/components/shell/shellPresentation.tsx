@@ -1,5 +1,5 @@
 import { translate } from '../../i18n';
-import type { ShellStatusDto } from '@remote-codex/shared';
+import type { ShellStatusDto } from '@pockymoe/shared';
 
 /** Matches the workbench panel surfaces so the terminal reads as part of the panel. */
 export function terminalThemeFor(effectiveTheme: 'light' | 'dark') {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ShellSessionDto, ThreadShellStateDto } from '@remote-codex/shared';
+import type { ShellSessionDto, ThreadShellStateDto } from '@pockymoe/shared';
 import {
   EMPTY_SHELL_PANE_RUNTIME_STATE,
   buildConnectionButtonState,

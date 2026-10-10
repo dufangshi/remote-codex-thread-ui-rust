@@ -31,7 +31,7 @@ export default function WorkspaceDocumentDiff({
       automaticLayout: true,
       renderSideBySide: !compact,
       originalEditable: false,
-      theme: dark ? 'remote-codex-dark' : 'remote-codex-light',
+      theme: dark ? 'pockymoe-dark' : 'pockymoe-light',
       minimap: { enabled: false },
       fontSize: 12,
       scrollBeyondLastLine: false,

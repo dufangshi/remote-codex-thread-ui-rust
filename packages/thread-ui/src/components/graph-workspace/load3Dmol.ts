@@ -25,7 +25,7 @@ export async function load3Dmol(): Promise<ThreeDmolApi> {
   if (!threeDmolPromise) {
     threeDmolPromise = new Promise((resolve, reject) => {
       const existingScript = document.querySelector<HTMLScriptElement>(
-        'script[data-remote-codex-3dmol="true"]',
+        'script[data-pockymoe-3dmol="true"]',
       );
 
       const handleLoad = () => {
@@ -49,7 +49,7 @@ export async function load3Dmol(): Promise<ThreeDmolApi> {
       const script = document.createElement('script');
       script.src = '/vendor/3Dmol-min.js';
       script.async = true;
-      script.dataset.remoteCodex3dmol = 'true';
+      script.dataset.pockymoe3dmol = 'true';
       script.addEventListener('load', handleLoad, { once: true });
       script.addEventListener(
         'error',

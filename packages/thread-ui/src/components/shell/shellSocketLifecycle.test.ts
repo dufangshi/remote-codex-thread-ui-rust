@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { ShellSessionDto } from '@remote-codex/shared';
+import type { ShellSessionDto } from '@pockymoe/shared';
 import {
   applyShellLifecycleEventUpdate,
   applyShellSocketCloseDetachUpdate,

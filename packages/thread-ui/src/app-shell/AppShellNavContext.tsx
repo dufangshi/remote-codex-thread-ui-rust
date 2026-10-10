@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import type { AgentBackendIdDto } from '@remote-codex/shared';
+import type { AgentBackendIdDto } from '@pockymoe/shared';
 import type { ComposerSendShortcut } from '../components/composer/composerUtils';
 
 export type ThemeMode = 'system' | 'light' | 'dark';

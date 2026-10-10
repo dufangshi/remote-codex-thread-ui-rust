@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { AgentHookDto, ThreadHooksDto } from '@remote-codex/shared';
+import type { AgentHookDto, ThreadHooksDto } from '@pockymoe/shared';
 import { ComposerHooksPanel } from './ComposerHooksPanel';
 import type { HooksPanelMode } from './types';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@remote-codex/thread-ui",
+  "name": "@pockymoe/thread-ui",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -66,9 +66,9 @@
     "xterm": "^5.3.0"
   },
   "devDependencies": {
-    "@remote-codex/plugin-runtime": "workspace:*",
-    "@remote-codex/plugin-terminal": "workspace:*",
-    "@remote-codex/shared": "workspace:*",
+    "@pockymoe/plugin-runtime": "workspace:*",
+    "@pockymoe/plugin-terminal": "workspace:*",
+    "@pockymoe/shared": "workspace:*",
     "@types/react-syntax-highlighter": "^15.5.13",
     "mdast-util-from-markdown": "^2.0.3",
     "micromark-util-types": "^2.0.2",
@@ -78,9 +78,9 @@
     "vitest": "^3.1.1"
   },
   "peerDependencies": {
-    "@remote-codex/plugin-runtime": "0.1.0",
-    "@remote-codex/plugin-terminal": "0.1.0",
-    "@remote-codex/shared": "0.1.0",
+    "@pockymoe/plugin-runtime": "0.1.0",
+    "@pockymoe/plugin-terminal": "0.1.0",
+    "@pockymoe/shared": "0.1.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   }

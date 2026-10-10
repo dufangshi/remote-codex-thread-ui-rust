@@ -34,7 +34,7 @@ import type {
   ShellSessionDto,
   ShellStatusDto,
   ThreadShellStateDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ThreadShellAdapter } from '../adapters';
 import type { WorkbenchToolPanelControls } from './workbench/toolPanel';
 import { ShellPane, type ShellPaneHandle } from './shell/ShellPane';
@@ -182,7 +182,7 @@ export const ThreadShellPanel = forwardRef<
   ref,
 ) {
   const { locale } = useI18n();
-  const layoutKey = layoutStorageKey ?? `remote-codex:terminal-layout:${threadId}`;
+  const layoutKey = layoutStorageKey ?? `pockymoe:terminal-layout:${threadId}`;
   const [shellState, setShellState] = useState<ThreadShellStateDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);

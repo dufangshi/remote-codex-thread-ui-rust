@@ -5,7 +5,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ShellEventEnvelope, ShellSessionDto } from '@remote-codex/shared';
+import type { ShellEventEnvelope, ShellSessionDto } from '@pockymoe/shared';
 import type {
   ShellSocketConnection,
   ShellSocketHandlers,

@@ -12,7 +12,7 @@ import {
   type RefObject,
 } from 'react';
 
-import type { ThreadDetailDto } from '@remote-codex/shared';
+import type { ThreadDetailDto } from '@pockymoe/shared';
 import type {
   ThreadDetailUiAdapter,
   ThreadTimelineAdapter,

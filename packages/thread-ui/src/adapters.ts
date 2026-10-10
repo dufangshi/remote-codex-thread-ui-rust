@@ -7,7 +7,7 @@ import type {
   ThreadTurnDto,
   UpdateShellInput,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ReactNode } from 'react';
 import type { SendPromptInput } from './types';
 

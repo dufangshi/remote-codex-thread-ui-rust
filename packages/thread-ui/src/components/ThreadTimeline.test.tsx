@@ -7,7 +7,7 @@ import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { ThreadTurnDto } from '@remote-codex/shared';
+import type { ThreadTurnDto } from '@pockymoe/shared';
 
 import { ThreadTimeline } from './ThreadTimeline';
 import { WorkbenchContext } from './WorkbenchContext';

@@ -3,14 +3,14 @@ import type {
   ExportThreadTranscriptInput,
   ShellEventEnvelope,
   ThreadShellStateDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type {
   AppShellNavContextValue,
   ThreadDetailUiAdapter,
   ThreadShellAdapter,
   ThreadShellControlState,
   ThreadWorkspaceAdapter,
-} from '@remote-codex/thread-ui';
+} from '@pockymoe/thread-ui';
 import {
   AppShellMenuButton,
   AppShellNavContext,
@@ -18,7 +18,7 @@ import {
   PluginProvider,
   ThreadActionsDialog,
   ThreadDetailSurface,
-} from '@remote-codex/thread-ui';
+} from '@pockymoe/thread-ui';
 
 import {
   mockCapabilities,
@@ -26,7 +26,7 @@ import {
   mockStatus,
   mockThreads,
 } from './mockData';
-import { builtinFrontendPlugins } from '@remote-codex/thread-ui/builtin-plugins';
+import { builtinFrontendPlugins } from '@pockymoe/thread-ui/builtin-plugins';
 
 const mockShellSession = {
   id: 'shell-playground-1',

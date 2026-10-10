@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { Brain, Check, Copy } from 'lucide-react';
 
-import type { ThreadHistoryItemDto } from '@remote-codex/shared';
+import type { ThreadHistoryItemDto } from '@pockymoe/shared';
 import type { ThreadTimelineAdapter } from '../../adapters';
 import {
   GraphChatAgentMessageBody,

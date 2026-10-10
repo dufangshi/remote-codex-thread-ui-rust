@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../../i18n';
-import type { ThreadForkTurnOptionDto } from '@remote-codex/shared';
+import type { ThreadForkTurnOptionDto } from '@pockymoe/shared';
 
 import type { SlashPanelState } from './types';
 

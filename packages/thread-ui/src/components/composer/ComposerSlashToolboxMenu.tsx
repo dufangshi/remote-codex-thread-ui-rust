@@ -13,7 +13,7 @@ import type {
   UpdateThreadHookInput,
   UpdateThreadGoalInput,
   UpdateThreadSettingsInput,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { MouseEvent } from 'react';
 
 import { InputGroupButton } from '../graph-ui/InputGroup';

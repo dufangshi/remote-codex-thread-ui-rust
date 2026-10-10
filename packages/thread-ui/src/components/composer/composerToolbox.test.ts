@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { AgentBackendToolboxItemSchemaDto } from '@remote-codex/shared';
+import type { AgentBackendToolboxItemSchemaDto } from '@pockymoe/shared';
 
 import {
   filterToolboxItemsForCapabilities,

@@ -13,7 +13,7 @@ import type {
   AgentRuntimeStatusDto,
   ThreadDetailDto,
   ThreadHistoryItemDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type { ThreadWorkspaceAdapter } from '../adapters';
 import type { PluginContextValue } from '../plugins/plugin-context';
 import { GraphWorkspaceExplorer } from './graph-workspace/GraphWorkspaceExplorer';
@@ -338,7 +338,7 @@ export function ThreadGraphWorkspacePanel({
       tabs.push({ id: 'graph', label: translate("files.threadGraph"), icon: GitBranch });
     }
     if (features.extensions) {
-      tabs.push({ id: 'extensions', label: translate("files.remoteCodexExtensions"), icon: Wrench });
+      tabs.push({ id: 'extensions', label: translate("files.pockymoeExtensions"), icon: Wrench });
     }
     return tabs;
   }, [features.extensions, features.threadGraph, i18nLocale]);
@@ -381,7 +381,7 @@ export function ThreadGraphWorkspacePanel({
         {secondaryTabs.length ? (
           <div
             className="thread-graph-right-tab-secondary ml-auto flex h-6 min-w-0 shrink items-center gap-0.5 border-l pl-1"
-            aria-label={translate("files.remoteCodexWorkspaceExtensions")}
+            aria-label={translate("files.pockymoeWorkspaceExtensions")}
           >
             {secondaryTabs.map((tab) => {
               const Icon = tab.icon;
@@ -457,7 +457,7 @@ export function ThreadGraphWorkspacePanel({
                     ))}
                 </div>
               </WorkspaceInfoCard>
-              <WorkspaceInfoCard label={translate("files.remoteCodexTools")}>
+              <WorkspaceInfoCard label={translate("files.pockymoeTools")}>
                 <div className="grid gap-2 text-[var(--theme-fg-muted)]">
                   <div className="flex items-start gap-2">
                     <Terminal className="mt-0.5 h-4 w-4 shrink-0" />

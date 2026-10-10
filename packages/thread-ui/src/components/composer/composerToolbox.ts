@@ -2,7 +2,7 @@ import { translate, useI18n } from '../../i18n';
 import type {
   AgentBackendToolboxItemSchemaDto,
   ThreadGoalStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import { goalStatusLabel } from './composerPresentation';
 import type { SlashPanelView } from './types';

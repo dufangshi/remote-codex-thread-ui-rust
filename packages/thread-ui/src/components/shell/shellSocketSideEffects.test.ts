@@ -5,7 +5,7 @@ import type { MutableRefObject } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { ShellSessionDto } from '@remote-codex/shared';
+import type { ShellSessionDto } from '@pockymoe/shared';
 import type { ShellSocketConnection } from '../../adapters';
 import {
   SHELL_ATTACH_RETRY_DELAY_MS,

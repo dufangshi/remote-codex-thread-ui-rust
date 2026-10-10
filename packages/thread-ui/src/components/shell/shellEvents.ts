@@ -3,7 +3,7 @@ import type {
   ShellEventEnvelope,
   ShellEventPayloadMap,
   ShellStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 
 import {
   extractCommandOutput,

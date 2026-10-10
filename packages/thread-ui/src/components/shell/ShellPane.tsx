@@ -15,7 +15,7 @@ import type { Terminal } from 'xterm';
 import type {
   ShellSessionDto,
   ShellStatusDto,
-} from '@remote-codex/shared';
+} from '@pockymoe/shared';
 import type {
   ShellSocketConnection,
   ThreadShellAdapter,

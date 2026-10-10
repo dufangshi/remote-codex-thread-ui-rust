@@ -50,13 +50,13 @@ export default defineConfig({
           if (id.includes('/lucide-react/')) {
             return 'vendor-icons';
           }
-          if (id.includes('/@remote-codex/thread-ui/dist/workspace-panel')) {
+          if (id.includes('/@pockymoe/thread-ui/dist/workspace-panel')) {
             return 'thread-ui-workspace';
           }
-          if (id.includes('/@remote-codex/thread-ui/dist/')) {
+          if (id.includes('/@pockymoe/thread-ui/dist/')) {
             return 'thread-ui-core';
           }
-          if (id.includes('/@remote-codex/plugin-')) {
+          if (id.includes('/@pockymoe/plugin-')) {
             return 'plugin-runtime';
           }
 

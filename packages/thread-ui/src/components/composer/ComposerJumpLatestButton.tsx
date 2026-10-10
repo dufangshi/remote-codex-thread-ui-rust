@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../../i18n';
-import type { AgentSubscriptionUsageDto } from '@remote-codex/shared';
+import type { AgentSubscriptionUsageDto } from '@pockymoe/shared';
 import { ComposerSubscriptionUsage } from './ComposerSubscriptionUsage';
 
 export function ComposerJumpLatestButton({
