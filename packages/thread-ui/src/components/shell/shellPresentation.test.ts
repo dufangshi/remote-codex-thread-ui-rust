@@ -28,7 +28,8 @@ describe('shell presentation helpers', () => {
     expect(clampPaneRatio(10)).toBe(25);
     expect(clampPaneRatio(50)).toBe(50);
     expect(clampPaneRatio(90)).toBe(75);
-    expect(terminalThemeFor('light').background).toBe('#f2ede5');
-    expect(terminalThemeFor('dark').background).toBe('#0c1117');
+    // The terminal matches the workbench panel surfaces.
+    expect(terminalThemeFor('light').background).toBe('#ebeeeb');
+    expect(terminalThemeFor('dark').background).toBe('#0f1317');
   });
 });

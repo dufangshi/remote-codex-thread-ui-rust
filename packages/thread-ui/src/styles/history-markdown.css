@@ -167,6 +167,17 @@
   container-type: inline-size;
 }
 
+/* Host directories of links outside the workspace: keep the path tail visible. */
+.thread-ui-shell .workspace-linked-directory-label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  direction: rtl;
+  text-align: left;
+  color: var(--theme-fg-soft);
+}
+.thread-ui-shell .workspace-linked-directory-label > bdi { direction: ltr; unicode-bidi: isolate; }
+
 .thread-ui-shell .thread-graph-tree-row:hover {
   --thread-graph-tree-row-background: var(--theme-hover);
   background: var(--theme-hover);

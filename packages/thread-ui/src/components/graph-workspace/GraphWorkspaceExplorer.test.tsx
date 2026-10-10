@@ -209,16 +209,22 @@ describe('GraphWorkspaceExplorer', () => {
     vi.restoreAllMocks();
   });
 
-  it('refreshes the linked-files memo label without refetching or replacing adapter props', async () => {
+  it('lists an external linked file under its real parent directory, not a virtual folder', async () => {
     const { adapter, listTree } = createAdapter();
-    const statLinkedFile = vi.fn(async () => file('/outside/notes.txt'));
-    await renderExplorer({ ...adapter, statLinkedFile }, { path: '/outside/notes.txt', requestId: 1 });
-    await vi.waitFor(() => expect(host?.textContent).toContain('Linked files'));
+    const statLinkedFile = vi.fn(async () => file('/outside/docs/notes.txt'));
+    await renderExplorer({ ...adapter, statLinkedFile }, { path: '/outside/docs/notes.txt', requestId: 1 });
+    const parent = () => host?.querySelector('[data-explorer-path="/outside/docs"]');
+    await vi.waitFor(() => expect(parent()?.getAttribute('aria-expanded')).toBe('true'));
+    expect(parent()?.textContent).toContain('/outside/docs');
+    expect(host?.querySelector('[data-explorer-path="/outside/docs/notes.txt"]')?.getAttribute('aria-selected')).toBe('true');
+    expect(host?.textContent).not.toContain('Linked files');
     const calls = listTree.mock.calls.length;
     act(() => setLocale('zh-CN', false));
-    expect(host?.textContent).toContain('链接文件');
+    expect(host?.textContent).not.toContain('链接文件');
     expect(host?.textContent).toContain('notes.txt');
+    // Locale changes neither refetch nor list the host directory.
     expect(listTree).toHaveBeenCalledTimes(calls);
+    expect(listTree.mock.calls.some(([input]) => String(input.path).startsWith('/outside'))).toBe(false);
     expect(statLinkedFile).toHaveBeenCalledTimes(1);
   });
 

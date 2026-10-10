@@ -11,6 +11,7 @@ import {
   WorkbenchPanels,
   type WorkbenchPanelsOptions,
 } from './WorkbenchPanels';
+import type { WorkbenchToolPanelControls } from './toolPanel';
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 let host: HTMLDivElement, root: Root;
 let options: WorkbenchPanelsOptions;
@@ -131,22 +132,65 @@ describe('split panes and independent tools', () => {
     });
     options = {
       ...options,
-      presentation: { ...options.presentation, mode: 'thread' },
+      presentation: { ...options.presentation, mode: 'files' },
       toolsOpen: true,
     };
     render();
+    // The terminal is a bottom panel now: Files stays open beside it.
+    expect(host.querySelector('[aria-label="File editor"]')!.closest('[hidden]')).toBeNull();
     const terminal = host.querySelector<HTMLInputElement>(
       '[aria-label="Terminal input"]',
     )!;
+    expect(terminal.closest('[data-testid="workbench-bottom-panel"]')).not.toBeNull();
     act(() => terminal.focus());
     expect(options.onFocusPane).not.toHaveBeenCalled();
+    // Escape belongs to the shell (vim, less); hiding the panel is explicit.
     act(() =>
       terminal.dispatchEvent(
         new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
       ),
     );
-    expect(options.onCloseTools).toHaveBeenCalledOnce();
+    expect(options.onCloseTools).not.toHaveBeenCalled();
     expect(host.querySelector('[aria-label="Second draft"]')).toBe(secondary);
+  });
+  it('lays the terminal below the conversations with persisted size, maximize, collapse and hide', () => {
+    const observed: ResizeObserverCallback[] = [];
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { observed.push(callback); }
+      observe() {}
+      disconnect() {}
+    });
+    let controls: WorkbenchToolPanelControls | null = null;
+    options = {
+      ...options,
+      toolsOpen: true,
+      toolContent: (next) => { controls = next; return <input aria-label="Terminal input" />; },
+    };
+    render();
+    // The column is 800px tall: the panel may take everything but 200px.
+    act(() => observed.forEach(callback => callback([{ contentRect: { width: 1200, height: 800 } } as ResizeObserverEntry], {} as ResizeObserver)));
+    const panel = host.querySelector<HTMLElement>('[data-testid="workbench-bottom-panel"]')!;
+    const sash = host.querySelector<HTMLElement>('[data-testid="workbench-panel-sash"]')!;
+    expect(sash.getAttribute('aria-valuemax')).toBe('600');
+    const start = Number(sash.getAttribute('aria-valuenow'));
+    act(() => sash.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true })));
+    expect(Number(sash.getAttribute('aria-valuenow'))).toBe(start + 24);
+    expect(panel.style.getPropertyValue('--workbench-panel-height')).toBe(`${start + 24}px`);
+    expect(JSON.parse(localStorage.getItem('remote-codex.terminal-panel.v1')!).height).toBe(start + 24);
+    act(() => sash.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true })));
+    expect(sash.getAttribute('aria-valuenow')).toBe('600');
+    act(() => controls!.toggleMaximized());
+    expect(panel.classList.contains('is-maximized')).toBe(true);
+    expect(host.querySelector('.workbench-pane-grid')!.hasAttribute('inert')).toBe(true);
+    // Maximize hides, never unmounts, the conversations and their drafts.
+    expect(host.querySelector('[aria-label="Second draft"]')).not.toBeNull();
+    act(() => controls!.toggleCollapsed());
+    expect(panel.classList.contains('is-collapsed')).toBe(true);
+    expect(panel.classList.contains('is-maximized')).toBe(false);
+    expect(host.querySelector('[data-testid="workbench-panel-sash"]')).toBeNull();
+    act(() => controls!.close());
+    expect(options.onCloseTools).toHaveBeenCalledOnce();
+    localStorage.removeItem('remote-codex.terminal-panel.v1');
   });
   it('returns from a mobile tool drawer with Back without closing split membership', () => {
     vi.stubGlobal('innerWidth', 500);

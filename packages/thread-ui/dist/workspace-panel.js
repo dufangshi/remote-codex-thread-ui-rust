@@ -39,13 +39,13 @@ import {
   settleSave,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-RI7HMVYH.js";
+} from "./chunk-GZXOMVRD.js";
 import {
   en,
   getLocale,
   translate,
   useI18n
-} from "./chunk-JE26ELYQ.js";
+} from "./chunk-RP43R2N3.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect10, useMemo as useMemo10, useState as useState11 } from "react";
@@ -510,6 +510,31 @@ function useWorkspaceExplorerPersistence(identity) {
   );
 }
 
+// src/components/graph-workspace/explorer/workspaceLinkedFiles.ts
+var LINKED_DIRECTORY_ID_PREFIX = "linked-dir:";
+function linkedParentDirectory(path) {
+  const index = path.lastIndexOf("/");
+  const parent = index >= 0 ? path.slice(0, index) : "";
+  if (/^[a-z]:$/i.test(parent)) return `${parent}/`;
+  return parent || "/";
+}
+function linkedDirectoryNodes(files) {
+  const groups = /* @__PURE__ */ new Map();
+  for (const file of files) {
+    const parent = linkedParentDirectory(file.path);
+    groups.set(parent, [...groups.get(parent) ?? [], file]);
+  }
+  return [...groups].map(([parent, children]) => ({
+    id: `${LINKED_DIRECTORY_ID_PREFIX}${parent}`,
+    name: parent,
+    path: parent,
+    kind: "directory",
+    children: [...children].sort((left, right) => left.name.localeCompare(right.name)),
+    childrenLoaded: true,
+    hasChildren: true
+  }));
+}
+
 // src/components/graph-workspace/explorer/useWorkspaceExplorerController.ts
 function selectedPathForId(selectedId, nodeMap) {
   if (!selectedId) {
@@ -552,15 +577,7 @@ function useWorkspaceExplorerController({
   const [linkedFiles, setLinkedFiles] = useState([]);
   const tree = useMemo2(() => {
     const root = adapterTree ?? fallbackTree;
-    return linkedFiles.length ? { ...root, children: [...root.children, {
-      id: "linked-files",
-      path: "linked-files:",
-      name: translate("files.linkedFiles"),
-      kind: "directory",
-      children: linkedFiles,
-      childrenLoaded: true,
-      hasChildren: true
-    }] } : root;
+    return linkedFiles.length ? { ...root, children: [...root.children, ...linkedDirectoryNodes(linkedFiles)] } : root;
   }, [adapterTree, fallbackTree, linkedFiles, locale]);
   const nodeMap = useMemo2(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState(() => {
@@ -766,7 +783,7 @@ function useWorkspaceExplorerController({
       setSelectedNodeId(`workspace:${targetPath}`);
       setFilterQuery("");
       const external = relativeWorkspacePath(path, detail.workspace.absPath) === null;
-      const ancestors = external ? ["linked-files:"] : ancestorDirectoryPaths(targetPath);
+      const ancestors = external ? [linkedParentDirectory(targetPath)] : ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
         next.add("");
@@ -1388,7 +1405,7 @@ import {
 } from "react";
 
 // src/components/graph-workspace/explorer/WorkspaceExplorerTree.tsx
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { measureElement, useVirtualizer } from "@tanstack/react-virtual";
 import {
   useCallback as useCallback3,
   useEffect as useEffect4,
@@ -1592,6 +1609,7 @@ import {
   FileImage,
   Folder,
   FolderOpen,
+  FolderSymlink,
   LoaderCircle
 } from "lucide-react";
 
@@ -1896,6 +1914,7 @@ function WorkspaceExplorerRow({
     children: []
   };
   const isDirectory = node.kind === "directory";
+  const linkedDirectory = node.id.startsWith(LINKED_DIRECTORY_ID_PREFIX);
   const canToggleDirectory = isDirectory && Boolean(node.path);
   const expanded = Boolean(row.expanded);
   const paddingLeft = `${row.depth * 0.5 + 0.5}rem`;
@@ -1987,8 +2006,12 @@ function WorkspaceExplorerRow({
               if (canToggleDirectory && window.matchMedia?.("(max-width: 639px)").matches) onToggle(node.path);
             },
             children: [
-              iconForNode(node, expanded),
-              /* @__PURE__ */ jsx2("span", { className: "min-w-0 flex-1 truncate", title: displayName, children: label })
+              linkedDirectory ? /* @__PURE__ */ jsx2(FolderSymlink, { className: "h-4 w-4 text-slate-500 dark:text-slate-400", "aria-hidden": "true" }) : iconForNode(node, expanded),
+              linkedDirectory ? (
+                // Long host paths keep their meaningful tail visible.
+                /* @__PURE__ */ jsx2("span", { className: "workspace-linked-directory-label min-w-0 flex-1", title: `${displayName}
+${translate("files.linkedFilesAreReadOnlyPreviews")}`, children: /* @__PURE__ */ jsx2("bdi", { children: displayName }) })
+              ) : /* @__PURE__ */ jsx2("span", { className: "min-w-0 flex-1 truncate", title: displayName, children: label })
             ]
           }
         ),
@@ -2004,7 +2027,7 @@ function WorkspaceExplorerRow({
             children: /* @__PURE__ */ jsx2(CircleAlert, { className: "h-3.5 w-3.5" })
           }
         ) : null,
-        node.id !== "linked-files" && node.path ? /* @__PURE__ */ jsx2(
+        !linkedDirectory && node.path ? /* @__PURE__ */ jsx2(
           WorkspaceNodeActions,
           {
             node,
@@ -2069,8 +2092,33 @@ function WorkspaceExplorerTree({
     estimateSize: () => typeof window !== "undefined" && window.matchMedia?.("(max-width: 639px)").matches ? 44 : 28,
     overscan: 6,
     enabled: canVirtualize,
-    useFlushSync: false
+    useFlushSync: false,
+    // A hidden drawer (`display: none`) reports 0px rows. Caching those sizes
+    // collapses rows and shifts everything after them once it is shown again.
+    measureElement: (element, entry, instance) => {
+      const size = measureElement(element, entry, instance);
+      if (size > 0) return size;
+      const index = instance.indexFromElement(element);
+      return instance.measurementsCache[index]?.size ?? instance.options.estimateSize(index);
+    }
   });
+  const lastVisibleScrollTopRef = useRef4(0);
+  useEffect4(() => {
+    const scroller = scrollerRef.current;
+    if (!canVirtualize || !scroller) return;
+    let hidden = scroller.clientHeight === 0;
+    const observer = new ResizeObserver(() => {
+      const nowHidden = scroller.clientHeight === 0;
+      if (hidden && !nowHidden) {
+        const target = lastVisibleScrollTopRef.current;
+        if (Math.abs(scroller.scrollTop - target) > 1) scroller.scrollTop = target;
+        scroller.dispatchEvent(new Event("scroll"));
+      }
+      hidden = nowHidden;
+    });
+    observer.observe(scroller);
+    return () => observer.disconnect();
+  }, [canVirtualize, scrollerRef]);
   useEffect4(() => {
     onFilterResultsChange?.({
       matchCount: projection.matchCount,
@@ -2174,6 +2222,9 @@ function WorkspaceExplorerTree({
       "aria-label": translate("files.workspaceFiles"),
       className: "thread-graph-workspace-tree-scroll min-h-0 flex-1 overflow-y-auto py-1 outline-none",
       onScroll: (event) => {
+        if (event.currentTarget.clientHeight > 0) {
+          lastVisibleScrollTopRef.current = event.currentTarget.scrollTop;
+        }
         if (scrollTopRef) {
           scrollTopRef.current = event.currentTarget.scrollTop;
         }
@@ -3835,7 +3886,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-P53CTDXN.js")
+  () => import("./GraphWorkspaceMonacoEditor-NSOV2HIC.js")
 );
 function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
@@ -3879,7 +3930,7 @@ function translateReadOnly(reason) {
   const key = `files.safeReason.${reason}`;
   return Object.hasOwn(en, key) ? translate(key) : reason;
 }
-var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-26GY6ZHC.js"));
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-NNDHZMRP.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -4629,7 +4680,7 @@ function GraphWorkspaceExplorer({
   }, [createSource]);
   function openCreateFile() {
     const relative = activeNode ? relativeWorkspacePath(activeNode.path, detail.workspace.absPath) : null;
-    const directory = relative && !relative.startsWith("linked-files:") ? activeNode?.kind === "directory" ? relative : relative.slice(0, Math.max(0, relative.lastIndexOf("/"))) : "";
+    const directory = relative ? activeNode?.kind === "directory" ? relative : relative.slice(0, Math.max(0, relative.lastIndexOf("/"))) : "";
     setNewFilePath(directory ? `${directory}/` : "");
     setCreateError(null);
   }

@@ -9,6 +9,7 @@ import {
   FileImage,
   Folder,
   FolderOpen,
+  FolderSymlink,
   LoaderCircle,
 } from 'lucide-react';
 import type { KeyboardEvent, ReactNode, Ref } from 'react';
@@ -16,6 +17,7 @@ import type { KeyboardEvent, ReactNode, Ref } from 'react';
 import { extensionOf, type WorkspaceTreeNode } from '../workspaceTree';
 import type { WorkspaceExplorerRowProjection } from './workspaceExplorerTypes';
 import { WorkspaceNodeActions, type WorkspaceNodeActionProps } from './WorkspaceNodeActions';
+import { LINKED_DIRECTORY_ID_PREFIX } from './workspaceLinkedFiles';
 
 function iconForNode(node: WorkspaceTreeNode, expanded: boolean) {
   if (node.kind === 'directory') {
@@ -98,6 +100,7 @@ export function WorkspaceExplorerRow({
     children: [],
   };
   const isDirectory = node.kind === 'directory';
+  const linkedDirectory = node.id.startsWith(LINKED_DIRECTORY_ID_PREFIX);
   const canToggleDirectory = isDirectory && Boolean(node.path);
   const expanded = Boolean(row.expanded);
   const paddingLeft = `${row.depth * 0.5 + 0.5}rem`;
@@ -200,10 +203,19 @@ export function WorkspaceExplorerRow({
         className="flex min-h-11 min-w-0 flex-1 items-center gap-2 py-2 pr-2 text-left sm:min-h-7 sm:py-1"
         onClick={() => { onSelect(node); if (canToggleDirectory && window.matchMedia?.('(max-width: 639px)').matches) onToggle(node.path); }}
       >
-        {iconForNode(node, expanded)}
-        <span className="min-w-0 flex-1 truncate" title={displayName}>
-          {label}
-        </span>
+        {linkedDirectory
+          ? <FolderSymlink className="h-4 w-4 text-slate-500 dark:text-slate-400" aria-hidden="true" />
+          : iconForNode(node, expanded)}
+        {linkedDirectory ? (
+          // Long host paths keep their meaningful tail visible.
+          <span className="workspace-linked-directory-label min-w-0 flex-1" title={`${displayName}\n${translate('files.linkedFilesAreReadOnlyPreviews')}`}>
+            <bdi>{displayName}</bdi>
+          </span>
+        ) : (
+          <span className="min-w-0 flex-1 truncate" title={displayName}>
+            {label}
+          </span>
+        )}
       </button>
       {isDirectory && error && onRetry ? (
         <button
@@ -217,7 +229,7 @@ export function WorkspaceExplorerRow({
           <CircleAlert className="h-3.5 w-3.5" />
         </button>
       ) : null}
-      {node.id !== 'linked-files' && node.path ? <WorkspaceNodeActions node={node}
+      {!linkedDirectory && node.path ? <WorkspaceNodeActions node={node}
         {...(onDownload ? {onDownload} : {})} {...(onCopyPath ? {onCopyPath} : {})}
         {...(onRename && !node.path.startsWith('/') && !/^[a-z]:/i.test(node.path) ? {onRename} : {})}
         {...(onDelete && !node.path.startsWith('/') && !/^[a-z]:/i.test(node.path) ? {onDelete} : {})} /> : null}

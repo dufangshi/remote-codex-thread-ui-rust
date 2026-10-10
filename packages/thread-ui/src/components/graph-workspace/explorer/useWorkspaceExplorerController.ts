@@ -29,6 +29,7 @@ import {
 } from './workspaceExplorerModel';
 import type { WorkspaceExplorerModel } from './workspaceExplorerTypes';
 import { useWorkspaceExplorerPersistence } from './useWorkspaceExplorerPersistence';
+import { linkedDirectoryNodes, linkedParentDirectory } from './workspaceLinkedFiles';
 
 export interface UseWorkspaceExplorerControllerInput {
   activeView: 'chat' | 'shell';
@@ -87,10 +88,9 @@ export function useWorkspaceExplorerController({
   const [linkedFiles, setLinkedFiles] = useState<WorkspaceTreeNode[]>([]);
   const tree = useMemo(() => {
     const root = adapterTree ?? fallbackTree;
-    return linkedFiles.length ? {...root, children: [...root.children, {
-      id: 'linked-files', path: 'linked-files:', name: translate("files.linkedFiles"), kind: 'directory' as const,
-      children: linkedFiles, childrenLoaded: true, hasChildren: true,
-    }]} : root;
+    return linkedFiles.length
+      ? { ...root, children: [...root.children, ...linkedDirectoryNodes(linkedFiles)] }
+      : root;
   }, [adapterTree, fallbackTree, linkedFiles, locale]);
   const nodeMap = useMemo(() => flattenWorkspaceNodes(tree), [tree]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(() => {
@@ -346,7 +346,7 @@ export function useWorkspaceExplorerController({
       setSelectedNodeId(`workspace:${targetPath}`);
       setFilterQuery('');
       const external = relativeWorkspacePath(path, detail.workspace.absPath) === null;
-      const ancestors = external ? ['linked-files:'] : ancestorDirectoryPaths(targetPath);
+      const ancestors = external ? [linkedParentDirectory(targetPath)] : ancestorDirectoryPaths(targetPath);
       setExpandedPaths((current) => {
         const next = new Set(current);
         next.add('');

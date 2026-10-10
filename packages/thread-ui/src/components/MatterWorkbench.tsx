@@ -1,4 +1,5 @@
 import { WorkbenchPanels, type WorkbenchPanelsOptions } from './workbench/WorkbenchPanels';
+import { useWorkbenchToolPanel } from './workbench/toolPanel';
 import { getLocale } from '../i18n';
 import { translate, useI18n } from '../i18n';
 import { useEffect, useState, useRef, type ReactNode, type CSSProperties } from 'react';
@@ -114,6 +115,29 @@ export function MatterWorkbench({
     query.addEventListener('change', change);
     return () => query.removeEventListener('change', change);
   }, []);
+  const toolPanel = useWorkbenchToolPanel();
+  // With the bottom panel the conversation stays visible beside the terminal:
+  // Chat is "pressed" unless a maximized terminal covers it.
+  const chatCovered = Boolean(o.panels && o.activeView === 'shell' && toolPanel.maximized && !toolPanel.collapsed);
+  const showChat = () => {
+    if (o.panels) {
+      if (chatCovered) toolPanel.update({ maximized: false });
+    } else o.onViewChange('chat');
+  };
+  const viewChange = useRef(o.onViewChange);
+  viewChange.current = o.onViewChange;
+  useEffect(() => {
+    if (!o.terminalEnabled) return;
+    // VS Code's Ctrl+` toggles the terminal, even while xterm has focus.
+    const toggle = (event: KeyboardEvent) => {
+      if (event.key !== '`' || !event.ctrlKey || event.altKey || event.metaKey || event.shiftKey) return;
+      event.preventDefault();
+      event.stopPropagation();
+      viewChange.current('shell');
+    };
+    window.addEventListener('keydown', toggle, true);
+    return () => window.removeEventListener('keydown', toggle, true);
+  }, [o.terminalEnabled]);
   const [shortcutsOpen, setShortcutsOpen] = useState(true);
   const [recentsOpen, setRecentsOpen] = useState(true);
   const [bellOpen, setBellOpen] = useState(false);
@@ -214,8 +238,8 @@ export function MatterWorkbench({
         </a>
         <button
           aria-label={translate("workbench.chat")}
-          aria-pressed={o.activeView === 'chat'}
-          onClick={() => o.onViewChange('chat')}
+          aria-pressed={o.panels ? !chatCovered : o.activeView === 'chat'}
+          onClick={showChat}
         >
           <MessageSquare />
         </button>
@@ -223,6 +247,7 @@ export function MatterWorkbench({
           <button
             aria-label={translate("workbench.terminal")}
             aria-pressed={o.activeView === 'shell'}
+            title={`${translate("workbench.terminal")} (Ctrl+\`)`}
             onClick={() => o.onViewChange('shell')}
           >
             <Terminal />
@@ -266,7 +291,7 @@ export function MatterWorkbench({
         <div className="matter-topbar-end">
           {mobile && deviceMonitor}
           {mobile && <>
-            <button aria-label={translate("workbench.chat")} aria-pressed={o.activeView === 'chat'} onClick={() => o.onViewChange('chat')}><MessageSquare /></button>
+            <button aria-label={translate("workbench.chat")} aria-pressed={o.panels ? !chatCovered : o.activeView === 'chat'} onClick={showChat}><MessageSquare /></button>
             {o.terminalEnabled && <button aria-label={translate("workbench.terminal")} aria-pressed={o.activeView === 'shell'} onClick={() => o.onViewChange('shell')}><Terminal /></button>}
             <button aria-label={translate("workbench.toggleExplorer")} aria-pressed={explorerOpen} aria-expanded={explorerOpen} title={translate("workbench.explorer")} onClick={() => setExplorerOpen(open => !open)}><FolderOpen /></button>
             {settings}
@@ -385,7 +410,7 @@ export function MatterWorkbench({
           </div>
         </div>}
         </div>
-        {o.panels ? <WorkbenchContext.Provider value={true}><WorkbenchPanels options={o.panels} explorer={explorer} revealExplorer={revealExplorer}>{children}</WorkbenchPanels></WorkbenchContext.Provider> : (
+        {o.panels ? <WorkbenchContext.Provider value={true}><WorkbenchPanels options={o.panels} explorer={explorer} revealExplorer={revealExplorer} toolPanel={toolPanel}>{children}</WorkbenchPanels></WorkbenchContext.Provider> : (
         <div ref={contentRef} style={{ '--explorer-width': `${explorerWidth}px` } as CSSProperties} className={`matter-content ${explorerOpen ? 'has-explorer' : ''}`}>
           <div className="matter-chat">
             <WorkbenchContext.Provider value={true}>

@@ -99,7 +99,7 @@ export function GraphWorkspaceExplorer({
   useEffect(() => { setNewFilePath(null); setCreateError(null); setCreatingFile(false); }, [createSource]);
   function openCreateFile() {
     const relative = activeNode ? relativeWorkspacePath(activeNode.path, detail.workspace.absPath) : null;
-    const directory = relative && !relative.startsWith('linked-files:')
+    const directory = relative
       ? activeNode?.kind === 'directory' ? relative : relative.slice(0, Math.max(0, relative.lastIndexOf('/')))
       : '';
     setNewFilePath(directory ? `${directory}/` : '');

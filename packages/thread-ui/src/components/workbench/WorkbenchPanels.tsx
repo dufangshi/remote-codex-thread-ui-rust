@@ -8,6 +8,13 @@ import {
 import { FolderOpen, X } from 'lucide-react';
 import { translate as t, useI18n } from '../../i18n';
 import type { WorkbenchPresentation } from './presentation';
+import {
+  clampToolPanelHeight,
+  toolPanelBounds,
+  useWorkbenchToolPanel,
+  type WorkbenchToolPanelControls,
+  type WorkbenchToolPanelState,
+} from './toolPanel';
 
 export interface WorkbenchPanelsOptions {
   deviceLabel: string;
@@ -27,7 +34,8 @@ export interface WorkbenchPanelsOptions {
   storageFailed?: boolean;
   focusedPane?: 'primary' | 'reference';
   onFocusPane?: (pane: 'primary' | 'reference') => boolean | void;
-  toolContent?: ReactNode;
+  /** Bottom panel content (the terminal). A function receives the panel actions. */
+  toolContent?: ReactNode | ((controls: WorkbenchToolPanelControls) => ReactNode);
   toolTitle?: string;
   toolsTargetLabel?: string;
   toolsOpen?: boolean;
@@ -38,13 +46,18 @@ export function WorkbenchPanels({
   children,
   explorer,
   revealExplorer,
+  toolPanel: sharedToolPanel,
 }: {
   options: WorkbenchPanelsOptions;
   children: ReactNode;
   explorer: ReactNode;
   revealExplorer: number;
+  /** Owned by the workbench chrome when its rail also restores a maximized panel. */
+  toolPanel?: WorkbenchToolPanelState;
 }) {
   useI18n();
+  const ownToolPanel = useWorkbenchToolPanel();
+  const toolPanel = sharedToolPanel ?? ownToolPanel;
   const { mode, referenceId, ratio } = o.presentation;
   const root = useRef<HTMLDivElement>(null);
   const [compact, setCompact] = useState(() => window.innerWidth < 1000);
@@ -66,6 +79,14 @@ export function WorkbenchPanels({
     }
   }, [mode, compact, o.onFocusPane]);
   const [filesVisited, setFilesVisited] = useState(mode === 'files');
+  // Keep terminals mounted after the first open: hiding the panel must not
+  // close their sockets or drop scrollback.
+  const toolsOpen = Boolean(o.toolsOpen);
+  const [toolsVisited, setToolsVisited] = useState(toolsOpen);
+  useEffect(() => { if (toolsOpen) setToolsVisited(true); }, [toolsOpen]);
+  const mainColumn = useRef<HTMLDivElement>(null);
+  const [columnHeight, setColumnHeight] = useState(0);
+  const panelDrag = useRef<{ y: number; height: number; next: number } | null>(null);
   const drag = useRef<{ x: number; ratio: number; width: number } | null>(null);
   const [drawerWidth, setDrawerWidth] = useState(() => {
     try {
@@ -136,6 +157,75 @@ export function WorkbenchPanels({
     observer.observe(root.current);
     return () => observer.disconnect();
   }, []);
+  useEffect(() => {
+    if (!mainColumn.current) return;
+    const observer = new ResizeObserver((entries) => setColumnHeight(entries[0].contentRect.height));
+    observer.observe(mainColumn.current);
+    return () => observer.disconnect();
+  }, []);
+  // The stored height is a preference; the visible height always leaves room
+  // for the conversation and grows back when the window does.
+  const panelHeight = clampToolPanelHeight(toolPanel.height, columnHeight, compact);
+  const panelBounds = toolPanelBounds(columnHeight, compact);
+  const panelMaximized = toolPanel.maximized && !toolPanel.collapsed;
+  const toolPanelControls: WorkbenchToolPanelControls = {
+    maximized: panelMaximized,
+    collapsed: toolPanel.collapsed,
+    compact,
+    toggleMaximized: () => toolPanel.update({ maximized: !panelMaximized, collapsed: false }),
+    toggleCollapsed: () => toolPanel.update({ collapsed: !toolPanel.collapsed, maximized: false }),
+    close: () => o.onCloseTools?.(),
+  };
+  const resizePanel = (height: number, persist: boolean) =>
+    toolPanel.update({ height: clampToolPanelHeight(height, columnHeight, compact) }, persist);
+  const panelSash = (
+    <div
+      role="separator"
+      tabIndex={0}
+      aria-label={t('workbench.terminalResize')}
+      aria-orientation="horizontal"
+      aria-valuemin={panelBounds.min}
+      aria-valuemax={panelBounds.max}
+      aria-valuenow={panelHeight}
+      className="workbench-panel-sash"
+      data-testid="workbench-panel-sash"
+      onPointerDown={(event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+        panelDrag.current = { y: event.clientY, height: panelHeight, next: panelHeight };
+      }}
+      onPointerMove={(event) => {
+        const drag = panelDrag.current;
+        if (!drag) return;
+        drag.next = drag.height + drag.y - event.clientY;
+        resizePanel(drag.next, false);
+      }}
+      onPointerUp={(event) => {
+        const drag = panelDrag.current;
+        panelDrag.current = null;
+        if (drag) resizePanel(drag.next, true);
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+      }}
+      onPointerCancel={() => { panelDrag.current = null; }}
+      onLostPointerCapture={() => {
+        const drag = panelDrag.current;
+        panelDrag.current = null;
+        if (drag) resizePanel(drag.next, true);
+      }}
+      onDoubleClick={() => toolPanel.update({ height: null })}
+      onKeyDown={(event) => {
+        const step = event.shiftKey ? 96 : 24;
+        const next = event.key === 'ArrowUp' ? panelHeight + step
+          : event.key === 'ArrowDown' ? panelHeight - step
+            : event.key === 'Home' ? panelBounds.min
+              : event.key === 'End' ? panelBounds.max : null;
+        if (next === null) return;
+        event.preventDefault();
+        resizePanel(next, true);
+      }}
+    />
+  );
   useEffect(() => {
     setMobileView('primary');
   }, [o.primaryTitle]);
@@ -234,8 +324,12 @@ export function WorkbenchPanels({
         </nav>
       )}
       <div className="workbench-content">
+      <div ref={mainColumn} className={`workbench-main-column ${o.toolsOpen && panelMaximized ? 'has-maximized-panel' : ''}`}>
       <div
         className={`workbench-pane-grid ${showReference ? 'has-reference' : ''}`}
+        // A maximized terminal covers the conversations without unmounting
+        // them (scroll and drafts survive); keep them out of the tab order.
+        inert={o.toolsOpen && panelMaximized ? true : undefined}
       >
         <section
           className="workbench-primary matter-chat"
@@ -367,12 +461,26 @@ export function WorkbenchPanels({
           </div>
         </section>
       </div>
+      {toolsVisited && o.toolContent && (
+        <section
+          role="region"
+          aria-label={o.toolTitle ?? t('workbench.terminal')}
+          className={`workbench-bottom-panel ${panelMaximized ? 'is-maximized' : ''} ${toolPanel.collapsed ? 'is-collapsed' : ''}`}
+          data-testid="workbench-bottom-panel"
+          hidden={!o.toolsOpen}
+          style={{ '--workbench-panel-height': `${panelHeight}px` } as CSSProperties}
+        >
+          {!panelMaximized && !toolPanel.collapsed && panelSash}
+          {typeof o.toolContent === 'function' ? o.toolContent(toolPanelControls) : o.toolContent}
+        </section>
+      )}
+      </div>
       {filesVisited && (
         <aside
           role="region"
           aria-label={t('workbench.referenceFiles')}
           className="workbench-tool-drawer"
-          hidden={mode !== 'files' || Boolean(o.toolsOpen && o.toolContent)}
+          hidden={mode !== 'files'}
           onKeyDown={(event) => {
             if (event.key === 'Escape' && !event.defaultPrevented) {
               event.preventDefault();
@@ -396,37 +504,6 @@ export function WorkbenchPanels({
             </button>
           </header>
           <div className="workbench-pane-body workbench-files">{explorer}</div>
-        </aside>
-      )}
-      {o.toolContent && (
-        <aside
-          role="region"
-          aria-label={o.toolTitle ?? t('workbench.terminal')}
-          className="workbench-tool-drawer"
-          hidden={!o.toolsOpen}
-          onKeyDown={(event) => {
-            if (event.key === 'Escape' && !event.defaultPrevented) {
-              event.preventDefault();
-              event.stopPropagation();
-              o.onCloseTools?.();
-            }
-          }}
-        >
-          {drawerResizeHandle()}
-          <header>
-            <div>
-              <strong>{o.toolTitle ?? t('workbench.terminal')}</strong>
-              {o.toolsTargetLabel && <small>{o.toolsTargetLabel}</small>}
-            </div>
-            <button
-              data-testid="workbench-close-tools"
-              aria-label={t('workbench.closeTools')}
-              onClick={o.onCloseTools}
-            >
-              <X size={17} />
-            </button>
-          </header>
-          <div className="workbench-pane-body">{o.toolContent}</div>
         </aside>
       )}
       </div>

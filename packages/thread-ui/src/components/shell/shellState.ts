@@ -7,7 +7,8 @@ import type {
 
 import { basenameFromPath, buildPromptLabel } from './shellPresentation';
 
-export type ShellPaneId = 'primary' | 'secondary';
+/** Panes are keyed by shell id; tests and older callers use fixed names. */
+export type ShellPaneId = string;
 
 export interface ShellPaneRuntimeState {
   status: ShellStatusDto;

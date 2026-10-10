@@ -448,8 +448,31 @@ export function useTimelineScroll({
     });
 
     observer.observe(content);
+    // A bottom panel (terminal) or keyboard can shrink the viewport without a
+    // content change. Keep the newest reply above the composer if the reader
+    // was following the tail.
+    let lastClientHeight = container.clientHeight;
+    const viewportObserver = new ResizeObserver(() => {
+      const nextClientHeight = container.clientHeight;
+      const previousClientHeight = lastClientHeight;
+      lastClientHeight = nextClientHeight;
+      if (nextClientHeight === 0 || nextClientHeight >= previousClientHeight) {
+        return;
+      }
+      if (
+        userScrolledAwayFromTailRef.current ||
+        !(shouldStickToBottomRef.current || isTailVisibleRef.current)
+      ) {
+        return;
+      }
+      window.requestAnimationFrame(() => {
+        if (!userScrolledAwayFromTailRef.current) scrollToBottom();
+      });
+    });
+    viewportObserver.observe(container);
     return () => {
       observer.disconnect();
+      viewportObserver.disconnect();
     };
   }, [scrollToBottom]);
 
