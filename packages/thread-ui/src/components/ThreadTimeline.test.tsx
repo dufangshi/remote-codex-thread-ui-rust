@@ -10,10 +10,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { ThreadTurnDto } from '@remote-codex/shared';
 
 import { ThreadTimeline } from './ThreadTimeline';
+import { WorkbenchContext } from './WorkbenchContext';
 const shellSettings = vi.hoisted(() => ({ showReasoningSummaries: true }));
 vi.mock('../app-shell/AppShellNavContext', () => ({ useAppShellNav: () => shellSettings }));
 import {
   formatPreciseMessageTimestamp,
+  formatLongTimestamp,
   formatShortTimestamp,
 } from './threadPresentation';
 
@@ -199,7 +201,7 @@ describe('ThreadTimeline', () => {
     const expand = element.querySelector<HTMLButtonElement>('[aria-label*="Expand turn 1"]')!;
     expect(expand).not.toBeNull();
     flushSync(() => expand.click());
-    expect(element.textContent).toMatch(/Ran\s*2 commands/);
+    expect(element.textContent).toContain('2 operations');
     expect(element.textContent).not.toContain('Hidden reasoning');
     expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('4 steps');
   });
@@ -591,7 +593,7 @@ describe('ThreadTimeline', () => {
       />,
     );
 
-    expect(element.textContent).toContain(formatShortTimestamp(activityAt));
+    expect(element.querySelector('.thread-progress-indicator')?.getAttribute('aria-label')).toContain(formatLongTimestamp(activityAt));
     expect(element.textContent).toContain('10s');
 
     flushSync(() => {
@@ -633,9 +635,9 @@ describe('ThreadTimeline', () => {
     expect(element.textContent).toContain('Interrupted');
   });
 
-  it('renders a command batch without redundant activity or batch labels', () => {
+  it('keeps operations collapsed in the workbench while assistant prose stays visible', () => {
     const element = render(
-      <ThreadTimeline
+      <WorkbenchContext.Provider value={true}><ThreadTimeline
         autoCollapseCompletedTurns={false}
         liveOutput=""
         turns={[
@@ -659,10 +661,11 @@ describe('ThreadTimeline', () => {
             },
           ]),
         ]}
-      />,
+      /></WorkbenchContext.Provider>,
     );
 
-    expect(element.textContent).toContain('3 commands');
+    expect(element.textContent).toContain('3 operations');
+    expect(element.textContent).not.toContain('pnpm test');
     expect(element.textContent).not.toContain('Agent activity');
     expect(element.textContent).not.toContain('Batch');
     expect(element.textContent).toContain('All commands completed.');
@@ -712,7 +715,7 @@ describe('ThreadTimeline', () => {
     );
 
     expect(element.textContent).toContain('The first finding is ready.');
-    expect(element.textContent).toContain('Worked');
+    expect(element.textContent).toContain('Performed');
     expect(element.textContent).toContain('3 operations');
     expect(element.textContent).toContain(
       'The imported session now reads cleanly.',

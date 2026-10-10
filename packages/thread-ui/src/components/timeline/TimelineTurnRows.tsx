@@ -2,7 +2,8 @@ import { translate, useI18n } from '../../i18n';
 import {
   memo,
   useCallback,
-  useContext,
+  useEffect,
+  useRef,
   useMemo,
   useState,
   type RefCallback,
@@ -52,6 +53,7 @@ import {
   groupTimelineHistoryItems,
   isActiveTurnStatus,
   isCompactChatItem,
+  isRunningHistoryStatus,
   mergeLiveTurnItems,
   parseHookPromptText,
   prepareTurnItemsForRendering,
@@ -61,7 +63,6 @@ import {
 import { TurnTokenSummary } from './tokenFormatting';
 import { deriveDisplayedLivePlan, TurnStatusBar } from './turnStatus';
 import { TurnUsageInline } from './TurnUsageInline';
-import { WorkbenchContext } from '../WorkbenchContext';
 import { useAppShellNav } from '../../app-shell/AppShellNavContext';
 
 type LivePlan = {
@@ -387,6 +388,7 @@ export const HistoryItemRow = memo(function HistoryItemRow({
 });
 
 interface ThreadTurnRowProps {
+  revealTarget?: { itemId: string; key: number } | undefined;
   threadId: string | undefined;
   adapter?: ThreadTimelineAdapter | undefined;
   turn: TimelineTurn;
@@ -486,6 +488,12 @@ export function formatWorkedDuration(
 }
 
 import { TimelineTimeToggle } from './TimelineTimeToggle';
+function historyEntryRunning(entry: TimelineHistoryEntry): boolean {
+  if (entry.kind === 'item') return isRunningHistoryStatus(entry.item.status);
+  if (entry.kind === 'agentActivityGroup') return entry.entries.some(historyEntryRunning);
+  return entry.items.some(item => isRunningHistoryStatus(item.status));
+}
+
 function firstHistoryEntryTimestamp(
   entry: TimelineHistoryEntry,
 ): string | null {
@@ -549,6 +557,7 @@ function collapsedSummaryMessages(entries: TimelineHistoryEntry[], active: boole
 
 export const ThreadTurnRow = memo(function ThreadTurnRow({
   threadId,
+  revealTarget,
   adapter,
   turn,
   absoluteIndex,
@@ -627,7 +636,23 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
     {},
   );
-  const workbench = useContext(WorkbenchContext);
+  const revealedSearch = useRef<number | null>(null);
+  useEffect(() => {
+    if (!revealTarget || revealedSearch.current === revealTarget.key) return;
+    const keys: string[] = [];
+    function contains(entry: TimelineHistoryEntry): boolean {
+      if (entry.kind === 'item') return entry.item.id === revealTarget?.itemId;
+      const found = entry.kind === 'agentActivityGroup'
+        ? entry.entries.some(contains)
+        : entry.items.some(item => item.id === revealTarget?.itemId);
+      if (found) keys.push(entry.key);
+      return found;
+    }
+    if (groupedItems.some(contains)) {
+      revealedSearch.current = revealTarget.key;
+      setExpandedGroups(current => ({ ...current, ...Object.fromEntries(keys.map(key => [key, true])) }));
+    }
+  }, [groupedItems, revealTarget]);
 
   const toggleGroupedItem = useCallback((groupKey: string) => {
     setExpandedGroups((current) => ({
@@ -638,7 +663,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
 
   const renderHistoryEntries = (entries: TimelineHistoryEntry[]) => (
     <TimelineHistoryEntries
-      entries={workbench ? entries.flatMap(entry => entry.kind === 'agentActivityGroup' ? entry.entries : [entry]) : entries}
+      entries={entries}
       expandedGroups={expandedGroups}
       onToggleGroupedItem={toggleGroupedItem}
       threadId={threadId}
@@ -964,7 +989,7 @@ function TimelineHistoryEntries({
         <AgentActivityGroupItem
           key={entry.key}
           itemCount={entry.itemCount}
-          running={autoOpenLatestToolDetails && entry.key === latestEntryKey}
+          running={entry.entries.some(historyEntryRunning)}
           expanded={expanded}
           onToggleExpanded={onToggleExpanded}
           timeMeta={relativeTimeMeta(

@@ -594,15 +594,6 @@ function containsReasoningEntry(entries: TimelineHistoryEntry[]) {
   );
 }
 
-function isCompletedAgentNarrative(entry: TimelineHistoryEntry | undefined) {
-  return (
-    entry?.kind === "item" &&
-    entry.item.kind === "agentMessage" &&
-    entry.item.text.trim().length > 0 &&
-    !isRunningHistoryStatus(entry.item.status)
-  );
-}
-
 function entryItemCount(entry: TimelineHistoryEntry): number {
   if (entry.kind === "item") {
     return 1;
@@ -636,7 +627,7 @@ function groupAgentActivitySequences(entries: TimelineHistoryEntry[]) {
 
     if (
       containsReasoningEntry(activityEntries) ||
-      (activityEntries.length > 1 && isCompletedAgentNarrative(entries[index]))
+      itemCount >= 2
     ) {
       grouped.push({
         kind: "agentActivityGroup",

@@ -705,6 +705,7 @@ function ThreadTimelineComponent({
                     threadId={threadId}
                     {...(adapter ? { adapter } : {})}
                     turn={displayTurn}
+                    revealTarget={searchTarget?.turnId === displayTurn.id ? searchTarget : undefined}
                     backgroundAgentCount={backgroundAgentCount}
                     absoluteIndex={visibleTurnAbsoluteOffset + visibleIndex + 1}
                     isCollapsed={rowCollapsed}

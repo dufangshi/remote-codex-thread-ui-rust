@@ -430,4 +430,7 @@ export const chatZhCN = {
   "chat.workedForHours": "工作了 {{hours}} 小时 {{minutes}} 分钟",
   "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒",
   "chat.workedForSeconds": "工作了 {{seconds}} 秒",
+  'chat.operationCount': '{{count}} 项操作',
+  'chat.performedOperations': '已执行',
+  'chat.performingOperations': '正在执行',
 } as const;

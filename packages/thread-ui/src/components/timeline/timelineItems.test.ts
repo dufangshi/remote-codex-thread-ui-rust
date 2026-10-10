@@ -166,9 +166,7 @@ describe("timeline item utilities", () => {
     expect(entries.map((entry) => entry.kind)).toEqual([
       "agentActivityGroup",
       "item",
-      "commandGroup",
-      "fileReadGroup",
-      "item",
+      "agentActivityGroup",
       "item",
     ]);
     expect(entries[0]).toMatchObject({
@@ -180,7 +178,7 @@ describe("timeline item utilities", () => {
       kind: "item",
       item: { id: "agent" },
     });
-    const commandGroup = entries[2];
+    const commandGroup = entries[2]?.kind === "agentActivityGroup" ? entries[2].entries[0] : undefined;
     expect(commandGroup?.kind).toBe("commandGroup");
     if (commandGroup?.kind === "commandGroup") {
       expect(commandGroup.items.map((entry) => entry.id)).toEqual([
@@ -188,6 +186,19 @@ describe("timeline item utilities", () => {
         "cmd-2",
       ]);
     }
+  });
+
+  it("groups mixed trailing operations before any next assistant reply exists", () => {
+    const entries = groupTimelineHistoryItems([
+      item("intro", "agentMessage", { text: "I will check the code." }),
+      item("command", "commandExecution"),
+      item("read", "fileRead"),
+      item("search", "webSearch"),
+    ]);
+    expect(entries).toMatchObject([
+      { kind: "item", item: { id: "intro" } },
+      { kind: "agentActivityGroup", itemCount: 3 },
+    ]);
   });
 
   it("batches Claude tool calls and folds a completed operation run before agent prose", () => {
@@ -258,7 +269,7 @@ describe("timeline item utilities", () => {
     expect(updated[2]?.key).not.toBe(updated[0]?.key);
   });
 
-  it("does not wrap a single command batch in agent activity", () => {
+  it("wraps a command batch in the unified operation summary", () => {
     const entries = groupTimelineHistoryItems([
       item("cmd-1", "commandExecution"),
       item("cmd-2", "commandExecution"),
@@ -270,16 +281,17 @@ describe("timeline item utilities", () => {
     ]);
 
     expect(entries.map((entry) => entry.kind)).toEqual([
-      "commandGroup",
+      "agentActivityGroup",
       "item",
     ]);
     expect(entries[0]).toMatchObject({
-      kind: "commandGroup",
-      items: [{ id: "cmd-1" }, { id: "cmd-2" }, { id: "cmd-3" }],
+      kind: "agentActivityGroup",
+      itemCount: 3,
+      entries: [{ kind: "commandGroup", items: [{ id: "cmd-1" }, { id: "cmd-2" }, { id: "cmd-3" }] }],
     });
   });
 
-  it("keeps in-progress activity visible until a completed agent narrative arrives", () => {
+  it("groups operations while keeping a streaming narrative visible", () => {
     const entries = groupTimelineHistoryItems([
       item("tool-1", "toolCall"),
       item("tool-2", "toolCall"),
@@ -290,18 +302,18 @@ describe("timeline item utilities", () => {
     ]);
 
     expect(entries.map((entry) => entry.kind)).toEqual([
-      "toolCallGroup",
+      "agentActivityGroup",
       "item",
     ]);
   });
 
-  it("keeps a final activity sequence visible when no following narrative exists", () => {
+  it("groups trailing operations without waiting for a narrative", () => {
     const entries = groupTimelineHistoryItems([
       item("tool-1", "toolCall"),
       item("tool-2", "toolCall"),
     ]);
 
-    expect(entries.map((entry) => entry.kind)).toEqual(["toolCallGroup"]);
+    expect(entries.map((entry) => entry.kind)).toEqual(["agentActivityGroup"]);
   });
 
   it("folds imported reasoning summaries and operations into one activity batch", () => {

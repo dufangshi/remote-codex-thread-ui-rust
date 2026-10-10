@@ -761,7 +761,10 @@ var chatEn = {
   "chat.awaitingResponseStatus": "Awaiting response",
   "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m",
   "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
-  "chat.workedForSeconds": "Worked for {{seconds}}s"
+  "chat.workedForSeconds": "Worked for {{seconds}}s",
+  "chat.operationCount": { one: "{{count}} operation", other: "{{count}} operations" },
+  "chat.performedOperations": "Performed",
+  "chat.performingOperations": "Working on"
 };
 
 // src/i18n/common.en.ts
@@ -2098,6 +2101,12 @@ var sharingEn = {
 
 // src/i18n/workbench.en.ts
 var workbenchEn = {
+  "workbench.adapterInstallTitle": "Install ACP adapter?",
+  "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Remote Codex. Install it now?",
+  "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.",
+  "workbench.adapterInstallFailed": "Unable to install the ACP adapter.",
+  "workbench.adapterInstallConfirm": "Install adapter",
+  "workbench.adapterInstallRetry": "Retry installation",
   "workbench.subagentBack": "Back to subagents",
   "workbench.subagentDetails": "Agent details",
   "workbench.subagentCounts": "{{running}} running \xB7 {{total}} total",
@@ -2557,7 +2566,10 @@ var workbenchEn = {
   "workbench.splitNoDevices": "No other devices available",
   "workbench.splitOnline": "Online",
   "workbench.splitOffline": "Offline",
-  "workbench.splitUntitled": "Untitled conversation"
+  "workbench.splitUntitled": "Untitled conversation",
+  "workbench.subagentCreated": "Created",
+  "workbench.subagentUpdated": "Updated",
+  "workbench.subagentLoadEarlier": "Load earlier activity"
 };
 
 // src/i18n/en.ts
@@ -3334,7 +3346,10 @@ var chatZhCN = {
   "chat.awaitingResponseStatus": "\u7B49\u5F85\u56DE\u590D",
   "chat.workedForHours": "\u5DE5\u4F5C\u4E86 {{hours}} \u5C0F\u65F6 {{minutes}} \u5206\u949F",
   "chat.workedForMinutes": "\u5DE5\u4F5C\u4E86 {{minutes}} \u5206\u949F {{seconds}} \u79D2",
-  "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2"
+  "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2",
+  "chat.operationCount": "{{count}} \u9879\u64CD\u4F5C",
+  "chat.performedOperations": "\u5DF2\u6267\u884C",
+  "chat.performingOperations": "\u6B63\u5728\u6267\u884C"
 };
 
 // src/i18n/common.zh-CN.ts
@@ -4671,6 +4686,12 @@ var sharingZhCN = {
 
 // src/i18n/workbench.zh-CN.ts
 var workbenchZhCN = {
+  "workbench.adapterInstallTitle": "\u5B89\u88C5 ACP \u9002\u914D\u5668\uFF1F",
+  "workbench.adapterInstallDescription": "\u5DF2\u68C0\u6D4B\u5230 {{agent}}\uFF0C\u8FD8\u9700\u8981 ACP \u9002\u914D\u5668\u624D\u80FD\u8FDE\u63A5 Remote Codex\u3002\u662F\u5426\u4E00\u952E\u5B89\u88C5\uFF1F",
+  "workbench.adapterInstallNotReady": "\u5B89\u88C5\u5DF2\u5B8C\u6210\uFF0C\u4F46 ACP \u9002\u914D\u5668\u5C1A\u672A\u5C31\u7EEA\uFF0C\u8BF7\u91CD\u8BD5\u3002",
+  "workbench.adapterInstallFailed": "ACP \u9002\u914D\u5668\u5B89\u88C5\u5931\u8D25\u3002",
+  "workbench.adapterInstallConfirm": "\u4E00\u952E\u5B89\u88C5",
+  "workbench.adapterInstallRetry": "\u91CD\u8BD5\u5B89\u88C5",
   "workbench.subagentBack": "\u8FD4\u56DE\u5B50\u667A\u80FD\u4F53\u5217\u8868",
   "workbench.subagentDetails": "\u5B50\u667A\u80FD\u4F53\u8BE6\u60C5",
   "workbench.subagentCounts": "{{running}} \u4E2A\u8FD0\u884C\u4E2D \xB7 \u5171 {{total}} \u4E2A",
@@ -5130,7 +5151,10 @@ var workbenchZhCN = {
   "workbench.splitNoDevices": "\u6682\u65E0\u5176\u4ED6\u53EF\u7528\u8BBE\u5907",
   "workbench.splitOnline": "\u5728\u7EBF",
   "workbench.splitOffline": "\u79BB\u7EBF",
-  "workbench.splitUntitled": "\u672A\u547D\u540D\u4F1A\u8BDD"
+  "workbench.splitUntitled": "\u672A\u547D\u540D\u4F1A\u8BDD",
+  "workbench.subagentCreated": "\u521B\u5EFA\u4E8E",
+  "workbench.subagentUpdated": "\u66F4\u65B0\u4E8E",
+  "workbench.subagentLoadEarlier": "\u52A0\u8F7D\u66F4\u65E9\u8BB0\u5F55"
 };
 
 // src/i18n/zh-CN.ts
