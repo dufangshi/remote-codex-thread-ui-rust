@@ -3065,7 +3065,7 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
 }
 .thread-ui-shell .is-compact-group .thread-graph-history-group-summary > span {
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 11px;
 }
 .thread-ui-shell .is-compact-group .thread-graph-history-group-stats {
   display: inline-flex;
@@ -3076,7 +3076,7 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
   display: inline-flex;
   align-items: center;
   gap: 1px;
-  font-size: 11px;
+  font-size: 10px;
   font-variant-numeric: tabular-nums;
 }
 .thread-ui-shell .is-compact-group .thread-graph-history-group-time {
@@ -3099,14 +3099,14 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
 .thread-ui-shell .is-compact-group.is-plain-group > .thread-graph-history-group-card > .thread-graph-history-group-toggle { gap: 8px; }
 .thread-ui-shell .is-compact-group.is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-summary > span {
   color: var(--theme-fg-muted);
-  font-size: 14px;
+  font-size: 12px;
 }
 .thread-ui-shell .is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-time {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-left: 0;
-  font-size: 12px;
+  font-size: 11px;
 }
 .thread-ui-shell .is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-time::before { content: '·'; opacity: .55; }
 .thread-ui-shell .is-compact-group > .thread-graph-history-group-card > .thread-graph-history-group-list {

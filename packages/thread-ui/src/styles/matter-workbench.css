@@ -975,7 +975,7 @@
   border-radius: 5px;
   text-align: left;
   line-height: 20px;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--theme-fg-soft);
   transition: background-color 150ms;
 }
@@ -998,7 +998,7 @@
 .thread-diff-line.is-add .thread-diff-sign { color: light-dark(oklch(40% .12 150), oklch(77% .14 150)); }
 .thread-diff-line.is-remove .thread-diff-sign { color: light-dark(oklch(43% .16 25), oklch(77% .12 25)); }
 .thread-diff-line.is-meta { color: var(--theme-fg-muted); }
-.thread-history-direct-row { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 0; font-size: 12px; color: var(--theme-fg-soft); }
+.thread-history-direct-row { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 0; font-size: 11px; color: var(--theme-fg-soft); }
 .thread-history-direct-action { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; text-align: left; border-radius: 6px; padding: 4px 2px; }
 .thread-history-direct-action:hover { background: var(--theme-hover); }
 .thread-history-direct-action:focus-visible { outline: 2px solid var(--theme-accent-border); }
