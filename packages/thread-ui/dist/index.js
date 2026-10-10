@@ -17684,6 +17684,19 @@ var ShellPane = forwardRef(
       refreshTerminalLayoutRef.current = () => refreshTerminalLayout();
     }, [refreshTerminalLayout]);
     useEffect30(() => {
+      if (!isMobileShell || !isVisible || !terminalReady) return;
+      let frame = 0;
+      const refresh = () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => refreshTerminalLayoutRef.current());
+      };
+      window.visualViewport?.addEventListener("resize", refresh);
+      return () => {
+        cancelAnimationFrame(frame);
+        window.visualViewport?.removeEventListener("resize", refresh);
+      };
+    }, [isMobileShell, isVisible, terminalReady]);
+    useEffect30(() => {
       onRuntimeStateChange({
         status: viewerId ? "attached" : shellStatus,
         shellInputEnabled: Boolean(viewerId && shell),

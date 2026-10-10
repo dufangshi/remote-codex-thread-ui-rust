@@ -329,6 +329,22 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
     }, [refreshTerminalLayout]);
 
     useEffect(() => {
+      if (!isMobileShell || !isVisible || !terminalReady) return;
+      let frame = 0;
+      const refresh = () => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => refreshTerminalLayoutRef.current());
+      };
+      // Keyboard focus can scroll xterm after its host ResizeObserver runs.
+      // Refit and reveal the input after the visual viewport has settled too.
+      window.visualViewport?.addEventListener('resize', refresh);
+      return () => {
+        cancelAnimationFrame(frame);
+        window.visualViewport?.removeEventListener('resize', refresh);
+      };
+    }, [isMobileShell, isVisible, terminalReady]);
+
+    useEffect(() => {
       onRuntimeStateChange({
         status: viewerId ? 'attached' : shellStatus,
         shellInputEnabled: Boolean(viewerId && shell),
