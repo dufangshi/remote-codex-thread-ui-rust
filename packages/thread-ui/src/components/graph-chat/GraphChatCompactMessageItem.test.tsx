@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { GraphChatCompactMessageItem } from "./GraphChatCompactMessageItem";
+import { GraphChatContextCompactionItem } from './GraphChatHistoryItems';
 
 (
   globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -14,20 +15,42 @@ import { GraphChatCompactMessageItem } from "./GraphChatCompactMessageItem";
 let cleanup: (() => void) | null = null;
 
 afterEach(() => {
-  cleanup?.();
+  act(() => cleanup?.());
   cleanup = null;
   vi.restoreAllMocks();
 });
 
 describe("GraphChatCompactMessageItem", () => {
-  it("does not put running dots on already emitted agent messages", async () => {
+  it.each(['running', 'in_progress', 'interrupted', 'cancelled', 'failed', 'completed'])("does not repeat %s turn status on emitted agent messages", async (status) => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const root = createRoot(container);
     cleanup = () => { root.unmount(); container.remove(); };
-    await act(async () => root.render(<GraphChatCompactMessageItem item={{id:'old',kind:'agentMessage',text:'Previous checkpoint',status:'running'}} scrollRootRef={{current:null}} />));
+    await act(async () => root.render(<GraphChatCompactMessageItem item={{id:'old',kind:'agentMessage',text:'Previous checkpoint',status}} scrollRootRef={{current:null}} />));
     expect(container.textContent).toContain('Previous checkpoint');
     expect(container.querySelector('.thread-graph-message-status')).toBeNull();
+  });
+
+  it('preserves the explicit delivery status of a pending user message', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    cleanup = () => { root.unmount(); container.remove(); };
+    await act(async () => root.render(<GraphChatCompactMessageItem item={{id:'queued',kind:'userMessage',text:'Follow up',status:'Awaiting response'}} scrollRootRef={{current:null}} />));
+    expect(container.querySelector('.thread-graph-message-status')?.textContent).toBe('Awaiting response');
+  });
+
+  it('keeps compaction content without an empty neutral status chip, while retaining errors', async () => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root = createRoot(container);
+    cleanup = () => { root.unmount(); container.remove(); };
+    const item = {id:'compact',kind:'contextCompaction' as const,text:'Context compaction',status:'interrupted'};
+    await act(async () => root.render(<GraphChatContextCompactionItem item={item} />));
+    expect(container.textContent).toContain('Context compacted');
+    expect(container.querySelector('.thread-graph-tool-badge')).toBeNull();
+    await act(async () => root.render(<GraphChatContextCompactionItem item={{...item,status:'failed'}} />));
+    expect(container.querySelector('.thread-graph-tool-badge')?.textContent).toBe('Failed');
   });
 
   it("does not mount chain-of-thought content until its toggle is opened", async () => {

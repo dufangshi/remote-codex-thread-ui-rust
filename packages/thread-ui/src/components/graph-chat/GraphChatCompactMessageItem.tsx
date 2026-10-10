@@ -219,13 +219,8 @@ export const GraphChatCompactMessageItem = memo(
       <GraphChatMessageFrame
         messageId={item.id}
         kind={item.kind}
-        status={
-          queuedLikeStatus
-            ? item.status
-            : item.kind === 'agentMessage' && !isGraphChatRunningStatus(item.status)
-              ? item.status
-              : null
-        }
+        // Execution status belongs to the turn summary, not every emitted reply.
+        status={queuedLikeStatus ? item.status : null}
         copyButton={copyButton}
         metaControl={reasoningToggle}
         reasoning={reasoning}

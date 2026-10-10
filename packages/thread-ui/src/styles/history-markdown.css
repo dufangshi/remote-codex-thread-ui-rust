@@ -2350,27 +2350,7 @@
     font-size: 0.625rem;
   }
 
-  .thread-ui-shell
-    :where(.thread-graph-message-status, .thread-graph-tool-badge)
-    .thread-graph-status-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
 
-  .thread-ui-shell
-    :where(.thread-graph-message-status, .thread-graph-tool-badge) {
-    min-width: 1.45rem;
-    justify-content: center;
-    padding-left: 0.25rem !important;
-    padding-right: 0.25rem !important;
-  }
 }
 
 @media (min-width: 640px) {

@@ -444,7 +444,7 @@ function GraphChatHistoryEventFrame({
   const { locale: i18nLocale } = useI18n();
   const statusConfig = graphHistoryStatusConfig(item.status);
   const showStatus = Boolean(
-    item.status && statusConfig.className !== 'is-completed',
+    statusConfig.className === 'is-pending' || statusConfig.className === 'is-failed',
   );
 
   return (

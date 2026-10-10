@@ -99,7 +99,7 @@ export function GraphChatMessageFrame({
   const [touchActionsVisible, setTouchActionsVisible] = useState(false);
   const normalizedStatus = status?.trim().toLowerCase() ?? '';
   const showStatus = Boolean(
-    status &&
+    isUser && status &&
     normalizedStatus !== 'complete' &&
     normalizedStatus !== 'completed',
   );
@@ -162,16 +162,6 @@ export function GraphChatMessageFrame({
               <GraphChatMessageStatusBadge status={status} />
             ) : null}
 
-          </div>
-        ) : null}
-        {!isUser && showStatus ? (
-          <div
-            className={`thread-graph-message-assistant-actions flex items-center gap-1 ${showStatus ? 'has-status' : ''}`}
-          >
-
-            {showStatus ? (
-              <GraphChatMessageStatusBadge status={status} />
-            ) : null}
           </div>
         ) : null}
       </div>
