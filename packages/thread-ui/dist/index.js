@@ -7874,8 +7874,8 @@ ${thread.subtitle} \xB7 ${activity.label}`,
               href: homeHref,
               "aria-label": translate("workbench.pockymoeHome"),
               children: [
-                "r",
-                /* @__PURE__ */ jsx33("span", { children: "c" })
+                "p",
+                /* @__PURE__ */ jsx33("span", { children: "m" })
               ]
             }
           ),

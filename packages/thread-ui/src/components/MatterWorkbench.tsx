@@ -243,7 +243,7 @@ export function MatterWorkbench({
           href={homeHref}
           aria-label={translate("workbench.pockymoeHome")}
         >
-          r<span>c</span>
+          p<span>m</span>
         </a>
         <button
           aria-label={translate("workbench.chat")}
