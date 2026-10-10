@@ -638,7 +638,8 @@ function GraphChatNativeTaskNotification({
       : completed ? 'chat.backgroundTaskCompleted'
       : 'chat.backgroundTaskUpdated',
   );
-  const timestamp = item.createdAt ? new Date(item.createdAt) : null;
+  const notificationAt = typeof item.awakenedAt === 'string' ? item.awakenedAt : item.createdAt;
+  const timestamp = notificationAt ? new Date(notificationAt) : null;
   const validTimestamp = timestamp && Number.isFinite(timestamp.getTime());
 
   return (
@@ -664,7 +665,7 @@ function GraphChatNativeTaskNotification({
           {item.detailText ? <div><GraphChatLinkifiedPlainText text={item.detailText} /></div> : null}
           {waiting ? <div>{translate('chat.backgroundWaitingHint')}</div> : null}
           {validTimestamp ? (
-            <time dateTime={item.createdAt!}>
+            <time dateTime={notificationAt!}>
               {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' }).format(timestamp)}
             </time>
           ) : null}

@@ -12843,7 +12843,8 @@ function GraphChatNativeTaskNotification({
   const label = translate(
     waiting ? "chat.waitingForWake" : item.origin === "nativeTaskNotification" && !failed && !stopped ? "chat.backgroundAwakened" : item.origin === "nativeBackgroundWait" && status === "running" ? "chat.backgroundResumed" : item.origin === "nativeBackgroundWait" ? "chat.backgroundWaitEnded" : failed ? "chat.backgroundTaskFailed" : stopped ? "chat.backgroundTaskStopped" : completed ? "chat.backgroundTaskCompleted" : "chat.backgroundTaskUpdated"
   );
-  const timestamp = item.createdAt ? new Date(item.createdAt) : null;
+  const notificationAt = typeof item.awakenedAt === "string" ? item.awakenedAt : item.createdAt;
+  const timestamp = notificationAt ? new Date(notificationAt) : null;
   const validTimestamp = timestamp && Number.isFinite(timestamp.getTime());
   return /* @__PURE__ */ jsxs41("div", { className: `thread-graph-event thread-graph-task-notice${failed ? " is-failed" : ""}`, children: [
     /* @__PURE__ */ jsxs41("div", { className: "thread-graph-task-notice-row", children: [
@@ -12868,7 +12869,7 @@ function GraphChatNativeTaskNotification({
       item.text ? /* @__PURE__ */ jsx51("div", { children: /* @__PURE__ */ jsx51(GraphChatLinkifiedPlainText, { text: item.text }) }) : null,
       item.detailText ? /* @__PURE__ */ jsx51("div", { children: /* @__PURE__ */ jsx51(GraphChatLinkifiedPlainText, { text: item.detailText }) }) : null,
       waiting ? /* @__PURE__ */ jsx51("div", { children: translate("chat.backgroundWaitingHint") }) : null,
-      validTimestamp ? /* @__PURE__ */ jsx51("time", { dateTime: item.createdAt, children: new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "medium" }).format(timestamp) }) : null
+      validTimestamp ? /* @__PURE__ */ jsx51("time", { dateTime: notificationAt, children: new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "medium" }).format(timestamp) }) : null
     ] }) : null
   ] });
 }

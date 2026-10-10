@@ -59,10 +59,11 @@ it('replaces waiting with the wake cause using the same timeline anchor', async 
   const toggle=container.querySelector('button')!;
   await act(async () => toggle.click());
   expect(container.textContent).toContain('Updates will continue here');
-  await act(async () => root.render(<GraphChatGenericHistoryItem item={{...item,origin:'nativeTaskNotification',status:'completed',taskStatus:'completed',text:'Release finished',detailText:'All checks passed'}} />));
+  await act(async () => root.render(<GraphChatGenericHistoryItem item={{...item,origin:'nativeTaskNotification',status:'completed',taskStatus:'completed',text:'Release finished',detailText:'All checks passed',createdAt:'2026-10-10T18:30:00Z',awakenedAt:'2026-10-10T18:31:00Z'}} />));
   expect(container.querySelector('button')).toBe(toggle);
   expect(container.textContent).toContain('Awakened');
   expect(container.textContent).toContain('All checks passed');
+  expect(container.querySelector('time')?.dateTime).toBe('2026-10-10T18:31:00Z');
   expect(container.textContent).not.toContain('Waiting for wake');
   expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
 });
@@ -74,7 +75,7 @@ it('keeps wake and narrative visible while a completed turn collapses its operat
   const root=createRoot(container);
   cleanup=()=>{root.unmount();container.remove();};
   await act(async()=>root.render(<ThreadTimeline autoCollapseCompletedTurns liveOutput="" turns={[{
-    id:'turn',status:'completed',startedAt:'2026-10-10T18:30:00Z',completedAt:'2026-10-10T18:31:00Z',items:[
+    id:'turn',status:'completed',error:null,startedAt:'2026-10-10T18:30:00Z',completedAt:'2026-10-10T18:31:00Z',items:[
       {id:'prompt',kind:'userMessage',text:'Check after the build'},
       {id:'foreground',kind:'agentMessage',text:'Waiting for the build'},
       {id:'wait',kind:'other',text:'Build finished',origin:'nativeTaskNotification',taskStatus:'completed'},

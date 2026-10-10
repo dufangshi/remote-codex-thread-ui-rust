@@ -401,6 +401,10 @@ export interface ThreadHistoryItemDto {
   sourceTurnId?: string | null;
   origin?: string | null;
   taskStatus?: string | null;
+  taskId?: string | null;
+  waitingStartedAt?: string | null;
+  awakenedAt?: string | null;
+  backgroundTaskCount?: number | null;
   createdAt?: string | null;
   status?: string | null;
   assetPath?: string | null;
