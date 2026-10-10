@@ -212,7 +212,7 @@ export function buildTurnTokenDetails(turn: TimelineTurn) {
     nonCachedInputTokens > 0
       ? {
           id: 'in',
-          label: translate("chat.input"),
+          label: translate("chat.uncachedInput"),
           tokenCompactValue: formatCompactTokenCount(nonCachedInputTokens),
           tokenRawValue: nonCachedInputTokens,
           usdCompactValue: turn.priceEstimate
@@ -226,7 +226,7 @@ export function buildTurnTokenDetails(turn: TimelineTurn) {
     cachedInputTokens > 0
       ? {
           id: 'cache',
-          label: translate("chat.cachedInput"),
+          label: translate("chat.cacheRead"),
           tokenCompactValue: formatCompactTokenCount(cachedInputTokens),
           tokenRawValue: cachedInputTokens,
           usdCompactValue: turn.priceEstimate

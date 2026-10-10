@@ -19,7 +19,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-DCFSFMIV.js";
+} from "./chunk-BPY7AMZR.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -37,7 +37,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-H2FKRDJJ.js";
+} from "./chunk-U5L6VXJW.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -6152,7 +6152,7 @@ function buildTurnTokenDetails(turn) {
   const details = [
     nonCachedInputTokens > 0 ? {
       id: "in",
-      label: translate("chat.input"),
+      label: translate("chat.uncachedInput"),
       tokenCompactValue: formatCompactTokenCount(nonCachedInputTokens),
       tokenRawValue: nonCachedInputTokens,
       usdCompactValue: turn.priceEstimate ? formatDetailedUsd(turn.priceEstimate.inputUsd) : "--",
@@ -6162,7 +6162,7 @@ function buildTurnTokenDetails(turn) {
     } : null,
     cachedInputTokens > 0 ? {
       id: "cache",
-      label: translate("chat.cachedInput"),
+      label: translate("chat.cacheRead"),
       tokenCompactValue: formatCompactTokenCount(cachedInputTokens),
       tokenRawValue: cachedInputTokens,
       usdCompactValue: turn.priceEstimate ? formatDetailedUsd(turn.priceEstimate.cachedInputUsd) : "--",
@@ -6403,17 +6403,23 @@ function TokenUsageCost({
   const priceTitle = translate("chat.aPIPriceUnavailableForThisModelOr");
   const details = usage ? [
     {
-      label: translate("chat.input"),
+      label: translate("chat.uncachedInput"),
       icon: ArrowDownToLine,
       value: uncachedInput,
       usd: price?.inputUsd
     },
     {
-      label: translate("chat.cachedInput"),
+      label: translate("chat.cacheRead"),
       icon: Database,
       value: usage.cachedInputTokens,
       usd: price?.cachedInputUsd
     },
+    ...usage.cacheWriteInputTokens ? [{
+      label: translate("chat.cacheWrite"),
+      icon: Save,
+      value: usage.cacheWriteInputTokens,
+      usd: price?.cacheWriteInputUsd
+    }] : [],
     {
       label: translate("chat.output"),
       icon: ArrowUpFromLine,
@@ -6426,14 +6432,6 @@ function TokenUsageCost({
         icon: Brain,
         value: reasoning,
         usd: price ? reasoningUsd : void 0
-      }
-    ] : [],
-    ...usage.cacheWriteInputTokens ? [
-      {
-        label: translate("chat.cacheWrite"),
-        icon: Save,
-        value: usage.cacheWriteInputTokens,
-        usd: price?.cacheWriteInputUsd
       }
     ] : []
   ] : [];
@@ -6473,45 +6471,57 @@ function TokenUsageCost({
           border: "1px solid #484a41",
           borderRadius: 10,
           padding: "9px 12px",
+          fontSize: 12,
+          lineHeight: 1.5,
           boxShadow: "0 6px 22px #0005",
           zIndex: tooltipZIndex,
           maxWidth: "calc(100vw - 24px)"
         },
         children: [
-          /* @__PURE__ */ jsxs22(
+          /* @__PURE__ */ jsxs22("div", { style: { display: "flex", gap: 12, alignItems: "center", marginBottom: 6 }, children: [
+            /* @__PURE__ */ jsx26(DollarSign, { size: 14, "aria-hidden": "true" }),
+            /* @__PURE__ */ jsx26("span", { children: costLabel }),
+            /* @__PURE__ */ jsx26("span", { style: { marginLeft: "auto", fontVariantNumeric: "tabular-nums", fontWeight: 600 }, children: hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle })
+          ] }),
+          usage && /* @__PURE__ */ jsxs22("div", { style: { display: "flex", justifyContent: "space-between", gap: 12, paddingBottom: 8, marginBottom: 8, borderBottom: "1px solid #484a41" }, children: [
+            /* @__PURE__ */ jsx26("span", { children: translate("chat.totalInput") }),
+            /* @__PURE__ */ jsx26("span", { "aria-label": translate("chat.tokens", { value1: translate("chat.totalInput"), value2: usage.inputTokens.toLocaleString(getLocale()) }), title: usage.inputTokens.toLocaleString(getLocale()), style: { fontVariantNumeric: "tabular-nums", fontWeight: 600 }, children: formatCompactTokenCount(usage.inputTokens) })
+          ] }),
+          /* @__PURE__ */ jsx26(
             "div",
             {
               style: {
                 display: "grid",
-                gridTemplateColumns: "16px auto auto",
-                gap: "6px 12px",
+                gridTemplateColumns: "16px minmax(0, 1fr) auto auto",
+                gap: "6px 8px",
                 alignItems: "center",
                 fontVariantNumeric: "tabular-nums"
               },
-              children: [
-                /* @__PURE__ */ jsx26(DollarSign, { size: 14, "aria-label": costLabel }),
-                /* @__PURE__ */ jsx26("span", { style: { gridColumn: "span 2", textAlign: "right" }, children: hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle }),
-                details.map(({ label, icon: Icon, value, usd }) => /* @__PURE__ */ jsxs22("span", { style: { display: "contents" }, children: [
-                  /* @__PURE__ */ jsx26(Icon, { size: 14, "aria-label": label }),
-                  /* @__PURE__ */ jsx26(
-                    "span",
-                    {
-                      "aria-label": translate("chat.tokens", { value1: label, value2: value.toLocaleString(getLocale()) }),
-                      title: `${label}: ${value.toLocaleString(getLocale())}`,
-                      children: formatCompactTokenCount(value)
-                    }
-                  ),
-                  /* @__PURE__ */ jsx26(
-                    "span",
-                    {
-                      "aria-label": translate("chat.cost", { value1: label }),
-                      title: Icon === Brain ? translate("chat.includedInOutputChargesNotAnAdditional") : void 0,
-                      style: { textAlign: "right" },
-                      children: usd == null ? "\u2014" : formatCompactUsd(usd)
-                    }
-                  )
-                ] }, label))
-              ]
+              children: details.map(({ label, icon: Icon, value, usd }) => /* @__PURE__ */ jsxs22("span", { style: { display: "contents" }, children: [
+                /* @__PURE__ */ jsx26(Icon, { size: 14, "aria-hidden": "true" }),
+                /* @__PURE__ */ jsxs22("span", { children: [
+                  label,
+                  Icon === Save && usage?.cacheWriteOneHourInputTokens === usage?.cacheWriteInputTokens && usage?.cacheWriteOneHourInputTokens ? /* @__PURE__ */ jsx26("small", { style: { opacity: 0.65, marginLeft: 4 }, children: "1h" }) : null
+                ] }),
+                /* @__PURE__ */ jsx26(
+                  "span",
+                  {
+                    "aria-label": translate("chat.tokens", { value1: label, value2: value.toLocaleString(getLocale()) }),
+                    title: `${label}: ${value.toLocaleString(getLocale())}`,
+                    style: { textAlign: "right", whiteSpace: "nowrap" },
+                    children: formatCompactTokenCount(value)
+                  }
+                ),
+                /* @__PURE__ */ jsx26(
+                  "span",
+                  {
+                    "aria-label": translate("chat.cost", { value1: label }),
+                    title: Icon === Brain ? translate("chat.includedInOutputChargesNotAnAdditional") : void 0,
+                    style: { textAlign: "right", whiteSpace: "nowrap" },
+                    children: usd == null ? "\u2014" : formatCompactUsd(usd)
+                  }
+                )
+              ] }, label))
             }
           ),
           detailsNote ? /* @__PURE__ */ jsx26("p", { className: "mt-2 max-w-xs text-xs", children: detailsNote }) : null

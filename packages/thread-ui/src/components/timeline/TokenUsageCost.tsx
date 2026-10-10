@@ -64,17 +64,25 @@ export function TokenUsageCost({
   const details = usage
     ? [
         {
-          label: translate("chat.input"),
+          label: translate("chat.uncachedInput"),
           icon: ArrowDownToLine,
           value: uncachedInput,
           usd: price?.inputUsd,
         },
         {
-          label: translate("chat.cachedInput"),
+          label: translate("chat.cacheRead"),
           icon: Database,
           value: usage.cachedInputTokens,
           usd: price?.cachedInputUsd,
         },
+        ...(usage.cacheWriteInputTokens
+          ? [{
+              label: translate("chat.cacheWrite"),
+              icon: Save,
+              value: usage.cacheWriteInputTokens,
+              usd: price?.cacheWriteInputUsd,
+            }]
+          : []),
         {
           label: translate("chat.output"),
           icon: ArrowUpFromLine,
@@ -88,16 +96,6 @@ export function TokenUsageCost({
                 icon: Brain,
                 value: reasoning,
                 usd: price ? reasoningUsd : undefined,
-              },
-            ]
-          : []),
-        ...(usage.cacheWriteInputTokens
-          ? [
-              {
-                label: translate("chat.cacheWrite"),
-                icon: Save,
-                value: usage.cacheWriteInputTokens,
-                usd: price?.cacheWriteInputUsd,
               },
             ]
           : []),
@@ -152,30 +150,44 @@ export function TokenUsageCost({
               border: '1px solid #484a41',
               borderRadius: 10,
               padding: '9px 12px',
+              fontSize: 12,
+              lineHeight: 1.5,
               boxShadow: '0 6px 22px #0005',
               zIndex: tooltipZIndex,
               maxWidth: 'calc(100vw - 24px)',
             }}
           >
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 6 }}>
+              <DollarSign size={14} aria-hidden="true" />
+              <span>{costLabel}</span>
+              <span style={{ marginLeft: 'auto', fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
+                {hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle}
+              </span>
+            </div>
+            {usage && <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid #484a41' }}>
+              <span>{translate('chat.totalInput')}</span>
+              <span aria-label={translate('chat.tokens', { value1: translate('chat.totalInput'), value2: usage.inputTokens.toLocaleString(getLocale()) })} title={usage.inputTokens.toLocaleString(getLocale())} style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 600 }}>
+                {formatCompactTokenCount(usage.inputTokens)}
+              </span>
+            </div>}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '16px auto auto',
-                gap: '6px 12px',
+                gridTemplateColumns: '16px minmax(0, 1fr) auto auto',
+                gap: '6px 8px',
                 alignItems: 'center',
                 fontVariantNumeric: 'tabular-nums',
               }}
             >
-              <DollarSign size={14} aria-label={costLabel} />
-              <span style={{ gridColumn: 'span 2', textAlign: 'right' }}>
-                {hasPrice ? formatCompactUsd(price.totalUsd) : priceTitle}
-              </span>
               {details.map(({ label, icon: Icon, value, usd }) => (
                 <span key={label} style={{ display: 'contents' }}>
-                  <Icon size={14} aria-label={label} />
+                  <Icon size={14} aria-hidden="true" />
+                  <span>{label}{Icon === Save && usage?.cacheWriteOneHourInputTokens === usage?.cacheWriteInputTokens && usage?.cacheWriteOneHourInputTokens
+                    ? <small style={{ opacity: 0.65, marginLeft: 4 }}>1h</small> : null}</span>
                   <span
                     aria-label={translate("chat.tokens", { value1: label, value2: value.toLocaleString(getLocale()) })}
                     title={`${label}: ${value.toLocaleString(getLocale())}`}
+                    style={{ textAlign: 'right', whiteSpace: 'nowrap' }}
                   >
                     {formatCompactTokenCount(value)}
                   </span>
@@ -186,7 +198,7 @@ export function TokenUsageCost({
                         ? translate("chat.includedInOutputChargesNotAnAdditional")
                         : undefined
                     }
-                    style={{ textAlign: 'right' }}
+                    style={{ textAlign: 'right', whiteSpace: 'nowrap' }}
                   >
                     {usd == null ? '—' : formatCompactUsd(usd)}
                   </span>

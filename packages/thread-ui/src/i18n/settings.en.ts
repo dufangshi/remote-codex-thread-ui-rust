@@ -137,6 +137,7 @@ export const settingsEn = {
   "settings.in": "In",
   "settings.cached": "Cached",
   "settings.out_220e06": "Out",
+  "settings.cacheWriteOneHour": "Cache write (1h)",
   "settings.cacheWrite": "Cache write",
   "settings.templateExportedWithoutAPIKeysFillThem": "Template exported without API keys. Fill them in before importing on another device.",
   "settings.configurationAppliedIdleSessionsWereRestartedThe": "{{value1}} configuration applied. Idle sessions were restarted; the next turn uses this upstream.",

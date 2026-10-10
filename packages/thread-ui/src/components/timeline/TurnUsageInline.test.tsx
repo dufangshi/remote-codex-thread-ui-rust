@@ -95,8 +95,8 @@ describe('turn usage in the visible timeline', () => {
     try {
       flushSync(() => root.render(<TurnUsageInline turn={turn} />));
       flushSync(() => container.querySelector<HTMLButtonElement>('.thread-turn-usage-price')!.click());
-      expect(document.querySelector('[aria-label="Input: 1,000 tokens"]')).not.toBeNull();
-      expect(document.querySelector('[aria-label="Cached input: 500 tokens"]')).not.toBeNull();
+      expect(document.querySelector('[aria-label="Uncached input: 1,000 tokens"]')).not.toBeNull();
+      expect(document.querySelector('[aria-label="Cache read: 500 tokens"]')).not.toBeNull();
       expect(document.querySelector('[aria-label="Output: 1,200 tokens"]')).not.toBeNull();
       expect(document.querySelector('[aria-label="Reasoning: 800 tokens"]')).not.toBeNull();
     } finally { flushSync(() => root.unmount()); container.remove(); vi.unstubAllGlobals(); }

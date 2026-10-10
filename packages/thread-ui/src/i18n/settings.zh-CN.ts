@@ -137,6 +137,7 @@ export const settingsZhCN = {
   "settings.in": "输入",
   "settings.cached": "缓存",
   "settings.out_220e06": "输出",
+  "settings.cacheWriteOneHour": "缓存写入（1 小时）",
   "settings.cacheWrite": "缓存写入",
   "settings.templateExportedWithoutAPIKeysFillThem": "已导出不含 API 密钥的模板。在其他设备导入前请填写密钥。",
   "settings.configurationAppliedIdleSessionsWereRestartedThe": "已应用 {{value1}} 配置。空闲会话已重启，下个轮次使用此上游。",

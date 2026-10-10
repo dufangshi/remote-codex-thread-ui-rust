@@ -944,6 +944,7 @@ declare const en: {
     readonly "settings.in": "In";
     readonly "settings.cached": "Cached";
     readonly "settings.out_220e06": "Out";
+    readonly "settings.cacheWriteOneHour": "Cache write (1h)";
     readonly "settings.cacheWrite": "Cache write";
     readonly "settings.templateExportedWithoutAPIKeysFillThem": "Template exported without API keys. Fill them in before importing on another device.";
     readonly "settings.configurationAppliedIdleSessionsWereRestartedThe": "{{value1}} configuration applied. Idle sessions were restarted; the next turn uses this upstream.";
@@ -2240,6 +2241,9 @@ declare const en: {
     readonly "chat.loadingCompleteHistory": "Loading complete history...";
     readonly "chat.historyUnavailableRetry": "History unavailable, retry";
     readonly "chat.steps": "steps";
+    readonly "chat.uncachedInput": "Uncached input";
+    readonly "chat.cacheRead": "Cache read";
+    readonly "chat.totalInput": "Total input";
     readonly "chat.input": "Input";
     readonly "chat.cachedInput": "Cached input";
     readonly "chat.output": "Output";
@@ -3700,6 +3704,7 @@ declare const zhCN: {
     "settings.in": "输入";
     "settings.cached": "缓存";
     "settings.out_220e06": "输出";
+    "settings.cacheWriteOneHour": "缓存写入（1 小时）";
     "settings.cacheWrite": "缓存写入";
     "settings.templateExportedWithoutAPIKeysFillThem": "已导出不含 API 密钥的模板。在其他设备导入前请填写密钥。";
     "settings.configurationAppliedIdleSessionsWereRestartedThe": "已应用 {{value1}} 配置。空闲会话已重启，下个轮次使用此上游。";
@@ -4996,6 +5001,9 @@ declare const zhCN: {
     "chat.loadingCompleteHistory": "正在加载完整历史…";
     "chat.historyUnavailableRetry": "历史不可用，重试";
     "chat.steps": "步骤";
+    "chat.uncachedInput": "未缓存输入";
+    "chat.cacheRead": "缓存读取";
+    "chat.totalInput": "输入合计";
     "chat.input": "输入";
     "chat.cachedInput": "缓存输入";
     "chat.output": "输出";
@@ -6460,6 +6468,7 @@ declare const resources: {
         readonly "settings.in": "In";
         readonly "settings.cached": "Cached";
         readonly "settings.out_220e06": "Out";
+        readonly "settings.cacheWriteOneHour": "Cache write (1h)";
         readonly "settings.cacheWrite": "Cache write";
         readonly "settings.templateExportedWithoutAPIKeysFillThem": "Template exported without API keys. Fill them in before importing on another device.";
         readonly "settings.configurationAppliedIdleSessionsWereRestartedThe": "{{value1}} configuration applied. Idle sessions were restarted; the next turn uses this upstream.";
@@ -7756,6 +7765,9 @@ declare const resources: {
         readonly "chat.loadingCompleteHistory": "Loading complete history...";
         readonly "chat.historyUnavailableRetry": "History unavailable, retry";
         readonly "chat.steps": "steps";
+        readonly "chat.uncachedInput": "Uncached input";
+        readonly "chat.cacheRead": "Cache read";
+        readonly "chat.totalInput": "Total input";
         readonly "chat.input": "Input";
         readonly "chat.cachedInput": "Cached input";
         readonly "chat.output": "Output";
@@ -9215,6 +9227,7 @@ declare const resources: {
         "settings.in": "输入";
         "settings.cached": "缓存";
         "settings.out_220e06": "输出";
+        "settings.cacheWriteOneHour": "缓存写入（1 小时）";
         "settings.cacheWrite": "缓存写入";
         "settings.templateExportedWithoutAPIKeysFillThem": "已导出不含 API 密钥的模板。在其他设备导入前请填写密钥。";
         "settings.configurationAppliedIdleSessionsWereRestartedThe": "已应用 {{value1}} 配置。空闲会话已重启，下个轮次使用此上游。";
@@ -10511,6 +10524,9 @@ declare const resources: {
         "chat.loadingCompleteHistory": "正在加载完整历史…";
         "chat.historyUnavailableRetry": "历史不可用，重试";
         "chat.steps": "步骤";
+        "chat.uncachedInput": "未缓存输入";
+        "chat.cacheRead": "缓存读取";
+        "chat.totalInput": "输入合计";
         "chat.input": "输入";
         "chat.cachedInput": "缓存输入";
         "chat.output": "输出";
