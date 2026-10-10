@@ -8,6 +8,7 @@ import {
 import { FolderOpen, X } from 'lucide-react';
 import { translate as t, useI18n } from '../../i18n';
 import type { WorkbenchPresentation } from './presentation';
+import { useTerminalKeyboardInset } from './useTerminalKeyboardInset';
 import {
   clampToolPanelHeight,
   toolPanelBounds,
@@ -82,6 +83,7 @@ export function WorkbenchPanels({
   // Keep terminals mounted after the first open: hiding the panel must not
   // close their sockets or drop scrollback.
   const toolsOpen = Boolean(o.toolsOpen);
+  const keyboardInset = useTerminalKeyboardInset(root, compact && toolsOpen);
   const [toolsVisited, setToolsVisited] = useState(toolsOpen);
   useEffect(() => { if (toolsOpen) setToolsVisited(true); }, [toolsOpen]);
   const mainColumn = useRef<HTMLDivElement>(null);
@@ -291,7 +293,7 @@ export function WorkbenchPanels({
       className={`workbench-panels ${compact ? 'is-compact' : ''}`}
       data-testid="workbench-panels"
       data-mode={mode}
-      style={{ '--primary-ratio': `${ratio}%`, '--workbench-tool-width': `${visibleDrawerWidth}px` } as CSSProperties}
+      style={{ '--primary-ratio': `${ratio}%`, '--workbench-tool-width': `${visibleDrawerWidth}px`, paddingBottom: keyboardInset || undefined } as CSSProperties}
     >
       {o.storageFailed && (
         <p role="status" className="workbench-persistence-notice">

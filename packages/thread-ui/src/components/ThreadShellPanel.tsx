@@ -47,7 +47,7 @@ import {
   type ShellPaneRuntimeState,
   type ThreadShellControlState,
 } from './shell/shellState';
-import { ShellTouchControls, useShellKeyboardLayout } from './shell/ShellTouchControls';
+import { ShellTouchControls } from './shell/ShellTouchControls';
 import { controlSequenceForLetter } from './shell/shellSnapshot';
 import { TerminalMenu } from './shell/TerminalMenu';
 import {
@@ -208,7 +208,7 @@ export const ThreadShellPanel = forwardRef<
   const compact = panelControls?.compact ?? isMobileShell;
   const collapsed = panelControls?.collapsed ?? false;
   const panelVisible = isVisible && !collapsed;
-  const { panelRef, layout: keyboardLayout } = useShellKeyboardLayout(panelVisible, isMobileShell);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [ctrlPressed, setCtrlPressed] = useState(false);
   const ctrlRef = useRef(false);
   const transformInput = useCallback((data: string) => {
@@ -748,7 +748,6 @@ export const ThreadShellPanel = forwardRef<
       className={`terminal-panel shell-direct-input ${isMobileShell ? 'shell-is-mobile' : ''} ${compact ? 'is-compact' : ''}`}
       data-terminal-theme={effectiveTheme}
       data-testid="terminal-panel"
-      style={keyboardLayout.height ? { height: keyboardLayout.height, flex: '0 0 auto' } : undefined}
     >
       {header}
       {(error || workspacePathMissing) && !collapsed && (
@@ -883,7 +882,6 @@ export const ThreadShellPanel = forwardRef<
       </div>
       {isMobileShell && panelVisible && activeShell && (
         <ShellTouchControls
-          inset={keyboardLayout.inset}
           enabled={activeRuntime.shellInputEnabled}
           ctrl={ctrlPressed}
           onCtrl={() => { ctrlRef.current = !ctrlRef.current; setCtrlPressed(ctrlRef.current); }}
