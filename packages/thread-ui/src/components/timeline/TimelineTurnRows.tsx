@@ -922,6 +922,7 @@ function TimelineHistoryEntries({
           absoluteLabel={formatShortTimestamp(timestamp)}
           timestamp={timestamp}
           endTimestamp={endTimestamp}
+          displayMode={endTimestamp ? 'duration' : 'offset'}
           turnStartedAt={turnStartedAt ?? fallbackTimestamp}
         />
       ) : null,

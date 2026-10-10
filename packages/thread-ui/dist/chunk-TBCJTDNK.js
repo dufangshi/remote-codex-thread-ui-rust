@@ -763,6 +763,12 @@ var chatEn = {
   "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
   "chat.workedForSeconds": "Worked for {{seconds}}s",
   "chat.operationCount": { one: "{{count}} operation", other: "{{count}} operations" },
+  "chat.activityStepCount": { one: "{{count}} step", other: "{{count}} steps" },
+  "chat.commandCount": { one: "{{count}} command", other: "{{count}} commands" },
+  "chat.readFileCount": { one: "Read {{count}} file", other: "Read {{count}} files" },
+  "chat.changedFileCount": { one: "{{count}} file", other: "{{count}} files" },
+  "chat.addedLineCount": { one: "{{count}} line added", other: "{{count}} lines added" },
+  "chat.removedLineCount": { one: "{{count}} line removed", other: "{{count}} lines removed" },
   "chat.performedOperations": "Performed",
   "chat.performingOperations": "Working on"
 };
@@ -3391,6 +3397,12 @@ var chatZhCN = {
   "chat.workedForMinutes": "\u5DE5\u4F5C\u4E86 {{minutes}} \u5206\u949F {{seconds}} \u79D2",
   "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2",
   "chat.operationCount": { one: "{{count}} \u9879\u64CD\u4F5C", other: "{{count}} \u9879\u64CD\u4F5C" },
+  "chat.activityStepCount": "{{count}} \u4E2A\u6B65\u9AA4",
+  "chat.commandCount": "{{count}} \u6761\u547D\u4EE4",
+  "chat.readFileCount": "\u8BFB\u53D6 {{count}} \u4E2A\u6587\u4EF6",
+  "chat.changedFileCount": "{{count}} \u4E2A\u6587\u4EF6",
+  "chat.addedLineCount": "\u65B0\u589E {{count}} \u884C",
+  "chat.removedLineCount": "\u5220\u9664 {{count}} \u884C",
   "chat.performedOperations": "\u5DF2\u6267\u884C",
   "chat.performingOperations": "\u6B63\u5728\u6267\u884C"
 };

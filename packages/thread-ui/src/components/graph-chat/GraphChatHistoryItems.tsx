@@ -8,6 +8,8 @@ import {
 } from 'react';
 import {
   Archive,
+  ArrowDown,
+  ArrowUp,
   Bot,
   Check,
   CheckCircle2,
@@ -19,7 +21,6 @@ import {
   Image as ImageIconLucide,
   Info,
   Loader2,
-  Layers3,
   PackageOpen,
   Search,
   Sparkles,
@@ -1152,15 +1153,11 @@ export const GraphChatCommandGroupItem = memo(
     const runningCount = items.filter((item) =>
       isRunningHistoryStatus(item.status),
     ).length;
-    const countLabel =
-      items.length === 1 ? '1 command' : `${items.length} commands`;
+    const countLabel = translate('chat.commandCount', { count: items.length });
 
     return (
       <GraphChatHistoryGroupFrame
         className="thread-graph-history-group-command"
-        count={items.length}
-        countBadgeClassName="border-amber-200/35 text-amber-100"
-        desktopIconClassName="border-amber-300/30 bg-amber-300/[0.14] text-amber-100"
         expanded={expanded}
         expandedListClassName="border-amber-300/12"
         icon={<CommandBatchIcon />}
@@ -1168,7 +1165,6 @@ export const GraphChatCommandGroupItem = memo(
         runningIndicator={runningCount > 0 ? <RunningDots /> : null}
         summary={
           <>
-            <span className="thread-graph-history-group-verb">{translate("chat.ran")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
@@ -1261,9 +1257,6 @@ export const GraphChatToolCallGroupItem = memo(
     return (
       <GraphChatHistoryGroupFrame
         className="thread-graph-history-group-tool"
-        count={items.length}
-        countBadgeClassName="border-teal-200/35 text-teal-100"
-        desktopIconClassName="border-teal-300/30 bg-teal-300/[0.14] text-teal-100"
         expanded={expanded}
         expandedListClassName="border-teal-300/12"
         icon={
@@ -1338,28 +1331,24 @@ export const GraphChatAgentActivityGroupItem = memo(
   }) {
   const { locale: i18nLocale } = useI18n();
     const countLabel =
-      translate('chat.operationCount', { count: itemCount });
+      translate('chat.activityStepCount', { count: itemCount });
+    const accessibleCountLabel = translate('chat.operationCount', { count: itemCount });
     return (
       <GraphChatHistoryGroupFrame
         className={`thread-graph-history-group-activity ${running ? 'is-running-batch' : ''}`}
-        count={itemCount}
-        countBadgeClassName="border-slate-200/35 text-slate-100"
-        desktopIconClassName="border-slate-300/30 bg-slate-300/[0.14] text-slate-100"
         expanded={expanded}
         expandedListClassName="border-slate-300/12"
-        icon={<Layers3 className="h-3.5 w-3.5" />}
+        plain
         onToggleExpanded={onToggleExpanded}
         summary={
           <>
-            <span className="thread-graph-history-group-verb">
-              {translate(running ? "chat.performingOperations" : "chat.performedOperations")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
           </>
         }
         timeMeta={timeMeta}
-        toggleAriaLabel={`${expanded ? translate("chat.collapse") : translate("chat.expand")} ${countLabel}`}
+        toggleAriaLabel={`${expanded ? translate("chat.collapse") : translate("chat.expand")} ${accessibleCountLabel}`}
       >
         {children}
       </GraphChatHistoryGroupFrame>
@@ -1387,9 +1376,6 @@ export const GraphChatSearchGroupItem = memo(function GraphChatSearchGroupItem({
   return (
     <GraphChatHistoryGroupFrame
       className="thread-graph-history-group-search"
-      count={items.length}
-      countBadgeClassName="border-sky-200/35 text-sky-100"
-      desktopIconClassName="border-sky-300/30 bg-sky-300/[0.14] text-sky-100"
       expanded={expanded}
       expandedListClassName="border-sky-300/12"
       icon={<SearchBatchIcon />}
@@ -1462,23 +1448,17 @@ export const GraphChatFileReadGroupItem = memo(
     timeMeta?: ReactNode;
   }) {
   const { locale: i18nLocale } = useI18n();
-    const countLabel =
-      items.length === 1 ? translate("chat.1FileRead") : translate("chat.fileReads", { value1: items.length });
+    const countLabel = translate('chat.readFileCount', { count: items.length });
 
     return (
       <GraphChatHistoryGroupFrame
         className="thread-graph-history-group-file-read"
-        count={items.length}
-        countBadgeClassName="border-cyan-200/35 text-cyan-100"
-        desktopIconClassName="border-cyan-300/30 bg-cyan-300/[0.14] text-cyan-100"
         expanded={expanded}
         expandedListClassName="border-cyan-300/12"
         icon={<FileReadIcon />}
         onToggleExpanded={onToggleExpanded}
         summary={
           <>
-            <span className="thread-graph-history-group-verb">
-              {translate("chat.read")}</span>
             <span className="thread-graph-history-group-description">
               {countLabel}
             </span>
@@ -1524,30 +1504,20 @@ export const GraphChatFileChangeGroupItem = memo(
       (sum, item) => sum + (item.removedLines ?? 0),
       0,
     );
-    const batchLabel =
-      items.length === 1 ? translate("chat.1FileChange") : translate("chat.fileChanges", { value1: items.length });
+    const batchLabel = translate('chat.changedFileCount', { count: changedFiles || items.length });
 
     return (
       <GraphChatHistoryGroupFrame
         className="thread-graph-history-group-file-change"
-        count={items.length}
-        countBadgeClassName="border-lime-200/35 text-lime-100"
-        desktopIconClassName="border-lime-300/30 bg-lime-300/[0.14] text-lime-100"
         expanded={expanded}
         expandedListClassName="border-lime-300/12"
         icon={<FileChangeIcon />}
         onToggleExpanded={onToggleExpanded}
         summary={
           <>
-            <span className="thread-graph-history-group-verb">
-              {translate("chat.changed")}</span>
             <span className="thread-graph-history-group-description">
               {batchLabel}
             </span>
-            {changedFiles > 0 ? (
-              <span className="thread-graph-history-detail-meta text-xs">
-                {changedFiles} {translate("chat.files")}</span>
-            ) : null}
           </>
         }
         timeMeta={timeMeta}
@@ -1555,13 +1525,13 @@ export const GraphChatFileChangeGroupItem = memo(
         trailingSummary={
           <span className="inline-flex shrink-0 items-center gap-1.5">
             {addedLines > 0 ? (
-              <span className="thread-graph-history-delta-badge is-add">
-                +{addedLines}
+              <span className="thread-graph-history-delta-badge is-add" aria-label={translate('chat.addedLineCount', { count: addedLines })}>
+                <ArrowUp size={11} aria-hidden="true" />{addedLines}
               </span>
             ) : null}
             {removedLines > 0 ? (
-              <span className="thread-graph-history-delta-badge is-remove">
-                -{removedLines}
+              <span className="thread-graph-history-delta-badge is-remove" aria-label={translate('chat.removedLineCount', { count: removedLines })}>
+                <ArrowDown size={11} aria-hidden="true" />{removedLines}
               </span>
             ) : null}
           </span>
@@ -1582,9 +1552,9 @@ export const GraphChatFileChangeGroupItem = memo(
               className="matter-command-step w-full text-left"
             >
               <span className="matter-step-number">{String(index + 1).padStart(2, '0')}</span>
-              <div className="flex min-w-0 items-center gap-2">
+              <div className="matter-step-file-summary">
                 <span
-                  className="thread-graph-history-detail-text min-w-0 flex-1 text-sm leading-6"
+                  className="matter-step-title"
                   title={pathSummary}
                 >
                   {formatTrailingPathLabel(pathSummary, 34)}

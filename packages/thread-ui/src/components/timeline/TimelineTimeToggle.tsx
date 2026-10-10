@@ -34,12 +34,14 @@ export function TimelineTimeToggle({
   timestamp,
   endTimestamp,
   turnStartedAt,
+  displayMode = 'offset',
 }: {
   absoluteLabel: string;
   endTimestamp?: string | null | undefined;
   className?: string;
   timestamp: string | null | undefined;
   turnStartedAt: string | null | undefined;
+  displayMode?: 'offset' | 'duration';
 }) {
   useI18n();
   const [showAbsolute, setShowAbsolute] = useState(false);
@@ -47,12 +49,14 @@ export function TimelineTimeToggle({
     return null;
   }
 
-  const absoluteTitle = formatLongTimestamp(timestamp);
+  const absoluteTitle = formatLongTimestamp(timestamp) + (endTimestamp && endTimestamp !== timestamp ? ` – ${formatLongTimestamp(endTimestamp)}` : '');
   const relativeLabel = formatRelativeTurnTime(turnStartedAt, timestamp);
   const hasRange = endTimestamp && endTimestamp !== timestamp;
   const label = showAbsolute
     ? absoluteLabel + (hasRange ? ` – ${formatShortTimestamp(endTimestamp)}` : '')
-    : relativeLabel + (hasRange ? ` – ${formatRelativeTurnTime(turnStartedAt, endTimestamp)}` : '');
+    : displayMode === 'duration' && endTimestamp
+      ? formatRelativeTurnTime(timestamp, endTimestamp)
+      : relativeLabel + (hasRange ? ` – ${formatRelativeTurnTime(turnStartedAt, endTimestamp)}` : '');
 
   return (
     <span

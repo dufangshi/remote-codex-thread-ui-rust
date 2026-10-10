@@ -431,6 +431,12 @@ export const chatZhCN = {
   "chat.workedForMinutes": "工作了 {{minutes}} 分钟 {{seconds}} 秒",
   "chat.workedForSeconds": "工作了 {{seconds}} 秒",
   'chat.operationCount': { one: '{{count}} 项操作', other: '{{count}} 项操作' },
+  'chat.activityStepCount': '{{count}} 个步骤',
+  'chat.commandCount': '{{count}} 条命令',
+  'chat.readFileCount': '读取 {{count}} 个文件',
+  'chat.changedFileCount': '{{count}} 个文件',
+  'chat.addedLineCount': '新增 {{count}} 行',
+  'chat.removedLineCount': '删除 {{count}} 行',
   'chat.performedOperations': '已执行',
   'chat.performingOperations': '正在执行',
 } as const;

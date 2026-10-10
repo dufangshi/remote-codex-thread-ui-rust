@@ -201,7 +201,7 @@ describe('ThreadTimeline', () => {
     const expand = element.querySelector<HTMLButtonElement>('[aria-label*="Expand turn 1"]')!;
     expect(expand).not.toBeNull();
     flushSync(() => expand.click());
-    expect(element.textContent).toContain('2 operations');
+    expect(element.textContent).toContain('2 steps');
     expect(element.textContent).not.toContain('Hidden reasoning');
     expect(element.querySelector('.thread-execution-step-count')?.textContent).toBe('4 steps');
   });
@@ -664,7 +664,11 @@ describe('ThreadTimeline', () => {
       /></WorkbenchContext.Provider>,
     );
 
-    expect(element.textContent).toContain('3 operations');
+    expect(element.textContent).toContain('3 steps');
+    const activity = element.querySelector('.thread-graph-history-group-activity')!;
+    expect(activity.querySelector('.thread-graph-history-group-icon')).toBeNull();
+    expect(activity.querySelector('.thread-graph-history-group-inline-icon')).toBeNull();
+    expect(activity.querySelector('.thread-graph-history-group-time')?.textContent).toBe('2s');
     expect(element.textContent).not.toContain('pnpm test');
     expect(element.textContent).not.toContain('Agent activity');
     expect(element.textContent).not.toContain('Batch');
@@ -715,8 +719,8 @@ describe('ThreadTimeline', () => {
     );
 
     expect(element.textContent).toContain('The first finding is ready.');
-    expect(element.textContent).toContain('Performed');
-    expect(element.textContent).toContain('3 operations');
+    expect(element.textContent).not.toContain('Performed');
+    expect(element.textContent).toContain('3 steps');
     expect(element.textContent).toContain(
       'The imported session now reads cleanly.',
     );

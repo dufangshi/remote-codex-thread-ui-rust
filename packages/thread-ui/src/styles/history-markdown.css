@@ -3034,6 +3034,89 @@
 html[data-theme-effective="light"] .thread-workspace-link-menu { background:#f3f5f5; color:#24292c; border-color:#c8cecd; }
 html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html[data-theme-effective="light"] .thread-workspace-link-menu button:focus-visible { background:#e0e6e5; }
 @keyframes thread-operation-sheen { from { background-position:150% 0; } to { background-position:-150% 0; } }
+/* Quiet, single-line disclosures. Text never competes with a boxed icon or a full date. */
+.thread-ui-shell .thread-graph-history-group.is-compact-group {
+  min-width: 0;
+  width: 100%;
+  min-height: 0;
+  padding: 2px 0;
+}
+.thread-ui-shell .is-compact-group > .thread-graph-history-group-card { width: 100%; }
+.thread-ui-shell .is-compact-group > .thread-graph-history-group-card > .thread-graph-history-group-toggle {
+  justify-content: flex-start;
+  gap: 6px;
+  min-height: 32px;
+  padding: 2px 0;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-inline-icon {
+  display: inline-flex;
+  flex: 0 0 14px;
+  align-items: center;
+  color: var(--theme-fg-muted);
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-inline-icon svg { width: 14px; height: 14px; }
+.thread-ui-shell .is-compact-group .thread-graph-history-group-summary {
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+  gap: 4px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-summary > span {
+  white-space: nowrap;
+  font-size: 12px;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-stats {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-stats .thread-graph-history-delta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-time {
+  min-width: 0;
+  max-width: 8rem;
+  margin-left: auto;
+  flex: 0 1 auto;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.thread-ui-shell .is-compact-group .thread-graph-history-group-time > .thread-graph-relative-time {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0;
+  background: transparent;
+}
+.thread-ui-shell .is-compact-group.is-plain-group > .thread-graph-history-group-card > .thread-graph-history-group-toggle { gap: 8px; }
+.thread-ui-shell .is-compact-group.is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-summary > span {
+  color: var(--theme-fg-muted);
+  font-size: 14px;
+}
+.thread-ui-shell .is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 0;
+  font-size: 12px;
+}
+.thread-ui-shell .is-plain-group > .thread-graph-history-group-card > button > .thread-graph-history-group-time::before { content: '·'; opacity: .55; }
+.thread-ui-shell .is-compact-group > .thread-graph-history-group-card > .thread-graph-history-group-list {
+  margin: 2px 0 0 6px;
+  padding: 0 0 0 8px;
+  border-top: 0;
+  border-left: 1px solid var(--theme-border);
+}
+.matter-step-file-summary { display: flex; flex: 1; min-width: 0; align-items: center; gap: 6px; }
+.matter-command-step > .thread-graph-relative-time { max-width: 6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 1; }
 .is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { background-image:linear-gradient(105deg,var(--theme-fg-muted) 35%,var(--theme-fg) 50%,var(--theme-fg-muted) 65%); background-size:250% 100%; background-clip:text; -webkit-background-clip:text; color:transparent; animation:thread-operation-sheen 2.4s linear infinite; }
 @media(prefers-reduced-motion:reduce) { .is-running-batch .thread-graph-history-group-verb,.is-running-batch .thread-graph-history-group-description { animation:none; color:var(--theme-fg); background:none; } }
 

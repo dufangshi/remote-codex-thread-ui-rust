@@ -431,6 +431,12 @@ export const chatEn = {
   "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
   "chat.workedForSeconds": "Worked for {{seconds}}s",
   'chat.operationCount': { one: '{{count}} operation', other: '{{count}} operations' },
+  'chat.activityStepCount': { one: '{{count}} step', other: '{{count}} steps' },
+  'chat.commandCount': { one: '{{count}} command', other: '{{count}} commands' },
+  'chat.readFileCount': { one: 'Read {{count}} file', other: 'Read {{count}} files' },
+  'chat.changedFileCount': { one: '{{count}} file', other: '{{count}} files' },
+  'chat.addedLineCount': { one: '{{count}} line added', other: '{{count}} lines added' },
+  'chat.removedLineCount': { one: '{{count}} line removed', other: '{{count}} lines removed' },
   'chat.performedOperations': 'Performed',
   'chat.performingOperations': 'Working on',
 } as const;

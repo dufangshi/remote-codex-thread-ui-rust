@@ -2287,6 +2287,30 @@ declare const en: {
         readonly one: "{{count}} operation";
         readonly other: "{{count}} operations";
     };
+    readonly 'chat.activityStepCount': {
+        readonly one: "{{count}} step";
+        readonly other: "{{count}} steps";
+    };
+    readonly 'chat.commandCount': {
+        readonly one: "{{count}} command";
+        readonly other: "{{count}} commands";
+    };
+    readonly 'chat.readFileCount': {
+        readonly one: "Read {{count}} file";
+        readonly other: "Read {{count}} files";
+    };
+    readonly 'chat.changedFileCount': {
+        readonly one: "{{count}} file";
+        readonly other: "{{count}} files";
+    };
+    readonly 'chat.addedLineCount': {
+        readonly one: "{{count}} line added";
+        readonly other: "{{count}} lines added";
+    };
+    readonly 'chat.removedLineCount': {
+        readonly one: "{{count}} line removed";
+        readonly other: "{{count}} lines removed";
+    };
     readonly 'chat.performedOperations': "Performed";
     readonly 'chat.performingOperations': "Working on";
     readonly "auth.avatar": "Profile avatar";
@@ -4867,6 +4891,12 @@ declare const zhCN: {
         readonly one: "{{count}} 项操作";
         readonly other: "{{count}} 项操作";
     };
+    'chat.activityStepCount': "{{count}} 个步骤";
+    'chat.commandCount': "{{count}} 条命令";
+    'chat.readFileCount': "读取 {{count}} 个文件";
+    'chat.changedFileCount': "{{count}} 个文件";
+    'chat.addedLineCount': "新增 {{count}} 行";
+    'chat.removedLineCount': "删除 {{count}} 行";
     'chat.performedOperations': "已执行";
     'chat.performingOperations': "正在执行";
     "auth.avatar": "个人头像";
@@ -7469,6 +7499,30 @@ declare const resources: {
             readonly one: "{{count}} operation";
             readonly other: "{{count}} operations";
         };
+        readonly 'chat.activityStepCount': {
+            readonly one: "{{count}} step";
+            readonly other: "{{count}} steps";
+        };
+        readonly 'chat.commandCount': {
+            readonly one: "{{count}} command";
+            readonly other: "{{count}} commands";
+        };
+        readonly 'chat.readFileCount': {
+            readonly one: "Read {{count}} file";
+            readonly other: "Read {{count}} files";
+        };
+        readonly 'chat.changedFileCount': {
+            readonly one: "{{count}} file";
+            readonly other: "{{count}} files";
+        };
+        readonly 'chat.addedLineCount': {
+            readonly one: "{{count}} line added";
+            readonly other: "{{count}} lines added";
+        };
+        readonly 'chat.removedLineCount': {
+            readonly one: "{{count}} line removed";
+            readonly other: "{{count}} lines removed";
+        };
         readonly 'chat.performedOperations': "Performed";
         readonly 'chat.performingOperations': "Working on";
         readonly "auth.avatar": "Profile avatar";
@@ -10048,6 +10102,12 @@ declare const resources: {
             readonly one: "{{count}} 项操作";
             readonly other: "{{count}} 项操作";
         };
+        'chat.activityStepCount': "{{count}} 个步骤";
+        'chat.commandCount': "{{count}} 条命令";
+        'chat.readFileCount': "读取 {{count}} 个文件";
+        'chat.changedFileCount': "{{count}} 个文件";
+        'chat.addedLineCount': "新增 {{count}} 行";
+        'chat.removedLineCount': "删除 {{count}} 行";
         'chat.performedOperations': "已执行";
         'chat.performingOperations': "正在执行";
         "auth.avatar": "个人头像";
