@@ -1,3 +1,4 @@
+import { useFilePanel } from '../../workbench/FilePanelContext';
 import { translate, useI18n } from '../../../i18n';
 import {
   FileCode2,
@@ -103,6 +104,7 @@ export function WorkspaceExplorerPanel({
   rootError?: string | null;
 } & WorkspaceNodeActionProps) {
   useI18n();
+  const filePanel = useFilePanel();
   const visibleTree = useMemo(
     () => ({
       ...tree,
@@ -136,10 +138,11 @@ export function WorkspaceExplorerPanel({
 
   return (
     <aside className="thread-graph-explorer flex h-full min-h-0 flex-col overflow-hidden rounded-md">
-      <div className="thread-graph-explorer-header flex h-9 shrink-0 items-center justify-between border-b px-2">
+      <div title={filePanel?.label} className="thread-graph-explorer-header flex h-9 shrink-0 items-center justify-between border-b px-2">
         <h2 className="text-[11px] font-semibold uppercase text-slate-600 dark:text-slate-300">
           {translate("files.explorer")}</h2>
         <div className="thread-graph-explorer-toolbar flex items-center gap-1">
+          {filePanel && onExpandViewer && <button type="button" data-testid="workbench-close-files" className={iconButtonClassName} onClick={filePanel.close} aria-label={translate('workbench.closeFiles')} title={translate('workbench.closeFiles')}><X size={16} /></button>}
           {onCreateFile && <button type="button" onClick={onCreateFile}
             className={iconButtonClassName} title={translate('files.newFile')}
             aria-label={translate('files.newFile')}>

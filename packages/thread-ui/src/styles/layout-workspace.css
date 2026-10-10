@@ -695,3 +695,30 @@
 @media (max-width:639px) { .workspace-document-diff {height:160px;} .workspace-document-status {padding:7px 9px;} .workspace-document-actions button {min-height:30px;} }
 
 .thread-ui-shell .thread-graph-file-editor { color:var(--theme-fg); background:var(--theme-panel); }
+
+/* One file toolbar. Document identity, navigation and actions share the tab row. */
+.workspace-file-toolbar { align-items:center; min-width:0; }
+.workspace-file-navigation { gap:2px; padding-left:2px; }
+.workspace-file-state { display:inline-flex; align-items:center; flex:none; color:var(--status-success-fg, #20bc87); margin:0 3px; }
+.workspace-file-state[data-phase='dirty'], .workspace-file-state[data-phase='saving'] { color:var(--status-warning-fg, #d8a84a); }
+.workspace-file-state[data-phase='conflict'], .workspace-file-state[data-phase='unknown'], .workspace-file-state[data-phase='error'] { color:var(--status-danger-fg, #e88181); }
+.workspace-file-more, .workspace-close-files, .workspace-mobile-view-toggle { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex:none; border-radius:5px; }
+.workspace-file-menu { border:1px solid var(--theme-border); border-radius:10px; padding:4px; background:var(--theme-panel); color:var(--theme-fg); box-shadow:0 10px 30px #0004; }
+.workspace-file-menu-info { padding:8px; font-size:11px; border-bottom:1px solid var(--theme-border); margin-bottom:4px; overflow-wrap:anywhere; }
+.workspace-file-menu-info small { display:block; color:var(--theme-fg-muted); font-size:10px; margin-top:5px; }
+.workspace-file-menu-feedback { padding:8px; margin:0; font-size:11px; color:var(--theme-fg-muted); overflow-wrap:anywhere; }
+.workspace-preview-back, .workspace-preview-forward, .workspace-preview-tree { display:inline-flex; align-items:center; justify-content:center; flex:none; width:32px; height:44px; border-radius:5px; color:var(--theme-fg-muted); }
+.workspace-preview-back:hover, .workspace-preview-forward:hover, .workspace-preview-tree:hover { color:var(--theme-fg); background:var(--theme-hover); }
+@media (max-width:639px) {
+  .workspace-file-toolbar { min-height:44px; }
+  .workspace-file-toolbar .thread-graph-editor-tab, .workspace-file-toolbar .thread-graph-editor-tabs-action { height:44px; }
+  .workspace-file-toolbar .thread-graph-editor-tab { max-width:150px; flex-shrink:1; }
+  .workspace-file-toolbar .thread-graph-editor-tab [role='tab'] { padding-left:4px; padding-right:2px; gap:4px; }
+  .workspace-file-toolbar .thread-graph-editor-tab [role='tab'] > svg { display:none; }
+  .workspace-file-toolbar .thread-graph-editor-tab-close { width:24px; height:36px; margin:0; }
+  .workspace-file-toolbar .thread-graph-editor-toolbar-button { width:32px; height:40px; }
+  .workspace-file-toolbar .thread-graph-editor-tabs-action { padding:0 2px; }
+  .workspace-file-toolbar .thread-graph-editor-tabs-action > div { gap:0; }
+  .workspace-file-toolbar .workspace-file-state { margin:0 2px; }
+  .thread-graph-explorer-header { min-height:44px; }
+}

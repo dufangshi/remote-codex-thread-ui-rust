@@ -15,6 +15,7 @@ export function WorkspaceFileTabs({
   onSelect,
   tabs,
   trailingAction,
+  leadingAction,
   onSaveAndClose,
   blockedClosePaths = new Set(),
 }: {
@@ -24,6 +25,7 @@ export function WorkspaceFileTabs({
   onSelect: (path: string) => void;
   tabs: WorkspaceFileTab[];
   trailingAction?: ReactNode;
+  leadingAction?: ReactNode;
   onSaveAndClose?: (path: string) => Promise<void>;
   blockedClosePaths?: ReadonlySet<string>;
 }) {
@@ -46,7 +48,8 @@ export function WorkspaceFileTabs({
 
   return (
     <div className="thread-graph-editor-tabs-shell shrink-0">
-      <div className="flex min-w-0 border-b border-[var(--theme-border)]">
+      <div className="workspace-file-toolbar flex min-w-0 border-b border-[var(--theme-border)]">
+        {leadingAction && <div className="workspace-file-navigation flex shrink-0 items-center">{leadingAction}</div>}
         <div
           className="thread-graph-editor-tabs flex min-w-0 flex-1 overflow-x-auto"
           role="tablist"

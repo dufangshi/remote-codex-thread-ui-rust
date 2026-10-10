@@ -1,5 +1,6 @@
 import { automationEn } from './automation.en';
 import { searchEn } from './search.en';
+import { tourEn } from './tour.en';
 import { authEn } from './auth.en';
 import { chatEn } from './chat.en';
 import { commonEn } from './common.en';
@@ -19,4 +20,5 @@ export const en = {
   ...sharingEn,
   ...workbenchEn,
   ...searchEn,
+  ...tourEn,
 } as const;

@@ -221,6 +221,7 @@ export function useWorkspaceDocuments(
       const disk = await adapter.readDocument({ ...identity, path });
       const current = documents.get(path);
       if (!current) return;
+      if (current.error) current.error = null;
       if (isProtected(current) || current.revision !== revision) {
         if (
           current.phase === 'unknown' ||

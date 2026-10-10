@@ -187,6 +187,8 @@ interface WorkbenchPanelsOptions {
     toolContent?: ReactNode | ((controls: WorkbenchToolPanelControls) => ReactNode);
     toolTitle?: string;
     toolsTargetLabel?: string;
+    /** The file explorer provides its own single toolbar and close action. */
+    inlineFilesHeader?: boolean;
     toolsOpen?: boolean;
     onCloseTools?: () => void;
 }

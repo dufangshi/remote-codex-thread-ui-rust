@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-3CKDHMEY.js";
+} from "./chunk-H2FKRDJJ.js";
 
 // src/components/graph-workspace/explorer/workspaceDocuments.ts
 var storeKey = /* @__PURE__ */ Symbol.for("remote-codex.workspace-documents");
@@ -1117,6 +1117,11 @@ function ZoomableImage({
   ] });
 }
 
+// src/components/workbench/FilePanelContext.tsx
+import { createContext, useContext } from "react";
+var FilePanelContext = createContext(null);
+var useFilePanel = () => useContext(FilePanelContext);
+
 // src/components/graph-chat/graphChatShiki.ts
 var graphChatHighlighterPromise = null;
 function getGraphChatHighlighter() {
@@ -1295,6 +1300,8 @@ export {
   TooltipTrigger,
   TooltipContent,
   RenameDialog,
+  FilePanelContext,
+  useFilePanel,
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,

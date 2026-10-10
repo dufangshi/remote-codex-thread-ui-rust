@@ -8,6 +8,7 @@ import {
 import { FolderOpen, X } from 'lucide-react';
 import { translate as t, useI18n } from '../../i18n';
 import type { WorkbenchPresentation } from './presentation';
+import { FilePanelContext } from './FilePanelContext';
 import { useTerminalKeyboardInset } from './useTerminalKeyboardInset';
 import {
   clampToolPanelHeight,
@@ -39,6 +40,8 @@ export interface WorkbenchPanelsOptions {
   toolContent?: ReactNode | ((controls: WorkbenchToolPanelControls) => ReactNode);
   toolTitle?: string;
   toolsTargetLabel?: string;
+  /** The file explorer provides its own single toolbar and close action. */
+  inlineFilesHeader?: boolean;
   toolsOpen?: boolean;
   onCloseTools?: () => void;
 }
@@ -492,7 +495,7 @@ export function WorkbenchPanels({
           }}
         >
           {drawerResizeHandle()}
-          <header>
+          {!o.inlineFilesHeader && <header>
             <div>
               <strong>{t('workbench.referenceFiles')}</strong>
               {o.toolsTargetLabel && <small>{o.toolsTargetLabel}</small>}
@@ -504,8 +507,10 @@ export function WorkbenchPanels({
             >
               <X size={17} />
             </button>
-          </header>
-          <div className="workbench-pane-body workbench-files">{explorer}</div>
+          </header>}
+          <FilePanelContext.Provider value={o.inlineFilesHeader ? { close: closeFiles, ...(o.toolsTargetLabel ? { label: o.toolsTargetLabel } : {}) } : null}>
+            <div className="workbench-pane-body workbench-files">{explorer}</div>
+          </FilePanelContext.Provider>
         </aside>
       )}
       </div>

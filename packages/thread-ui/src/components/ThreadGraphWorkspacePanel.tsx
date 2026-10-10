@@ -361,7 +361,7 @@ export function ThreadGraphWorkspacePanel({
 
   return (
     <div className="thread-graph-right-panel flex h-full min-h-0 flex-col overflow-hidden">
-      <div className="thread-graph-right-tabs flex h-9 shrink-0 items-center gap-0 overflow-hidden border-b px-1">
+      {primaryTabs.length + secondaryTabs.length > 1 && <div className="thread-graph-right-tabs flex h-9 shrink-0 items-center gap-0 overflow-hidden border-b px-1">
         {primaryTabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -402,7 +402,7 @@ export function ThreadGraphWorkspacePanel({
             })}
           </div>
         ) : null}
-      </div>
+      </div>}
 
       <div className="min-h-0 flex-1 overflow-hidden">
         {activeTab === 'workspace' ? (

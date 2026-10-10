@@ -1,4 +1,9 @@
 export const filesEn = {
+  "files.fileActions": "File actions",
+  "files.reloadFile": "Reload from disk",
+  "files.fileReloaded": "File reloaded",
+  "files.fileAlreadyCurrent": "Already up to date",
+
   "files.backToDocument": "Back to {{name}}",
   "files.goForward": "Forward",
   "files.backToFiles": "Back to files",

@@ -19,6 +19,8 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  Check,
+  Circle,
   ChevronRight,
   Code2,
   Download,
@@ -28,6 +30,8 @@ import {
   Save,
   X,
 } from 'lucide-react';
+import { useFilePanel } from '../workbench/FilePanelContext';
+import { WorkspaceFileMenu } from './WorkspaceFileMenu';
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
 import { localFileHref, relativeWorkspacePath, normalizeFileSystemPath } from '../workspacePaths';
 import remarkGfm from 'remark-gfm';
@@ -472,6 +476,7 @@ export function GraphWorkspacePreviewPane({
   workspaceRootPath?: string;
 }) {
   const { locale: i18nLocale } = useI18n();
+  const filePanel = useFilePanel();
   const surfaceRef = useRef<HTMLElement | null>(null);
   const document = previewFile ? documents?.documents.get(previewFile.path) : undefined;
   const editing = document?.editing ?? false;
@@ -565,6 +570,9 @@ export function GraphWorkspacePreviewPane({
     previewFile && (isMarkdownFile || isDrawioFile || canEditFile) ? (
       <div className="flex shrink-0 items-center gap-1">
         {(isMarkdownFile || isDrawioFile) && !editing ? (
+          mobileNavigation ? <button type="button" className="thread-graph-editor-toolbar-button workspace-mobile-view-toggle" aria-label={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} title={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} onClick={() => setMarkdownView(view => view==='preview'?'source':'preview')}>
+            {markdownView==='preview' ? <Code2 size={16}/> : <BookOpen size={16}/>}
+          </button> : (
           <div
             className="thread-graph-markdown-view-switch inline-flex items-center rounded border p-px"
             role="group"
@@ -595,6 +603,7 @@ export function GraphWorkspacePreviewPane({
               <Code2 className="h-3 w-3" />
             </button>
           </div>
+          )
         ) : null}
         {canEditFile ? (
           <div className="flex shrink-0 items-center gap-0.5">
@@ -643,6 +652,20 @@ export function GraphWorkspacePreviewPane({
         ) : null}
       </div>
     ) : null;
+  const documentState = document ? translate(document.snapshot.readOnlyReason ? 'files.safeReadOnly' : document.needsVerification && document.phase==='clean' ? 'files.safeAdoptedSnapshot' : `files.safePhase.${document.phase}`, { reason: document.snapshot.readOnlyReason ? translateReadOnly(document.snapshot.readOnlyReason) : '' }) : null;
+  const documentMetadata = document ? `${documentState} · ${document.snapshot.encoding==='utf-8' ? 'UTF-8' : translate('files.safeUnknownEncoding')}${document.snapshot.bom ? ' BOM' : ''} · ${document.snapshot.eol.toUpperCase()}` : undefined;
+  const inlineStatus = document && <span role="status" data-testid="workspace-document-status" className="workspace-file-state" data-phase={document.phase} title={documentMetadata}>
+    {document.phase==='clean' ? <Check size={13} aria-hidden="true"/> : <Circle size={10} aria-hidden="true"/>}<span className="sr-only">{documentState}</span>
+  </span>;
+  const fileMenu = activeFilePath && <WorkspaceFileMenu key={activeFilePath} path={activeFilePath} {...((documentMetadata || filePanel?.label) ? { metadata:[filePanel?.label, documentMetadata].filter(Boolean).join(' · ') } : {})}
+    {...(document ? {onDownload:()=>downloadDraft(document), onRefresh: async () => {
+      const previous = document.snapshot.contentHash;
+      await documents?.checkDisk(document.snapshot.path);
+      const current = documents?.documents.get(document.snapshot.path);
+      if (current?.error) throw new Error(current.error);
+      return translate(current?.phase==='conflict' ? 'files.safePhase.conflict' : current?.snapshot.contentHash===previous ? 'files.fileAlreadyCurrent' : 'files.fileReloaded');
+    }} : onDownloadFile ? {onDownload:()=>void onDownloadFile()} : {})}/>;
+  const closeFilePanel = filePanel && <button type="button" data-testid="workbench-close-files" className="thread-graph-editor-toolbar-button workspace-close-files" onClick={filePanel.close} aria-label={translate('workbench.closeFiles')} title={translate('workbench.closeFiles')}><X size={16}/></button>;
   const backLabel = previousFilePath ? translate('files.backToDocument', { name: previousFilePath.split('/').pop() ?? previousFilePath }) : translate('workbench.goBack');
   const navigationControls = <>
     {onNavigateBack && <button type="button" onClick={onNavigateBack} aria-label={backLabel} title={backLabel} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowLeft size={14} /></button>}
@@ -672,20 +695,19 @@ export function GraphWorkspacePreviewPane({
     </button>
   ) : null;
 
+  const previewNavigation = mobileNavigation && onExpandExplorer ? <>
+    <button type="button" className="workspace-preview-back" onClick={onNavigateBack ?? onExpandExplorer} aria-label={onNavigateBack ? backLabel : translate('files.backToFiles')} title={onNavigateBack ? backLabel : translate('files.backToFiles')} data-testid={onNavigateBack ? 'preview-back' : 'expand-explorer'}><ArrowLeft size={18}/></button>
+    {onNavigateForward && <button type="button" className="workspace-preview-forward" onClick={onNavigateForward} aria-label={translate('files.goForward')} title={translate('files.goForward')}><ArrowRight size={16}/></button>}
+    {onNavigateBack && <button type="button" className="workspace-preview-tree" onClick={onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><PanelLeftOpen size={16}/></button>}
+  </> : navigationControls;
+  const previewActions = <>{inlineStatus}{fileToolbar}{fileMenu}{!mobileNavigation && viewerPaneToggle}{closeFilePanel}</>;
+
   return (
     <section
       ref={surfaceRef}
       className="thread-graph-viewer flex h-full min-h-0 flex-col overflow-hidden rounded-md"
       data-preview-target-kind={selectedTarget?.kind ?? 'none'}
     >
-      {mobileNavigation && onExpandExplorer ? (
-        <div className="thread-graph-mobile-file-navigation flex min-h-11 shrink-0 items-center gap-2 border-b border-[var(--theme-border)] px-2">
-          <button type="button" onClick={onNavigateBack ?? onExpandExplorer} data-testid={onNavigateBack ? 'preview-back' : 'expand-explorer'} className="inline-flex min-h-11 shrink-0 items-center gap-1 px-2 text-sm" aria-label={onNavigateBack ? backLabel : translate('files.backToFiles')} title={onNavigateBack ? backLabel : undefined}><ArrowLeft size={18} />{onNavigateBack ? translate('workbench.goBack') : translate('files.explorer')}</button>
-          <span className="min-w-0 flex-1 truncate text-xs text-[var(--theme-fg-muted)]" title={activeFilePath ?? ''}>{activeFilePath ?? title}</span>
-          {onNavigateForward && <button type="button" onClick={onNavigateForward} aria-label={translate('files.goForward')} className="inline-flex h-11 w-9 shrink-0 items-center justify-center"><ArrowRight size={18} /></button>}
-          {onNavigateBack && <button type="button" onClick={onExpandExplorer} aria-label={translate('files.backToFiles')} data-testid="expand-explorer" className="inline-flex h-11 w-9 shrink-0 items-center justify-center"><PanelLeftOpen size={18} /></button>}
-        </div>
-      ) : null}
       {!mobileNavigation && selectedTarget?.kind !== 'workspace-file' ? (
         <div className="thread-graph-viewer-header flex h-9 shrink-0 items-center justify-between gap-2 border-b px-2.5">
           <span className="min-w-0 truncate text-xs font-medium text-[var(--theme-fg)]">
@@ -694,6 +716,9 @@ export function GraphWorkspacePreviewPane({
           {viewerPaneToggle}
         </div>
       ) : null}
+      {fileTabs.length === 0 && <div className="workspace-file-toolbar flex min-h-9 shrink-0 items-center justify-between border-b px-1">
+        <div className="workspace-file-navigation flex items-center">{previewNavigation}</div><span className="min-w-0 flex-1 truncate text-xs" title={filePanel?.label}>{title}</span><div className="flex shrink-0 items-center">{previewActions}</div>
+      </div>}
       {fileTabs.length > 0 && onCloseFileTab && onSelectFileTab ? (
         <WorkspaceFileTabs
           activePath={activeFilePath ?? null}
@@ -703,15 +728,8 @@ export function GraphWorkspacePreviewPane({
           tabs={fileTabs}
           {...(onSaveAndClose ? { onSaveAndClose } : {})}
           blockedClosePaths={new Set([...documents?.documents ?? []].filter(([,doc]) => ['saving','unknown'].includes(doc.phase)).map(([path]) => path))}
-          trailingAction={
-            fileToolbar || viewerPaneToggle || onNavigateBack || onNavigateForward ? (
-              <>
-                {!mobileNavigation && navigationControls}
-                {fileToolbar}
-                {!mobileNavigation && viewerPaneToggle}
-              </>
-            ) : null
-          }
+          leadingAction={previewNavigation}
+          trailingAction={previewActions}
         />
       ) : null}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -754,8 +772,7 @@ export function GraphWorkspacePreviewPane({
           </div>
         ) : selectedTarget.kind === 'workspace-file' && previewFile ? (
           <div className="flex min-h-0 flex-1 flex-col">
-            {breadcrumbSegments.length > 1 ||
-            (fileTabs.length === 0 && fileToolbar) ? (
+            {fileTabs.length === 0 && (breadcrumbSegments.length > 1 || fileToolbar) ? (
               <div className="thread-graph-editor-breadcrumbs flex h-7 shrink-0 items-center border-b px-2 text-[11px]">
                 <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto">
                   {breadcrumbSegments.map((segment, index, segments) => (
@@ -784,18 +801,16 @@ export function GraphWorkspacePreviewPane({
                 {fileTabs.length === 0 ? fileToolbar : null}
               </div>
             ) : null}
-            {document ? (
-              <div className="workspace-document-status" role="status" data-testid="workspace-document-status">
+            {document && (document.snapshot.readOnlyReason || ['conflict','unknown','error'].includes(document.phase)) ? (
+              <div className="workspace-document-status" role="status">
                 <span>{document.snapshot.readOnlyReason ? translate('files.safeReadOnly', {reason: translateReadOnly(document.snapshot.readOnlyReason)}) : translate(document.needsVerification && document.phase==='clean' ? 'files.safeAdoptedSnapshot':`files.safePhase.${document.phase}`)} · {document.snapshot.encoding==='utf-8' ? 'UTF-8':translate('files.safeUnknownEncoding')}{document.snapshot.bom ? ' BOM' : ''} · {document.snapshot.eol.toUpperCase()} · r{document.revision}</span>
                 <div className="workspace-document-actions">
-                  <button type="button" onClick={() => downloadDraft(document)}>{translate('files.safeDownloadDraft')}</button>
-                  <button type="button" disabled={saving} onClick={() => void documents?.checkDisk(document.snapshot.path)}>{translate('files.safeCheckDisk')}</button>
                   {document.phase === 'unknown' ? <button type="button" onClick={() => void documents?.reconcile(document.snapshot.path)}>{translate('files.safeVerifySave')}</button> : null}
                   {document.phase === 'unknown' && document.conflict ? <button type="button" disabled={document.operationPending} onClick={() => {if(window.confirm(translate('files.safeManualRebase'))) documents?.acceptVerifiedDisk(document.snapshot.path);}}>{translate('files.safeUseCheckedBase')}</button> : null}
                   {document.phase === 'conflict' && !showConflict ? <button type="button" onClick={() => setShowConflict(true)}>{translate('files.safeViewConflict')}</button> : null}
                 </div>
               </div>
-            ) : canSaveDocument ? <div className="workspace-document-status">{translate('files.safeUnavailable')}</div> : null}
+            ) : !document && canSaveDocument ? <div className="workspace-document-status">{translate('files.safeUnavailable')}</div> : null}
             {document && (document.phase === 'conflict' || (document.phase === 'unknown' && document.conflict)) && showConflict ? (
               <div className="workspace-document-conflict" data-testid="workspace-document-conflict">
                 <strong>{translate(document.phase==='unknown' ? 'files.safePhase.unknown':'files.safeConflictTitle')}</strong>

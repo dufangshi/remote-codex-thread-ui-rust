@@ -1,4 +1,9 @@
 export const filesZhCN = {
+  "files.fileActions": "文件操作",
+  "files.reloadFile": "重新读取文件",
+  "files.fileReloaded": "文件已更新",
+  "files.fileAlreadyCurrent": "文件已是最新",
+
   "files.backToDocument": "返回 {{name}}",
   "files.goForward": "前进",
   "files.backToFiles": "返回文件列表",
