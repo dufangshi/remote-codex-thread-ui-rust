@@ -90,7 +90,7 @@ export const devicesEn = {
   "devices.running": "; running",
   "devices.checkUpdatesToBringTheInstallationAnd": ". Check updates to bring the installation and running service to the same version.",
   "devices.waitingForTheDeviceToReconnect": "Waiting for the device to reconnect…",
-  "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Installation may have finished, but restart has not been verified. Check the Supervisor update and launch logs on the device. This page will keep checking automatically.",
+  "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Stopping the old Supervisor can take up to two minutes when Web terminals are open, and this page keeps checking automatically. If it has not returned after a few minutes, check the Supervisor update and service logs on the device.",
   "devices.controlsAreTemporarilyDisabledUntilThisOperation": "Controls are temporarily disabled until this operation finishes.",
   "devices.chooseHarness": "Choose harness",
   "devices.useThisHarnessSNativeConfigurationTo": "Use this harness's native configuration to manage upstreams.",

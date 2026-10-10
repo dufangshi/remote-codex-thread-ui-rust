@@ -1554,7 +1554,7 @@ declare const en: {
     readonly "devices.running": "; running";
     readonly "devices.checkUpdatesToBringTheInstallationAnd": ". Check updates to bring the installation and running service to the same version.";
     readonly "devices.waitingForTheDeviceToReconnect": "Waiting for the device to reconnect…";
-    readonly "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Installation may have finished, but restart has not been verified. Check the Supervisor update and launch logs on the device. This page will keep checking automatically.";
+    readonly "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Stopping the old Supervisor can take up to two minutes when Web terminals are open, and this page keeps checking automatically. If it has not returned after a few minutes, check the Supervisor update and service logs on the device.";
     readonly "devices.controlsAreTemporarilyDisabledUntilThisOperation": "Controls are temporarily disabled until this operation finishes.";
     readonly "devices.chooseHarness": "Choose harness";
     readonly "devices.useThisHarnessSNativeConfigurationTo": "Use this harness's native configuration to manage upstreams.";
@@ -4162,7 +4162,7 @@ declare const zhCN: {
     "devices.running": "；运行中";
     "devices.checkUpdatesToBringTheInstallationAnd": "。检查更新以统一已安装版本与运行服务版本。";
     "devices.waitingForTheDeviceToReconnect": "正在等待设备重新连接…";
-    "devices.theDeviceHasNotReturnedYetInstallation": "设备尚未恢复。安装可能已完成，但还未验证重启。请检查设备上的 Supervisor 更新和启动日志。页面会继续自动检查。";
+    "devices.theDeviceHasNotReturnedYetInstallation": "设备尚未恢复。如果开着网页终端，停止旧 Supervisor 可能需要两分钟左右，页面会继续自动检查。若几分钟后仍未恢复，请检查设备上的 Supervisor 更新日志和服务日志。";
     "devices.controlsAreTemporarilyDisabledUntilThisOperation": "此操作完成前暂时禁用控件。";
     "devices.chooseHarness": "选择 Harness";
     "devices.useThisHarnessSNativeConfigurationTo": "使用此 Harness 的原生配置管理上游。";
@@ -6774,7 +6774,7 @@ declare const resources: {
         readonly "devices.running": "; running";
         readonly "devices.checkUpdatesToBringTheInstallationAnd": ". Check updates to bring the installation and running service to the same version.";
         readonly "devices.waitingForTheDeviceToReconnect": "Waiting for the device to reconnect…";
-        readonly "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Installation may have finished, but restart has not been verified. Check the Supervisor update and launch logs on the device. This page will keep checking automatically.";
+        readonly "devices.theDeviceHasNotReturnedYetInstallation": "The device has not returned yet. Stopping the old Supervisor can take up to two minutes when Web terminals are open, and this page keeps checking automatically. If it has not returned after a few minutes, check the Supervisor update and service logs on the device.";
         readonly "devices.controlsAreTemporarilyDisabledUntilThisOperation": "Controls are temporarily disabled until this operation finishes.";
         readonly "devices.chooseHarness": "Choose harness";
         readonly "devices.useThisHarnessSNativeConfigurationTo": "Use this harness's native configuration to manage upstreams.";
@@ -9381,7 +9381,7 @@ declare const resources: {
         "devices.running": "；运行中";
         "devices.checkUpdatesToBringTheInstallationAnd": "。检查更新以统一已安装版本与运行服务版本。";
         "devices.waitingForTheDeviceToReconnect": "正在等待设备重新连接…";
-        "devices.theDeviceHasNotReturnedYetInstallation": "设备尚未恢复。安装可能已完成，但还未验证重启。请检查设备上的 Supervisor 更新和启动日志。页面会继续自动检查。";
+        "devices.theDeviceHasNotReturnedYetInstallation": "设备尚未恢复。如果开着网页终端，停止旧 Supervisor 可能需要两分钟左右，页面会继续自动检查。若几分钟后仍未恢复，请检查设备上的 Supervisor 更新日志和服务日志。";
         "devices.controlsAreTemporarilyDisabledUntilThisOperation": "此操作完成前暂时禁用控件。";
         "devices.chooseHarness": "选择 Harness";
         "devices.useThisHarnessSNativeConfigurationTo": "使用此 Harness 的原生配置管理上游。";
