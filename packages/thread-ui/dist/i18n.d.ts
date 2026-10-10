@@ -5195,12 +5195,30 @@ declare const zhCN: {
         readonly one: "{{count}} 项操作";
         readonly other: "{{count}} 项操作";
     };
-    'chat.activityStepCount': "{{count}} 个步骤";
-    'chat.commandCount': "{{count}} 条命令";
-    'chat.readFileCount': "读取 {{count}} 个文件";
-    'chat.changedFileCount': "{{count}} 个文件";
-    'chat.addedLineCount': "新增 {{count}} 行";
-    'chat.removedLineCount': "删除 {{count}} 行";
+    'chat.activityStepCount': {
+        readonly one: "{{count}} 个步骤";
+        readonly other: "{{count}} 个步骤";
+    };
+    'chat.commandCount': {
+        readonly one: "{{count}} 条命令";
+        readonly other: "{{count}} 条命令";
+    };
+    'chat.readFileCount': {
+        readonly one: "读取 {{count}} 个文件";
+        readonly other: "读取 {{count}} 个文件";
+    };
+    'chat.changedFileCount': {
+        readonly one: "{{count}} 个文件";
+        readonly other: "{{count}} 个文件";
+    };
+    'chat.addedLineCount': {
+        readonly one: "新增 {{count}} 行";
+        readonly other: "新增 {{count}} 行";
+    };
+    'chat.removedLineCount': {
+        readonly one: "删除 {{count}} 行";
+        readonly other: "删除 {{count}} 行";
+    };
     'chat.performedOperations': "已执行";
     'chat.performingOperations': "正在执行";
     "auth.avatar": "个人头像";
@@ -10710,12 +10728,30 @@ declare const resources: {
             readonly one: "{{count}} 项操作";
             readonly other: "{{count}} 项操作";
         };
-        'chat.activityStepCount': "{{count}} 个步骤";
-        'chat.commandCount': "{{count}} 条命令";
-        'chat.readFileCount': "读取 {{count}} 个文件";
-        'chat.changedFileCount': "{{count}} 个文件";
-        'chat.addedLineCount': "新增 {{count}} 行";
-        'chat.removedLineCount': "删除 {{count}} 行";
+        'chat.activityStepCount': {
+            readonly one: "{{count}} 个步骤";
+            readonly other: "{{count}} 个步骤";
+        };
+        'chat.commandCount': {
+            readonly one: "{{count}} 条命令";
+            readonly other: "{{count}} 条命令";
+        };
+        'chat.readFileCount': {
+            readonly one: "读取 {{count}} 个文件";
+            readonly other: "读取 {{count}} 个文件";
+        };
+        'chat.changedFileCount': {
+            readonly one: "{{count}} 个文件";
+            readonly other: "{{count}} 个文件";
+        };
+        'chat.addedLineCount': {
+            readonly one: "新增 {{count}} 行";
+            readonly other: "新增 {{count}} 行";
+        };
+        'chat.removedLineCount': {
+            readonly one: "删除 {{count}} 行";
+            readonly other: "删除 {{count}} 行";
+        };
         'chat.performedOperations': "已执行";
         'chat.performingOperations': "正在执行";
         "auth.avatar": "个人头像";

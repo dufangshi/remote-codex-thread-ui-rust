@@ -3700,12 +3700,12 @@ var chatZhCN = {
   "chat.workedForMinutes": "\u5DE5\u4F5C\u4E86 {{minutes}} \u5206\u949F {{seconds}} \u79D2",
   "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2",
   "chat.operationCount": { one: "{{count}} \u9879\u64CD\u4F5C", other: "{{count}} \u9879\u64CD\u4F5C" },
-  "chat.activityStepCount": "{{count}} \u4E2A\u6B65\u9AA4",
-  "chat.commandCount": "{{count}} \u6761\u547D\u4EE4",
-  "chat.readFileCount": "\u8BFB\u53D6 {{count}} \u4E2A\u6587\u4EF6",
-  "chat.changedFileCount": "{{count}} \u4E2A\u6587\u4EF6",
-  "chat.addedLineCount": "\u65B0\u589E {{count}} \u884C",
-  "chat.removedLineCount": "\u5220\u9664 {{count}} \u884C",
+  "chat.activityStepCount": { one: "{{count}} \u4E2A\u6B65\u9AA4", other: "{{count}} \u4E2A\u6B65\u9AA4" },
+  "chat.commandCount": { one: "{{count}} \u6761\u547D\u4EE4", other: "{{count}} \u6761\u547D\u4EE4" },
+  "chat.readFileCount": { one: "\u8BFB\u53D6 {{count}} \u4E2A\u6587\u4EF6", other: "\u8BFB\u53D6 {{count}} \u4E2A\u6587\u4EF6" },
+  "chat.changedFileCount": { one: "{{count}} \u4E2A\u6587\u4EF6", other: "{{count}} \u4E2A\u6587\u4EF6" },
+  "chat.addedLineCount": { one: "\u65B0\u589E {{count}} \u884C", other: "\u65B0\u589E {{count}} \u884C" },
+  "chat.removedLineCount": { one: "\u5220\u9664 {{count}} \u884C", other: "\u5220\u9664 {{count}} \u884C" },
   "chat.performedOperations": "\u5DF2\u6267\u884C",
   "chat.performingOperations": "\u6B63\u5728\u6267\u884C"
 };
