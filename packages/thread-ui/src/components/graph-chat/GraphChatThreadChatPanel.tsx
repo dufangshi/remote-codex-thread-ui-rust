@@ -73,6 +73,10 @@ export function GraphChatThreadChatPanel({
   const [mobileKeyboardInset, setMobileKeyboardInset] = useState(0);
   const [mobilePromptFocused, setMobilePromptFocused] = useState(false);
   const internalComposerHostRef = useRef<HTMLDivElement | null>(null);
+  const panelRootRef = useRef<HTMLDivElement | null>(null);
+  // Space between this chat and the window bottom (a terminal panel below it).
+  // The keyboard covers that space first; only the rest overlaps this chat.
+  const [panelBottomGap, setPanelBottomGap] = useState(0);
   const timelineTailVisibilityChange = timelineProps?.onTailVisibilityChange;
   const hasPendingRequests = detail.pendingRequests.length > 0;
   const queuedPrompts = useMemo(() => {
@@ -233,8 +237,13 @@ export function GraphChatThreadChatPanel({
 
     const updateOverlap = () => {
       const rect = node.getBoundingClientRect();
+      const root = panelRootRef.current;
+      const bottom = useFloatingMobileComposer || !root
+        ? window.innerHeight
+        : Math.min(window.innerHeight, root.getBoundingClientRect().bottom);
+      setPanelBottomGap(Math.max(0, Math.round(window.innerHeight - bottom)));
       setMobileComposerOverlap(
-        Math.max(0, Math.ceil(window.innerHeight - rect.top)),
+        Math.max(0, Math.ceil(bottom - rect.top)),
       );
     };
 
@@ -247,6 +256,7 @@ export function GraphChatThreadChatPanel({
     if (typeof ResizeObserver !== 'undefined') {
       observer = new ResizeObserver(updateOverlap);
       observer.observe(node);
+      if (panelRootRef.current) observer.observe(panelRootRef.current);
     }
 
     return () => {
@@ -261,6 +271,7 @@ export function GraphChatThreadChatPanel({
     mobilePromptFocused,
     composerProps,
     hasPendingRequests,
+    useFloatingMobileComposer,
   ]);
 
   useEffect(() => {
@@ -311,9 +322,12 @@ export function GraphChatThreadChatPanel({
 
   const mobileComposerBottomOffset =
     isMobileViewport && mobilePromptFocused
-      ? Math.max(0, mobileKeyboardInset - floatingMobileComposerBottomOffset)
+      ? Math.max(0, mobileKeyboardInset - floatingMobileComposerBottomOffset - panelBottomGap)
       : 0;
-  const effectiveMobileComposerHeight = Math.max(mobileComposerHeight, 144);
+  // Above a bottom panel the chat is short; reserve the composer's real height.
+  const effectiveMobileComposerHeight = panelBottomGap > 0
+    ? mobileComposerHeight
+    : Math.max(mobileComposerHeight, 144);
   const effectiveMobileComposerOverlap = Math.max(
     mobileComposerOverlap,
     effectiveMobileComposerHeight + mobileComposerBottomOffset,
@@ -378,6 +392,7 @@ export function GraphChatThreadChatPanel({
 
   return (
     <div
+      ref={panelRootRef}
       data-testid="chat-panel"
       className="thread-graph-chat-panel relative flex h-full min-h-0 flex-col"
       style={panelStyle}

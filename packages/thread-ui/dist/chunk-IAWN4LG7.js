@@ -761,7 +761,10 @@ var chatEn = {
   "chat.awaitingResponseStatus": "Awaiting response",
   "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m",
   "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
-  "chat.workedForSeconds": "Worked for {{seconds}}s"
+  "chat.workedForSeconds": "Worked for {{seconds}}s",
+  "chat.operationCount": { one: "{{count}} operation", other: "{{count}} operations" },
+  "chat.performedOperations": "Performed",
+  "chat.performingOperations": "Working on"
 };
 
 // src/i18n/common.en.ts
@@ -2197,6 +2200,12 @@ var sharingEn = {
 
 // src/i18n/workbench.en.ts
 var workbenchEn = {
+  "workbench.adapterInstallTitle": "Install ACP adapter?",
+  "workbench.adapterInstallDescription": "{{agent}} is installed. Its ACP adapter is required to connect it to Remote Codex. Install it now?",
+  "workbench.adapterInstallNotReady": "Installation finished, but the ACP adapter is not ready. Please retry.",
+  "workbench.adapterInstallFailed": "Unable to install the ACP adapter.",
+  "workbench.adapterInstallConfirm": "Install adapter",
+  "workbench.adapterInstallRetry": "Retry installation",
   "workbench.subagentBack": "Back to subagents",
   "workbench.subagentDetails": "Agent details",
   "workbench.subagentCounts": "{{running}} running \xB7 {{total}} total",
@@ -2662,7 +2671,38 @@ var workbenchEn = {
   "workbench.openCreatedThread": "Open thread",
   "workbench.deepseekHarness": "DeepSeek Harness",
   "workbench.deepseekHarnessPluginDescription": "Run modes, DSH plugins, profile settings, commands and the native DSH console for DeepSeek Harness threads.",
-  "workbench.deepseekHarnessNotRunning": "This thread's DSH session is not running yet."
+  "workbench.deepseekHarnessNotRunning": "This thread's DSH session is not running yet.",
+  "workbench.terminalNew": "New terminal",
+  "workbench.terminalSplit": "Split terminal",
+  "workbench.terminalKill": "Kill terminal",
+  "workbench.terminalKillNamed": "Kill {{value1}}",
+  "workbench.terminalSplitNamed": "Split {{value1}}",
+  "workbench.terminalRename": "Rename terminal",
+  "workbench.terminalRenameNamed": "Rename {{value1}}",
+  "workbench.terminalName": "Terminal name",
+  "workbench.terminalDefaultName": "Terminal {{value1}}",
+  "workbench.terminalSplitPosition": "{{value1}}, split {{value2}} of {{value3}}",
+  "workbench.terminalTabs": "Terminals",
+  "workbench.terminalSwitch": "Switch terminal",
+  "workbench.terminalMore": "More terminal actions",
+  "workbench.terminalMaximize": "Maximize panel",
+  "workbench.terminalRestore": "Restore panel size",
+  "workbench.terminalCollapse": "Collapse panel",
+  "workbench.terminalExpand": "Expand panel",
+  "workbench.terminalHide": "Hide panel (terminals keep running)",
+  "workbench.terminalBackToChat": "Back to chat",
+  "workbench.terminalResize": "Resize terminal panel",
+  "workbench.terminalResizeTabs": "Resize terminal list",
+  "workbench.terminalResizePanes": "Resize split terminals",
+  "workbench.terminalEmpty": "No terminal in this conversation yet",
+  "workbench.terminalRunsIn": "Commands run in {{value1}}",
+  "workbench.terminalConnecting": "Connecting\u2026",
+  "workbench.terminalDisconnected": "Disconnected",
+  "workbench.terminalReconnect": "Reconnect",
+  "workbench.terminalStatusConnected": "Connected",
+  "workbench.subagentCreated": "Created",
+  "workbench.subagentUpdated": "Updated",
+  "workbench.subagentLoadEarlier": "Load earlier activity"
 };
 
 // src/i18n/en.ts
@@ -3439,7 +3479,10 @@ var chatZhCN = {
   "chat.awaitingResponseStatus": "\u7B49\u5F85\u56DE\u590D",
   "chat.workedForHours": "\u5DE5\u4F5C\u4E86 {{hours}} \u5C0F\u65F6 {{minutes}} \u5206\u949F",
   "chat.workedForMinutes": "\u5DE5\u4F5C\u4E86 {{minutes}} \u5206\u949F {{seconds}} \u79D2",
-  "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2"
+  "chat.workedForSeconds": "\u5DE5\u4F5C\u4E86 {{seconds}} \u79D2",
+  "chat.operationCount": { one: "{{count}} \u9879\u64CD\u4F5C", other: "{{count}} \u9879\u64CD\u4F5C" },
+  "chat.performedOperations": "\u5DF2\u6267\u884C",
+  "chat.performingOperations": "\u6B63\u5728\u6267\u884C"
 };
 
 // src/i18n/common.zh-CN.ts
@@ -4875,6 +4918,12 @@ var sharingZhCN = {
 
 // src/i18n/workbench.zh-CN.ts
 var workbenchZhCN = {
+  "workbench.adapterInstallTitle": "\u5B89\u88C5 ACP \u9002\u914D\u5668\uFF1F",
+  "workbench.adapterInstallDescription": "\u5DF2\u68C0\u6D4B\u5230 {{agent}}\uFF0C\u8FD8\u9700\u8981 ACP \u9002\u914D\u5668\u624D\u80FD\u8FDE\u63A5 Remote Codex\u3002\u662F\u5426\u4E00\u952E\u5B89\u88C5\uFF1F",
+  "workbench.adapterInstallNotReady": "\u5B89\u88C5\u5DF2\u5B8C\u6210\uFF0C\u4F46 ACP \u9002\u914D\u5668\u5C1A\u672A\u5C31\u7EEA\uFF0C\u8BF7\u91CD\u8BD5\u3002",
+  "workbench.adapterInstallFailed": "ACP \u9002\u914D\u5668\u5B89\u88C5\u5931\u8D25\u3002",
+  "workbench.adapterInstallConfirm": "\u4E00\u952E\u5B89\u88C5",
+  "workbench.adapterInstallRetry": "\u91CD\u8BD5\u5B89\u88C5",
   "workbench.subagentBack": "\u8FD4\u56DE\u5B50\u667A\u80FD\u4F53\u5217\u8868",
   "workbench.subagentDetails": "\u5B50\u667A\u80FD\u4F53\u8BE6\u60C5",
   "workbench.subagentCounts": "{{running}} \u4E2A\u8FD0\u884C\u4E2D \xB7 \u5171 {{total}} \u4E2A",
@@ -5340,7 +5389,38 @@ var workbenchZhCN = {
   "workbench.openCreatedThread": "\u6253\u5F00\u7EBF\u7A0B",
   "workbench.deepseekHarness": "DeepSeek Harness",
   "workbench.deepseekHarnessPluginDescription": "\u4E3A DeepSeek Harness \u7EBF\u7A0B\u63D0\u4F9B\u8FD0\u884C\u6A21\u5F0F\u3001DSH \u63D2\u4EF6\u3001\u914D\u7F6E\u9879\u3001\u547D\u4EE4\u548C DSH \u539F\u751F\u63A7\u5236\u53F0\u3002",
-  "workbench.deepseekHarnessNotRunning": "\u672C\u7EBF\u7A0B\u7684 DSH \u4F1A\u8BDD\u5C1A\u672A\u8FD0\u884C\u3002"
+  "workbench.deepseekHarnessNotRunning": "\u672C\u7EBF\u7A0B\u7684 DSH \u4F1A\u8BDD\u5C1A\u672A\u8FD0\u884C\u3002",
+  "workbench.terminalNew": "\u65B0\u5EFA\u7EC8\u7AEF",
+  "workbench.terminalSplit": "\u62C6\u5206\u7EC8\u7AEF",
+  "workbench.terminalKill": "\u7EC8\u6B62\u7EC8\u7AEF",
+  "workbench.terminalKillNamed": "\u7EC8\u6B62 {{value1}}",
+  "workbench.terminalSplitNamed": "\u62C6\u5206 {{value1}}",
+  "workbench.terminalRename": "\u91CD\u547D\u540D\u7EC8\u7AEF",
+  "workbench.terminalRenameNamed": "\u91CD\u547D\u540D {{value1}}",
+  "workbench.terminalName": "\u7EC8\u7AEF\u540D\u79F0",
+  "workbench.terminalDefaultName": "\u7EC8\u7AEF {{value1}}",
+  "workbench.terminalSplitPosition": "{{value1}}\uFF0C\u62C6\u5206 {{value2}}/{{value3}}",
+  "workbench.terminalTabs": "\u7EC8\u7AEF\u5217\u8868",
+  "workbench.terminalSwitch": "\u5207\u6362\u7EC8\u7AEF",
+  "workbench.terminalMore": "\u66F4\u591A\u7EC8\u7AEF\u64CD\u4F5C",
+  "workbench.terminalMaximize": "\u6700\u5927\u5316\u9762\u677F",
+  "workbench.terminalRestore": "\u6062\u590D\u9762\u677F\u5927\u5C0F",
+  "workbench.terminalCollapse": "\u6298\u53E0\u9762\u677F",
+  "workbench.terminalExpand": "\u5C55\u5F00\u9762\u677F",
+  "workbench.terminalHide": "\u9690\u85CF\u9762\u677F\uFF08\u7EC8\u7AEF\u7EE7\u7EED\u8FD0\u884C\uFF09",
+  "workbench.terminalBackToChat": "\u8FD4\u56DE\u804A\u5929",
+  "workbench.terminalResize": "\u8C03\u6574\u7EC8\u7AEF\u9762\u677F\u9AD8\u5EA6",
+  "workbench.terminalResizeTabs": "\u8C03\u6574\u7EC8\u7AEF\u5217\u8868\u5BBD\u5EA6",
+  "workbench.terminalResizePanes": "\u8C03\u6574\u62C6\u5206\u7EC8\u7AEF\u5927\u5C0F",
+  "workbench.terminalEmpty": "\u6B64\u4F1A\u8BDD\u8FD8\u6CA1\u6709\u7EC8\u7AEF",
+  "workbench.terminalRunsIn": "\u547D\u4EE4\u5728 {{value1}} \u4E2D\u8FD0\u884C",
+  "workbench.terminalConnecting": "\u8FDE\u63A5\u4E2D\u2026",
+  "workbench.terminalDisconnected": "\u5DF2\u65AD\u5F00",
+  "workbench.terminalReconnect": "\u91CD\u65B0\u8FDE\u63A5",
+  "workbench.terminalStatusConnected": "\u5DF2\u8FDE\u63A5",
+  "workbench.subagentCreated": "\u521B\u5EFA\u4E8E",
+  "workbench.subagentUpdated": "\u66F4\u65B0\u4E8E",
+  "workbench.subagentLoadEarlier": "\u52A0\u8F7D\u66F4\u65E9\u8BB0\u5F55"
 };
 
 // src/i18n/zh-CN.ts

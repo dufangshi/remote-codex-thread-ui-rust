@@ -430,4 +430,7 @@ export const chatEn = {
   "chat.workedForHours": "Worked for {{hours}}h {{minutes}}m",
   "chat.workedForMinutes": "Worked for {{minutes}}m {{seconds}}s",
   "chat.workedForSeconds": "Worked for {{seconds}}s",
+  'chat.operationCount': { one: '{{count}} operation', other: '{{count}} operations' },
+  'chat.performedOperations': 'Performed',
+  'chat.performingOperations': 'Working on',
 } as const;

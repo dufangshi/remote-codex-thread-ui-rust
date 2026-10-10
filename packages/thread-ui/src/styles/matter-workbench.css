@@ -1187,6 +1187,9 @@
 .workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button { display: inline-flex; justify-content: center; align-items: center; gap: 6px; min-height: 32px; padding: 5px 9px; border-radius: 7px; font-size: 12px; color: var(--theme-fg-soft); }
 .workbench-panels :is(.workbench-pane-heading, .workbench-mobile-views, .workbench-collaboration, .workbench-reference-status) button:hover { background: var(--theme-hover); }
 .workbench-content { position: relative; display: flex; flex: 1; min-width: 0; min-height: 0; }
+/* Conversations and the bottom panel share one column, like VS Code's editor
+   area and panel; the Files drawer stays a full-height column beside them. */
+.workbench-main-column { position: relative; display: flex; flex: 1; flex-direction: column; min-width: 0; min-height: 0; }
 .workbench-pane-grid { display: flex; flex: 1; min-width: 0; min-height: 0; }
 .workbench-primary, .workbench-reference { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; flex: 1; }
 .workbench-pane-grid.has-reference > .workbench-primary { flex: 0 0 clamp(360px, var(--primary-ratio), calc(100% - 365px)); --matter-reading-width: 100%; }
@@ -1309,3 +1312,27 @@
 .workbench-tool-resize:hover::after, .workbench-tool-resize:focus-visible::after { background: var(--theme-accent-solid); }
 .workbench-tool-resize:focus-visible { outline: none; }
 .workbench-panels.is-compact .workbench-tool-drawer { position: absolute; inset: 0; z-index: 90; width: 100%; }
+
+/* Bottom tool panel. It takes height from the conversations instead of covering
+   them; only an explicit maximize lays it over the (still mounted) chat. */
+.workbench-bottom-panel { position: relative; display: flex; flex: 0 0 var(--workbench-panel-height, 320px); flex-direction: column; min-width: 0; min-height: 0; border-top: 1px solid var(--theme-border-strong); background: var(--theme-panel); }
+.workbench-bottom-panel.is-collapsed { flex-basis: auto; }
+.workbench-bottom-panel.is-maximized { position: absolute; inset: 0; z-index: 6; border-top: 0; }
+/* Hidden, not unmounted: scroll positions and drafts survive a maximize, and
+   floating chat controls cannot show through the terminal. */
+.workbench-main-column.has-maximized-panel > .workbench-pane-grid { visibility: hidden; }
+.workbench-panel-sash { position: absolute; inset: -4px 0 auto; z-index: 4; height: 8px; cursor: row-resize; touch-action: none; user-select: none; }
+.workbench-panel-sash::after { content: ''; position: absolute; inset: 3px 0 auto; height: 2px; background: transparent; transition: background 120ms; }
+.workbench-panel-sash:hover::after, .workbench-panel-sash:focus-visible::after, .workbench-panel-sash:active::after { background: var(--theme-accent-solid); }
+.workbench-panel-sash:focus-visible { outline: none; }
+/* Touch: an in-flow grab bar, large enough for a thumb and visible without hover. */
+.workbench-panels.is-compact .workbench-panel-sash { position: relative; inset: auto; display: flex; flex: 0 0 18px; align-items: center; justify-content: center; height: 18px; margin-top: -1px; }
+.workbench-panels.is-compact .workbench-panel-sash::after { position: static; width: 36px; height: 4px; border-radius: 2px; background: var(--theme-border-strong); }
+.workbench-panels.is-compact .workbench-panel-sash:active::after { background: var(--theme-accent-solid); }
+@media (pointer: coarse) {
+  .workbench-panel-sash { inset: -10px 0 auto; height: 20px; }
+  .workbench-panel-sash::after { inset: 9px 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workbench-panel-sash::after { transition: none; }
+}

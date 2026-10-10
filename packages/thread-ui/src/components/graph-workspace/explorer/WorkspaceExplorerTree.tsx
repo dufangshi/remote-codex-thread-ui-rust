@@ -1,5 +1,5 @@
 import { translate, useI18n } from '../../../i18n';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { measureElement, useVirtualizer } from '@tanstack/react-virtual';
 import {
   useCallback,
   useEffect,
@@ -96,7 +96,36 @@ export function WorkspaceExplorerTree({
     overscan: 6,
     enabled: canVirtualize,
     useFlushSync: false,
+    // A hidden drawer (`display: none`) reports 0px rows. Caching those sizes
+    // collapses rows and shifts everything after them once it is shown again.
+    measureElement: (element, entry, instance) => {
+      const size = measureElement(element, entry, instance);
+      if (size > 0) return size;
+      const index = instance.indexFromElement(element);
+      return instance.measurementsCache[index]?.size ?? instance.options.estimateSize(index);
+    },
   });
+  const lastVisibleScrollTopRef = useRef(0);
+
+  // Hiding the drawer can also reset scrollTop without a scroll event (WebKit),
+  // leaving the virtualizer rendering rows for a stale offset: a blank band.
+  // Restore the last visible position and resync the virtualizer when shown.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!canVirtualize || !scroller) return;
+    let hidden = scroller.clientHeight === 0;
+    const observer = new ResizeObserver(() => {
+      const nowHidden = scroller.clientHeight === 0;
+      if (hidden && !nowHidden) {
+        const target = lastVisibleScrollTopRef.current;
+        if (Math.abs(scroller.scrollTop - target) > 1) scroller.scrollTop = target;
+        scroller.dispatchEvent(new Event('scroll'));
+      }
+      hidden = nowHidden;
+    });
+    observer.observe(scroller);
+    return () => observer.disconnect();
+  }, [canVirtualize, scrollerRef]);
 
   useEffect(() => {
     onFilterResultsChange?.({
@@ -210,6 +239,9 @@ export function WorkspaceExplorerTree({
       aria-label={translate("files.workspaceFiles")}
       className="thread-graph-workspace-tree-scroll min-h-0 flex-1 overflow-y-auto py-1 outline-none"
       onScroll={(event) => {
+        if (event.currentTarget.clientHeight > 0) {
+          lastVisibleScrollTopRef.current = event.currentTarget.scrollTop;
+        }
         if (scrollTopRef) {
           scrollTopRef.current = event.currentTarget.scrollTop;
         }

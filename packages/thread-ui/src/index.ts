@@ -8,6 +8,7 @@ import './styles/matter-workbench.css';
 import './styles/composer-compact.css';
 import './styles/composer-reasoning.css';
 import './styles/mermaid-diagrams.css';
+import './styles/terminal-panel.css';
 
 export type {
   ShellSocketConnection,
@@ -121,6 +122,7 @@ export { confirmWorkspaceDocumentLeave } from "./components/graph-workspace/expl
 export { useWorkbenchPresentation } from "./components/workbench/presentation";
 export type { WorkbenchPresentation, ReferenceMode } from "./components/workbench/presentation";
 export type { WorkbenchPanelsOptions } from "./components/workbench/WorkbenchPanels";
+export type { WorkbenchToolPanelControls } from "./components/workbench/toolPanel";
 
 export { SettingsDialog } from './components/SettingsDialog';
 

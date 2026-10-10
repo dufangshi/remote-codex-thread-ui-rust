@@ -74,6 +74,11 @@ interface ShellPaneProps {
   shell: ShellSessionDto | null;
   isActive: boolean;
   isVisible: boolean;
+  /**
+   * Take keyboard focus when this active pane becomes visible. Off when the
+   * terminal only follows another chat, so it cannot steal the composer's focus.
+   */
+  autoFocus?: boolean;
   isMobileShell: boolean;
   effectiveTheme: 'light' | 'dark';
   workspacePathMissing: boolean;
@@ -100,6 +105,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       shell,
       isActive,
       isVisible,
+      autoFocus = true,
       isMobileShell,
       effectiveTheme,
       workspacePathMissing,
@@ -488,7 +494,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       }
 
       const frame = window.requestAnimationFrame(() => {
-        refreshTerminalLayout({ focus: isActive, syncBackendSize: false });
+        refreshTerminalLayout({ focus: isActive && autoFocus, syncBackendSize: false });
         if (
           !socketRef.current &&
           shell?.id &&
@@ -501,7 +507,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
       return () => {
         window.cancelAnimationFrame(frame);
       };
-    }, [isActive, isVisible, refreshTerminalLayout, shell?.id, terminalReady]);
+    }, [autoFocus, isActive, isVisible, refreshTerminalLayout, shell?.id, terminalReady]);
 
     useEffect(() => {
       const terminal = terminalRef.current;
@@ -755,15 +761,15 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
 
     return (
       <div
-        className={`relative min-h-0 flex-1 overflow-hidden ${
+        className={`shell-pane relative min-h-0 flex-1 overflow-hidden ${
           isActive ? 'shell-pane-active' : ''
         }`}
-        onMouseDown={onActivate}
+        onPointerDown={onActivate}
         data-pane-id={paneId}
       >
         <div
           ref={setTerminalHostNode}
-          className={`h-full w-full px-2 py-2 sm:px-3 sm:py-3 ${
+          className={`shell-pane-host h-full w-full ${
             isMobileShell ? 'mobile-shell-direct' : ''
           }`}
           onClick={() => {
@@ -771,10 +777,6 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
             terminalRef.current?.focus();
           }}
         />
-        {isActive && (
-          <div className="pointer-events-none absolute right-2 top-2 rounded-md border border-sky-300/30 bg-sky-300/10 px-2 py-1 text-[10px] uppercase tracking-[0.12em] text-sky-100">
-            {translate("files.active")}</div>
-        )}
       </div>
     );
   },

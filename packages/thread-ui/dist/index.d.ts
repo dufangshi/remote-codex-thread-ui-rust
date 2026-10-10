@@ -153,6 +153,17 @@ declare function useWorkbenchPresentation(scope: string | null, contextKey?: str
     storageFailed: boolean;
 };
 
+/** Passed to bottom-panel content so its title bar can own the panel actions. */
+interface WorkbenchToolPanelControls {
+    maximized: boolean;
+    collapsed: boolean;
+    /** Phone-sized workbench: no hover, touch-sized targets, stacked splits. */
+    compact: boolean;
+    toggleMaximized: () => void;
+    toggleCollapsed: () => void;
+    close: () => void;
+}
+
 interface WorkbenchPanelsOptions {
     deviceLabel: string;
     workspaceLabel: string;
@@ -172,7 +183,8 @@ interface WorkbenchPanelsOptions {
     storageFailed?: boolean;
     focusedPane?: 'primary' | 'reference';
     onFocusPane?: (pane: 'primary' | 'reference') => boolean | void;
-    toolContent?: ReactNode;
+    /** Bottom panel content (the terminal). A function receives the panel actions. */
+    toolContent?: ReactNode | ((controls: WorkbenchToolPanelControls) => ReactNode);
     toolTitle?: string;
     toolsTargetLabel?: string;
     toolsOpen?: boolean;
@@ -460,11 +472,28 @@ interface ThreadShellPanelProps {
     isVisible?: boolean;
     showHeader?: boolean;
     onBackToChat?: (() => void) | undefined;
+    /** @deprecated The phone key bar replaced the floating toolbox. */
     showFloatingToolbox?: boolean;
     effectiveTheme?: 'light' | 'dark';
+    /** @deprecated Split sizes are stored with the per-thread terminal layout. */
     loadSplitRatio?: (threadId: string) => number | null | undefined;
+    /** @deprecated Split sizes are stored with the per-thread terminal layout. */
     saveSplitRatio?: (threadId: string, ratio: number) => void;
     onStateChange?: (state: ThreadShellControlState) => void;
+    /** Bottom-panel actions (collapse, maximize, hide) rendered in the title bar. */
+    panelControls?: WorkbenchToolPanelControls;
+    /** Device · workspace · conversation the commands run in. */
+    targetLabel?: string;
+    layoutStorageKey?: string;
+    /**
+     * Bumped when the user opens the terminal for this target: focus it and create
+     * a first terminal if there is none. 0 means no request, so following another
+     * chat never spawns a shell. Omit it for the legacy behaviour of creating one
+     * whenever the panel becomes visible empty.
+     */
+    openRequest?: number;
+    /** Like VS Code, hide the panel after the last terminal is killed or exits. */
+    onLastTerminalClosed?: () => void;
 }
 interface ThreadShellPanelHandle {
     toggleConnection: () => Promise<void>;
@@ -759,4 +788,4 @@ declare function createWorkspacePathResolver(adapter: Pick<ThreadWorkspaceAdapte
     workspaceId?: string | null;
 }, workspaceRoot: string): WorkspacePathResolver;
 
-export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, type ComposerSendShortcut, ConfirmDialog, ConversationSearchExcerpt, type ConversationSearchScope, ConversationSearchScopePicker, type CreateThreadShareInput, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MatterWorkbench, type MatterWorkbenchOptions, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ReferenceMode, SettingsDialog, SettingsPanels, type SettingsSection, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceAdapter, ThreadWorkspaceLayout, TokenUsageCost, type TokenUsageCostProps, type WorkbenchNotification, type WorkbenchPanelsOptions, type WorkbenchPresentation, type WorkbenchThread, type WorkbenchToolPanel, confirmWorkspaceDocumentLeave, createWorkspacePathResolver, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, transcriptSnapshot, turnStatusLabel, useAppShellNav, usePlugins, useWorkbenchPresentation };
+export { type AgentBackendId, AppShellMenuButton, AppShellNavContext, type AppShellNavContextValue, type AppShellNavigationItem, AppShellNavigationMenu, type AppShellNavigationMenuProps, AppShellSettingsDialog, type AppShellSettingsDialogProps, type ComposerSendShortcut, ConfirmDialog, ConversationSearchExcerpt, type ConversationSearchScope, ConversationSearchScopePicker, type CreateThreadShareInput, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, ExportTranscriptDialog, FrontendPluginModule, LongTextDialog, MatterWorkbench, type MatterWorkbenchOptions, MemoizedThreadGraphWorkspacePanel, PluginContextValue, PluginProvider, PromptAttachmentUpload, PublicTranscript, type PublicTranscriptSnapshot, type ReferenceMode, SettingsDialog, SettingsPanels, type SettingsSection, type ThemeMode, ThreadActionsDialog, type ThreadActionsDialogProps, ThreadCards, ThreadComposer, type ThreadComposerProps, ThreadDetailSurface, type ThreadDetailSurfaceProps, ThreadDetailUiAdapter, ThreadGraphWorkspaceFeatures, ThreadGraphWorkspacePanel, ThreadGraphWorkspacePanelProps, type ThreadShareSummary, ThreadShellAdapter, ThreadShellControlState$1 as ThreadShellControlState, ThreadShellPanel, type ThreadShellPanelHandle, ThreadTimeline, ThreadTimelineAdapter, type ThreadTimelineProps, ThreadWorkspaceAdapter, ThreadWorkspaceLayout, TokenUsageCost, type TokenUsageCostProps, type WorkbenchNotification, type WorkbenchPanelsOptions, type WorkbenchPresentation, type WorkbenchThread, type WorkbenchToolPanel, type WorkbenchToolPanelControls, confirmWorkspaceDocumentLeave, createWorkspacePathResolver, formatLongTimestamp, formatShortTimestamp, hasLikelyMarkdownSyntax, historyItemAccentClassName, historyItemLabel, threadStatusClassName, threadStatusLabel, transcriptSnapshot, turnStatusLabel, useAppShellNav, usePlugins, useWorkbenchPresentation };
