@@ -331,6 +331,10 @@ var authEn = {
 
 // src/i18n/chat.en.ts
 var chatEn = {
+  "chat.backgroundTaskCompleted": "Background task completed",
+  "chat.backgroundTaskFailed": "Background task failed",
+  "chat.backgroundTaskStopped": "Background task stopped",
+  "chat.backgroundTaskUpdated": "Background task updated",
   "chat.diagram": "Diagram",
   "chat.diagramSource": "View diagram source",
   "chat.showDiagram": "Show diagram",
@@ -2965,6 +2969,10 @@ var authZhCN = {
 
 // src/i18n/chat.zh-CN.ts
 var chatZhCN = {
+  "chat.backgroundTaskCompleted": "\u540E\u53F0\u4EFB\u52A1\u5B8C\u6210",
+  "chat.backgroundTaskFailed": "\u540E\u53F0\u4EFB\u52A1\u5931\u8D25",
+  "chat.backgroundTaskStopped": "\u540E\u53F0\u4EFB\u52A1\u5DF2\u505C\u6B62",
+  "chat.backgroundTaskUpdated": "\u540E\u53F0\u4EFB\u52A1\u66F4\u65B0",
   "chat.diagram": "\u56FE\u8868",
   "chat.diagramSource": "\u67E5\u770B\u56FE\u8868\u6E90\u7801",
   "chat.showDiagram": "\u663E\u793A\u56FE\u8868",

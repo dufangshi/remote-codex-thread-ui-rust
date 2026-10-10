@@ -1,4 +1,8 @@
 export const chatZhCN = {
+  "chat.backgroundTaskCompleted": "后台任务完成",
+  "chat.backgroundTaskFailed": "后台任务失败",
+  "chat.backgroundTaskStopped": "后台任务已停止",
+  "chat.backgroundTaskUpdated": "后台任务更新",
   "chat.diagram": "图表",
   "chat.diagramSource": "查看图表源码",
   "chat.showDiagram": "显示图表",

@@ -1852,6 +1852,10 @@ declare const en: {
         readonly one: "{{count}} item";
         readonly other: "{{count}} items";
     };
+    readonly "chat.backgroundTaskCompleted": "Background task completed";
+    readonly "chat.backgroundTaskFailed": "Background task failed";
+    readonly "chat.backgroundTaskStopped": "Background task stopped";
+    readonly "chat.backgroundTaskUpdated": "Background task updated";
     readonly "chat.diagram": "Diagram";
     readonly "chat.diagramSource": "View diagram source";
     readonly "chat.showDiagram": "Show diagram";
@@ -4456,6 +4460,10 @@ declare const zhCN: {
         readonly one: "{{count}} 项";
         readonly other: "{{count}} 项";
     };
+    "chat.backgroundTaskCompleted": "后台任务完成";
+    "chat.backgroundTaskFailed": "后台任务失败";
+    "chat.backgroundTaskStopped": "后台任务已停止";
+    "chat.backgroundTaskUpdated": "后台任务更新";
     "chat.diagram": "图表";
     "chat.diagramSource": "查看图表源码";
     "chat.showDiagram": "显示图表";
@@ -7064,6 +7072,10 @@ declare const resources: {
             readonly one: "{{count}} item";
             readonly other: "{{count}} items";
         };
+        readonly "chat.backgroundTaskCompleted": "Background task completed";
+        readonly "chat.backgroundTaskFailed": "Background task failed";
+        readonly "chat.backgroundTaskStopped": "Background task stopped";
+        readonly "chat.backgroundTaskUpdated": "Background task updated";
         readonly "chat.diagram": "Diagram";
         readonly "chat.diagramSource": "View diagram source";
         readonly "chat.showDiagram": "Show diagram";
@@ -9667,6 +9679,10 @@ declare const resources: {
             readonly one: "{{count}} 项";
             readonly other: "{{count}} 项";
         };
+        "chat.backgroundTaskCompleted": "后台任务完成";
+        "chat.backgroundTaskFailed": "后台任务失败";
+        "chat.backgroundTaskStopped": "后台任务已停止";
+        "chat.backgroundTaskUpdated": "后台任务更新";
         "chat.diagram": "图表";
         "chat.diagramSource": "查看图表源码";
         "chat.showDiagram": "显示图表";

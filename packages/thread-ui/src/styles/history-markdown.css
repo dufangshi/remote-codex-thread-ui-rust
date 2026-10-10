@@ -3131,3 +3131,42 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
   .thread-ui-shell .thread-graph-editor-toolbar-button { width: 32px; height: 44px; }
   .thread-ui-shell .thread-graph-workspace-tree-scroll { overscroll-behavior: contain; touch-action: pan-y; }
 }
+
+/* Task notifications share the quiet typography of intermediate steps. */
+.thread-ui-shell .thread-graph-event-generic .thread-graph-history-event-title,
+.thread-ui-shell .thread-graph-history-event-note,
+.thread-ui-shell .thread-graph-task-notice {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.thread-ui-shell .thread-graph-history-event-note {
+  color: var(--theme-fg-soft);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.thread-ui-shell .thread-graph-task-notice { min-width: 0; padding: 2px 0; }
+.thread-ui-shell .thread-graph-task-notice-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.thread-ui-shell .thread-graph-task-notice-toggle {
+  display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;
+  min-height: 32px; border: 0; border-radius: 4px; background: transparent;
+  padding: 0; color: var(--theme-fg-muted); font: inherit; text-align: left;
+  cursor: pointer;
+}
+.thread-ui-shell .thread-graph-task-notice-toggle:hover { color: var(--theme-fg); }
+.thread-ui-shell .thread-graph-task-notice-toggle:focus-visible { outline: 1px solid var(--theme-border-contrast); outline-offset: 3px; }
+.thread-ui-shell .thread-graph-task-notice-label { flex-shrink: 0; }
+.thread-ui-shell .thread-graph-task-notice-preview { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-ui-shell .thread-graph-task-notice-preview::before { content: '·'; margin-right: 8px; opacity: .55; }
+.thread-ui-shell .thread-graph-task-notice-chevron { width: 12px; height: 12px; flex-shrink: 0; transition: transform 140ms ease; }
+.thread-ui-shell .thread-graph-task-notice-chevron.is-open { transform: rotate(90deg); }
+.thread-ui-shell .thread-graph-task-notice-time { flex: 0 0 auto; color: var(--theme-fg-muted); font-size: 11px; }
+.thread-ui-shell .thread-graph-task-notice-detail {
+  margin: 2px 0 8px 6px; padding: 4px 0 4px 10px; border-left: 1px solid var(--theme-border);
+  color: var(--theme-fg-soft); white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.thread-ui-shell .thread-graph-task-notice-detail time { display: block; margin-top: 4px; color: var(--theme-fg-muted); font-size: 11px; }
+.thread-ui-shell .thread-graph-task-notice.is-failed .thread-graph-task-notice-label { color: var(--theme-danger, #ef6a75); }
+@media (max-width: 639px) { .thread-ui-shell .thread-graph-task-notice-toggle { min-height: 44px; } }
+@media (prefers-reduced-motion: reduce) { .thread-ui-shell .thread-graph-task-notice-chevron { transition: none; } }

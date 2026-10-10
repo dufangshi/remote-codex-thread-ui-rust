@@ -1,4 +1,8 @@
 export const chatEn = {
+  "chat.backgroundTaskCompleted": "Background task completed",
+  "chat.backgroundTaskFailed": "Background task failed",
+  "chat.backgroundTaskStopped": "Background task stopped",
+  "chat.backgroundTaskUpdated": "Background task updated",
   "chat.diagram": "Diagram",
   "chat.diagramSource": "View diagram source",
   "chat.showDiagram": "Show diagram",

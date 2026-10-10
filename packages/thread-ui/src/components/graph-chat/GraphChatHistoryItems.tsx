@@ -611,6 +611,58 @@ export const GraphChatContextCompactionItem = memo(
   },
 );
 
+function GraphChatNativeTaskNotification({
+  item,
+  timeMeta,
+}: {
+  item: ThreadHistoryItemDto;
+  timeMeta?: ReactNode;
+}) {
+  const { locale } = useI18n();
+  const [open, setOpen] = useState(false);
+  // A parent turn can be interrupted after the task has already completed.
+  const status = (item.taskStatus ?? item.status ?? '').trim().toLowerCase();
+  const failed = ['failed', 'failure', 'error', 'errored'].includes(status);
+  const stopped = ['stopped', 'killed', 'cancelled', 'canceled', 'interrupted'].includes(status);
+  const completed = ['completed', 'complete', 'success', 'succeeded'].includes(status);
+  const label = translate(
+    failed ? 'chat.backgroundTaskFailed'
+      : stopped ? 'chat.backgroundTaskStopped'
+      : completed ? 'chat.backgroundTaskCompleted'
+      : 'chat.backgroundTaskUpdated',
+  );
+  const timestamp = item.createdAt ? new Date(item.createdAt) : null;
+  const validTimestamp = timestamp && Number.isFinite(timestamp.getTime());
+
+  return (
+    <div className={`thread-graph-event thread-graph-task-notice${failed ? ' is-failed' : ''}`}>
+      <div className="thread-graph-task-notice-row">
+        <button
+          type="button"
+          className="thread-graph-task-notice-toggle"
+          aria-expanded={open}
+          onClick={() => setOpen(value => !value)}
+        >
+          <span className="thread-graph-task-notice-label">{label}</span>
+          <span className="thread-graph-task-notice-preview">{item.text}</span>
+          <ChevronRight className={`thread-graph-task-notice-chevron${open ? ' is-open' : ''}`} aria-hidden="true" />
+        </button>
+        {timeMeta ? <span className="thread-graph-task-notice-time">{timeMeta}</span> : null}
+      </div>
+      {open ? (
+        <div className="thread-graph-task-notice-detail">
+          <div><GraphChatLinkifiedPlainText text={item.text} /></div>
+          {validTimestamp ? (
+            <time dateTime={item.createdAt!}>
+              {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' }).format(timestamp)}
+            </time>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export const GraphChatGenericHistoryItem = memo(
   function GraphChatGenericHistoryItem({
     item,
@@ -619,7 +671,10 @@ export const GraphChatGenericHistoryItem = memo(
     item: ThreadHistoryItemDto;
     timeMeta?: ReactNode;
   }) {
-  const { locale: i18nLocale } = useI18n();
+    const { locale: i18nLocale } = useI18n();
+    if (item.origin === 'nativeTaskNotification') {
+      return <GraphChatNativeTaskNotification item={item} timeMeta={timeMeta} />;
+    }
     return (
       <GraphChatHistoryEventFrame
         className="thread-graph-event-generic"
@@ -629,9 +684,9 @@ export const GraphChatGenericHistoryItem = memo(
         title={translate("chat.noted")}
         tone="generic"
       >
-        <pre className="thread-graph-history-event-pre">
+        <div className="thread-graph-history-event-note">
           <GraphChatLinkifiedPlainText text={item.text} />
-        </pre>
+        </div>
       </GraphChatHistoryEventFrame>
     );
   },
