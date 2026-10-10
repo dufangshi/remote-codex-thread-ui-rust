@@ -729,6 +729,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
       variant="footer"
       lastActivityAt={lastActivityAt}
       backgroundAgentCount={backgroundAgentCount}
+      waitingForWake={mergedItems.some(item => item.origin === 'nativeBackgroundWait' && item.status === 'waiting')}
     />
   ) : null;
   const collapsedSummary = useMemo(
@@ -748,6 +749,12 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
+  // A background turn is a sequence of waiting/wake/report episodes. Keep
+  // these anchors and narrative visible even when operation details collapse.
+  const hasBackgroundAnchors = mergedItems.some(item => item.origin === 'nativeBackgroundWait' || item.origin === 'nativeTaskNotification');
+  const backgroundNarrative = hasBackgroundAnchors ? groupedItems.filter(entry => entry.kind === 'item' &&
+    (entry.item.kind === 'agentMessage' || entry.item.origin === 'nativeBackgroundWait' || entry.item.origin === 'nativeTaskNotification')) : [];
+
   const canToggleWorkedSummary =
     hasCollapsedHiddenItems;
   const terminalWorkedNode =
@@ -814,7 +821,9 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           />
         </div>
         {!effectiveCollapsed ? <div className="thread-execution-timeline">{renderHistoryEntries(collapsedSummary.hiddenEntries)}</div> : null}
-        {visibleSummaryAgent ? (
+        {effectiveCollapsed && backgroundNarrative.length > 0 ? (
+          <div className="thread-execution-timeline">{renderHistoryEntries(backgroundNarrative)}</div>
+        ) : visibleSummaryAgent ? (
           <CompactMessageItem
             threadId={threadId}
             item={visibleSummaryAgent}

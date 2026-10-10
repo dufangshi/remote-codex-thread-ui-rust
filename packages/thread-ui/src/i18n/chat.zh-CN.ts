@@ -1,4 +1,9 @@
 export const chatZhCN = {
+  "chat.backgroundResumed": "继续执行",
+  "chat.waitingForWake": "等待唤醒",
+  "chat.backgroundAwakened": "已唤醒",
+  "chat.backgroundWaitEnded": "等待已结束",
+  "chat.backgroundWaitingHint": "后台任务运行中，后续进展会继续显示在这里。",
   "chat.backgroundTaskCompleted": "后台任务完成",
   "chat.backgroundTaskFailed": "后台任务失败",
   "chat.backgroundTaskStopped": "后台任务已停止",

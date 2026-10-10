@@ -8,6 +8,8 @@ import {
 } from 'react';
 import {
   Archive,
+  BellRing,
+  Hourglass,
   ArrowDown,
   ArrowUp,
   Bot,
@@ -625,8 +627,13 @@ function GraphChatNativeTaskNotification({
   const failed = ['failed', 'failure', 'error', 'errored'].includes(status);
   const stopped = ['stopped', 'killed', 'cancelled', 'canceled', 'interrupted'].includes(status);
   const completed = ['completed', 'complete', 'success', 'succeeded'].includes(status);
+  const waiting = item.origin === 'nativeBackgroundWait' && status === 'waiting';
   const label = translate(
-    failed ? 'chat.backgroundTaskFailed'
+    waiting ? 'chat.waitingForWake'
+      : item.origin === 'nativeTaskNotification' && !failed && !stopped ? 'chat.backgroundAwakened'
+      : item.origin === 'nativeBackgroundWait' && status === 'running' ? 'chat.backgroundResumed'
+      : item.origin === 'nativeBackgroundWait' ? 'chat.backgroundWaitEnded'
+      : failed ? 'chat.backgroundTaskFailed'
       : stopped ? 'chat.backgroundTaskStopped'
       : completed ? 'chat.backgroundTaskCompleted'
       : 'chat.backgroundTaskUpdated',
@@ -643,15 +650,19 @@ function GraphChatNativeTaskNotification({
           aria-expanded={open}
           onClick={() => setOpen(value => !value)}
         >
+          {waiting ? <Hourglass className="thread-graph-task-notice-icon" aria-hidden="true" />
+            : item.origin === 'nativeTaskNotification' ? <BellRing className="thread-graph-task-notice-icon" aria-hidden="true" /> : null}
           <span className="thread-graph-task-notice-label">{label}</span>
-          <span className="thread-graph-task-notice-preview">{item.text}</span>
+          {item.text ? <span className="thread-graph-task-notice-preview">{item.text}</span> : null}
           <ChevronRight className={`thread-graph-task-notice-chevron${open ? ' is-open' : ''}`} aria-hidden="true" />
         </button>
         {timeMeta ? <span className="thread-graph-task-notice-time">{timeMeta}</span> : null}
       </div>
       {open ? (
         <div className="thread-graph-task-notice-detail">
-          <div><GraphChatLinkifiedPlainText text={item.text} /></div>
+          {item.text ? <div><GraphChatLinkifiedPlainText text={item.text} /></div> : null}
+          {item.detailText ? <div><GraphChatLinkifiedPlainText text={item.detailText} /></div> : null}
+          {waiting ? <div>{translate('chat.backgroundWaitingHint')}</div> : null}
           {validTimestamp ? (
             <time dateTime={item.createdAt!}>
               {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium' }).format(timestamp)}
@@ -672,7 +683,7 @@ export const GraphChatGenericHistoryItem = memo(
     timeMeta?: ReactNode;
   }) {
     const { locale: i18nLocale } = useI18n();
-    if (item.origin === 'nativeTaskNotification') {
+    if (item.origin === 'nativeTaskNotification' || item.origin === 'nativeBackgroundWait') {
       return <GraphChatNativeTaskNotification item={item} timeMeta={timeMeta} />;
     }
     return (

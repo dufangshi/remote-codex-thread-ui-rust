@@ -116,7 +116,7 @@ export function countTurnSteps(
 ) {
   const recorded = renderableHistoryItems([...new Map(items.map(item => [item.id, item])).values()]);
   const latestReply = recorded.findLast(item => item.kind === 'agentMessage');
-  const count = (entries: ThreadHistoryItemDto[]) => entries.filter(item => item.kind !== 'userMessage' && item.id !== latestReply?.id).length;
+  const count = (entries: ThreadHistoryItemDto[]) => entries.filter(item => item.kind !== 'userMessage' && item.id !== latestReply?.id && item.origin !== 'nativeBackgroundWait' && item.origin !== 'nativeTaskNotification').length;
   const loaded = count(recorded);
   if (!turn.hasDeferredItems) return loaded;
   const snapshot = renderableHistoryItems([...new Map(summaryItems.map(item => [item.id, item])).values()]);

@@ -473,6 +473,11 @@ var authEn = {
 
 // src/i18n/chat.en.ts
 var chatEn = {
+  "chat.backgroundResumed": "Continuing",
+  "chat.waitingForWake": "Waiting for wake",
+  "chat.backgroundAwakened": "Awakened",
+  "chat.backgroundWaitEnded": "Waiting ended",
+  "chat.backgroundWaitingHint": "Background tasks are running. Updates will continue here.",
   "chat.backgroundTaskCompleted": "Background task completed",
   "chat.backgroundTaskFailed": "Background task failed",
   "chat.backgroundTaskStopped": "Background task stopped",
@@ -3278,6 +3283,11 @@ var authZhCN = {
 
 // src/i18n/chat.zh-CN.ts
 var chatZhCN = {
+  "chat.backgroundResumed": "\u7EE7\u7EED\u6267\u884C",
+  "chat.waitingForWake": "\u7B49\u5F85\u5524\u9192",
+  "chat.backgroundAwakened": "\u5DF2\u5524\u9192",
+  "chat.backgroundWaitEnded": "\u7B49\u5F85\u5DF2\u7ED3\u675F",
+  "chat.backgroundWaitingHint": "\u540E\u53F0\u4EFB\u52A1\u8FD0\u884C\u4E2D\uFF0C\u540E\u7EED\u8FDB\u5C55\u4F1A\u7EE7\u7EED\u663E\u793A\u5728\u8FD9\u91CC\u3002",
   "chat.backgroundTaskCompleted": "\u540E\u53F0\u4EFB\u52A1\u5B8C\u6210",
   "chat.backgroundTaskFailed": "\u540E\u53F0\u4EFB\u52A1\u5931\u8D25",
   "chat.backgroundTaskStopped": "\u540E\u53F0\u4EFB\u52A1\u5DF2\u505C\u6B62",

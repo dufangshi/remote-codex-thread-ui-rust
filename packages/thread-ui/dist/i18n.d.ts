@@ -2011,6 +2011,11 @@ declare const en: {
         readonly one: "{{count}} item";
         readonly other: "{{count}} items";
     };
+    readonly "chat.backgroundResumed": "Continuing";
+    readonly "chat.waitingForWake": "Waiting for wake";
+    readonly "chat.backgroundAwakened": "Awakened";
+    readonly "chat.backgroundWaitEnded": "Waiting ended";
+    readonly "chat.backgroundWaitingHint": "Background tasks are running. Updates will continue here.";
     readonly "chat.backgroundTaskCompleted": "Background task completed";
     readonly "chat.backgroundTaskFailed": "Background task failed";
     readonly "chat.backgroundTaskStopped": "Background task stopped";
@@ -4781,6 +4786,11 @@ declare const zhCN: {
         readonly one: "{{count}} 项";
         readonly other: "{{count}} 项";
     };
+    "chat.backgroundResumed": "继续执行";
+    "chat.waitingForWake": "等待唤醒";
+    "chat.backgroundAwakened": "已唤醒";
+    "chat.backgroundWaitEnded": "等待已结束";
+    "chat.backgroundWaitingHint": "后台任务运行中，后续进展会继续显示在这里。";
     "chat.backgroundTaskCompleted": "后台任务完成";
     "chat.backgroundTaskFailed": "后台任务失败";
     "chat.backgroundTaskStopped": "后台任务已停止";
@@ -7573,6 +7583,11 @@ declare const resources: {
             readonly one: "{{count}} item";
             readonly other: "{{count}} items";
         };
+        readonly "chat.backgroundResumed": "Continuing";
+        readonly "chat.waitingForWake": "Waiting for wake";
+        readonly "chat.backgroundAwakened": "Awakened";
+        readonly "chat.backgroundWaitEnded": "Waiting ended";
+        readonly "chat.backgroundWaitingHint": "Background tasks are running. Updates will continue here.";
         readonly "chat.backgroundTaskCompleted": "Background task completed";
         readonly "chat.backgroundTaskFailed": "Background task failed";
         readonly "chat.backgroundTaskStopped": "Background task stopped";
@@ -10342,6 +10357,11 @@ declare const resources: {
             readonly one: "{{count}} 项";
             readonly other: "{{count}} 项";
         };
+        "chat.backgroundResumed": "继续执行";
+        "chat.waitingForWake": "等待唤醒";
+        "chat.backgroundAwakened": "已唤醒";
+        "chat.backgroundWaitEnded": "等待已结束";
+        "chat.backgroundWaitingHint": "后台任务运行中，后续进展会继续显示在这里。";
         "chat.backgroundTaskCompleted": "后台任务完成";
         "chat.backgroundTaskFailed": "后台任务失败";
         "chat.backgroundTaskStopped": "后台任务已停止";

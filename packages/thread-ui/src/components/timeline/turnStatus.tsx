@@ -1,4 +1,5 @@
 import { translate, useI18n } from '../../i18n';
+import { Hourglass } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../graph-ui/Tooltip';
 
@@ -305,11 +306,13 @@ export function TurnStatusBar({
   variant = 'header',
   lastActivityAt = null,
   backgroundAgentCount = 0,
+  waitingForWake = false,
 }: {
   turn: TimelineTurn;
   variant?: 'header' | 'footer';
   lastActivityAt?: string | null;
   backgroundAgentCount?: number;
+  waitingForWake?: boolean;
 }) {
   const { locale: i18nLocale } = useI18n();
   const label = turnStatusLabel(turn.status);
@@ -330,7 +333,11 @@ export function TurnStatusBar({
     return (
       <div className="thread-graph-turn-footer flex w-full items-center justify-between gap-3 text-xs">
         <div className="thread-graph-turn-footer-runtime flex min-w-0 flex-wrap items-center gap-2">
-          {active && turn.status !== 'recovering' && backgroundAgentCount > 0 ? (
+          {active && turn.status !== 'recovering' && waitingForWake ? (
+            <span className="inline-flex items-center gap-1.5 text-[var(--theme-fg-muted)]" role="status">
+              <Hourglass className="h-3 w-3" aria-hidden="true" />{translate('chat.waitingForWake')}
+            </span>
+          ) : active && turn.status !== 'recovering' && backgroundAgentCount > 0 ? (
             <span className="thread-background-agent-status min-w-0 text-[var(--theme-fg-muted)]" role="status">
               {backgroundAgentCount} {translate("chat.backgroundAgent")}{backgroundAgentCount === 1 ? '' : translate("chat.s")} {translate("chat.running_3c49d9")}</span>
           ) : active && turn.status !== 'recovering'

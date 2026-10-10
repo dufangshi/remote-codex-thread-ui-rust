@@ -1,4 +1,9 @@
 export const chatEn = {
+  "chat.backgroundResumed": "Continuing",
+  "chat.waitingForWake": "Waiting for wake",
+  "chat.backgroundAwakened": "Awakened",
+  "chat.backgroundWaitEnded": "Waiting ended",
+  "chat.backgroundWaitingHint": "Background tasks are running. Updates will continue here.",
   "chat.backgroundTaskCompleted": "Background task completed",
   "chat.backgroundTaskFailed": "Background task failed",
   "chat.backgroundTaskStopped": "Background task stopped",
