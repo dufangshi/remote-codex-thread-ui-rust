@@ -39,13 +39,13 @@ import {
   settleSave,
   workspaceRelativeFocusPath,
   workspaceTreeNodeToGraphNode
-} from "./chunk-VAIJXWHI.js";
+} from "./chunk-7LHBG35D.js";
 import {
   en,
   getLocale,
   translate,
   useI18n
-} from "./chunk-7QIHJDEV.js";
+} from "./chunk-K267XB7L.js";
 
 // src/components/ThreadGraphWorkspacePanel.tsx
 import { memo as memo2, useEffect as useEffect10, useMemo as useMemo10, useState as useState11 } from "react";
@@ -3084,7 +3084,7 @@ async function load3Dmol() {
   if (!threeDmolPromise) {
     threeDmolPromise = new Promise((resolve, reject) => {
       const existingScript = document.querySelector(
-        'script[data-remote-codex-3dmol="true"]'
+        'script[data-pockymoe-3dmol="true"]'
       );
       const handleLoad = () => {
         if (window["3Dmol"]) {
@@ -3105,7 +3105,7 @@ async function load3Dmol() {
       const script = document.createElement("script");
       script.src = "/vendor/3Dmol-min.js";
       script.async = true;
-      script.dataset.remoteCodex3dmol = "true";
+      script.dataset.pockymoe3dmol = "true";
       script.addEventListener("load", handleLoad, { once: true });
       script.addEventListener(
         "error",
@@ -3886,7 +3886,7 @@ function WorkspaceFileTabs({
 // src/components/graph-workspace/GraphWorkspacePreviewPane.tsx
 import { Fragment as Fragment4, jsx as jsx15, jsxs as jsxs11 } from "react/jsx-runtime";
 var GraphWorkspaceMonacoEditor = lazy(
-  () => import("./GraphWorkspaceMonacoEditor-KLUSKWQ3.js")
+  () => import("./GraphWorkspaceMonacoEditor-PMFR774D.js")
 );
 function DownloadFilePreview({ node, onDownload, readOnlyReason }) {
   const { locale: i18nLocale } = useI18n();
@@ -3930,7 +3930,7 @@ function translateReadOnly(reason) {
   const key = `files.safeReason.${reason}`;
   return Object.hasOwn(en, key) ? translate(key) : reason;
 }
-var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-C6N5HRN5.js"));
+var WorkspaceDocumentDiff = lazy(() => import("./GraphWorkspaceMonacoDiff-BQZGUS63.js"));
 var SMALL_TEXT_FILE_MAX_BYTES = 50 * 1024;
 var SMALL_TEXT_FILE_MAX_LINES = 1e3;
 var MARKDOWN_EXTENSIONS = /* @__PURE__ */ new Set(["md", "markdown"]);
@@ -5731,7 +5731,7 @@ function ThreadGraphWorkspacePanel({
       tabs.push({ id: "graph", label: translate("files.threadGraph"), icon: GitBranch });
     }
     if (features.extensions) {
-      tabs.push({ id: "extensions", label: translate("files.remoteCodexExtensions"), icon: Wrench });
+      tabs.push({ id: "extensions", label: translate("files.pockymoeExtensions"), icon: Wrench });
     }
     return tabs;
   }, [features.extensions, features.threadGraph, i18nLocale]);
@@ -5770,7 +5770,7 @@ function ThreadGraphWorkspacePanel({
         "div",
         {
           className: "thread-graph-right-tab-secondary ml-auto flex h-6 min-w-0 shrink items-center gap-0.5 border-l pl-1",
-          "aria-label": translate("files.remoteCodexWorkspaceExtensions"),
+          "aria-label": translate("files.pockymoeWorkspaceExtensions"),
           children: secondaryTabs.map((tab) => {
             const Icon = tab.icon;
             return /* @__PURE__ */ jsx22(
@@ -5820,7 +5820,7 @@ function ThreadGraphWorkspacePanel({
           },
           plugin.id
         )) }) }),
-        /* @__PURE__ */ jsx22(WorkspaceInfoCard, { label: translate("files.remoteCodexTools"), children: /* @__PURE__ */ jsxs17("div", { className: "grid gap-2 text-[var(--theme-fg-muted)]", children: [
+        /* @__PURE__ */ jsx22(WorkspaceInfoCard, { label: translate("files.pockymoeTools"), children: /* @__PURE__ */ jsxs17("div", { className: "grid gap-2 text-[var(--theme-fg-muted)]", children: [
           /* @__PURE__ */ jsxs17("div", { className: "flex items-start gap-2", children: [
             /* @__PURE__ */ jsx22(Terminal, { className: "mt-0.5 h-4 w-4 shrink-0" }),
             /* @__PURE__ */ jsx22("p", { children: translate("files.terminalStaysAvailableWhenTheTerminalPlugin") })

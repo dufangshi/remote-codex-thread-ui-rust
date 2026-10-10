@@ -1,9 +1,9 @@
 import {
   translate
-} from "./chunk-7QIHJDEV.js";
+} from "./chunk-K267XB7L.js";
 
 // src/plugins/builtin-plugin-modules.tsx
-import { terminalPluginManifest } from "@remote-codex/plugin-terminal";
+import { terminalPluginManifest } from "@pockymoe/plugin-terminal";
 
 // src/plugins/deepseek-harness-plugin.ts
 var DEEPSEEK_HARNESS_PLUGIN_ID = "remote-codex.deepseek-harness";

@@ -1,6 +1,6 @@
-import { F as FrontendPluginModule } from './plugin-types-lcO37_1W.js';
+import { F as FrontendPluginModule } from './plugin-types-DBa9QrHM.js';
 import 'react';
-import '@remote-codex/shared';
+import '@pockymoe/shared';
 
 declare const builtinFrontendPlugins: FrontendPluginModule[];
 

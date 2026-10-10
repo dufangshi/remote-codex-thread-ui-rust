@@ -18,7 +18,7 @@ import {
   languageForPath,
   localFileHref,
   relativeWorkspacePath
-} from "./chunk-VAIJXWHI.js";
+} from "./chunk-7LHBG35D.js";
 import {
   DEFAULT_LOCALE,
   I18nProvider,
@@ -36,7 +36,7 @@ import {
   t,
   translate,
   useI18n
-} from "./chunk-7QIHJDEV.js";
+} from "./chunk-K267XB7L.js";
 import {
   styleInject
 } from "./chunk-7O5E2ZHX.js";
@@ -7872,7 +7872,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
             {
               className: "matter-brand",
               href: homeHref,
-              "aria-label": translate("workbench.remoteCodexHome"),
+              "aria-label": translate("workbench.pockymoeHome"),
               children: [
                 "r",
                 /* @__PURE__ */ jsx33("span", { children: "c" })
@@ -7938,7 +7938,7 @@ ${thread.subtitle} \xB7 ${activity.label}`,
               children: /* @__PURE__ */ jsx33(PanelLeft, {})
             }
           ),
-          /* @__PURE__ */ jsx33("span", { className: "matter-topbar-brand", children: "Remote Codex" }),
+          /* @__PURE__ */ jsx33("span", { className: "matter-topbar-brand", children: "Pockymoe" }),
           /* @__PURE__ */ jsx33("span", { className: "matter-topbar-separator" }),
           /* @__PURE__ */ jsx33("button", { "aria-label": translate("workbench.goBack"), onClick: () => history.back(), children: /* @__PURE__ */ jsx33(ArrowLeft, {}) }),
           /* @__PURE__ */ jsx33("button", { "data-action": "go-forward", "aria-label": translate("workbench.goForward"), onClick: () => history.forward(), children: /* @__PURE__ */ jsx33(ArrowRight, {}) }),
@@ -9045,9 +9045,9 @@ function ThreadWorkspaceLayout({
                 /* @__PURE__ */ jsx35(Pencil, { size: 14 }),
                 translate("files.renameThread_1ebf84")
               ] }),
-              /* @__PURE__ */ jsxs29("button", { disabled: !currentThreadId, onClick: () => currentThreadId && void copySessionValue(currentThreadId, translate("files.remoteCodexSessionID")), children: [
+              /* @__PURE__ */ jsxs29("button", { disabled: !currentThreadId, onClick: () => currentThreadId && void copySessionValue(currentThreadId, translate("files.pockymoeSessionID")), children: [
                 /* @__PURE__ */ jsx35(Copy, { size: 14 }),
-                translate("files.copyRemoteCodexSessionID")
+                translate("files.copyPockymoeSessionID")
               ] }),
               /* @__PURE__ */ jsxs29("button", { disabled: !workbench.harnessSessionId, title: workbench.harnessSessionId ?? translate("files.theHarnessHasNotAssignedASession"), onClick: () => workbench.harnessSessionId && void copySessionValue(workbench.harnessSessionId, translate("files.harnessSessionID")), children: [
                 /* @__PURE__ */ jsx35(Copy, { size: 14 }),
@@ -9365,7 +9365,7 @@ function ThreadWorkspaceLayout({
 }
 
 // src/components/ThreadTimeline.tsx
-import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@remote-codex/shared";
+import { mergeThreadHistoryItem as mergeThreadHistoryItem2 } from "@pockymoe/shared";
 import { memo as memo7, useCallback as useCallback16, useEffect as useEffect28, useMemo as useMemo9, useRef as useRef24, useState as useState41 } from "react";
 
 // src/components/LongTextDialog.tsx
@@ -11298,7 +11298,7 @@ var GraphChatCompactMessageItem = memo4(
 );
 
 // src/components/timeline/timelineItems.ts
-import { mergeThreadHistoryItem } from "@remote-codex/shared";
+import { mergeThreadHistoryItem } from "@pockymoe/shared";
 function isRenderableHistoryItem(item) {
   if (!item || typeof item.id !== "string" || typeof item.kind !== "string") {
     return false;
@@ -18490,7 +18490,7 @@ var ThreadShellPanel = forwardRef2(function ThreadShellPanel2({
   onLastTerminalClosed
 }, ref) {
   const { locale } = useI18n();
-  const layoutKey = layoutStorageKey ?? `remote-codex:terminal-layout:${threadId}`;
+  const layoutKey = layoutStorageKey ?? `pockymoe:terminal-layout:${threadId}`;
   const [shellState, setShellState] = useState44(null);
   const [loading, setLoading] = useState44(true);
   const [busy, setBusy] = useState44(false);
@@ -20684,7 +20684,7 @@ function AppShellNavigationMenu({
       className: `rounded-[1.8rem] border border-[var(--theme-border)] bg-[var(--theme-panel)] p-4 shadow-2xl shadow-black/15 backdrop-blur ${className}`.trim(),
       children: [
         /* @__PURE__ */ jsxs55("div", { children: [
-          /* @__PURE__ */ jsx70("p", { className: "text-base font-semibold tracking-wide text-[var(--theme-accent-strong)]", children: "Remote Codex" }),
+          /* @__PURE__ */ jsx70("p", { className: "text-base font-semibold tracking-wide text-[var(--theme-accent-strong)]", children: "Pockymoe" }),
           /* @__PURE__ */ jsx70("p", { className: "mt-1 text-xs uppercase tracking-[0.24em] text-[var(--theme-fg-muted)]", children: translate("files.navigation") })
         ] }),
         /* @__PURE__ */ jsxs55("nav", { className: "mt-4 flex flex-col gap-1.5 text-sm", children: [
