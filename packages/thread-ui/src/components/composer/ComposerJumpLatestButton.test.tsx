@@ -115,7 +115,7 @@ describe('ComposerJumpLatestButton', () => {
       },
     });
 
-    expect(view.querySelector('[aria-label="Timeline navigation"]')?.className)
+    expect(view.querySelector('[aria-label="Timeline navigation"]')?.closest('.thread-jump-latest-cluster')?.className)
       .toContain('left-1/2');
     expect(view.querySelector('.thread-subscription-usage')?.className)
       .toContain('right-2');

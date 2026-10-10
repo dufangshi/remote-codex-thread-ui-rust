@@ -433,6 +433,8 @@ export const workbenchEn = {
   "workbench.resizeComparison": "Resize comparison",
   "workbench.readOnlyReference": "Read-only reference",
   "workbench.makePrimary": "Make primary",
+  "workbench.showLeftConversation": "Show the left conversation: {{value1}}",
+  "workbench.showRightConversation": "Show the right conversation: {{value1}}",
   "workbench.closeReference": "Close split",
   "workbench.closeReferenceContinues": "Close view; the thread keeps running",
   "workbench.managedThreads": "Managed thread family",

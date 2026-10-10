@@ -433,6 +433,8 @@ export const workbenchZhCN = {
   "workbench.resizeComparison": "调整对照比例",
   "workbench.readOnlyReference": "只读参考",
   "workbench.makePrimary": "设为主会话",
+  "workbench.showLeftConversation": "显示左侧会话：{{value1}}",
+  "workbench.showRightConversation": "显示右侧会话：{{value1}}",
   "workbench.closeReference": "关闭分屏",
   "workbench.closeReferenceContinues": "关闭视图，线程继续运行",
   "workbench.managedThreads": "托管线程族",

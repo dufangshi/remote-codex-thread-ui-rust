@@ -11,6 +11,12 @@ function resetLabel(value: string | null) {
     : translate("chat.resets", { value1: date.toLocaleString(getLocale()) });
 }
 
+/** The (at most two) usage windows the composer badge shows. */
+export function visibleSubscriptionWindows(usage?: AgentSubscriptionUsageDto | null) {
+  if (!usage || usage.authKind !== 'subscription') return [];
+  return usage.windows.filter(window => Number.isFinite(window.usedPercent) && window.usedPercent >= 0 && (!window.resetsAt || new Date(window.resetsAt).getTime() > Date.now())).slice(0, 2);
+}
+
 export function ComposerSubscriptionUsage({
   usage,
 }: {
@@ -27,16 +33,8 @@ export function ComposerSubscriptionUsage({
     return () => {document.removeEventListener('pointerdown',outside);document.removeEventListener('keydown',escape);};
   },[detailsVisible]);
 
-  if (
-    !usage ||
-    usage.authKind !== 'subscription' ||
-    usage.windows.length === 0
-  ) {
-    return null;
-  }
-
-  const windows = usage.windows.filter(window => Number.isFinite(window.usedPercent) && window.usedPercent >= 0 && (!window.resetsAt || new Date(window.resetsAt).getTime() > Date.now())).slice(0, 2);
-  if (!windows.length) return null;
+  const windows = visibleSubscriptionWindows(usage);
+  if (!usage || !windows.length) return null;
   const description = windows
     .map((window) => {
       const remaining = Math.max(0, 100 - window.usedPercent);

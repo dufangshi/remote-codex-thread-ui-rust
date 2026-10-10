@@ -1,5 +1,7 @@
 import {
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -10,6 +12,12 @@ import { translate as t, useI18n } from '../../i18n';
 import type { WorkbenchPresentation } from './presentation';
 import { FilePanelContext } from './FilePanelContext';
 import { useTerminalKeyboardInset } from './useTerminalKeyboardInset';
+import {
+  WorkbenchPaneSwitchButton,
+  WorkbenchPaneSwitchContext,
+  type WorkbenchPane,
+  type WorkbenchPaneSwitch,
+} from './paneSwitch';
 import {
   clampToolPanelHeight,
   toolPanelBounds,
@@ -243,6 +251,30 @@ export function WorkbenchPanels({
   const showReference = showThread || mode === 'collaboration';
   const closeFiles = () =>
     o.onPresentationChange({ mode: referenceId ? 'thread' : 'focus' });
+  // A phone split of two conversations is switched from their composers.
+  const paneSwitchEnabled = compact && showThread;
+  const [switchClaims, setSwitchClaims] = useState<Record<WorkbenchPane, number>>({ primary: 0, reference: 0 });
+  const claimSwitch = useCallback((pane: WorkbenchPane) => {
+    setSwitchClaims(current => ({ ...current, [pane]: current[pane] + 1 }));
+    return () => setSwitchClaims(current => ({ ...current, [pane]: current[pane] - 1 }));
+  }, []);
+  const onFocusPane = o.onFocusPane;
+  const selectPane = useCallback((pane: WorkbenchPane) => {
+    if (onFocusPane?.(pane) !== false) setMobileView(pane);
+  }, [onFocusPane]);
+  const referenceTitle = o.referenceTitle ?? t('workbench.loadingThreadDetail');
+  const paneSwitches = useMemo(() => {
+    if (!paneSwitchEnabled) return null;
+    const base = { active: mobileView, titles: { primary: o.primaryTitle, reference: referenceTitle }, select: selectPane, claim: claimSwitch };
+    return { primary: { ...base, pane: 'primary' }, reference: { ...base, pane: 'reference' } } satisfies Record<WorkbenchPane, WorkbenchPaneSwitch>;
+  }, [paneSwitchEnabled, mobileView, o.primaryTitle, referenceTitle, selectPane, claimSwitch]);
+  // Without a composer (a loading or unavailable conversation) the pane keeps its own switch.
+  const paneSwitchFallback = (pane: WorkbenchPane) => paneSwitches && mobileView === pane && switchClaims[pane] === 0 && (
+    <div className="workbench-pane-switch-fallback">
+      <WorkbenchPaneSwitchButton target="primary" value={paneSwitches[pane]} />
+      <WorkbenchPaneSwitchButton target="reference" value={paneSwitches[pane]} />
+    </div>
+  );
   const historyHandlers = useRef({
     onFocusPane: o.onFocusPane,
     onPresentationChange: o.onPresentationChange,
@@ -303,7 +335,7 @@ export function WorkbenchPanels({
           {t('workbench.layoutSessionOnly')}
         </p>
       )}
-      {compact && showReference && (
+      {compact && showReference && !showThread && (
         <nav
           className="workbench-mobile-views"
           aria-label={t('workbench.panelViews')}
@@ -350,7 +382,10 @@ export function WorkbenchPanels({
           }}
           hidden={compact && showReference && mobileView !== 'primary'}
         >
-          <div className="workbench-pane-body">{children}</div>
+          <WorkbenchPaneSwitchContext.Provider value={paneSwitches?.primary ?? null}>
+            <div className="workbench-pane-body">{children}</div>
+          </WorkbenchPaneSwitchContext.Provider>
+          {paneSwitchFallback('primary')}
         </section>
         {showReference && (
           <div
@@ -425,7 +460,7 @@ export function WorkbenchPanels({
             }
           }}
         >
-          <header className="workbench-pane-heading">
+          {!paneSwitchEnabled && <header className="workbench-pane-heading">
             <div>
               <strong>
                 {showThread
@@ -454,10 +489,13 @@ export function WorkbenchPanels({
             >
               <X size={17} />
             </button>
-          </header>
+          </header>}
           <div className="workbench-pane-body" hidden={!showThread}>
-            {o.referenceContent}
+            <WorkbenchPaneSwitchContext.Provider value={paneSwitches?.reference ?? null}>
+              {o.referenceContent}
+            </WorkbenchPaneSwitchContext.Provider>
           </div>
+          {paneSwitchFallback('reference')}
           <div
             className="workbench-pane-body workbench-collaboration"
             hidden={mode !== 'collaboration'}

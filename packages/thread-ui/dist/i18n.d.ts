@@ -599,6 +599,8 @@ declare const en: {
     readonly "workbench.resizeComparison": "Resize comparison";
     readonly "workbench.readOnlyReference": "Read-only reference";
     readonly "workbench.makePrimary": "Make primary";
+    readonly "workbench.showLeftConversation": "Show the left conversation: {{value1}}";
+    readonly "workbench.showRightConversation": "Show the right conversation: {{value1}}";
     readonly "workbench.closeReference": "Close split";
     readonly "workbench.closeReferenceContinues": "Close view; the thread keeps running";
     readonly "workbench.managedThreads": "Managed thread family";
@@ -3374,6 +3376,8 @@ declare const zhCN: {
     "workbench.resizeComparison": "调整对照比例";
     "workbench.readOnlyReference": "只读参考";
     "workbench.makePrimary": "设为主会话";
+    "workbench.showLeftConversation": "显示左侧会话：{{value1}}";
+    "workbench.showRightConversation": "显示右侧会话：{{value1}}";
     "workbench.closeReference": "关闭分屏";
     "workbench.closeReferenceContinues": "关闭视图，线程继续运行";
     "workbench.managedThreads": "托管线程族";
@@ -6171,6 +6175,8 @@ declare const resources: {
         readonly "workbench.resizeComparison": "Resize comparison";
         readonly "workbench.readOnlyReference": "Read-only reference";
         readonly "workbench.makePrimary": "Make primary";
+        readonly "workbench.showLeftConversation": "Show the left conversation: {{value1}}";
+        readonly "workbench.showRightConversation": "Show the right conversation: {{value1}}";
         readonly "workbench.closeReference": "Close split";
         readonly "workbench.closeReferenceContinues": "Close view; the thread keeps running";
         readonly "workbench.managedThreads": "Managed thread family";
@@ -8945,6 +8951,8 @@ declare const resources: {
         "workbench.resizeComparison": "调整对照比例";
         "workbench.readOnlyReference": "只读参考";
         "workbench.makePrimary": "设为主会话";
+        "workbench.showLeftConversation": "显示左侧会话：{{value1}}";
+        "workbench.showRightConversation": "显示右侧会话：{{value1}}";
         "workbench.closeReference": "关闭分屏";
         "workbench.closeReferenceContinues": "关闭视图，线程继续运行";
         "workbench.managedThreads": "托管线程族";

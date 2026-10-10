@@ -12,6 +12,7 @@ import {
   type WorkbenchPanelsOptions,
 } from './WorkbenchPanels';
 import type { WorkbenchToolPanelControls } from './toolPanel';
+import { ComposerJumpLatestButton } from '../composer/ComposerJumpLatestButton';
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
 let host: HTMLDivElement, root: Root;
 let options: WorkbenchPanelsOptions;
@@ -217,17 +218,18 @@ describe('split panes and independent tools', () => {
     vi.stubGlobal('innerWidth', 500);
     vi.mocked(options.onFocusPane!).mockReturnValue(true);
     render();
-    const views = host.querySelectorAll<HTMLButtonElement>(
-      '.workbench-mobile-views button',
-    );
-    act(() => views[1]!.click());
+    // Without composers each visible pane keeps its own switch.
+    const view = (side: 'primary' | 'reference') =>
+      host.querySelector<HTMLButtonElement>(`.thread-pane-switch[data-side="${side}"]`)!;
+    expect(host.querySelector('.workbench-mobile-views')).toBeNull();
+    act(() => view('reference').click());
     expect(
       host
         .querySelector('[data-testid="reference-pane"]')!
         .hasAttribute('hidden'),
     ).toBe(false);
     vi.mocked(options.onFocusPane!).mockReturnValue(false);
-    act(() => views[0]!.click());
+    act(() => view('primary').click());
     expect(
       host
         .querySelector('[data-testid="reference-pane"]')!
@@ -256,6 +258,42 @@ describe('split panes and independent tools', () => {
     expect(document.activeElement).toBe(file);
     expect(file.value).toBe('unsaved file');
     expect(options.presentation.referenceId).toBe('peer');
+  });
+  it('switches a phone split from the composers without a pane header or top views', () => {
+    vi.stubGlobal('innerWidth', 500);
+    vi.mocked(options.onFocusPane!).mockReturnValue(true);
+    options = { ...options, referenceContent: <ComposerJumpLatestButton activeView="chat" followTail={false} /> };
+    act(() =>
+      root.render(
+        <WorkbenchPanels options={options} explorer={null} revealExplorer={0}>
+          <ComposerJumpLatestButton activeView="chat" followTail={false} />
+        </WorkbenchPanels>,
+      ),
+    );
+    const reference = host.querySelector('[data-testid="reference-pane"]')!;
+    expect(host.querySelector('.workbench-mobile-views')).toBeNull();
+    expect(host.querySelector('[data-testid="make-primary"]')).toBeNull();
+    expect(host.querySelector('.workbench-pane-switch-fallback')).toBeNull();
+    const primarySwitch = host.querySelector('[data-testid="primary-pane"] .thread-jump-latest-cluster')!;
+    const [left, right] = primarySwitch.querySelectorAll<HTMLButtonElement>('.thread-pane-switch');
+    expect(left!.textContent).toBe('Primary');
+    expect(right!.textContent).toBe('Second conversation');
+    expect(left!.getAttribute('aria-pressed')).toBe('true');
+    expect(reference.hasAttribute('hidden')).toBe(true);
+    act(() => right!.click());
+    expect(options.onFocusPane).toHaveBeenLastCalledWith('reference');
+    expect(reference.hasAttribute('hidden')).toBe(false);
+    const back = reference.querySelector<HTMLButtonElement>('.thread-pane-switch[data-side="primary"]')!;
+    expect(back.getAttribute('aria-pressed')).toBe('false');
+    act(() => back.click());
+    expect(reference.hasAttribute('hidden')).toBe(true);
+  });
+  it('keeps the reference header and no pane switch side by side', () => {
+    vi.stubGlobal('innerWidth', 1400);
+    options = { ...options, referenceContent: <ComposerJumpLatestButton activeView="chat" followTail={false} /> };
+    render();
+    expect(host.querySelector('[data-testid="make-primary"]')).not.toBeNull();
+    expect(host.querySelector('.thread-pane-switch')).toBeNull();
   });
   it('keeps split membership and ratio through the sidebar file toggle and its guarded callback', () => {
     const workbench: MatterWorkbenchOptions = {

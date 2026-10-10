@@ -1,18 +1,9 @@
 import { translate, useI18n } from '../../i18n';
 import type { AgentSubscriptionUsageDto } from '@pockymoe/shared';
-import { ComposerSubscriptionUsage } from './ComposerSubscriptionUsage';
+import { ComposerSubscriptionUsage, visibleSubscriptionWindows } from './ComposerSubscriptionUsage';
+import { WorkbenchPaneSwitchButton, useWorkbenchPaneSwitch } from '../workbench/paneSwitch';
 
-export function ComposerJumpLatestButton({
-  activeView,
-  followTail,
-  onToggleFollow,
-  canJumpToPreviousTurn,
-  onJumpToPreviousTurn,
-  canJumpToNextTurn,
-  onJumpToNextTurn,
-  subscriptionUsage,
-}: {
-  activeView: 'chat' | 'shell';
+type JumpLatestProps = {
   followTail: boolean;
   onToggleFollow?: (() => void) | undefined;
   canJumpToPreviousTurn?: boolean | undefined;
@@ -20,18 +11,39 @@ export function ComposerJumpLatestButton({
   canJumpToNextTurn?: boolean | undefined;
   onJumpToNextTurn?: (() => void) | undefined;
   subscriptionUsage?: AgentSubscriptionUsageDto | null;
-}) {
+};
+
+export function ComposerJumpLatestButton({
+  activeView,
+  ...props
+}: JumpLatestProps & { activeView: 'chat' | 'shell' }) {
+  // Only a rendered strip may claim the phone split switch for its pane.
+  return activeView === 'chat' ? <JumpLatestStrip {...props} /> : null;
+}
+
+function JumpLatestStrip({
+  followTail,
+  onToggleFollow,
+  canJumpToPreviousTurn,
+  onJumpToPreviousTurn,
+  canJumpToNextTurn,
+  onJumpToNextTurn,
+  subscriptionUsage,
+}: JumpLatestProps) {
   useI18n();
-  if (activeView !== 'chat') {
-    return null;
-  }
+  const paneSwitch = useWorkbenchPaneSwitch();
+  // Clear the usage tab at the composer's top-right edge.
+  const position = !paneSwitch ? 'bottom-1'
+    : visibleSubscriptionWindows(subscriptionUsage).length ? 'bottom-[1.125rem]' : 'bottom-0';
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[90] h-11 -translate-y-full bg-transparent touch-manipulation sm:h-10">
+      <div className={`thread-jump-latest-cluster pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 ${position} ${paneSwitch ? 'has-pane-switch' : ''}`}>
+      {paneSwitch && <WorkbenchPaneSwitchButton target="primary" value={paneSwitch} />}
       <span
         role="group"
         aria-label={translate("chat.timelineNavigation")}
-        className={`thread-jump-latest-badge pointer-events-auto absolute bottom-1 left-1/2 inline-flex h-5 min-w-[7.5rem] -translate-x-1/2 overflow-hidden rounded-[0.7rem] border shadow-sm transition ${
+        className={`thread-jump-latest-badge pointer-events-auto inline-flex h-5 min-w-[7.5rem] shrink-0 overflow-hidden rounded-[0.7rem] border shadow-sm transition ${
           followTail
             ? 'is-active border-sky-300/36 bg-sky-300/[0.03] text-sky-100/86'
             : 'border-stone-500/70 bg-stone-950/[0.08] text-stone-200/86'
@@ -82,6 +94,8 @@ export function ComposerJumpLatestButton({
           </svg>
         </button>
       </span>
+      {paneSwitch && <WorkbenchPaneSwitchButton target="reference" value={paneSwitch} />}
+      </div>
       <ComposerSubscriptionUsage usage={subscriptionUsage} />
     </div>
   );

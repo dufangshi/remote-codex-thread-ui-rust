@@ -13,7 +13,6 @@ import {
   FolderOpen,
   MessageSquare,
   PanelLeft,
-  PanelRight,
   Search,
   SlidersHorizontal,
   Star,
@@ -414,13 +413,6 @@ export function MatterWorkbench({
           <div className="matter-thread-actions">
             {actions}
             {threadMenu}
-            <button
-              aria-label={translate("workbench.toggleExplorer")}
-              aria-expanded={explorerOpen}
-              onClick={() => setExplorerOpen(!explorerOpen)}
-            >
-              <PanelRight />
-            </button>
           </div>
         </div>}
         </div>

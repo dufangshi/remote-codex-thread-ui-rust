@@ -766,6 +766,46 @@
 .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button { border-radius: 999px; border: 0; }
 .thread-ui-shell .matter-workbench .thread-jump-latest-badge > button:hover:not(:disabled) { background: var(--theme-hover); }
 .thread-ui-shell .matter-workbench .thread-jump-latest-badge.is-active > button[data-action="jump-latest"] { color: var(--theme-accent-strong); background: var(--theme-accent-soft); }
+/* Phone split: the two conversations flank the timeline capsule above the composer. */
+.thread-pane-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 1 auto;
+  min-width: 0;
+  height: 28px;
+  max-width: min(9rem, calc((100vw - 9.75rem) / 2));
+  padding: 0 11px;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-panel) 52%, transparent);
+  color: var(--theme-fg-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: auto;
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 0 0 1px color-mix(in srgb, var(--theme-border) 70%, transparent), 0 3px 10px rgb(18 32 25 / 14%);
+  transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+/* A 44px touch target around the compact pill. */
+.thread-pane-switch::after { content: ''; position: absolute; inset: -8px -3px; }
+.thread-pane-switch > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread-pane-switch-glyph { width: 13px; height: 13px; flex: none; opacity: 0.8; }
+.thread-pane-switch:hover { color: var(--theme-fg); }
+.thread-pane-switch[aria-pressed='true'] {
+  color: var(--theme-accent-strong);
+  background: var(--theme-accent-soft);
+  box-shadow: inset 0 1px 0 var(--matter-glass-highlight), 0 0 0 1px color-mix(in srgb, var(--theme-accent-strong) 38%, transparent), 0 3px 10px rgb(18 32 25 / 14%);
+}
+.thread-pane-switch[aria-pressed='true'] .thread-pane-switch-glyph { opacity: 1; }
+.thread-pane-switch:focus-visible { outline: 2px solid var(--theme-accent-solid); outline-offset: 2px; }
+.workbench-pane-switch-fallback { display: flex; justify-content: center; gap: 8px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--theme-border); }
+@media (prefers-reduced-transparency: reduce) {
+  .thread-pane-switch { background: var(--theme-panel); backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
 .matter-thread-entry { display: flex; align-items: center; min-width: 0; position: relative; }
 .matter-thread-entry > .matter-thread-row { flex: 1; min-width: 0; padding-right: 32px; }
 .matter-thread-entry > .recent-thread-actions { position: absolute; right: 3px; }
