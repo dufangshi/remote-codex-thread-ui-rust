@@ -33,6 +33,8 @@ export interface WorkbenchThread {
   favorite: boolean;
   parentKey?: string;
   rootKey?: string;
+  /** Harness id such as `codex` or `claude`; themes may show it as an avatar. */
+  agent?: string;
 }
 export interface WorkbenchNotification {
   id: string;
@@ -192,6 +194,7 @@ export function MatterWorkbench({
       aria-current={thread.key === o.currentKey ? 'page' : undefined}
       title={`${thread.title}\n${thread.subtitle} · ${activity.label}`}
     >
+      {thread.agent && <span className="matter-thread-avatar" data-agent={thread.agent} aria-hidden="true" />}
       <span
         className="matter-status-dot"
         data-status={activity.status}

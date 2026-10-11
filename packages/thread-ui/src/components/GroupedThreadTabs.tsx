@@ -63,6 +63,7 @@ export function GroupedThreadTabs({ threads, currentKey, onNavigate }: {
         <a className="matter-group-tab" href={root.href} aria-current={active ? 'page' : undefined}
           title={`${selected ? `${root.title} · ${selected.title}` : root.title}\n${activity.label}`}
           onClick={event => { event.preventDefault(); onNavigate(root.href); }}>
+          {root.agent && <span className="matter-thread-avatar" data-agent={root.agent} aria-hidden="true" />}
           <span className="matter-status-dot" role="img" aria-label={activity.label} data-status={activity.status} />
           <span>{root.title}{selected ? ` · ${selected.title}` : ''}</span>
         </a>

@@ -49,6 +49,7 @@ import {
   type ShellPaneRuntimeState,
 } from './shellState';
 import { useShellSocketLifecycle } from './useShellSocketLifecycle';
+import { useDocumentThemePreset } from '../themeHooks';
 
 export type ToolboxFeedbackState = 'idle' | 'done' | 'failed';
 
@@ -118,6 +119,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
     ref,
   ) {
   useI18n();
+    const themePreset = useDocumentThemePreset();
     const transformRef = useRef(inputTransform);
     transformRef.current = inputTransform;
     const terminalRef = useRef<Terminal | null>(null);
@@ -401,7 +403,7 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
           fontSize: 13,
           lineHeight: 1.25,
           scrollback: 3000,
-          theme: terminalThemeFor(effectiveTheme),
+          theme: terminalThemeFor(effectiveTheme, terminalHostNode),
         });
         const fitAddon = new FitConstructor();
         terminal.loadAddon(fitAddon);
@@ -492,8 +494,8 @@ export const ShellPane = forwardRef<ShellPaneHandle, ShellPaneProps>(
         return;
       }
 
-      terminal.options.theme = terminalThemeFor(effectiveTheme);
-    }, [effectiveTheme]);
+      terminal.options.theme = terminalThemeFor(effectiveTheme, terminalHostNode);
+    }, [effectiveTheme, themePreset, terminalHostNode]);
 
     useEffect(() => {
       const terminal = terminalRef.current;

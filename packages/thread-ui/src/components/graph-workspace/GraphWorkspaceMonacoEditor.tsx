@@ -1,6 +1,7 @@
 import { translate, useI18n } from '../../i18n';
 import { useEffect, useRef } from 'react';
 import * as monaco from 'monaco-editor/editor/editor.api.js';
+import { cssHexVariable, useDocumentThemePreset } from '../themeHooks';
 import 'monaco-editor/languages/definitions/cpp/register.js';
 import 'monaco-editor/languages/definitions/css/register.js';
 import 'monaco-editor/languages/definitions/html/register.js';
@@ -86,6 +87,33 @@ monaco.editor.defineTheme('pockymoe-light', {
   },
 });
 
+const editorColorVariables: Record<string, string> = {
+  'editor.background': '--editor-bg',
+  'editorGutter.background': '--editor-bg',
+  'editor.foreground': '--editor-fg',
+  'editorLineNumber.foreground': '--editor-line-number',
+  'editorLineNumber.activeForeground': '--editor-fg',
+  'editor.lineHighlightBackground': '--editor-line-highlight',
+  'editor.selectionBackground': '--editor-selection',
+  'editor.inactiveSelectionBackground': '--editor-selection-inactive',
+  'editorCursor.foreground': '--editor-cursor',
+  'editorIndentGuide.background1': '--editor-indent',
+  'editorIndentGuide.activeBackground1': '--editor-indent-active',
+};
+/** The Monaco theme for a container. A theme preset may set `--editor-*` hex colors
+ *  (at least `--editor-bg`) on an ancestor; otherwise the built-in theme is used.
+ *  Monaco themes are global, so all editors switch together. */
+export function editorThemeFor(dark: boolean, container: Element | null | undefined) {
+  const base = dark ? 'pockymoe-dark' : 'pockymoe-light';
+  const colors = Object.fromEntries(Object.entries(editorColorVariables)
+    .map(([key, variable]) => [key, cssHexVariable(container, variable)])
+    .filter((entry): entry is [string, string] => Boolean(entry[1])));
+  if (!colors['editor.background']) return base;
+  const name = `${base}-preset`;
+  monaco.editor.defineTheme(name, { base: dark ? 'vs-dark' : 'vs', inherit: true, rules: [], colors });
+  return name;
+}
+
 const releasedKeys = new Set<string>();
 const retainedModels = new Map<string, {model:monaco.editor.ITextModel;view:monaco.editor.ICodeEditorViewState|null}>();
 window.addEventListener('workspace-model-release', (event) => {
@@ -129,6 +157,7 @@ export default function GraphWorkspaceMonacoEditor({
 }: GraphWorkspaceMonacoEditorProps) {
   const modelKey = resourceKey ?? path;
   const { locale } = useI18n();
+  const themePreset = useDocumentThemePreset();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const modelRef = useRef<monaco.editor.ITextModel | null>(null);
@@ -167,9 +196,7 @@ export default function GraphWorkspaceMonacoEditor({
       model,
       readOnly: initialReadOnlyRef.current,
       automaticLayout: true,
-      theme: initialDarkRef.current
-        ? 'pockymoe-dark'
-        : 'pockymoe-light',
+      theme: editorThemeFor(initialDarkRef.current, host),
       ariaLabel: translate("files.workspaceEditor", { value1: path }),
       fontFamily:
         '"IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace',
@@ -226,9 +253,9 @@ export default function GraphWorkspaceMonacoEditor({
   }, [content]);
 
   useEffect(() => {
-    monaco.editor.setTheme(dark ? 'pockymoe-dark' : 'pockymoe-light');
+    monaco.editor.setTheme(editorThemeFor(dark, editorRef.current?.getContainerDomNode()));
     editorRef.current?.updateOptions({ readOnly });
-  }, [dark, readOnly]);
+  }, [dark, readOnly, themePreset]);
 
   useEffect(() => {
     editorRef.current?.updateOptions({ ariaLabel: translate('files.workspaceEditor', { value1: path }) });

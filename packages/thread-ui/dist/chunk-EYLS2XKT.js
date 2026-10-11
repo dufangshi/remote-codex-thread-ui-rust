@@ -1,7 +1,11 @@
 import {
+  cssHexVariable,
+  useDocumentThemePreset
+} from "./chunk-ZN6LCQTY.js";
+import {
   translate,
   useI18n
-} from "./chunk-XVPG43JJ.js";
+} from "./chunk-GQH7RSL7.js";
 import {
   KeyCode,
   KeyMod,
@@ -234,6 +238,27 @@ editor.defineTheme("pockymoe-light", {
     "editorIndentGuide.activeBackground1": "#aeb6c3"
   }
 });
+var editorColorVariables = {
+  "editor.background": "--editor-bg",
+  "editorGutter.background": "--editor-bg",
+  "editor.foreground": "--editor-fg",
+  "editorLineNumber.foreground": "--editor-line-number",
+  "editorLineNumber.activeForeground": "--editor-fg",
+  "editor.lineHighlightBackground": "--editor-line-highlight",
+  "editor.selectionBackground": "--editor-selection",
+  "editor.inactiveSelectionBackground": "--editor-selection-inactive",
+  "editorCursor.foreground": "--editor-cursor",
+  "editorIndentGuide.background1": "--editor-indent",
+  "editorIndentGuide.activeBackground1": "--editor-indent-active"
+};
+function editorThemeFor(dark, container) {
+  const base = dark ? "pockymoe-dark" : "pockymoe-light";
+  const colors = Object.fromEntries(Object.entries(editorColorVariables).map(([key, variable]) => [key, cssHexVariable(container, variable)]).filter((entry) => Boolean(entry[1])));
+  if (!colors["editor.background"]) return base;
+  const name = `${base}-preset`;
+  editor.defineTheme(name, { base: dark ? "vs-dark" : "vs", inherit: true, rules: [], colors });
+  return name;
+}
 var releasedKeys = /* @__PURE__ */ new Set();
 var retainedModels = /* @__PURE__ */ new Map();
 window.addEventListener("workspace-model-release", (event) => {
@@ -264,6 +289,7 @@ function GraphWorkspaceMonacoEditor({
 }) {
   const modelKey = resourceKey ?? path;
   const { locale } = useI18n();
+  const themePreset = useDocumentThemePreset();
   const hostRef = useRef(null);
   const editorRef = useRef(null);
   const modelRef = useRef(null);
@@ -299,7 +325,7 @@ function GraphWorkspaceMonacoEditor({
       model,
       readOnly: initialReadOnlyRef.current,
       automaticLayout: true,
-      theme: initialDarkRef.current ? "pockymoe-dark" : "pockymoe-light",
+      theme: editorThemeFor(initialDarkRef.current, host),
       ariaLabel: translate("files.workspaceEditor", { value1: path }),
       fontFamily: '"IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace',
       fontSize: 13,
@@ -351,9 +377,9 @@ function GraphWorkspaceMonacoEditor({
     applyingContentRef.current = false;
   }, [content]);
   useEffect(() => {
-    editor.setTheme(dark ? "pockymoe-dark" : "pockymoe-light");
+    editor.setTheme(editorThemeFor(dark, editorRef.current?.getContainerDomNode()));
     editorRef.current?.updateOptions({ readOnly });
-  }, [dark, readOnly]);
+  }, [dark, readOnly, themePreset]);
   useEffect(() => {
     editorRef.current?.updateOptions({ ariaLabel: translate("files.workspaceEditor", { value1: path }) });
   }, [locale, path]);
@@ -377,5 +403,6 @@ function GraphWorkspaceMonacoEditor({
 }
 
 export {
+  editorThemeFor,
   GraphWorkspaceMonacoEditor
 };

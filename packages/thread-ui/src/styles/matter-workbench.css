@@ -461,6 +461,8 @@
 @keyframes matter-running { to { transform: rotate(360deg); } }
 @keyframes matter-agents-running { 50% { opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .matter-status-dot:is([data-status='running'], [data-status='agents-running']) { animation: none; } }
+/* Hidden unless a theme preset gives it an image. */
+.matter-thread-avatar { display: none; }
 .matter-sidebar-footer {
   margin-top: auto;
   padding: 20px 8px 0;

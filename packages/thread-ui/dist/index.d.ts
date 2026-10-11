@@ -202,6 +202,8 @@ interface WorkbenchThread {
     favorite: boolean;
     parentKey?: string;
     rootKey?: string;
+    /** Harness id such as `codex` or `claude`; themes may show it as an avatar. */
+    agent?: string;
 }
 interface WorkbenchNotification {
     id: string;

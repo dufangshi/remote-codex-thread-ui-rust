@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -31,5 +32,19 @@ describe('shell presentation helpers', () => {
     // The terminal matches the workbench panel surfaces.
     expect(terminalThemeFor('light').background).toBe('#ebeeeb');
     expect(terminalThemeFor('dark').background).toBe('#0f1317');
+  });
+
+  it('lets a theme preset override the terminal surface with hex CSS variables', () => {
+    const container = document.createElement('div');
+    container.style.setProperty('--terminal-bg', '#150b1a');
+    container.style.setProperty('--terminal-selection', '#f0b54a47');
+    container.style.setProperty('--terminal-fg', 'plum');
+    document.body.append(container);
+    const theme = terminalThemeFor('dark', container);
+    expect(theme.background).toBe('#150b1a');
+    expect(theme.cursorAccent).toBe('#150b1a');
+    expect(theme.selectionBackground).toBe('#f0b54a47');
+    expect(theme.foreground).toBe('#d6dde6');
+    container.remove();
   });
 });

@@ -1,15 +1,20 @@
 import { translate } from '../../i18n';
 import type { ShellStatusDto } from '@pockymoe/shared';
+import { cssHexVariable } from '../themeHooks';
 
-/** Matches the workbench panel surfaces so the terminal reads as part of the panel. */
-export function terminalThemeFor(effectiveTheme: 'light' | 'dark') {
+/** Matches the workbench panel surfaces so the terminal reads as part of the panel.
+ *  A theme preset may override the surface colors with `--terminal-bg`, `--terminal-fg`,
+ *  `--terminal-cursor` and `--terminal-selection` (hex) on the terminal's container. */
+export function terminalThemeFor(effectiveTheme: 'light' | 'dark', container?: Element | null) {
   const light = effectiveTheme === 'light';
+  const background = cssHexVariable(container, '--terminal-bg') ?? (light ? '#ebeeeb' : '#0f1317');
+  const foreground = cssHexVariable(container, '--terminal-fg') ?? (light ? '#22282b' : '#d6dde6');
   return {
-    background: light ? '#ebeeeb' : '#0f1317',
-    foreground: light ? '#22282b' : '#d6dde6',
-    cursor: light ? '#22282b' : '#d6dde6',
-    cursorAccent: light ? '#ebeeeb' : '#0f1317',
-    selectionBackground: light ? 'rgba(0, 139, 83, 0.24)' : 'rgba(0, 204, 118, 0.28)',
+    background,
+    foreground,
+    cursor: cssHexVariable(container, '--terminal-cursor') ?? foreground,
+    cursorAccent: background,
+    selectionBackground: cssHexVariable(container, '--terminal-selection') ?? (light ? 'rgba(0, 139, 83, 0.24)' : 'rgba(0, 204, 118, 0.28)'),
     black: light ? '#c4c9c4' : '#1c242a',
     brightBlack: light ? '#6b736e' : '#5b6770',
     red: light ? '#c62f3a' : '#f87171',

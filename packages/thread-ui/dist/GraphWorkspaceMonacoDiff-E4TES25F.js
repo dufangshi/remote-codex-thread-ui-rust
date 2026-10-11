@@ -1,7 +1,12 @@
-import "./chunk-RXYFD6BH.js";
+import {
+  editorThemeFor
+} from "./chunk-EYLS2XKT.js";
+import {
+  useDocumentThemePreset
+} from "./chunk-ZN6LCQTY.js";
 import {
   translate
-} from "./chunk-XVPG43JJ.js";
+} from "./chunk-GQH7RSL7.js";
 import {
   editor
 } from "./chunk-JXQIYSAV.js";
@@ -19,6 +24,7 @@ function WorkspaceDocumentDiff({
   compact
 }) {
   const host = useRef(null);
+  const themePreset = useDocumentThemePreset();
   useEffect(() => {
     if (!host.current) return;
     const left = editor.createModel(
@@ -34,7 +40,7 @@ function WorkspaceDocumentDiff({
       automaticLayout: true,
       renderSideBySide: !compact,
       originalEditable: false,
-      theme: dark ? "pockymoe-dark" : "pockymoe-light",
+      theme: editorThemeFor(dark, host.current),
       minimap: { enabled: false },
       fontSize: 12,
       scrollBeyondLastLine: false,
@@ -46,7 +52,7 @@ function WorkspaceDocumentDiff({
       left.dispose();
       right.dispose();
     };
-  }, [original, modified, language, dark, compact]);
+  }, [original, modified, language, dark, compact, themePreset]);
   return /* @__PURE__ */ jsx(
     "div",
     {
