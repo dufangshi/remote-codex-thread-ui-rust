@@ -405,6 +405,7 @@ export interface ThreadHistoryItemDto {
   waitingStartedAt?: string | null;
   awakenedAt?: string | null;
   backgroundTaskCount?: number | null;
+  responsePhase?: 'commentary' | 'final' | null;
   createdAt?: string | null;
   status?: string | null;
   assetPath?: string | null;

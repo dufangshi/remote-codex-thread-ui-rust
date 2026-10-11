@@ -68,7 +68,7 @@ it('replaces waiting with the wake cause using the same timeline anchor', async 
   expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
 });
 
-it('folds earlier wake episodes and progress while retaining the latest wake and report', async () => {
+it.each([['final', true], ['commentary', false], [undefined, false]] as const)('folds every wake and progress row and exposes only confirmed final replies (%s)', async (responsePhase, hasFinalReply) => {
   const { ThreadTimeline } = await import('../ThreadTimeline');
   const container=document.createElement('div');
   document.body.appendChild(container);
@@ -82,14 +82,14 @@ it('folds earlier wake episodes and progress while retaining the latest wake and
       {id:'progress',kind:'agentMessage',text:'Checking intermediate results'},
       {id:'wait',kind:'other',text:'Build finished',origin:'nativeTaskNotification',taskStatus:'completed'},
       {id:'command',kind:'commandExecution',text:'verify command',status:'completed'},
-      {id:'final',kind:'agentMessage',text:'Verified report'},
+      {id:'final',kind:'agentMessage',text:'Verified report', ...(responsePhase ? { responsePhase } : {})},
     ],
   }]} />));
   expect(container.textContent).not.toContain('Waiting for the build');
   expect(container.textContent).not.toContain('Checking intermediate results');
-  expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
-  expect(container.textContent).toContain('Awakened');
-  expect(container.textContent).toContain('Verified report');
+  expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(0);
+  expect(container.textContent).not.toContain('Awakened');
+  expect(container.textContent?.includes('Verified report')).toBe(hasFinalReply);
   expect(container.textContent).not.toContain('verify command');
   expect(container.querySelectorAll('[data-role="user"]')).toHaveLength(1);
   expect(container.querySelectorAll('.thread-graph-worked-summary')).toHaveLength(1);
@@ -101,12 +101,13 @@ it('folds earlier wake episodes and progress while retaining the latest wake and
     expect(container.textContent).toContain('Waiting for the build');
     expect(container.textContent).toContain('Checking intermediate results');
     expect(container.textContent).toContain('verify command');
+    expect(container.textContent).toContain('Verified report');
     expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(2);
     await act(async () => toggle.click());
     expect(container.textContent).not.toContain('Waiting for the build');
     expect(container.textContent).not.toContain('Checking intermediate results');
     expect(container.textContent).not.toContain('verify command');
-    expect(container.textContent).toContain('Verified report');
-    expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
+    expect(container.textContent?.includes('Verified report')).toBe(hasFinalReply);
+    expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(0);
   }
 });

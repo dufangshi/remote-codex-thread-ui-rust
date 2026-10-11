@@ -14504,7 +14504,8 @@ function collapsedSummaryMessages(entries, active) {
   const latestAgent = itemEntries.map((entry) => entry.item).reverse().find(
     (item) => item.kind === "agentMessage" && item.text.trim().length > 0
   );
-  const finalAgent = active && !(last?.kind === "item" && last.item.kind === "agentMessage") ? void 0 : latestAgent;
+  const hasBackground = itemEntries.some(({ item }) => item.origin === "nativeBackgroundWait" || item.origin === "nativeTaskNotification");
+  const finalAgent = hasBackground ? !active && latestAgent?.responsePhase === "final" ? latestAgent : void 0 : active && !(last?.kind === "item" && last.item.kind === "agentMessage") ? void 0 : latestAgent;
   const hiddenEntries = entries.filter((entry) => {
     if (entry.kind !== "item") {
       return true;
@@ -14687,9 +14688,7 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
   const interruptedLabel = turn.status === "interrupted" ? /* @__PURE__ */ jsx59("span", { className: "thread-graph-worked-interrupted shrink-0 text-[11px]", children: translate("chat.interrupted") }) : null;
   const hasCollapsedHiddenItems = collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
-  const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
-  const latestBackgroundAnchor = groupedItems.findLast((entry) => entry.kind === "item" && (entry.item.origin === "nativeBackgroundWait" || entry.item.origin === "nativeTaskNotification"));
-  const backgroundSummary = latestBackgroundAnchor ? groupedItems.filter((entry) => entry === latestBackgroundAnchor || entry.kind === "item" && entry.item.id === visibleSummaryAgent?.id) : [];
+  const visibleSummaryAgent = collapsedSummary.finalAgent;
   const canToggleWorkedSummary = hasCollapsedHiddenItems;
   const terminalWorkedNode = isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? /* @__PURE__ */ jsxs48("div", { className: "thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm", children: [
     /* @__PURE__ */ jsx59("span", { className: "thread-graph-worked-label shrink-0", children: workedLabel }),
@@ -14749,7 +14748,7 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
       )
     ] }),
     !effectiveCollapsed ? /* @__PURE__ */ jsx59("div", { className: "thread-execution-timeline", children: renderHistoryEntries(collapsedSummary.hiddenEntries) }) : null,
-    effectiveCollapsed && backgroundSummary.length > 0 ? /* @__PURE__ */ jsx59("div", { className: "thread-execution-timeline", children: renderHistoryEntries(backgroundSummary) }) : visibleSummaryAgent ? /* @__PURE__ */ jsx59(
+    visibleSummaryAgent ? /* @__PURE__ */ jsx59(
       GraphChatCompactMessageItem,
       {
         threadId,

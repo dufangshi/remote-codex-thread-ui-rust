@@ -536,7 +536,14 @@ function collapsedSummaryMessages(entries: TimelineHistoryEntry[], active: boole
       (item): item is ThreadHistoryItemDto & { kind: 'agentMessage' } =>
         item.kind === 'agentMessage' && item.text.trim().length > 0,
     );
-  const finalAgent = active && !(last?.kind === 'item' && last.item.kind === 'agentMessage') ? undefined : latestAgent;
+  const hasBackground = itemEntries.some(({ item }) =>
+    item.origin === 'nativeBackgroundWait' || item.origin === 'nativeTaskNotification');
+  // Background notifications and progress share one turn. Only a native-confirmed
+  // final reply may sit outside its folded execution history; legacy rows are
+  // deliberately conservative because completed text is not proof of a final reply.
+  const finalAgent = hasBackground
+    ? (!active && latestAgent?.responsePhase === 'final' ? latestAgent : undefined)
+    : (active && !(last?.kind === 'item' && last.item.kind === 'agentMessage') ? undefined : latestAgent);
   const hiddenEntries = entries.filter((entry) => {
     if (entry.kind !== 'item') {
       return true;
@@ -748,13 +755,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
   const hasCollapsedHiddenItems =
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
-  const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
-  // Keep only the current background status beside the latest reply when
-  // folded. Earlier wake episodes and progress belong to the expandable body.
-  const latestBackgroundAnchor = groupedItems.findLast(entry => entry.kind === 'item' &&
-    (entry.item.origin === 'nativeBackgroundWait' || entry.item.origin === 'nativeTaskNotification'));
-  const backgroundSummary = latestBackgroundAnchor ? groupedItems.filter(entry =>
-    entry === latestBackgroundAnchor || (entry.kind === 'item' && entry.item.id === visibleSummaryAgent?.id)) : [];
+  const visibleSummaryAgent = collapsedSummary.finalAgent;
 
   const canToggleWorkedSummary =
     hasCollapsedHiddenItems;
@@ -822,9 +823,7 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           />
         </div>
         {!effectiveCollapsed ? <div className="thread-execution-timeline">{renderHistoryEntries(collapsedSummary.hiddenEntries)}</div> : null}
-        {effectiveCollapsed && backgroundSummary.length > 0 ? (
-          <div className="thread-execution-timeline">{renderHistoryEntries(backgroundSummary)}</div>
-        ) : visibleSummaryAgent ? (
+        {visibleSummaryAgent ? (
           <CompactMessageItem
             threadId={threadId}
             item={visibleSummaryAgent}
