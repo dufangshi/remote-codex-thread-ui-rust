@@ -1614,6 +1614,7 @@ declare const en: {
     readonly "files.workspaceImage": "workspace image";
     readonly "files.andItsContents": " and its contents";
     readonly "files.loadingDiagram": "Loading diagram…";
+    readonly "files.hidePreview": "Hide preview";
     readonly "devices.unavailable": "Unavailable";
     readonly "devices.sensorAccessSetup": "Sensor access setup";
     readonly "devices.cPUTemperature": "CPU temperature";
@@ -4391,6 +4392,7 @@ declare const zhCN: {
     "files.workspaceImage": "工作区图片";
     "files.andItsContents": "及其内容";
     "files.loadingDiagram": "正在加载图表…";
+    "files.hidePreview": "收起预览";
     "devices.unavailable": "不可用";
     "devices.sensorAccessSetup": "传感器访问设置";
     "devices.cPUTemperature": "CPU 温度";
@@ -7190,6 +7192,7 @@ declare const resources: {
         readonly "files.workspaceImage": "workspace image";
         readonly "files.andItsContents": " and its contents";
         readonly "files.loadingDiagram": "Loading diagram…";
+        readonly "files.hidePreview": "Hide preview";
         readonly "devices.unavailable": "Unavailable";
         readonly "devices.sensorAccessSetup": "Sensor access setup";
         readonly "devices.cPUTemperature": "CPU temperature";
@@ -9966,6 +9969,7 @@ declare const resources: {
         "files.workspaceImage": "工作区图片";
         "files.andItsContents": "及其内容";
         "files.loadingDiagram": "正在加载图表…";
+        "files.hidePreview": "收起预览";
         "devices.unavailable": "不可用";
         "devices.sensorAccessSetup": "传感器访问设置";
         "devices.cPUTemperature": "CPU 温度";

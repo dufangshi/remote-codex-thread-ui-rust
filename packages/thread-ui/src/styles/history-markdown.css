@@ -3171,3 +3171,38 @@ html[data-theme-effective="light"] .thread-workspace-link-menu button:hover,html
 .thread-ui-shell .thread-graph-task-notice.is-failed .thread-graph-task-notice-label { color: var(--theme-danger, #ef6a75); }
 @media (max-width: 639px) { .thread-ui-shell .thread-graph-task-notice-toggle { min-height: 44px; } }
 @media (prefers-reduced-motion: reduce) { .thread-ui-shell .thread-graph-task-notice-chevron { transition: none; } }
+
+.workspace-image-preview { position: relative; display: flex; flex: 1; min-width: 0; min-height: 0; flex-direction: column; overflow: hidden; }
+.workspace-image-viewport { display: flex; flex: 1; min-height: 0; align-items: center; justify-content: center; padding: 20px; overflow: hidden; touch-action: none; }
+.workspace-image-viewport img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; cursor: grab; will-change: transform; }
+.workspace-image-viewport img.is-dragging { cursor: grabbing; }
+.workspace-image-controls { position: absolute; z-index: 1; left: 50%; top: 8px; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid var(--theme-border); border-radius: 999px; background: color-mix(in srgb, var(--theme-panel) 78%, transparent); backdrop-filter: blur(12px); }
+.workspace-image-controls button { display: flex; align-items: center; justify-content: center; height: 28px; min-width: 28px; padding: 0 6px; border-radius: 999px; color: var(--theme-fg-soft); font-size: 10px; font-variant-numeric: tabular-nums; }
+.workspace-image-controls button:hover { background: var(--theme-hover); }
+.workspace-image-controls button:disabled { opacity: .35; }
+
+/* GitHub-style README layout, including inline badges and small heading icons. */
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) [align="center"] { text-align: center; }
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) [align="right"] { text-align: right; }
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) [align="left"] { text-align: left; }
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) :is([align], h1, h2, h3) .thread-graph-zoomable-image-trigger {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: .15rem .2rem;
+}
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) :is([align], h1, h2, h3) img {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+  margin: .15rem .2rem;
+  border: 0;
+  background: transparent;
+}
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) details {
+  border: 1px solid var(--theme-border);
+  border-radius: .5rem;
+  padding: .6rem .8rem;
+  margin-block: .8rem;
+}
+.thread-ui-shell :is(.thread-graph-markdown-preview, .thread-graph-message-markdown) summary { cursor: pointer; font-weight: 500; }

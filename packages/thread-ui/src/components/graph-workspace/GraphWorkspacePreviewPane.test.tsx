@@ -105,6 +105,23 @@ describe('resolveWorkspaceMarkdownPath', () => {
 });
 
 describe('GraphWorkspacePreviewPane', () => {
+  it('renders README HTML images and routes linked badges to relative workspace documents', () => {
+    const onOpenWorkspaceFile = vi.fn();
+    const element = render(<GraphWorkspacePreviewPane plugins={createDefaultPluginContextValue()}
+      selectedTarget={{ kind: 'workspace-file', node: { id: 'readme', path: '/home/u/treer/README.md', name: 'README.md', kind: 'file', children: [] } }}
+      previewFile={{ path: '/home/u/treer/README.md', name: 'README.md', language: 'markdown', size: 200, truncated: false, nextOffset: 200,
+        content: '<p align="center"><a href="README.zh-CN.md"><img src="https://example.com/badge.svg" alt="中文" width="80"></a></p>\n\n<p align="center"><img src="docs/hero.png" alt="Hero" width="100%"></p>' }}
+      workspaceRootPath="/home/u/treer" onOpenWorkspaceFile={onOpenWorkspaceFile}
+      resolveWorkspaceFileUrl={path => `/raw?path=${encodeURIComponent(path)}`} />);
+    expect(element.querySelector('p[align="center"]')).not.toBeNull();
+    expect(element.querySelector('a img')?.getAttribute('src')).toBe('https://example.com/badge.svg');
+    expect(element.querySelector('a button')).toBeNull();
+    const hero = element.querySelector<HTMLImageElement>('img[alt="Hero"]')!;
+    expect(hero.getAttribute('src')).toBe('/raw?path=docs%2Fhero.png');
+    expect(hero.style.width).toBe('100%');
+    act(() => element.querySelector('a')!.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })));
+    expect(onOpenWorkspaceFile).toHaveBeenCalledWith('README.zh-CN.md');
+  });
   const markdownNode: WorkspaceTreeNode = {
     id: 'workspace:docs/architecture.md',
     name: 'architecture.md',
@@ -210,7 +227,7 @@ describe('GraphWorkspacePreviewPane', () => {
     act(() => {
       element
         .querySelector<HTMLButtonElement>(
-          '[aria-label="Open image preview: /home/u/treer/images/diagram.png"]',
+          '[aria-label="Open image preview"]',
         )
         ?.click();
     });

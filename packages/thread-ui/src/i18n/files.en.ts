@@ -572,5 +572,6 @@ export const filesEn = {
   "files.theLastAttemptFailed": " The last attempt failed: {{value1}}",
   "files.workspaceImage": "workspace image",
   "files.andItsContents": " and its contents",
-  "files.loadingDiagram": "Loading diagram…"
+  "files.loadingDiagram": "Loading diagram…",
+  "files.hidePreview": "Hide preview",
 } as const;

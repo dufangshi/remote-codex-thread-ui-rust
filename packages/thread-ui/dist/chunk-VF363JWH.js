@@ -1907,7 +1907,8 @@ var filesEn = {
   "files.theLastAttemptFailed": " The last attempt failed: {{value1}}",
   "files.workspaceImage": "workspace image",
   "files.andItsContents": " and its contents",
-  "files.loadingDiagram": "Loading diagram\u2026"
+  "files.loadingDiagram": "Loading diagram\u2026",
+  "files.hidePreview": "Hide preview"
 };
 
 // src/i18n/settings.en.ts
@@ -4719,7 +4720,8 @@ var filesZhCN = {
   "files.theLastAttemptFailed": " \u4E0A\u6B21\u5C1D\u8BD5\u5931\u8D25\uFF1A{{value1}}",
   "files.workspaceImage": "\u5DE5\u4F5C\u533A\u56FE\u7247",
   "files.andItsContents": "\u53CA\u5176\u5185\u5BB9",
-  "files.loadingDiagram": "\u6B63\u5728\u52A0\u8F7D\u56FE\u8868\u2026"
+  "files.loadingDiagram": "\u6B63\u5728\u52A0\u8F7D\u56FE\u8868\u2026",
+  "files.hidePreview": "\u6536\u8D77\u9884\u89C8"
 };
 
 // src/i18n/settings.zh-CN.ts

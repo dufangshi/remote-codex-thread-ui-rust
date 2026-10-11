@@ -4,7 +4,7 @@ import { getLocale, en, type TranslationKey } from '../../i18n';
 import { translate, useI18n } from '../../i18n';
 import { externalLinkProps } from '../externalLinkProps';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
-import { ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
+import { WorkspaceImagePreview, ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
 import {
   lazy,
   memo,
@@ -35,6 +35,8 @@ import { WorkspaceFileMenu } from './WorkspaceFileMenu';
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
 import { localFileHref, relativeWorkspacePath, normalizeFileSystemPath } from '../workspacePaths';
 import remarkGfm from 'remark-gfm';
+import { markdownHtmlPlugins } from '../markdownHtml';
+import { MarkdownImageLinkContext } from '../ZoomableImage';
 import type { HighlighterCore } from 'shiki/core';
 
 import type { ThreadWorkspaceFilePreview } from '../../adapters';
@@ -367,8 +369,10 @@ const GraphWorkspaceMarkdownPreview = memo(
         <ReactMarkdown
           urlTransform={url => localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[...markdownHtmlPlugins]}
           components={{
-            a({ href, children, ...props }) {
+            a({ href, children: originalChildren, node: _node, ...props }) {
+              const children = <MarkdownImageLinkContext.Provider value={true}>{originalChildren}</MarkdownImageLinkContext.Provider>;
               const workspacePath = resolvePath(href);
               if (workspacePath && onOpenWorkspaceFile) {
                 return (
@@ -395,6 +399,8 @@ const GraphWorkspaceMarkdownPreview = memo(
                   alt={alt ?? ''}
                   loading="lazy"
                   className={props.className}
+                  width={props.width}
+                  height={props.height}
                 />
               );
             },
@@ -422,6 +428,7 @@ export function GraphWorkspacePreviewPane({
   resourceScopeKey,
   canSaveDocument,
   onSaveAndClose,
+  onReturnToFiles,
   onCloseFileTab,
   onDirtyChange,
   mobileNavigation = false,
@@ -455,6 +462,7 @@ export function GraphWorkspacePreviewPane({
   resourceScopeKey?: string;
   canSaveDocument?: boolean;
   onSaveAndClose?: (path: string) => Promise<void>;
+  onReturnToFiles?: () => void;
   onCloseFileTab?: (path: string) => void;
   onDirtyChange?: (path: string, dirty: boolean) => void;
   mobileNavigation?: boolean;
@@ -665,7 +673,7 @@ export function GraphWorkspacePreviewPane({
       if (current?.error) throw new Error(current.error);
       return translate(current?.phase==='conflict' ? 'files.safePhase.conflict' : current?.snapshot.contentHash===previous ? 'files.fileAlreadyCurrent' : 'files.fileReloaded');
     }} : onDownloadFile ? {onDownload:()=>void onDownloadFile()} : {})}/>;
-  const closeFilePanel = filePanel && <button type="button" data-testid="workbench-close-files" className="thread-graph-editor-toolbar-button workspace-close-files" onClick={filePanel.close} aria-label={translate('workbench.closeFiles')} title={translate('workbench.closeFiles')}><X size={16}/></button>;
+  const closeFilePanel = filePanel && <button type="button" data-testid="workbench-close-files" className="thread-graph-editor-toolbar-button workspace-close-files" onClick={onReturnToFiles ?? filePanel.close} aria-label={translate(onReturnToFiles ? 'files.hidePreview' : 'workbench.closeFiles')} title={translate(onReturnToFiles ? 'files.hidePreview' : 'workbench.closeFiles')}><X size={16}/></button>;
   const backLabel = previousFilePath ? translate('files.backToDocument', { name: previousFilePath.split('/').pop() ?? previousFilePath }) : translate('workbench.goBack');
   const navigationControls = <>
     {onNavigateBack && <button type="button" onClick={onNavigateBack} aria-label={backLabel} title={backLabel} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowLeft size={14} /></button>}
@@ -696,9 +704,8 @@ export function GraphWorkspacePreviewPane({
   ) : null;
 
   const previewNavigation = mobileNavigation && onExpandExplorer ? <>
-    <button type="button" className="workspace-preview-back" onClick={onNavigateBack ?? onExpandExplorer} aria-label={onNavigateBack ? backLabel : translate('files.backToFiles')} title={onNavigateBack ? backLabel : translate('files.backToFiles')} data-testid={onNavigateBack ? 'preview-back' : 'expand-explorer'}><ArrowLeft size={18}/></button>
-    {onNavigateForward && <button type="button" className="workspace-preview-forward" onClick={onNavigateForward} aria-label={translate('files.goForward')} title={translate('files.goForward')}><ArrowRight size={16}/></button>}
-    {onNavigateBack && <button type="button" className="workspace-preview-tree" onClick={onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><PanelLeftOpen size={16}/></button>}
+    <button type="button" className="workspace-preview-back" onClick={onReturnToFiles ?? onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><ArrowLeft size={18}/></button>
+    {navigationControls}
   </> : navigationControls;
   const previewActions = <>{inlineStatus}{fileToolbar}{fileMenu}{!mobileNavigation && viewerPaneToggle}{closeFilePanel}</>;
 
@@ -755,13 +762,7 @@ export function GraphWorkspacePreviewPane({
             />
           </div>
         ) : selectedTarget.kind === 'workspace-file' && imageUrl ? (
-          <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto p-5">
-            <GraphWorkspaceZoomableImage
-              src={imageUrl}
-              alt={selectedTarget.node.path || selectedTarget.node.name}
-              className="max-h-full max-w-full object-contain"
-            />
-          </div>
+          <WorkspaceImagePreview key={imageUrl} src={imageUrl} alt={selectedTarget.node.path || selectedTarget.node.name} />
         ) : selectedTarget.kind === 'workspace-file' && pdfUrl ? (
           <div className="thread-graph-file-preview-frame min-h-0 flex-1 overflow-hidden">
             <iframe

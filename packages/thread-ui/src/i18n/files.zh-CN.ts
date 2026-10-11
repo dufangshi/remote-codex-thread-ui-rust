@@ -572,5 +572,6 @@ export const filesZhCN = {
   "files.theLastAttemptFailed": " 上次尝试失败：{{value1}}",
   "files.workspaceImage": "工作区图片",
   "files.andItsContents": "及其内容",
-  "files.loadingDiagram": "正在加载图表…"
+  "files.loadingDiagram": "正在加载图表…",
+  "files.hidePreview": "收起预览",
 } as const;

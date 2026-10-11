@@ -23,7 +23,8 @@ import { remarkLatex } from './remarkLatex';
 import 'katex/dist/katex.min.css';
 
 import { localFileHref, relativeWorkspacePath } from '../workspacePaths';
-import { ZoomableImage } from '../ZoomableImage';
+import { ZoomableImage, MarkdownImageLinkContext } from '../ZoomableImage';
+import { markdownHtmlPlugins } from '../markdownHtml';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { VerifiedWorkspacePath } from '../VerifiedWorkspacePath';
 import { parseWorkspacePathText, remarkWorkspacePaths, type WorkspacePathResolver } from '../workspacePathLinks';
@@ -432,10 +433,10 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
       <ReactMarkdown
         urlTransform={url => !readOnly && url.startsWith('workspace-auto:') ? url : !readOnly && localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
         remarkPlugins={[remarkGfm, remarkMath, remarkLatex, remarkCjkFriendly, ...(!readOnly && resolveWorkspacePath ? [remarkWorkspacePaths] : [])]}
-        rehypePlugins={[rehypeKatex]}
+        rehypePlugins={[...markdownHtmlPlugins, rehypeKatex]}
         components={{
-          a({ href, children: originalChildren, ...props }) {
-            const children = <MarkdownLinkContext.Provider value={true}>{originalChildren}</MarkdownLinkContext.Provider>;
+          a({ href, children: originalChildren, node: _node, ...props }) {
+            const children = <MarkdownLinkContext.Provider value={true}><MarkdownImageLinkContext.Provider value={true}>{originalChildren}</MarkdownImageLinkContext.Provider></MarkdownLinkContext.Provider>;
             if (href?.startsWith('workspace-auto:')) {
               let value = '';
               try { value = decodeURIComponent(href.slice('workspace-auto:'.length)); } catch { /* Invalid path remains plain text. */ }
@@ -463,10 +464,10 @@ export const GraphChatMessageContent = memo(function GraphChatMessageContent({
               </a>
             );
           },
-          img({src, alt}) {
+          img({src, alt, width, height}) {
             const resolved = src ? (resolveHref?.(src) ?? src) : undefined;
             if (readOnly && !resolved?.startsWith('data:image/') && !/^https?:\/\//i.test(resolved ?? '')) return <span>{alt || translate("chat.imageUnavailable")}</span>;
-            return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} /> : <span>{alt || translate("chat.imageUnavailable")}</span>;
+            return resolved ? <ZoomableImage src={resolved} alt={alt ?? ''} width={width} height={height} /> : <span>{alt || translate("chat.imageUnavailable")}</span>;
           },
           code: StableCodeRenderer,
           pre: PreRenderer,

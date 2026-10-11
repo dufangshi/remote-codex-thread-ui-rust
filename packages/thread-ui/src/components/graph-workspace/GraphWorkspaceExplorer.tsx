@@ -239,18 +239,7 @@ export function GraphWorkspaceExplorer({
       if (current.some((tab) => tab.path === activeNode.path)) {
         return current;
       }
-      const previewIndex = current.findIndex((tab) => !tab.pinned);
-      const nextTab: WorkspaceFileTab = {
-        name: activeNode.name,
-        path: activeNode.path,
-        pinned: dirtyFilePaths.has(activeNode.path),
-      };
-      if (previewIndex < 0) {
-        return [...current, nextTab];
-      }
-      return current.map((tab, index) =>
-        index === previewIndex ? nextTab : tab,
-      );
+      return [...current, { name: activeNode.name, path: activeNode.path, pinned: true }];
     });
   }, [activeNode]);
 
@@ -385,6 +374,7 @@ export function GraphWorkspaceExplorer({
       void focusWorkspacePath(replacement.path);
     } else {
       setSelectedNodeId(null);
+      if (isMobileViewport) setCollapsedPanel('viewer');
     }
   }
 
@@ -457,7 +447,7 @@ export function GraphWorkspaceExplorer({
       }}
       onSelectNode={(node) => {
         setFocusedLine(null);
-        if (isMobileViewport && node.kind !== 'directory') {
+        if ((isMobileViewport || collapsedPanel === 'viewer') && node.kind !== 'directory') {
           rememberExplorerScroll();
           setCollapsedPanel('explorer');
         }
@@ -499,6 +489,7 @@ export function GraphWorkspaceExplorer({
         void focusWorkspacePath(path);
       }}
       {...(workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {})}
+      onReturnToFiles={() => { setNavigation(current => ({ ...current, paths: [], index: -1 })); setCollapsedPanel('viewer'); }}
       onCloseFileTab={handleCloseTab}
       onSelectFileTab={(path) => void focusWorkspacePath(path)}
       documents={documents}

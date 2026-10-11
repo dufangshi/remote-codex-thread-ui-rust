@@ -1,7 +1,7 @@
 import {
   translate,
   useI18n
-} from "./chunk-6DTEYFQM.js";
+} from "./chunk-VF363JWH.js";
 
 // src/components/graph-workspace/explorer/workspaceDocuments.ts
 var storeKey = /* @__PURE__ */ Symbol.for("remote-codex.workspace-documents");
@@ -866,19 +866,117 @@ function Button({
 }
 
 // src/components/ZoomableImage.tsx
-import { useEffect as useEffect3, useRef, useState } from "react";
+import { createContext, useContext, useEffect as useEffect3, useRef as useRef2, useState as useState2 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
-import { Minus, Plus, RotateCcw, X } from "lucide-react";
+
+// src/components/useImageViewport.ts
+import { useRef, useState } from "react";
+var MIN_SCALE = 0.5;
+var MAX_SCALE = 5;
+var clamp = (scale) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+function useImageViewport() {
+  const viewportRef = useRef(null);
+  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
+  const current = useRef(view);
+  const pointers = useRef(/* @__PURE__ */ new Map());
+  const baseline = useRef(null);
+  const moved = useRef(false);
+  const [dragging, setDragging] = useState(false);
+  const commit = (next) => {
+    current.current = next;
+    setView(next);
+  };
+  function centerAndDistance() {
+    const points = [...pointers.current.values()].slice(0, 2);
+    const a = points[0];
+    if (!a) return null;
+    const b = points[1] ?? a;
+    return { center: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, distance: Math.hypot(a.x - b.x, a.y - b.y) };
+  }
+  function restartGesture() {
+    const points = centerAndDistance();
+    baseline.current = points ? { ...points, view: current.current } : null;
+    setDragging(pointers.current.size > 0);
+  }
+  function local(point) {
+    const element = viewportRef.current;
+    if (!element) return point;
+    const rect = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return {
+      x: point.x - rect.left - (rect.width + parseFloat(style.paddingLeft || "0") - parseFloat(style.paddingRight || "0")) / 2,
+      y: point.y - rect.top - (rect.height + parseFloat(style.paddingTop || "0") - parseFloat(style.paddingBottom || "0")) / 2
+    };
+  }
+  function updateScale(scale, clientX, clientY) {
+    const old = current.current;
+    const next = clamp(scale);
+    const anchor = clientX === void 0 || clientY === void 0 ? { x: 0, y: 0 } : local({ x: clientX, y: clientY });
+    const ratio = next / old.scale;
+    commit({ scale: next, x: anchor.x - (anchor.x - old.x) * ratio, y: anchor.y - (anchor.y - old.y) * ratio });
+  }
+  function onPointerDown(event) {
+    if (event.button !== 0) return;
+    if (pointers.current.size === 0) moved.current = false;
+    pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    event.currentTarget.setPointerCapture(event.pointerId);
+    restartGesture();
+  }
+  function onPointerMove(event) {
+    if (!pointers.current.has(event.pointerId)) return;
+    pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    const base = baseline.current;
+    const points = centerAndDistance();
+    if (!base || !points) return;
+    const dx = points.center.x - base.center.x;
+    const dy = points.center.y - base.center.y;
+    if (Math.hypot(dx, dy) > 3 || Math.abs(points.distance - base.distance) > 3) moved.current = true;
+    if (pointers.current.size >= 2 && base.distance > 0) {
+      const scale = clamp(base.view.scale * points.distance / base.distance);
+      const ratio = scale / base.view.scale;
+      const start = local(base.center);
+      const end = local(points.center);
+      commit({ scale, x: end.x - (start.x - base.view.x) * ratio, y: end.y - (start.y - base.view.y) * ratio });
+    } else if (base.view.scale > 1) {
+      commit({ ...base.view, x: base.view.x + dx, y: base.view.y + dy });
+    }
+  }
+  function onPointerEnd(event) {
+    if (!pointers.current.delete(event.pointerId)) return;
+    restartGesture();
+  }
+  return {
+    viewportRef,
+    scale: view.scale,
+    dragging,
+    moved,
+    transform: `translate3d(${view.x}px, ${view.y}px, 0) scale(${view.scale})`,
+    reset: () => {
+      commit({ x: 0, y: 0, scale: 1 });
+      restartGesture();
+    },
+    updateScale,
+    handlers: {
+      onPointerDown,
+      onPointerMove,
+      onPointerUp: onPointerEnd,
+      onPointerCancel: onPointerEnd,
+      onLostPointerCapture: onPointerEnd,
+      onWheel: (event) => {
+        event.preventDefault();
+        updateScale(current.current.scale + (event.deltaY < 0 ? 0.25 : -0.25), event.clientX, event.clientY);
+      }
+    }
+  };
+}
+
+// src/components/ZoomableImage.tsx
+import { Maximize2, Minus, Plus, RotateCcw, X } from "lucide-react";
 import { Fragment, jsx as jsx6, jsxs as jsxs4 } from "react/jsx-runtime";
+var MarkdownImageLinkContext = createContext(false);
 var IMAGE_LIGHTBOX_MIN_SCALE = 0.5;
 var IMAGE_LIGHTBOX_MAX_SCALE = 5;
 var IMAGE_LIGHTBOX_SCALE_STEP = 0.25;
-function clampImageLightboxScale(scale) {
-  return Math.min(
-    IMAGE_LIGHTBOX_MAX_SCALE,
-    Math.max(IMAGE_LIGHTBOX_MIN_SCALE, scale)
-  );
-}
 function GraphWorkspaceImageLightbox({
   alt,
   backgroundColor,
@@ -886,12 +984,9 @@ function GraphWorkspaceImageLightbox({
   src
 }) {
   const { locale: i18nLocale } = useI18n();
-  const viewportRef = useRef(null);
-  const closeButtonRef = useRef(null);
-  const dragRef = useRef(null);
-  const [scale, setScale] = useState(1);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [dragging, setDragging] = useState(false);
+  const { viewportRef, scale, dragging, transform, reset: resetView, updateScale, handlers, moved } = useImageViewport();
+  const closeButtonRef = useRef2(null);
+  const backdropPointer = useRef2(true);
   useEffect3(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -907,67 +1002,6 @@ function GraphWorkspaceImageLightbox({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
-  function resetView() {
-    setScale(1);
-    setOffset({ x: 0, y: 0 });
-  }
-  function updateScale(nextScale, clientX, clientY) {
-    const clampedScale = clampImageLightboxScale(nextScale);
-    if (clampedScale === scale) {
-      return;
-    }
-    if (typeof clientX === "number" && typeof clientY === "number" && viewportRef.current) {
-      const rect = viewportRef.current.getBoundingClientRect();
-      const anchorX = clientX - (rect.left + rect.width / 2);
-      const anchorY = clientY - (rect.top + rect.height / 2);
-      const ratio = clampedScale / scale;
-      setOffset((current) => ({
-        x: anchorX - (anchorX - current.x) * ratio,
-        y: anchorY - (anchorY - current.y) * ratio
-      }));
-    }
-    setScale(clampedScale);
-  }
-  function handleWheel(event) {
-    event.preventDefault();
-    const direction = event.deltaY < 0 ? 1 : -1;
-    updateScale(
-      scale + direction * IMAGE_LIGHTBOX_SCALE_STEP,
-      event.clientX,
-      event.clientY
-    );
-  }
-  function handlePointerDown(event) {
-    if (scale <= 1 || event.button !== 0) {
-      return;
-    }
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startClientX: event.clientX,
-      startClientY: event.clientY,
-      startOffsetX: offset.x,
-      startOffsetY: offset.y
-    };
-    setDragging(true);
-  }
-  function handlePointerMove(event) {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) {
-      return;
-    }
-    setOffset({
-      x: drag.startOffsetX + event.clientX - drag.startClientX,
-      y: drag.startOffsetY + event.clientY - drag.startClientY
-    });
-  }
-  function handlePointerEnd(event) {
-    if (dragRef.current?.pointerId !== event.pointerId) {
-      return;
-    }
-    dragRef.current = null;
-    setDragging(false);
-  }
   return createPortal3(
     /* @__PURE__ */ jsxs4(
       "div",
@@ -1051,11 +1085,15 @@ function GraphWorkspaceImageLightbox({
               ref: viewportRef,
               className: "thread-graph-image-lightbox-viewport",
               onClick: (event) => {
-                if (event.target === event.currentTarget) {
+                if (event.target === event.currentTarget && backdropPointer.current && !moved.current) {
                   onClose();
                 }
               },
-              onWheel: handleWheel,
+              ...handlers,
+              onPointerDown: (event) => {
+                backdropPointer.current = event.target === event.currentTarget;
+                handlers.onPointerDown(event);
+              },
               children: /* @__PURE__ */ jsx6(
                 "img",
                 {
@@ -1063,12 +1101,8 @@ function GraphWorkspaceImageLightbox({
                   alt,
                   draggable: false,
                   className: dragging ? "is-dragging" : "",
-                  onPointerDown: handlePointerDown,
-                  onPointerMove: handlePointerMove,
-                  onPointerUp: handlePointerEnd,
-                  onPointerCancel: handlePointerEnd,
                   style: {
-                    transform: `translate3d(${offset.x}px, ${offset.y}px, 0) scale(${scale})`
+                    transform
                   }
                 }
               )
@@ -1084,15 +1118,22 @@ function ZoomableImage({
   alt,
   className,
   loading,
-  src
+  src,
+  width,
+  height
 }) {
   const { locale: i18nLocale } = useI18n();
-  const triggerRef = useRef(null);
-  const [open, setOpen] = useState(false);
+  const triggerRef = useRef2(null);
+  const [open, setOpen] = useState2(false);
+  const insideLink = useContext(MarkdownImageLinkContext);
+  const dimension = (value) => typeof value === "number" ? value : value && /^\d+(?:\.\d+)?%?$/.test(value) ? value.endsWith("%") ? value : Number(value) : void 0;
+  const imageStyle = { width: dimension(width), height: dimension(height) };
+  const image = /* @__PURE__ */ jsx6("img", { src, alt, className, loading, style: imageStyle });
   function closeLightbox() {
     setOpen(false);
     window.requestAnimationFrame(() => triggerRef.current?.focus());
   }
+  if (insideLink) return image;
   return /* @__PURE__ */ jsxs4(Fragment, { children: [
     /* @__PURE__ */ jsx6(
       "button",
@@ -1100,10 +1141,11 @@ function ZoomableImage({
         ref: triggerRef,
         type: "button",
         className: "thread-graph-zoomable-image-trigger",
+        style: { width: dimension(width) },
         onClick: () => setOpen(true),
         title: translate("files.openImagePreview"),
         "aria-label": translate("files.openImagePreview_bdac35", { value1: alt || translate("files.workspaceImage") }),
-        children: /* @__PURE__ */ jsx6("img", { src, alt, className, loading })
+        children: image
       }
     ),
     open ? /* @__PURE__ */ jsx6(
@@ -1116,11 +1158,29 @@ function ZoomableImage({
     ) : null
   ] });
 }
+function WorkspaceImagePreview({ src, alt }) {
+  useI18n();
+  const { viewportRef, scale, dragging, transform, reset, updateScale, handlers } = useImageViewport();
+  const [open, setOpen] = useState2(false);
+  return /* @__PURE__ */ jsxs4("div", { className: "workspace-image-preview", children: [
+    /* @__PURE__ */ jsxs4("div", { className: "workspace-image-controls", role: "toolbar", "aria-label": translate("files.imageZoomControls"), children: [
+      /* @__PURE__ */ jsx6("button", { type: "button", onClick: () => updateScale(scale - 0.25), disabled: scale <= IMAGE_LIGHTBOX_MIN_SCALE, "aria-label": translate("files.zoomOut"), children: /* @__PURE__ */ jsx6(Minus, { size: 14 }) }),
+      /* @__PURE__ */ jsx6("button", { type: "button", onClick: reset, "aria-label": translate("files.resetZoom"), children: /* @__PURE__ */ jsxs4("span", { children: [
+        Math.round(scale * 100),
+        "%"
+      ] }) }),
+      /* @__PURE__ */ jsx6("button", { type: "button", onClick: () => updateScale(scale + 0.25), disabled: scale >= IMAGE_LIGHTBOX_MAX_SCALE, "aria-label": translate("files.zoomIn"), children: /* @__PURE__ */ jsx6(Plus, { size: 14 }) }),
+      /* @__PURE__ */ jsx6("button", { type: "button", onClick: () => setOpen(true), "aria-label": translate("files.openImagePreview"), children: /* @__PURE__ */ jsx6(Maximize2, { size: 14 }) })
+    ] }),
+    /* @__PURE__ */ jsx6("div", { ref: viewportRef, className: "workspace-image-viewport", ...handlers, children: /* @__PURE__ */ jsx6("img", { src, alt, draggable: false, className: dragging ? "is-dragging" : "", style: { transform } }) }),
+    open && /* @__PURE__ */ jsx6(GraphWorkspaceImageLightbox, { src, alt, onClose: () => setOpen(false) })
+  ] });
+}
 
 // src/components/workbench/FilePanelContext.tsx
-import { createContext, useContext } from "react";
-var FilePanelContext = createContext(null);
-var useFilePanel = () => useContext(FilePanelContext);
+import { createContext as createContext2, useContext as useContext2 } from "react";
+var FilePanelContext = createContext2(null);
+var useFilePanel = () => useContext2(FilePanelContext);
 
 // src/components/graph-chat/graphChatShiki.ts
 var graphChatHighlighterPromise = null;
@@ -1229,15 +1289,36 @@ function externalLinkProps(href) {
   return {};
 }
 
+// src/components/markdownHtml.ts
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+var schema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    "*": [...(defaultSchema.attributes?.["*"] ?? []).filter((attribute) => attribute !== "align"), ["align", "left", "center", "right"]],
+    code: [["className", /^language-./, "math-inline", "math-display"]],
+    details: [...defaultSchema.attributes?.details ?? [], "open"]
+  },
+  strip: [...defaultSchema.strip ?? [], "style", "iframe", "object", "embed"],
+  protocols: {
+    ...defaultSchema.protocols,
+    // Preserve adapter links and Windows drive paths; the URL transform still
+    // rejects non-file drive schemes before any browser anchor is created.
+    href: [...defaultSchema.protocols?.href ?? [], "file", "workspace-auto", ..."abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"]
+  }
+};
+var markdownHtmlPlugins = [rehypeRaw, [rehypeSanitize, schema]];
+
 // src/components/WorkspaceFileLink.tsx
-import { useEffect as useEffect4, useRef as useRef2, useState as useState2 } from "react";
+import { useEffect as useEffect4, useRef as useRef3, useState as useState3 } from "react";
 import { createPortal as createPortal4 } from "react-dom";
 import { Fragment as Fragment2, jsx as jsx7, jsxs as jsxs5 } from "react/jsx-runtime";
 function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-inline-link" }) {
   useI18n();
-  const [menu, setMenu] = useState2(null);
-  const [copyError, setCopyError] = useState2(false);
-  const menuRef = useRef2(null);
+  const [menu, setMenu] = useState3(null);
+  const [copyError, setCopyError] = useState3(false);
+  const menuRef = useRef3(null);
   const displayPath = path.startsWith("/") || /^[a-z]:/i.test(path) ? path : `./${path.replace(/^\.\//, "")}`;
   const address = displayPath + (line ? `#L${line}` : "");
   useEffect4(() => {
@@ -1294,8 +1375,10 @@ function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-i
 export {
   cn,
   Button,
+  MarkdownImageLinkContext,
   GraphWorkspaceImageLightbox,
   ZoomableImage,
+  WorkspaceImagePreview,
   Tooltip,
   TooltipTrigger,
   TooltipContent,
@@ -1326,6 +1409,7 @@ export {
   findFirstPreviewNode,
   collectAncestorPaths,
   externalLinkProps,
+  markdownHtmlPlugins,
   WorkspaceFileLink,
   documentStores,
   documentListeners,
