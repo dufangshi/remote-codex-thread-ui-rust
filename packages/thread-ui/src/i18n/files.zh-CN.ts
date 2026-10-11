@@ -1,4 +1,6 @@
 export const filesZhCN = {
+  "files.copyFilePath": "复制文件路径",
+  "files.copyFileName": "复制文件名",
   "files.fileActions": "文件操作",
   "files.reloadFile": "重新读取文件",
   "files.fileReloaded": "文件已更新",

@@ -1336,6 +1336,8 @@ var devicesEn = {
 
 // src/i18n/files.en.ts
 var filesEn = {
+  "files.copyFilePath": "Copy file path",
+  "files.copyFileName": "Copy file name",
   "files.fileActions": "File actions",
   "files.reloadFile": "Reload from disk",
   "files.fileReloaded": "File reloaded",
@@ -4149,6 +4151,8 @@ var devicesZhCN = {
 
 // src/i18n/files.zh-CN.ts
 var filesZhCN = {
+  "files.copyFilePath": "\u590D\u5236\u6587\u4EF6\u8DEF\u5F84",
+  "files.copyFileName": "\u590D\u5236\u6587\u4EF6\u540D",
   "files.fileActions": "\u6587\u4EF6\u64CD\u4F5C",
   "files.reloadFile": "\u91CD\u65B0\u8BFB\u53D6\u6587\u4EF6",
   "files.fileReloaded": "\u6587\u4EF6\u5DF2\u66F4\u65B0",

@@ -6,6 +6,8 @@ import { externalLinkProps } from '../externalLinkProps';
 import { WorkspaceFileLink } from '../WorkspaceFileLink';
 import { WorkspaceImagePreview, ZoomableImage as GraphWorkspaceZoomableImage } from '../ZoomableImage';
 import {
+  createContext,
+  useContext,
   lazy,
   memo,
   Suspense,
@@ -19,8 +21,6 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
-  Check,
-  Circle,
   Code2,
   Download,
   Pencil,
@@ -32,7 +32,7 @@ import {
 } from 'lucide-react';
 import { useFilePanel } from '../workbench/FilePanelContext';
 import { WorkspaceFileActions } from './WorkspaceFileMenu';
-import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
+import ReactMarkdown, { defaultUrlTransform, type Components } from 'react-markdown';
 import { localFileHref, relativeWorkspacePath, normalizeFileSystemPath } from '../workspacePaths';
 import remarkGfm from 'remark-gfm';
 import { markdownHtmlPlugins } from '../markdownHtml';
@@ -314,6 +314,35 @@ const GraphWorkspaceCodePreview = memo(function GraphWorkspaceCodePreview({
   );
 });
 
+type MarkdownResourceContextValue = {
+  markdownPath: string;
+  workspaceRootPath?: string;
+  onOpenWorkspaceFile?: (path: string) => void;
+  resolveWorkspaceFileUrl?: (path: string) => string | null;
+};
+const MarkdownResourceContext = createContext<MarkdownResourceContextValue>({ markdownPath: '' });
+
+// Stable component types keep image state alive when Explorer updates its callbacks.
+// Defining these inside the preview remounted every image (and closed its lightbox).
+const workspaceMarkdownComponents: Components = {
+  a({ href, children: originalChildren, node: _node, ...props }) {
+    const { markdownPath, workspaceRootPath, onOpenWorkspaceFile } = useContext(MarkdownResourceContext);
+    const children = <MarkdownImageLinkContext.Provider value={true}>{originalChildren}</MarkdownImageLinkContext.Provider>;
+    const workspacePath = href ? resolveWorkspaceMarkdownPath({ markdownPath, resourceUrl: href, workspaceRootPath: workspaceRootPath ?? '' }) : null;
+    if (workspacePath && onOpenWorkspaceFile) {
+      return <WorkspaceFileLink path={workspacePath} onOpen={({ path }) => onOpenWorkspaceFile(path)}>{children}</WorkspaceFileLink>;
+    }
+    return <a {...props} {...externalLinkProps(href)} href={href}>{children}</a>;
+  },
+  img({ src, alt, ...props }) {
+    const { markdownPath, workspaceRootPath, resolveWorkspaceFileUrl } = useContext(MarkdownResourceContext);
+    const workspacePath = src ? resolveWorkspaceMarkdownPath({ markdownPath, resourceUrl: src, workspaceRootPath: workspaceRootPath ?? '' }) : null;
+    const resolvedSrc = workspacePath ? (resolveWorkspaceFileUrl?.(workspacePath) ?? src) : src;
+    return resolvedSrc ? <GraphWorkspaceZoomableImage src={resolvedSrc} alt={alt ?? ''} loading="lazy"
+      className={props.className} width={props.width} height={props.height} /> : null;
+  },
+};
+
 const GraphWorkspaceMarkdownPreview = memo(
   function GraphWorkspaceMarkdownPreview({
     content,
@@ -354,60 +383,19 @@ const GraphWorkspaceMarkdownPreview = memo(
         element.removeEventListener('load', restore, true);
       };
     }, [markdownPath, readingPositions]);
-    const resolvePath = (resourceUrl: string | undefined) =>
-      resourceUrl
-        ? resolveWorkspaceMarkdownPath({
-            markdownPath,
-            resourceUrl,
-            workspaceRootPath: workspaceRootPath ?? '',
-          })
-        : null;
-
     return (
       <div ref={scrollRef} onScroll={event => { lastScrollTop.current = event.currentTarget.scrollTop; readingPositions?.set(markdownPath, lastScrollTop.current); }} className="thread-graph-markdown thread-graph-markdown-preview min-h-0 flex-1 overflow-auto px-5 py-4 sm:px-7 sm:py-6">
         <div className="thread-graph-markdown-document">
+        <MarkdownResourceContext.Provider value={{ markdownPath, workspaceRootPath, onOpenWorkspaceFile, resolveWorkspaceFileUrl }}>
         <ReactMarkdown
           urlTransform={url => localFileHref(url, typeof window === 'undefined' ? undefined : window.location.origin) ? url : defaultUrlTransform(url)}
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[...markdownHtmlPlugins]}
-          components={{
-            a({ href, children: originalChildren, node: _node, ...props }) {
-              const children = <MarkdownImageLinkContext.Provider value={true}>{originalChildren}</MarkdownImageLinkContext.Provider>;
-              const workspacePath = resolvePath(href);
-              if (workspacePath && onOpenWorkspaceFile) {
-                return (
-                  <WorkspaceFileLink path={workspacePath} onOpen={({path})=>onOpenWorkspaceFile(path)}>{children}</WorkspaceFileLink>
-                );
-              }
-              return (
-                <a {...props} {...externalLinkProps(href)} href={href}>
-                  {children}
-                </a>
-              );
-            },
-            img({ src, alt, ...props }) {
-              const workspacePath = resolvePath(src);
-              const resolvedSrc = workspacePath
-                ? (resolveWorkspaceFileUrl?.(workspacePath) ?? src)
-                : src;
-              if (!resolvedSrc) {
-                return null;
-              }
-              return (
-                <GraphWorkspaceZoomableImage
-                  src={resolvedSrc}
-                  alt={alt ?? ''}
-                  loading="lazy"
-                  className={props.className}
-                  width={props.width}
-                  height={props.height}
-                />
-              );
-            },
-          }}
+          components={workspaceMarkdownComponents}
         >
           {content}
         </ReactMarkdown>
+        </MarkdownResourceContext.Provider>
         </div>
       </div>
     );
@@ -636,15 +624,13 @@ export function GraphWorkspacePreviewPane({
     ) : null;
   const documentState = document ? translate(document.snapshot.readOnlyReason ? 'files.safeReadOnly' : document.needsVerification && document.phase==='clean' ? 'files.safeAdoptedSnapshot' : `files.safePhase.${document.phase}`, { reason: document.snapshot.readOnlyReason ? translateReadOnly(document.snapshot.readOnlyReason) : '' }) : null;
   const documentMetadata = document ? `${documentState} · ${document.snapshot.encoding==='utf-8' ? 'UTF-8' : translate('files.safeUnknownEncoding')}${document.snapshot.bom ? ' BOM' : ''} · ${document.snapshot.eol.toUpperCase()}` : undefined;
-  const inlineStatus = document && <span role="status" data-testid="workspace-document-status" className="workspace-file-state" data-phase={document.phase} title={documentMetadata}>
-    {document.phase==='clean' ? <Check size={13} aria-hidden="true"/> : <Circle size={10} aria-hidden="true"/>}<span className="sr-only">{documentState}</span>
-  </span>;
+  const inlineStatus = document && <span role="status" data-testid="workspace-document-status" className="sr-only" data-phase={document.phase}>{documentState}</span>;
   const backLabel = previousFilePath ? translate('files.backToDocument', { name: previousFilePath.split('/').pop() ?? previousFilePath }) : translate('workbench.goBack');
   const navigationControls = <>
-    {onNavigateBack && <button type="button" onClick={onNavigateBack} aria-label={backLabel} title={backLabel} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowLeft size={14} /></button>}
     {onNavigateForward && <button type="button" onClick={onNavigateForward} aria-label={translate('files.goForward')} title={translate('files.goForward')} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowRight size={14} /></button>}
   </>;
-  const fileActions = activeNode && <WorkspaceFileActions key={activeNode.path} {...((documentMetadata || filePanel?.label) ? { metadata:[filePanel?.label, documentMetadata].filter(Boolean).join(' · ') } : {})}
+  const copyPath = activeNode?.path && !/^(?:\/|[a-z]:[\\/])/i.test(activeNode.path) && workspaceRootPath ? `${workspaceRootPath.replace(/[\\/]+$/, '')}/${activeNode.path}` : activeNode?.path ?? '';
+  const fileActions = activeNode && <WorkspaceFileActions path={copyPath} key={activeNode.path} {...((documentMetadata || filePanel?.label) ? { metadata:[filePanel?.label, documentMetadata].filter(Boolean).join(' · ') } : {})}
     {...(document ? {onDownload:()=>{ if (!isProtected(document) && onDownloadFile) void onDownloadFile(); else downloadDraft(document); }, onRefresh: async () => {
       const previous = document.snapshot.contentHash;
       await documents?.checkDisk(document.snapshot.path);
@@ -676,7 +662,7 @@ export function GraphWorkspacePreviewPane({
     </button>
   ) : null;
 
-  const previewNavigation = (onReturnToFiles || onExpandExplorer) && <button type="button" className="workspace-preview-back" onClick={onReturnToFiles ?? onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><ArrowLeft size={18}/></button>;
+  const previewNavigation = (onNavigateBack || onReturnToFiles || onExpandExplorer) && <button type="button" className="workspace-preview-back" onClick={onNavigateBack ?? onReturnToFiles ?? onExpandExplorer} aria-label={onNavigateBack ? backLabel : translate('files.backToFiles')} title={onNavigateBack ? backLabel : translate('files.backToFiles')} data-testid="expand-explorer"><ArrowLeft size={18}/></button>;
   const previewActions = <button ref={actionTrigger} type="button" className="thread-graph-editor-toolbar-button workspace-file-more" aria-label={translate('files.fileActions')} title={translate('files.fileActions')} aria-expanded={actionsOpen} onClick={() => setActionsOpen(open => !open)}><MoreHorizontal size={18}/></button>;
 
   return (

@@ -208,6 +208,26 @@ describe('GraphWorkspacePreviewPane', () => {
     expect(onOpenWorkspaceFile).toHaveBeenCalledWith('docs/details.md');
   });
 
+  it('keeps an open README image and its zoom across parent callback refreshes', () => {
+    const view = () => <GraphWorkspacePreviewPane plugins={createDefaultPluginContextValue()}
+      selectedTarget={{ kind: 'workspace-file', node: markdownNode }}
+      previewFile={{ path: markdownNode.path, name: markdownNode.name, content: '![Diagram](../assets/system.png)', language: 'markdown', size: 40, truncated: false, nextOffset: 40 }}
+      workspaceRootPath="/home/u/treer"
+      onOpenWorkspaceFile={() => undefined}
+      resolveWorkspaceFileUrl={path => `/raw?path=${encodeURIComponent(path)}`} />;
+    const element = render(view());
+    act(() => element.querySelector<HTMLButtonElement>('[aria-label="Open image preview: Diagram"]')!.click());
+    const dialog = document.body.querySelector('[role="dialog"]')!;
+    act(() => dialog.querySelector<HTMLButtonElement>('[aria-label="Zoom in"]')!.click());
+    expect(dialog.textContent).toContain('125%');
+    // Explorer refreshes recreate callbacks, even while the file stays the same.
+    act(() => root!.render(view()));
+    expect(document.body.querySelector('[role="dialog"]')).toBe(dialog);
+    expect(dialog.textContent).toContain('125%');
+    act(() => dialog.querySelector<HTMLButtonElement>('[aria-label="Close image preview"]')!.click());
+    expect(document.body.querySelector('[role="dialog"]')).toBeNull();
+  });
+
   it('opens direct image files in the same lightbox and closes from the toolbar', () => {
     const imageNode: WorkspaceTreeNode = {
       id: 'workspace:images/diagram.png',

@@ -1,4 +1,6 @@
 export const filesEn = {
+  "files.copyFilePath": "Copy file path",
+  "files.copyFileName": "Copy file name",
   "files.fileActions": "File actions",
   "files.reloadFile": "Reload from disk",
   "files.fileReloaded": "File reloaded",

@@ -446,6 +446,7 @@ export function GraphWorkspaceExplorer({
         setSelectedNodeId(nodeId);
       }}
       onSelectNode={(node) => {
+        setNavigation(current => ({ ...current, paths: [], index: -1 }));
         setFocusedLine(null);
         if ((isMobileViewport || collapsedPanel === 'viewer') && node.kind !== 'directory') {
           rememberExplorerScroll();
@@ -491,7 +492,10 @@ export function GraphWorkspaceExplorer({
       {...(workspaceAdapter?.textRangeRead ? { onLoadMore: handleLoadMore } : {})}
       onReturnToFiles={() => { setNavigation(current => ({ ...current, paths: [], index: -1 })); setCollapsedPanel('viewer'); }}
       onCloseFileTab={handleCloseTab}
-      onSelectFileTab={(path) => void focusWorkspacePath(path)}
+      onSelectFileTab={(path) => {
+        setNavigation(current => ({ ...current, paths: [], index: -1 }));
+        void focusWorkspacePath(path);
+      }}
       documents={documents}
       resourceScopeKey={documents.source}
       canSaveDocument={Boolean(workspaceAdapter?.saveDocument)}

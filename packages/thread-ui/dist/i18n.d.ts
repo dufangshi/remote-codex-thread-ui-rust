@@ -1042,6 +1042,8 @@ declare const en: {
     readonly "settings.upstreamsResponses": "Responses";
     readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
     readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
+    readonly "files.copyFilePath": "Copy file path";
+    readonly "files.copyFileName": "Copy file name";
     readonly "files.fileActions": "File actions";
     readonly "files.reloadFile": "Reload from disk";
     readonly "files.fileReloaded": "File reloaded";
@@ -3820,6 +3822,8 @@ declare const zhCN: {
     "settings.upstreamsResponses": "Responses";
     "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
     "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
+    "files.copyFilePath": "复制文件路径";
+    "files.copyFileName": "复制文件名";
     "files.fileActions": "文件操作";
     "files.reloadFile": "重新读取文件";
     "files.fileReloaded": "文件已更新";
@@ -6620,6 +6624,8 @@ declare const resources: {
         readonly "settings.upstreamsResponses": "Responses";
         readonly "settings.dshRunModeBroken": "{{value1}} (unavailable: {{value2}})";
         readonly "settings.dshRunModeBrokenUnknown": "DSH reports it cannot load";
+        readonly "files.copyFilePath": "Copy file path";
+        readonly "files.copyFileName": "Copy file name";
         readonly "files.fileActions": "File actions";
         readonly "files.reloadFile": "Reload from disk";
         readonly "files.fileReloaded": "File reloaded";
@@ -9397,6 +9403,8 @@ declare const resources: {
         "settings.upstreamsResponses": "Responses";
         "settings.dshRunModeBroken": "{{value1}}（不可用：{{value2}}）";
         "settings.dshRunModeBrokenUnknown": "DSH 报告无法加载";
+        "files.copyFilePath": "复制文件路径";
+        "files.copyFileName": "复制文件名";
         "files.fileActions": "文件操作";
         "files.reloadFile": "重新读取文件";
         "files.fileReloaded": "文件已更新";

@@ -79,7 +79,7 @@ export function WorkspaceFileTabs({
                   className={`flex h-full min-w-0 flex-1 items-center gap-1.5 px-2.5 text-left text-xs ${tab.pinned ? '' : 'italic'}`}
                 >
                   <FileCode2 className="h-3.5 w-3.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
-                  <span className="truncate">{tab.name}</span>
+                  <span className="workspace-file-tab-name" dir="rtl"><bdi dir="ltr">{tab.name}</bdi></span>
                 </button>
                 <button
                   type="button"
