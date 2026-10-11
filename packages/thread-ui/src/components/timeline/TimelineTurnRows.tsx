@@ -749,11 +749,12 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
     collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
-  // A background turn is a sequence of waiting/wake/report episodes. Keep
-  // these anchors and narrative visible even when operation details collapse.
-  const hasBackgroundAnchors = mergedItems.some(item => item.origin === 'nativeBackgroundWait' || item.origin === 'nativeTaskNotification');
-  const backgroundNarrative = hasBackgroundAnchors ? groupedItems.filter(entry => entry.kind === 'item' &&
-    (entry.item.kind === 'agentMessage' || entry.item.origin === 'nativeBackgroundWait' || entry.item.origin === 'nativeTaskNotification')) : [];
+  // Keep only the current background status beside the latest reply when
+  // folded. Earlier wake episodes and progress belong to the expandable body.
+  const latestBackgroundAnchor = groupedItems.findLast(entry => entry.kind === 'item' &&
+    (entry.item.origin === 'nativeBackgroundWait' || entry.item.origin === 'nativeTaskNotification'));
+  const backgroundSummary = latestBackgroundAnchor ? groupedItems.filter(entry =>
+    entry === latestBackgroundAnchor || (entry.kind === 'item' && entry.item.id === visibleSummaryAgent?.id)) : [];
 
   const canToggleWorkedSummary =
     hasCollapsedHiddenItems;
@@ -821,8 +822,8 @@ export const ThreadTurnRow = memo(function ThreadTurnRow({
           />
         </div>
         {!effectiveCollapsed ? <div className="thread-execution-timeline">{renderHistoryEntries(collapsedSummary.hiddenEntries)}</div> : null}
-        {effectiveCollapsed && backgroundNarrative.length > 0 ? (
-          <div className="thread-execution-timeline">{renderHistoryEntries(backgroundNarrative)}</div>
+        {effectiveCollapsed && backgroundSummary.length > 0 ? (
+          <div className="thread-execution-timeline">{renderHistoryEntries(backgroundSummary)}</div>
         ) : visibleSummaryAgent ? (
           <CompactMessageItem
             threadId={threadId}

@@ -68,7 +68,7 @@ it('replaces waiting with the wake cause using the same timeline anchor', async 
   expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
 });
 
-it('keeps wake and narrative visible while a completed turn collapses its operations', async () => {
+it('folds earlier wake episodes and progress while retaining the latest wake and report', async () => {
   const { ThreadTimeline } = await import('../ThreadTimeline');
   const container=document.createElement('div');
   document.body.appendChild(container);
@@ -78,15 +78,35 @@ it('keeps wake and narrative visible while a completed turn collapses its operat
     id:'turn',status:'completed',error:null,startedAt:'2026-10-10T18:30:00Z',completedAt:'2026-10-10T18:31:00Z',items:[
       {id:'prompt',kind:'userMessage',text:'Check after the build'},
       {id:'foreground',kind:'agentMessage',text:'Waiting for the build'},
+      {id:'previous-wake',kind:'other',text:'Earlier task finished',origin:'nativeTaskNotification',taskStatus:'completed'},
+      {id:'progress',kind:'agentMessage',text:'Checking intermediate results'},
       {id:'wait',kind:'other',text:'Build finished',origin:'nativeTaskNotification',taskStatus:'completed'},
       {id:'command',kind:'commandExecution',text:'verify command',status:'completed'},
       {id:'final',kind:'agentMessage',text:'Verified report'},
     ],
   }]} />));
-  expect(container.textContent).toContain('Waiting for the build');
+  expect(container.textContent).not.toContain('Waiting for the build');
+  expect(container.textContent).not.toContain('Checking intermediate results');
+  expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
   expect(container.textContent).toContain('Awakened');
   expect(container.textContent).toContain('Verified report');
   expect(container.textContent).not.toContain('verify command');
   expect(container.querySelectorAll('[data-role="user"]')).toHaveLength(1);
   expect(container.querySelectorAll('.thread-graph-worked-summary')).toHaveLength(1);
+  const toggle = container.querySelector<HTMLButtonElement>('.thread-graph-worked-summary button')!;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    await act(async () => toggle.click());
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(container.textContent).toContain('Waiting for the build');
+    expect(container.textContent).toContain('Checking intermediate results');
+    expect(container.textContent).toContain('verify command');
+    expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(2);
+    await act(async () => toggle.click());
+    expect(container.textContent).not.toContain('Waiting for the build');
+    expect(container.textContent).not.toContain('Checking intermediate results');
+    expect(container.textContent).not.toContain('verify command');
+    expect(container.textContent).toContain('Verified report');
+    expect(container.querySelectorAll('.thread-graph-task-notice')).toHaveLength(1);
+  }
 });

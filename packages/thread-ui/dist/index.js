@@ -14688,8 +14688,8 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
   const hasCollapsedHiddenItems = collapsedSummary.hiddenEntries.length > 0 || Boolean(turn.hasDeferredItems);
   const effectiveCollapsed = isCollapsed && hasCollapsedHiddenItems;
   const visibleSummaryAgent = effectiveCollapsed ? collapsedSummary.latestAgent : collapsedSummary.finalAgent;
-  const hasBackgroundAnchors = mergedItems.some((item) => item.origin === "nativeBackgroundWait" || item.origin === "nativeTaskNotification");
-  const backgroundNarrative = hasBackgroundAnchors ? groupedItems.filter((entry) => entry.kind === "item" && (entry.item.kind === "agentMessage" || entry.item.origin === "nativeBackgroundWait" || entry.item.origin === "nativeTaskNotification")) : [];
+  const latestBackgroundAnchor = groupedItems.findLast((entry) => entry.kind === "item" && (entry.item.origin === "nativeBackgroundWait" || entry.item.origin === "nativeTaskNotification"));
+  const backgroundSummary = latestBackgroundAnchor ? groupedItems.filter((entry) => entry === latestBackgroundAnchor || entry.kind === "item" && entry.item.id === visibleSummaryAgent?.id) : [];
   const canToggleWorkedSummary = hasCollapsedHiddenItems;
   const terminalWorkedNode = isTerminalTurnStatus(turn.status) && !hasCollapsedHiddenItems ? /* @__PURE__ */ jsxs48("div", { className: "thread-graph-worked-summary flex w-full items-center gap-2 py-2 text-sm", children: [
     /* @__PURE__ */ jsx59("span", { className: "thread-graph-worked-label shrink-0", children: workedLabel }),
@@ -14749,7 +14749,7 @@ var ThreadTurnRow = memo6(function ThreadTurnRow2({
       )
     ] }),
     !effectiveCollapsed ? /* @__PURE__ */ jsx59("div", { className: "thread-execution-timeline", children: renderHistoryEntries(collapsedSummary.hiddenEntries) }) : null,
-    effectiveCollapsed && backgroundNarrative.length > 0 ? /* @__PURE__ */ jsx59("div", { className: "thread-execution-timeline", children: renderHistoryEntries(backgroundNarrative) }) : visibleSummaryAgent ? /* @__PURE__ */ jsx59(
+    effectiveCollapsed && backgroundSummary.length > 0 ? /* @__PURE__ */ jsx59("div", { className: "thread-execution-timeline", children: renderHistoryEntries(backgroundSummary) }) : visibleSummaryAgent ? /* @__PURE__ */ jsx59(
       GraphChatCompactMessageItem,
       {
         threadId,
