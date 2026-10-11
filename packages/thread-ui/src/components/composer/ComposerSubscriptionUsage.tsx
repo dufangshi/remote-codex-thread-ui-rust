@@ -49,7 +49,7 @@ export function ComposerSubscriptionUsage({
     <button
       ref={ref}
       type="button"
-      className={`thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-4 items-center gap-1 rounded-t-md border border-b-0 border-stone-500/50 bg-stone-950 px-1 text-[9px] font-normal leading-none text-stone-200 shadow-sm transition-[border-color,background-color,opacity] duration-200 hover:border-stone-400/75 hover:bg-stone-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:text-[9px] ${usage.stale ? 'opacity-70' : 'opacity-95'}`}
+      className={`thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-3 items-center gap-1 rounded px-1 text-[8px] font-normal leading-none text-stone-400 transition-[color,opacity] duration-200 hover:text-stone-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:h-4 sm:text-[9px] ${usage.stale ? 'opacity-60' : 'opacity-85'}`}
       aria-label={translate("chat.subscriptionUsage", { value1: usage.provider, value2: description, value3: freshness })}
       aria-expanded={detailsVisible}
       onClick={() => setDetailsVisible((current) => !current)}
@@ -62,7 +62,7 @@ export function ComposerSubscriptionUsage({
             <span className="font-normal tracking-[-0.01em]">{window.label}</span>
             <span
               data-subscription-window-track="true"
-              className="h-0.5 w-7 overflow-hidden rounded-full bg-stone-600/55 sm:w-9"
+              className="h-0.5 w-6 overflow-hidden rounded-full bg-stone-600/55 sm:w-9"
             >
               <span
                 className="block h-full rounded-full transition-[width] duration-500 ease-out"

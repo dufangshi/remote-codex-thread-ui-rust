@@ -9,6 +9,7 @@ import { useCompactComposer } from './useCompactComposer';
 import { InputGroup } from '../graph-ui/InputGroup';
 import { ComposerHiddenAttachmentInputs } from './ComposerHiddenAttachmentInputs';
 import { ComposerJumpLatestButton } from './ComposerJumpLatestButton';
+import { ComposerSubscriptionUsage, visibleSubscriptionWindows } from './ComposerSubscriptionUsage';
 
 export interface ComposerFrameProps {
   activeView: 'chat' | 'shell';
@@ -80,7 +81,6 @@ export function ComposerFrame({
         onJumpToPreviousTurn={onJumpToPreviousTurn}
         canJumpToNextTurn={canJumpToNextTurn}
         onJumpToNextTurn={onJumpToNextTurn}
-        subscriptionUsage={subscriptionUsage}
       />
 
       {pendingQueueSlot}
@@ -105,6 +105,11 @@ export function ComposerFrame({
           {goalSlot}
           {shellPromptSlot}
         </div>
+        {activeView === 'chat' && visibleSubscriptionWindows(subscriptionUsage).length > 0 ? (
+          <div className="thread-composer-usage-footer relative mt-0.5 h-3 sm:h-4">
+            <ComposerSubscriptionUsage usage={subscriptionUsage} />
+          </div>
+        ) : null}
         {error ? (
           <div className="mt-2 rounded-2xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
             {error}

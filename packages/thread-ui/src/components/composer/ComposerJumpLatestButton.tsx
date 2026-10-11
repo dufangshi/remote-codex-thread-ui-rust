@@ -1,6 +1,4 @@
 import { translate, useI18n } from '../../i18n';
-import type { AgentSubscriptionUsageDto } from '@pockymoe/shared';
-import { ComposerSubscriptionUsage, visibleSubscriptionWindows } from './ComposerSubscriptionUsage';
 import { WorkbenchPaneSwitchButton, useWorkbenchPaneSwitch } from '../workbench/paneSwitch';
 
 type JumpLatestProps = {
@@ -10,7 +8,6 @@ type JumpLatestProps = {
   onJumpToPreviousTurn?: (() => void) | undefined;
   canJumpToNextTurn?: boolean | undefined;
   onJumpToNextTurn?: (() => void) | undefined;
-  subscriptionUsage?: AgentSubscriptionUsageDto | null;
 };
 
 export function ComposerJumpLatestButton({
@@ -28,13 +25,10 @@ function JumpLatestStrip({
   onJumpToPreviousTurn,
   canJumpToNextTurn,
   onJumpToNextTurn,
-  subscriptionUsage,
 }: JumpLatestProps) {
   useI18n();
   const paneSwitch = useWorkbenchPaneSwitch();
-  // Clear the usage tab at the composer's top-right edge.
-  const position = !paneSwitch ? 'bottom-1'
-    : visibleSubscriptionWindows(subscriptionUsage).length ? 'bottom-[1.125rem]' : 'bottom-0';
+  const position = paneSwitch ? 'bottom-0' : 'bottom-1';
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[90] h-11 -translate-y-full bg-transparent touch-manipulation sm:h-10">
@@ -96,7 +90,6 @@ function JumpLatestStrip({
       </span>
       {paneSwitch && <WorkbenchPaneSwitchButton target="reference" value={paneSwitch} />}
       </div>
-      <ComposerSubscriptionUsage usage={subscriptionUsage} />
     </div>
   );
 }

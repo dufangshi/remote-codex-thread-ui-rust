@@ -1383,9 +1383,131 @@ function ComposerHiddenAttachmentInputs({
   ] });
 }
 
-// src/components/composer/ComposerSubscriptionUsage.tsx
-import { useEffect, useRef as useRef2, useState as useState2 } from "react";
+// src/components/workbench/paneSwitch.tsx
+import { createContext, useContext, useEffect } from "react";
 import { jsx as jsx4, jsxs as jsxs3 } from "react/jsx-runtime";
+var WorkbenchPaneSwitchContext = createContext(null);
+function useWorkbenchPaneSwitch() {
+  const value = useContext(WorkbenchPaneSwitchContext);
+  const claim = value?.claim;
+  const pane = value?.pane;
+  useEffect(() => claim && pane ? claim(pane) : void 0, [claim, pane]);
+  return value;
+}
+function PaneGlyph({ side }) {
+  return /* @__PURE__ */ jsxs3("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "thread-pane-switch-glyph", children: [
+    /* @__PURE__ */ jsx4("rect", { x: "1.75", y: "2.75", width: "12.5", height: "10.5", rx: "2.5", fill: "none", stroke: "currentColor", strokeWidth: "1.4" }),
+    /* @__PURE__ */ jsx4("rect", { x: side === "primary" ? 3.4 : 8.35, y: "4.4", width: "4.25", height: "7.2", rx: "1.1", fill: "currentColor" })
+  ] });
+}
+function WorkbenchPaneSwitchButton({ target, value }) {
+  const title = value.titles[target];
+  return /* @__PURE__ */ jsxs3(
+    "button",
+    {
+      type: "button",
+      className: "thread-pane-switch",
+      "data-side": target,
+      "aria-pressed": value.active === target,
+      "aria-label": translate(target === "primary" ? "workbench.showLeftConversation" : "workbench.showRightConversation", { value1: title }),
+      title,
+      onClick: () => value.select(target),
+      children: [
+        target === "primary" && /* @__PURE__ */ jsx4(PaneGlyph, { side: "primary" }),
+        /* @__PURE__ */ jsx4("span", { children: title }),
+        target === "reference" && /* @__PURE__ */ jsx4(PaneGlyph, { side: "reference" })
+      ]
+    }
+  );
+}
+
+// src/components/composer/ComposerJumpLatestButton.tsx
+import { jsx as jsx5, jsxs as jsxs4 } from "react/jsx-runtime";
+function ComposerJumpLatestButton({
+  activeView,
+  ...props
+}) {
+  return activeView === "chat" ? /* @__PURE__ */ jsx5(JumpLatestStrip, { ...props }) : null;
+}
+function JumpLatestStrip({
+  followTail,
+  onToggleFollow,
+  canJumpToPreviousTurn,
+  onJumpToPreviousTurn,
+  canJumpToNextTurn,
+  onJumpToNextTurn
+}) {
+  useI18n();
+  const paneSwitch = useWorkbenchPaneSwitch();
+  const position = paneSwitch ? "bottom-0" : "bottom-1";
+  return /* @__PURE__ */ jsx5("div", { className: "pointer-events-none absolute inset-x-0 top-0 z-[90] h-11 -translate-y-full bg-transparent touch-manipulation sm:h-10", children: /* @__PURE__ */ jsxs4("div", { className: `thread-jump-latest-cluster pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 ${position} ${paneSwitch ? "has-pane-switch" : ""}`, children: [
+    paneSwitch && /* @__PURE__ */ jsx5(WorkbenchPaneSwitchButton, { target: "primary", value: paneSwitch }),
+    /* @__PURE__ */ jsxs4(
+      "span",
+      {
+        role: "group",
+        "aria-label": translate("chat.timelineNavigation"),
+        className: `thread-jump-latest-badge pointer-events-auto inline-flex h-5 min-w-[7.5rem] shrink-0 overflow-hidden rounded-[0.7rem] border shadow-sm transition ${followTail ? "is-active border-sky-300/36 bg-sky-300/[0.03] text-sky-100/86" : "border-stone-500/70 bg-stone-950/[0.08] text-stone-200/86"}`,
+        children: [
+          /* @__PURE__ */ jsx5(
+            "button",
+            {
+              type: "button",
+              "aria-label": translate("chat.jumpToPreviousTurn"),
+              title: canJumpToPreviousTurn ? translate("chat.jumpToTheStartOfThePrevious") : translate("chat.noEarlierTurn"),
+              disabled: !canJumpToPreviousTurn,
+              onClick: () => onJumpToPreviousTurn?.(),
+              className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35",
+              children: /* @__PURE__ */ jsx5("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-3.5 w-3.5 fill-none stroke-current", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsx5("path", { d: "M3.5 12h9M8 10V5M6 7l2-2 2 2" }) })
+            }
+          ),
+          /* @__PURE__ */ jsx5("span", { "aria-hidden": "true", className: "w-px bg-current opacity-20" }),
+          /* @__PURE__ */ jsx5(
+            "button",
+            {
+              type: "button",
+              "data-action": "jump-latest",
+              "aria-label": translate("chat.jumpToLatest"),
+              title: followTail ? translate("chat.latestMessagesAreInView") : translate("chat.jumpToTheBottom"),
+              onClick: () => onToggleFollow?.(),
+              className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70",
+              children: /* @__PURE__ */ jsx5(
+                "svg",
+                {
+                  "aria-hidden": "true",
+                  viewBox: "0 0 16 16",
+                  className: "h-3.5 w-3.5 fill-none stroke-current",
+                  strokeWidth: "1.5",
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  children: /* @__PURE__ */ jsx5("path", { d: "m4 5.5 4 4 4-4M3.5 12.5h9" })
+                }
+              )
+            }
+          ),
+          /* @__PURE__ */ jsx5("span", { "aria-hidden": "true", className: "w-px bg-current opacity-20" }),
+          /* @__PURE__ */ jsx5(
+            "button",
+            {
+              type: "button",
+              "aria-label": translate("chat.jumpToNextTurn"),
+              title: canJumpToNextTurn ? translate("chat.jumpToTheStartOfTheNext") : translate("chat.noLaterTurn"),
+              disabled: !canJumpToNextTurn,
+              onClick: () => onJumpToNextTurn?.(),
+              className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35",
+              children: /* @__PURE__ */ jsx5("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-3.5 w-3.5 fill-none stroke-current", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsx5("path", { d: "M3.5 4h9M8 6v5m-2-2 2 2 2-2" }) })
+            }
+          )
+        ]
+      }
+    ),
+    paneSwitch && /* @__PURE__ */ jsx5(WorkbenchPaneSwitchButton, { target: "reference", value: paneSwitch })
+  ] }) });
+}
+
+// src/components/composer/ComposerSubscriptionUsage.tsx
+import { useEffect as useEffect2, useRef as useRef2, useState as useState2 } from "react";
+import { jsx as jsx6, jsxs as jsxs5 } from "react/jsx-runtime";
 function resetLabel(value) {
   if (!value) return translate("chat.resetTimeUnavailable");
   const date = new Date(value);
@@ -1401,7 +1523,7 @@ function ComposerSubscriptionUsage({
   useI18n();
   const [detailsVisible, setDetailsVisible] = useState2(false);
   const ref = useRef2(null);
-  useEffect(() => {
+  useEffect2(() => {
     if (!detailsVisible) return;
     const outside = (event) => {
       if (!ref.current?.contains(event.target)) setDetailsVisible(false);
@@ -1425,12 +1547,12 @@ function ComposerSubscriptionUsage({
   const observed = new Date(usage.observedAt);
   const updated = Number.isNaN(observed.getTime()) ? translate("chat.updateTimeUnavailable") : translate("chat.updated", { value1: observed.toLocaleString(getLocale()) });
   const freshness = `${usage.stale ? translate("chat.lastKnown") : ""}${updated}`;
-  return /* @__PURE__ */ jsxs3(
+  return /* @__PURE__ */ jsxs5(
     "button",
     {
       ref,
       type: "button",
-      className: `thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-4 items-center gap-1 rounded-t-md border border-b-0 border-stone-500/50 bg-stone-950 px-1 text-[9px] font-normal leading-none text-stone-200 shadow-sm transition-[border-color,background-color,opacity] duration-200 hover:border-stone-400/75 hover:bg-stone-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:text-[9px] ${usage.stale ? "opacity-70" : "opacity-95"}`,
+      className: `thread-subscription-usage group pointer-events-auto absolute bottom-0 right-2 inline-flex h-3 items-center gap-1 rounded px-1 text-[8px] font-normal leading-none text-stone-400 transition-[color,opacity] duration-200 hover:text-stone-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-200/70 sm:right-3 sm:h-4 sm:text-[9px] ${usage.stale ? "opacity-60" : "opacity-85"}`,
       "aria-label": translate("chat.subscriptionUsage", { value1: usage.provider, value2: description, value3: freshness }),
       "aria-expanded": detailsVisible,
       onClick: () => setDetailsVisible((current) => !current),
@@ -1438,14 +1560,14 @@ function ComposerSubscriptionUsage({
         windows.map((window2) => {
           const remaining = Math.max(0, Math.min(100, 100 - window2.usedPercent));
           const hue = Math.round(18 + remaining / 100 * 190);
-          return /* @__PURE__ */ jsxs3("span", { className: "inline-flex items-center gap-0.5", children: [
-            /* @__PURE__ */ jsx4("span", { className: "font-normal tracking-[-0.01em]", children: window2.label }),
-            /* @__PURE__ */ jsx4(
+          return /* @__PURE__ */ jsxs5("span", { className: "inline-flex items-center gap-0.5", children: [
+            /* @__PURE__ */ jsx6("span", { className: "font-normal tracking-[-0.01em]", children: window2.label }),
+            /* @__PURE__ */ jsx6(
               "span",
               {
                 "data-subscription-window-track": "true",
-                className: "h-0.5 w-7 overflow-hidden rounded-full bg-stone-600/55 sm:w-9",
-                children: /* @__PURE__ */ jsx4(
+                className: "h-0.5 w-6 overflow-hidden rounded-full bg-stone-600/55 sm:w-9",
+                children: /* @__PURE__ */ jsx6(
                   "span",
                   {
                     className: "block h-full rounded-full transition-[width] duration-500 ease-out",
@@ -1459,15 +1581,15 @@ function ComposerSubscriptionUsage({
             )
           ] }, window2.id);
         }),
-        usage.stale ? /* @__PURE__ */ jsx4("span", { "aria-hidden": "true", children: "~" }) : null,
-        /* @__PURE__ */ jsxs3(
+        usage.stale ? /* @__PURE__ */ jsx6("span", { "aria-hidden": "true", children: "~" }) : null,
+        /* @__PURE__ */ jsxs5(
           "span",
           {
             role: "tooltip",
             "aria-hidden": !detailsVisible,
             className: `pointer-events-none absolute right-0 bottom-full mb-1 max-w-[calc(100vw-2rem)] rounded-md border border-stone-600/65 bg-stone-950/95 px-1.5 py-1 text-[9px] font-normal leading-4 text-stone-100 shadow-lg transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100 ${detailsVisible ? "translate-y-0 opacity-100" : "translate-y-0.5 opacity-0"}`,
             children: [
-              windows.map((window2) => /* @__PURE__ */ jsxs3("span", { className: "block", children: [
+              windows.map((window2) => /* @__PURE__ */ jsxs5("span", { className: "block", children: [
                 window2.label,
                 " \xB7 ",
                 Math.max(0, Math.round(100 - window2.usedPercent)),
@@ -1475,139 +1597,13 @@ function ComposerSubscriptionUsage({
                 " ",
                 resetLabel(window2.resetsAt)
               ] }, window2.id)),
-              /* @__PURE__ */ jsx4("span", { className: "block", children: freshness })
+              /* @__PURE__ */ jsx6("span", { className: "block", children: freshness })
             ]
           }
         )
       ]
     }
   );
-}
-
-// src/components/workbench/paneSwitch.tsx
-import { createContext, useContext, useEffect as useEffect2 } from "react";
-import { jsx as jsx5, jsxs as jsxs4 } from "react/jsx-runtime";
-var WorkbenchPaneSwitchContext = createContext(null);
-function useWorkbenchPaneSwitch() {
-  const value = useContext(WorkbenchPaneSwitchContext);
-  const claim = value?.claim;
-  const pane = value?.pane;
-  useEffect2(() => claim && pane ? claim(pane) : void 0, [claim, pane]);
-  return value;
-}
-function PaneGlyph({ side }) {
-  return /* @__PURE__ */ jsxs4("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "thread-pane-switch-glyph", children: [
-    /* @__PURE__ */ jsx5("rect", { x: "1.75", y: "2.75", width: "12.5", height: "10.5", rx: "2.5", fill: "none", stroke: "currentColor", strokeWidth: "1.4" }),
-    /* @__PURE__ */ jsx5("rect", { x: side === "primary" ? 3.4 : 8.35, y: "4.4", width: "4.25", height: "7.2", rx: "1.1", fill: "currentColor" })
-  ] });
-}
-function WorkbenchPaneSwitchButton({ target, value }) {
-  const title = value.titles[target];
-  return /* @__PURE__ */ jsxs4(
-    "button",
-    {
-      type: "button",
-      className: "thread-pane-switch",
-      "data-side": target,
-      "aria-pressed": value.active === target,
-      "aria-label": translate(target === "primary" ? "workbench.showLeftConversation" : "workbench.showRightConversation", { value1: title }),
-      title,
-      onClick: () => value.select(target),
-      children: [
-        target === "primary" && /* @__PURE__ */ jsx5(PaneGlyph, { side: "primary" }),
-        /* @__PURE__ */ jsx5("span", { children: title }),
-        target === "reference" && /* @__PURE__ */ jsx5(PaneGlyph, { side: "reference" })
-      ]
-    }
-  );
-}
-
-// src/components/composer/ComposerJumpLatestButton.tsx
-import { jsx as jsx6, jsxs as jsxs5 } from "react/jsx-runtime";
-function ComposerJumpLatestButton({
-  activeView,
-  ...props
-}) {
-  return activeView === "chat" ? /* @__PURE__ */ jsx6(JumpLatestStrip, { ...props }) : null;
-}
-function JumpLatestStrip({
-  followTail,
-  onToggleFollow,
-  canJumpToPreviousTurn,
-  onJumpToPreviousTurn,
-  canJumpToNextTurn,
-  onJumpToNextTurn,
-  subscriptionUsage
-}) {
-  useI18n();
-  const paneSwitch = useWorkbenchPaneSwitch();
-  const position = !paneSwitch ? "bottom-1" : visibleSubscriptionWindows(subscriptionUsage).length ? "bottom-[1.125rem]" : "bottom-0";
-  return /* @__PURE__ */ jsxs5("div", { className: "pointer-events-none absolute inset-x-0 top-0 z-[90] h-11 -translate-y-full bg-transparent touch-manipulation sm:h-10", children: [
-    /* @__PURE__ */ jsxs5("div", { className: `thread-jump-latest-cluster pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 ${position} ${paneSwitch ? "has-pane-switch" : ""}`, children: [
-      paneSwitch && /* @__PURE__ */ jsx6(WorkbenchPaneSwitchButton, { target: "primary", value: paneSwitch }),
-      /* @__PURE__ */ jsxs5(
-        "span",
-        {
-          role: "group",
-          "aria-label": translate("chat.timelineNavigation"),
-          className: `thread-jump-latest-badge pointer-events-auto inline-flex h-5 min-w-[7.5rem] shrink-0 overflow-hidden rounded-[0.7rem] border shadow-sm transition ${followTail ? "is-active border-sky-300/36 bg-sky-300/[0.03] text-sky-100/86" : "border-stone-500/70 bg-stone-950/[0.08] text-stone-200/86"}`,
-          children: [
-            /* @__PURE__ */ jsx6(
-              "button",
-              {
-                type: "button",
-                "aria-label": translate("chat.jumpToPreviousTurn"),
-                title: canJumpToPreviousTurn ? translate("chat.jumpToTheStartOfThePrevious") : translate("chat.noEarlierTurn"),
-                disabled: !canJumpToPreviousTurn,
-                onClick: () => onJumpToPreviousTurn?.(),
-                className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35",
-                children: /* @__PURE__ */ jsx6("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-3.5 w-3.5 fill-none stroke-current", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsx6("path", { d: "M3.5 12h9M8 10V5M6 7l2-2 2 2" }) })
-              }
-            ),
-            /* @__PURE__ */ jsx6("span", { "aria-hidden": "true", className: "w-px bg-current opacity-20" }),
-            /* @__PURE__ */ jsx6(
-              "button",
-              {
-                type: "button",
-                "data-action": "jump-latest",
-                "aria-label": translate("chat.jumpToLatest"),
-                title: followTail ? translate("chat.latestMessagesAreInView") : translate("chat.jumpToTheBottom"),
-                onClick: () => onToggleFollow?.(),
-                className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70",
-                children: /* @__PURE__ */ jsx6(
-                  "svg",
-                  {
-                    "aria-hidden": "true",
-                    viewBox: "0 0 16 16",
-                    className: "h-3.5 w-3.5 fill-none stroke-current",
-                    strokeWidth: "1.5",
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    children: /* @__PURE__ */ jsx6("path", { d: "m4 5.5 4 4 4-4M3.5 12.5h9" })
-                  }
-                )
-              }
-            ),
-            /* @__PURE__ */ jsx6("span", { "aria-hidden": "true", className: "w-px bg-current opacity-20" }),
-            /* @__PURE__ */ jsx6(
-              "button",
-              {
-                type: "button",
-                "aria-label": translate("chat.jumpToNextTurn"),
-                title: canJumpToNextTurn ? translate("chat.jumpToTheStartOfTheNext") : translate("chat.noLaterTurn"),
-                disabled: !canJumpToNextTurn,
-                onClick: () => onJumpToNextTurn?.(),
-                className: "inline-flex w-10 items-center justify-center transition hover:bg-sky-300/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-sky-200/70 disabled:cursor-default disabled:opacity-35",
-                children: /* @__PURE__ */ jsx6("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", className: "h-3.5 w-3.5 fill-none stroke-current", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: /* @__PURE__ */ jsx6("path", { d: "M3.5 4h9M8 6v5m-2-2 2 2 2-2" }) })
-              }
-            )
-          ]
-        }
-      ),
-      paneSwitch && /* @__PURE__ */ jsx6(WorkbenchPaneSwitchButton, { target: "reference", value: paneSwitch })
-    ] }),
-    /* @__PURE__ */ jsx6(ComposerSubscriptionUsage, { usage: subscriptionUsage })
-  ] });
 }
 
 // src/components/composer/ComposerFrame.tsx
@@ -1656,8 +1652,7 @@ function ComposerFrame({
         canJumpToPreviousTurn,
         onJumpToPreviousTurn,
         canJumpToNextTurn,
-        onJumpToNextTurn,
-        subscriptionUsage
+        onJumpToNextTurn
       }
     ),
     pendingQueueSlot,
@@ -1686,6 +1681,7 @@ function ComposerFrame({
               ]
             }
           ),
+          activeView === "chat" && visibleSubscriptionWindows(subscriptionUsage).length > 0 ? /* @__PURE__ */ jsx7("div", { className: "thread-composer-usage-footer relative mt-0.5 h-3 sm:h-4", children: /* @__PURE__ */ jsx7(ComposerSubscriptionUsage, { usage: subscriptionUsage }) }) : null,
           error ? /* @__PURE__ */ jsx7("div", { className: "mt-2 rounded-2xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200", children: error }) : null
         ]
       }

@@ -3,7 +3,6 @@
  */
 import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
-import type { ComponentProps } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ComposerJumpLatestButton } from './ComposerJumpLatestButton';
@@ -19,7 +18,6 @@ function renderButton({
   onJumpToPreviousTurn = vi.fn(),
   canJumpToNextTurn = true,
   onJumpToNextTurn = vi.fn(),
-  subscriptionUsage,
 }: {
   activeView: 'chat' | 'shell';
   followTail?: boolean;
@@ -28,7 +26,6 @@ function renderButton({
   onJumpToPreviousTurn?: () => void;
   canJumpToNextTurn?: boolean;
   onJumpToNextTurn?: () => void;
-  subscriptionUsage?: ComponentProps<typeof ComposerJumpLatestButton>['subscriptionUsage'];
 }) {
   container = document.createElement('div');
   document.body.appendChild(container);
@@ -44,7 +41,6 @@ function renderButton({
         onJumpToPreviousTurn={onJumpToPreviousTurn}
         canJumpToNextTurn={canJumpToNextTurn}
         onJumpToNextTurn={onJumpToNextTurn}
-        subscriptionUsage={subscriptionUsage}
       />,
     );
   });
@@ -97,28 +93,14 @@ describe('ComposerJumpLatestButton', () => {
     );
   });
 
-  it('keeps timeline navigation centered when subscription usage is visible', () => {
+  it('keeps timeline navigation centered without reserving a second row for usage', () => {
     const { view } = renderButton({
       activeView: 'chat',
-      subscriptionUsage: {
-        provider: 'claude',
-        authKind: 'subscription',
-        observedAt: '2026-07-13T00:00:00.000Z',
-        stale: false,
-        windows: [{
-          id: 'five_hour',
-          durationMinutes: 300,
-          label: '5h',
-          usedPercent: 2,
-          resetsAt: null,
-        }],
-      },
     });
 
     expect(view.querySelector('[aria-label="Timeline navigation"]')?.closest('.thread-jump-latest-cluster')?.className)
       .toContain('left-1/2');
-    expect(view.querySelector('.thread-subscription-usage')?.className)
-      .toContain('right-2');
+    expect(view.querySelector('.thread-subscription-usage')).toBeNull();
   });
 
   it('jumps to the next turn and disables that segment at the last turn', () => {
