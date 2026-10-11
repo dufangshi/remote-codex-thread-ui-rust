@@ -127,3 +127,5 @@ export type { WorkbenchToolPanelControls } from "./components/workbench/toolPane
 export { SettingsDialog } from './components/SettingsDialog';
 
 export { createWorkspacePathResolver } from './components/workspacePathLinks';
+
+export { GraphChatThreadChatPanel } from './components/graph-chat/GraphChatThreadChatPanel';

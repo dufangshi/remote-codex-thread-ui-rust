@@ -320,9 +320,11 @@ export function GraphChatThreadChatPanel({
     [composerHostRef],
   );
 
+  // A workbench pane switch briefly changes focus while the IME is still
+  // visible. Both panes must keep avoiding that viewport, including the strip.
   const mobileComposerBottomOffset =
-    isMobileViewport && mobilePromptFocused
-      ? Math.max(0, mobileKeyboardInset - floatingMobileComposerBottomOffset - panelBottomGap)
+    isMobileViewport && (mobilePromptFocused || floatingDesktopComposer)
+      ? Math.max(0, mobileKeyboardInset - (useFloatingMobileComposer ? floatingMobileComposerBottomOffset : 0) - panelBottomGap)
       : 0;
   // Above a bottom panel the chat is short; reserve the composer's real height.
   const effectiveMobileComposerHeight = panelBottomGap > 0

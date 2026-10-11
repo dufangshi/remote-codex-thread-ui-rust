@@ -1,7 +1,7 @@
 import * as react from 'react';
 import { ReactNode } from 'react';
 import * as _pockymoe_shared from '@pockymoe/shared';
-import { PromptAttachmentManifestEntryDto, ShellEventEnvelope, ThreadDto, UpdateThreadSettingsInput, ThreadHistoryItemDetailDto, ThreadTurnDto, ThreadShellStateDto, ShellSessionDto, UpdateShellInput, PluginDto, ImportPluginInput, ThreadArtifactDto, ThreadDetailDto, AgentRuntimeStatusDto } from '@pockymoe/shared';
+import { PromptAttachmentManifestEntryDto, ThreadDto, UpdateThreadSettingsInput, ThreadHistoryItemDetailDto, ThreadTurnDto, ThreadShellStateDto, ShellSessionDto, UpdateShellInput, ShellEventEnvelope, PluginDto, ImportPluginInput, ThreadArtifactDto, ThreadDetailDto, AgentRuntimeStatusDto } from '@pockymoe/shared';
 import { A as ArtifactRenderContext, I as InlineCodeRenderContext, T as ThreadPanelContribution, F as FrontendPluginModule } from './plugin-types-DBa9QrHM.js';
 
 interface PromptAttachmentUpload extends PromptAttachmentManifestEntryDto {
