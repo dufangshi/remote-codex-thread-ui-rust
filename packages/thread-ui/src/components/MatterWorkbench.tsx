@@ -19,6 +19,7 @@ import {
   Terminal,
   X,
 } from 'lucide-react';
+import { useTabScrollEdges } from './useTabScrollEdges';
 import { WorkbenchContext } from './WorkbenchContext';
 import { WorkbenchPath } from './WorkbenchPath';
 import { GroupedThreadTabs, groupThreads, threadGroupActivity } from './GroupedThreadTabs';
@@ -107,6 +108,7 @@ export function MatterWorkbench({
   useI18n();
   const tabs = o.workspaceThreads ?? o.threads.filter(thread => thread.key === o.currentKey);
   const tabsRef = useRef<HTMLElement>(null);
+  const tabScrollEdges = useTabScrollEdges(tabsRef);
   useEffect(() => {
     tabsRef.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }, [o.currentKey, tabs.length]);
@@ -390,10 +392,12 @@ export function MatterWorkbench({
       </aside>
       <main className="matter-main">
         <div className="matter-tabs-row">
+        <div className="tab-scroll-surface matter-tab-scroll" {...tabScrollEdges}>
         <nav ref={tabsRef} className="matter-thread-tabs" aria-label={translate("workbench.workspaceThreads")}>
           <GroupedThreadTabs threads={tabs} currentKey={o.currentKey} onNavigate={navigate} />
           {newThread}
         </nav>
+        </div>
         {!o.emptyWorkspace && <button className="matter-toolbar-toggle" aria-label={translate("workbench.threadTools")} aria-expanded={toolbarOpen} aria-controls="matter-thread-tools" onClick={() => setToolbarOpen(open => !open)} title={toolbarOpen ? translate("workbench.hideThreadTools") : translate("workbench.showThreadTools")}><SlidersHorizontal /></button>}
         {o.statusActions}
         {toolbarOpen && <div className="matter-breadcrumb" id="matter-thread-tools">

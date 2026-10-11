@@ -259,6 +259,8 @@ describe('GraphWorkspacePreviewPane', () => {
       />,
     );
 
+    act(() => element.querySelector<HTMLButtonElement>('[aria-label="File actions"]')!.click());
+    expect(element.querySelector('[role="menu"]')).toBeNull();
     const sourceButton = element.querySelector<HTMLButtonElement>(
       '[aria-label="Markdown source"]',
     );
@@ -295,6 +297,7 @@ it('renders draw.io in a sandbox by default and preserves source/preview switchi
   expect(frame?.getAttribute('title')).toBe('Draw.io preview: architecture.drawio');
   expect(frame?.getAttribute('sandbox')).toBe('allow-scripts');
   expect(frame?.getAttribute('srcdoc')).toContain('/vendor/drawio/bootstrap.v1.js');
+  act(() => element.querySelector<HTMLButtonElement>('[aria-label="File actions"]')!.click());
   act(() => element.querySelector<HTMLButtonElement>('[aria-label="Diagram source"]')!.click());
   expect(element.querySelector('iframe')).toBeNull();
   expect(element.querySelector('[aria-label="Source code"]')).toBeTruthy();

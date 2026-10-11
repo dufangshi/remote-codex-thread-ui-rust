@@ -56,7 +56,7 @@
 }
 
 .thread-ui-shell .thread-graph-editor-tabs {
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
 .thread-ui-shell .thread-graph-editor-tab {

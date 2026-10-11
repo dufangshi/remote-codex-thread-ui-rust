@@ -21,17 +21,17 @@ import {
   BookOpen,
   Check,
   Circle,
-  ChevronRight,
   Code2,
   Download,
   Pencil,
   PanelLeftOpen,
+  MoreHorizontal,
   PanelRightClose,
   Save,
   X,
 } from 'lucide-react';
 import { useFilePanel } from '../workbench/FilePanelContext';
-import { WorkspaceFileMenu } from './WorkspaceFileMenu';
+import { WorkspaceFileActions } from './WorkspaceFileMenu';
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
 import { localFileHref, relativeWorkspacePath, normalizeFileSystemPath } from '../workspacePaths';
 import remarkGfm from 'remark-gfm';
@@ -493,6 +493,8 @@ export function GraphWorkspacePreviewPane({
   const saveError = document?.error;
   const setDraftContent = (content: string) => { if (previewFile) documents?.change(previewFile.path,content); };
   const setEditing = (value: boolean) => { if (previewFile) documents?.setEditing(previewFile.path,value); };
+  const actionTrigger = useRef<HTMLButtonElement>(null);
+  const [actionsOpen, setActionsOpen] = useState(false);
   const [showConflict, setShowConflict] = useState(true);
   const [diffMode, setDiffMode] = useState<'draftDisk'|'baseDraft'|'baseDisk'>('draftDisk');
   const [markdownView, setMarkdownView] = useState<'preview' | 'source'>(
@@ -562,56 +564,28 @@ export function GraphWorkspacePreviewPane({
   }, []);
 
   useEffect(() => {
-    setMarkdownView('preview'); setShowConflict(true); setDiffMode('draftDisk');
-  }, [previewFile?.path]);
+    setMarkdownView('preview'); setShowConflict(true); setDiffMode('draftDisk'); setActionsOpen(false);
+  }, [activeNode?.path]);
+  useEffect(() => {
+    if (!actionsOpen) return;
+    const escape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape' || (event.target instanceof HTMLElement && event.target.closest('.monaco-editor'))) return;
+      event.preventDefault(); event.stopPropagation(); setActionsOpen(false); actionTrigger.current?.focus({ preventScroll: true });
+    };
+    window.addEventListener('keydown', escape, true);
+    return () => window.removeEventListener('keydown', escape, true);
+  }, [actionsOpen]);
   async function handleSaveFile() {
     if (previewFile) await documents?.save(previewFile.path);
   }
 
-  const breadcrumbSegments = previewFile
-    ? previewFile.path
-        .replace(workspaceRootPath ?? '', '')
-        .split('/')
-        .filter(Boolean)
-    : [];
   const fileToolbar =
     previewFile && (isMarkdownFile || isDrawioFile || canEditFile) ? (
       <div className="flex shrink-0 items-center gap-1">
         {(isMarkdownFile || isDrawioFile) && !editing ? (
-          mobileNavigation ? <button type="button" className="thread-graph-editor-toolbar-button workspace-mobile-view-toggle" aria-label={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} title={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} onClick={() => setMarkdownView(view => view==='preview'?'source':'preview')}>
+          <button type="button" className="thread-graph-editor-toolbar-button workspace-mobile-view-toggle" aria-label={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} title={translate(markdownView==='preview' ? 'files.source' : 'files.preview', { value1: renderedViewLabel })} onClick={() => setMarkdownView(view => view==='preview'?'source':'preview')}>
             {markdownView==='preview' ? <Code2 size={16}/> : <BookOpen size={16}/>}
-          </button> : (
-          <div
-            className="thread-graph-markdown-view-switch inline-flex items-center rounded border p-px"
-            role="group"
-            aria-label={translate("files.view", { value1: renderedViewLabel })}
-          >
-            <button
-              type="button"
-              onClick={() => setMarkdownView('preview')}
-              className={`inline-flex h-5 w-5 items-center justify-center rounded transition ${
-                markdownView === 'preview' ? 'is-active' : ''
-              }`}
-              aria-pressed={markdownView === 'preview'}
-              title={translate("files.preview", { value1: renderedViewLabel })}
-              aria-label={translate("files.preview", { value1: renderedViewLabel })}
-            >
-              <BookOpen className="h-3 w-3" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setMarkdownView('source')}
-              className={`inline-flex h-5 w-5 items-center justify-center rounded transition ${
-                markdownView === 'source' ? 'is-active' : ''
-              }`}
-              aria-pressed={markdownView === 'source'}
-              title={translate("files.source", { value1: renderedViewLabel })}
-              aria-label={translate("files.source", { value1: renderedViewLabel })}
-            >
-              <Code2 className="h-3 w-3" />
-            </button>
-          </div>
-          )
+          </button>
         ) : null}
         {canEditFile ? (
           <div className="flex shrink-0 items-center gap-0.5">
@@ -665,20 +639,19 @@ export function GraphWorkspacePreviewPane({
   const inlineStatus = document && <span role="status" data-testid="workspace-document-status" className="workspace-file-state" data-phase={document.phase} title={documentMetadata}>
     {document.phase==='clean' ? <Check size={13} aria-hidden="true"/> : <Circle size={10} aria-hidden="true"/>}<span className="sr-only">{documentState}</span>
   </span>;
-  const fileMenu = activeFilePath && <WorkspaceFileMenu key={activeFilePath} path={activeFilePath} {...((documentMetadata || filePanel?.label) ? { metadata:[filePanel?.label, documentMetadata].filter(Boolean).join(' · ') } : {})}
-    {...(document ? {onDownload:()=>downloadDraft(document), onRefresh: async () => {
-      const previous = document.snapshot.contentHash;
-      await documents?.checkDisk(document.snapshot.path);
-      const current = documents?.documents.get(document.snapshot.path);
-      if (current?.error) throw new Error(current.error);
-      return translate(current?.phase==='conflict' ? 'files.safePhase.conflict' : current?.snapshot.contentHash===previous ? 'files.fileAlreadyCurrent' : 'files.fileReloaded');
-    }} : onDownloadFile ? {onDownload:()=>void onDownloadFile()} : {})}/>;
-  const closeFilePanel = filePanel && <button type="button" data-testid="workbench-close-files" className="thread-graph-editor-toolbar-button workspace-close-files" onClick={onReturnToFiles ?? filePanel.close} aria-label={translate(onReturnToFiles ? 'files.hidePreview' : 'workbench.closeFiles')} title={translate(onReturnToFiles ? 'files.hidePreview' : 'workbench.closeFiles')}><X size={16}/></button>;
   const backLabel = previousFilePath ? translate('files.backToDocument', { name: previousFilePath.split('/').pop() ?? previousFilePath }) : translate('workbench.goBack');
   const navigationControls = <>
     {onNavigateBack && <button type="button" onClick={onNavigateBack} aria-label={backLabel} title={backLabel} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowLeft size={14} /></button>}
     {onNavigateForward && <button type="button" onClick={onNavigateForward} aria-label={translate('files.goForward')} title={translate('files.goForward')} className="thread-graph-editor-toolbar-button flex h-6 w-6 shrink-0 items-center justify-center rounded"><ArrowRight size={14} /></button>}
   </>;
+  const fileActions = activeNode && <WorkspaceFileActions key={activeNode.path} {...((documentMetadata || filePanel?.label) ? { metadata:[filePanel?.label, documentMetadata].filter(Boolean).join(' · ') } : {})}
+    {...(document ? {onDownload:()=>{ if (!isProtected(document) && onDownloadFile) void onDownloadFile(); else downloadDraft(document); }, onRefresh: async () => {
+      const previous = document.snapshot.contentHash;
+      await documents?.checkDisk(document.snapshot.path);
+      const current = documents?.documents.get(document.snapshot.path);
+      if (current?.error) throw new Error(current.error);
+      return translate(current?.phase==='conflict' ? 'files.safePhase.conflict' : current?.snapshot.contentHash===previous ? 'files.fileAlreadyCurrent' : 'files.fileReloaded');
+    }} : onDownloadFile ? {onDownload:()=>void onDownloadFile()} : {})}>{fileToolbar}{inlineStatus}{navigationControls}</WorkspaceFileActions>;
   const viewerPaneToggle = onExpandExplorer ? (
     <button
       type="button"
@@ -703,11 +676,8 @@ export function GraphWorkspacePreviewPane({
     </button>
   ) : null;
 
-  const previewNavigation = mobileNavigation && onExpandExplorer ? <>
-    <button type="button" className="workspace-preview-back" onClick={onReturnToFiles ?? onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><ArrowLeft size={18}/></button>
-    {navigationControls}
-  </> : navigationControls;
-  const previewActions = <>{inlineStatus}{fileToolbar}{fileMenu}{!mobileNavigation && viewerPaneToggle}{closeFilePanel}</>;
+  const previewNavigation = (onReturnToFiles || onExpandExplorer) && <button type="button" className="workspace-preview-back" onClick={onReturnToFiles ?? onExpandExplorer} aria-label={translate('files.backToFiles')} title={translate('files.backToFiles')} data-testid="expand-explorer"><ArrowLeft size={18}/></button>;
+  const previewActions = <button ref={actionTrigger} type="button" className="thread-graph-editor-toolbar-button workspace-file-more" aria-label={translate('files.fileActions')} title={translate('files.fileActions')} aria-expanded={actionsOpen} onClick={() => setActionsOpen(open => !open)}><MoreHorizontal size={18}/></button>;
 
   return (
     <section
@@ -739,6 +709,7 @@ export function GraphWorkspacePreviewPane({
           trailingAction={previewActions}
         />
       ) : null}
+      {actionsOpen && fileActions}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {error ? (
           <div className="border-b border-rose-200 bg-rose-50 px-5 py-3 text-sm text-rose-700 dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200">
@@ -773,35 +744,6 @@ export function GraphWorkspacePreviewPane({
           </div>
         ) : selectedTarget.kind === 'workspace-file' && previewFile ? (
           <div className="flex min-h-0 flex-1 flex-col">
-            {fileTabs.length === 0 && (breadcrumbSegments.length > 1 || fileToolbar) ? (
-              <div className="thread-graph-editor-breadcrumbs flex h-7 shrink-0 items-center border-b px-2 text-[11px]">
-                <div className="flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto">
-                  {breadcrumbSegments.map((segment, index, segments) => (
-                    <span
-                      key={`${segment}:${index}`}
-                      className="flex shrink-0 items-center gap-0.5"
-                    >
-                      <span
-                        className={
-                          index === segments.length - 1
-                            ? 'text-[var(--theme-fg)]'
-                            : ''
-                        }
-                      >
-                        {segment}
-                      </span>
-                      {index < segments.length - 1 ? (
-                        <ChevronRight
-                          aria-hidden="true"
-                          className="h-3 w-3 text-[var(--theme-fg-muted)]"
-                        />
-                      ) : null}
-                    </span>
-                  ))}
-                </div>
-                {fileTabs.length === 0 ? fileToolbar : null}
-              </div>
-            ) : null}
             {document && (document.snapshot.readOnlyReason || ['conflict','unknown','error'].includes(document.phase)) ? (
               <div className="workspace-document-status" role="status">
                 <span>{document.snapshot.readOnlyReason ? translate('files.safeReadOnly', {reason: translateReadOnly(document.snapshot.readOnlyReason)}) : translate(document.needsVerification && document.phase==='clean' ? 'files.safeAdoptedSnapshot':`files.safePhase.${document.phase}`)} · {document.snapshot.encoding==='utf-8' ? 'UTF-8':translate('files.safeUnknownEncoding')}{document.snapshot.bom ? ' BOM' : ''} · {document.snapshot.eol.toUpperCase()} · r{document.revision}</span>

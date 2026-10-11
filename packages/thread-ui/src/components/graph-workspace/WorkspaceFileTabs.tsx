@@ -1,6 +1,7 @@
 import { translate, useI18n } from '../../i18n';
+import { useTabScrollEdges } from '../useTabScrollEdges';
 import { Circle, FileCode2, X } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 export interface WorkspaceFileTab {
   name: string;
@@ -30,6 +31,9 @@ export function WorkspaceFileTabs({
   blockedClosePaths?: ReadonlySet<string>;
 }) {
   useI18n();
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const scrollEdges = useTabScrollEdges(tabsRef);
+  useEffect(() => { tabsRef.current?.querySelector('[aria-selected="true"]')?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }); }, [activePath, tabs.length]);
   const [pendingClosePath, setPendingClosePath] = useState<string | null>(null);
   const [savingClose, setSavingClose] = useState(false);
   const pendingTab = tabs.find((tab) => tab.path === pendingClosePath) ?? null;
@@ -50,7 +54,9 @@ export function WorkspaceFileTabs({
     <div className="thread-graph-editor-tabs-shell shrink-0">
       <div className="workspace-file-toolbar flex min-w-0 border-b border-[var(--theme-border)]">
         {leadingAction && <div className="workspace-file-navigation flex shrink-0 items-center">{leadingAction}</div>}
+        <div className="tab-scroll-surface workspace-tab-scroll" {...scrollEdges}>
         <div
+          ref={tabsRef}
           className="thread-graph-editor-tabs flex min-w-0 flex-1 overflow-x-auto"
           role="tablist"
           aria-label={translate("files.openWorkspaceFiles")}
@@ -91,6 +97,7 @@ export function WorkspaceFileTabs({
               </div>
             );
           })}
+        </div>
         </div>
         {trailingAction ? (
           <div className="thread-graph-editor-tabs-action flex h-8 shrink-0 items-center px-1">

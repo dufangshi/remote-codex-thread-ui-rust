@@ -703,16 +703,12 @@
 .workspace-file-state[data-phase='dirty'], .workspace-file-state[data-phase='saving'] { color:var(--status-warning-fg, #d8a84a); }
 .workspace-file-state[data-phase='conflict'], .workspace-file-state[data-phase='unknown'], .workspace-file-state[data-phase='error'] { color:var(--status-danger-fg, #e88181); }
 .workspace-file-more, .workspace-close-files, .workspace-mobile-view-toggle { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; flex:none; border-radius:5px; }
-.workspace-file-menu { border:1px solid var(--theme-border); border-radius:10px; padding:4px; background:var(--theme-panel); color:var(--theme-fg); box-shadow:0 10px 30px #0004; }
-.workspace-file-menu-info { padding:8px; font-size:11px; border-bottom:1px solid var(--theme-border); margin-bottom:4px; overflow-wrap:anywhere; }
-.workspace-file-menu-info small { display:block; color:var(--theme-fg-muted); font-size:10px; margin-top:5px; }
-.workspace-file-menu-feedback { padding:8px; margin:0; font-size:11px; color:var(--theme-fg-muted); overflow-wrap:anywhere; }
 .workspace-preview-back, .workspace-preview-forward, .workspace-preview-tree { display:inline-flex; align-items:center; justify-content:center; flex:none; width:32px; height:44px; border-radius:5px; color:var(--theme-fg-muted); }
 .workspace-preview-back:hover, .workspace-preview-forward:hover, .workspace-preview-tree:hover { color:var(--theme-fg); background:var(--theme-hover); }
 @media (max-width:639px) {
   .workspace-file-toolbar { min-height:44px; }
   .workspace-file-toolbar .thread-graph-editor-tab, .workspace-file-toolbar .thread-graph-editor-tabs-action { height:44px; }
-  .workspace-file-toolbar .thread-graph-editor-tab { max-width:150px; flex-shrink:1; }
+  .workspace-file-toolbar .thread-graph-editor-tab { min-width:116px; max-width:180px; flex:0 0 auto; }
   .workspace-file-toolbar .thread-graph-editor-tab [role='tab'] { padding-left:4px; padding-right:2px; gap:4px; }
   .workspace-file-toolbar .thread-graph-editor-tab [role='tab'] > svg { display:none; }
   .workspace-file-toolbar .thread-graph-editor-tab-close { width:24px; height:36px; margin:0; }
@@ -721,4 +717,33 @@
   .workspace-file-toolbar .thread-graph-editor-tabs-action > div { gap:0; }
   .workspace-file-toolbar .workspace-file-state { margin:0 2px; }
   .thread-graph-explorer-header { min-height:44px; }
+}
+
+/* The tab row reserves just two fixed controls; operations expand in layout. */
+.thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tab { flex: 0 0 auto; min-width: 116px; max-width: 200px; }
+.thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tab-close { flex: 0 0 24px; width: 24px; opacity: .7; }
+.thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tab-close:hover { opacity: 1; }
+.thread-ui-shell .workspace-file-navigation { padding: 0; border-right: 1px solid var(--theme-border); }
+.thread-ui-shell .workspace-file-toolbar .workspace-preview-back,
+.thread-ui-shell .workspace-file-toolbar .workspace-file-more { width: 34px; height: 32px; border-radius: 0; }
+.thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tabs-action { padding: 0; border-left: 1px solid var(--theme-border); }
+.thread-ui-shell .workspace-file-more[aria-expanded="true"] { color: var(--theme-accent-strong); background: var(--theme-accent-soft); }
+.thread-ui-shell .workspace-file-actions {
+  display: flex; flex: none; min-width: 0; align-items: center; gap: 4px;
+  height: 36px; padding: 0 6px; border-bottom: 1px solid var(--theme-border);
+  background: var(--theme-surface); color: var(--theme-fg-soft);
+}
+.thread-ui-shell .workspace-file-actions button { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 5px; background: transparent; color: inherit; }
+.thread-ui-shell .workspace-file-actions button:hover { background: var(--theme-hover); color: var(--theme-fg); }
+.thread-ui-shell .workspace-file-actions button:focus-visible { outline: 2px solid var(--theme-accent-border); outline-offset: -2px; }
+.thread-ui-shell .workspace-file-actions button:disabled { opacity: .4; }
+.thread-ui-shell .workspace-file-action-feedback { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--theme-fg-muted); }
+.thread-ui-shell .workspace-file-action-feedback.is-error { color: var(--status-danger-fg, #d76363); }
+@media (max-width: 639px) {
+  .thread-ui-shell .workspace-file-toolbar .workspace-preview-back,
+  .thread-ui-shell .workspace-file-toolbar .workspace-file-more { width: 36px; height: 44px; }
+  .thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tab { min-width: 116px; max-width: 180px; }
+  .thread-ui-shell .workspace-file-toolbar .thread-graph-editor-tab-close { height: 40px; }
+  .thread-ui-shell .workspace-file-actions { height: 40px; }
+  .thread-ui-shell .workspace-file-actions button { width: 36px; height: 36px; }
 }

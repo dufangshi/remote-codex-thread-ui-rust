@@ -810,3 +810,21 @@
 .thread-history-earlier[aria-busy="true"] .thread-history-arrow { animation: history-lift 900ms ease-in-out infinite; }
 @keyframes history-lift { 50% { transform: translateY(-4px); opacity: .45; } }
 @media (prefers-reduced-motion: reduce) { .thread-history-arrow { animation: none !important; transition: none; } }
+
+/* Shared swipe affordance for file tabs and workspace thread tabs. */
+.thread-ui-shell .tab-scroll-surface { position: relative; display: flex; flex: 1; min-width: 0; overflow: hidden; }
+.thread-ui-shell :is(.matter-thread-tabs, .thread-graph-editor-tabs) { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain; touch-action: pan-x; }
+.thread-ui-shell :is(.matter-thread-tabs, .thread-graph-editor-tabs)::-webkit-scrollbar { display: none; }
+.thread-ui-shell .tab-scroll-surface::before,
+.thread-ui-shell .tab-scroll-surface::after {
+  position: absolute; z-index: 2; inset-block: 0; width: 18px;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none; opacity: 0; color: var(--theme-fg-muted);
+  font-size: 15px; text-shadow: 0 0 3px var(--theme-surface); content: '';
+}
+.thread-ui-shell .tab-scroll-surface::before { left: 0; content: '‹'; background: linear-gradient(to right, var(--theme-surface) 20%, transparent); }
+.thread-ui-shell .tab-scroll-surface::after { right: 0; content: '›'; background: linear-gradient(to left, var(--theme-surface) 20%, transparent); }
+.thread-ui-shell .tab-scroll-surface[data-overflow-start="true"]::before,
+.thread-ui-shell .tab-scroll-surface[data-overflow-end="true"]::after { opacity: 1; }
+.thread-ui-shell .tab-scroll-surface[data-overflow-end="true"],
+.thread-ui-shell .tab-scroll-surface[data-overflow-start="true"] { box-shadow: inset 0 1px color-mix(in srgb, var(--theme-border-strong) 55%, transparent); }

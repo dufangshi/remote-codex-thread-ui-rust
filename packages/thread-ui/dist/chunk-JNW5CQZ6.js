@@ -416,6 +416,35 @@ function RenameDialog({
   );
 }
 
+// src/components/useTabScrollEdges.ts
+import { useLayoutEffect, useState } from "react";
+function useTabScrollEdges(ref) {
+  const [edges, setEdges] = useState({ start: false, end: false });
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const update = () => {
+      const start = element.scrollLeft > 2;
+      const end = element.scrollWidth - element.clientWidth - element.scrollLeft > 2;
+      setEdges((current) => current.start === start && current.end === end ? current : { start, end });
+    };
+    update();
+    element.addEventListener("scroll", update, { passive: true });
+    const resize = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
+    resize?.observe(element);
+    const mutation = new MutationObserver(update);
+    mutation.observe(element, { childList: true, subtree: true, characterData: true });
+    window.addEventListener("resize", update);
+    return () => {
+      element.removeEventListener("scroll", update);
+      resize?.disconnect();
+      mutation.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [ref]);
+  return { "data-overflow-start": edges.start, "data-overflow-end": edges.end };
+}
+
 // src/components/graph-workspace/GraphResizablePanels.tsx
 import { GripVerticalIcon } from "lucide-react";
 import * as ResizablePrimitive from "react-resizable-panels";
@@ -866,22 +895,22 @@ function Button({
 }
 
 // src/components/ZoomableImage.tsx
-import { createContext, useContext, useEffect as useEffect3, useRef as useRef2, useState as useState2 } from "react";
+import { createContext, useContext, useEffect as useEffect3, useRef as useRef2, useState as useState3 } from "react";
 import { createPortal as createPortal3 } from "react-dom";
 
 // src/components/useImageViewport.ts
-import { useRef, useState } from "react";
+import { useRef, useState as useState2 } from "react";
 var MIN_SCALE = 0.5;
 var MAX_SCALE = 5;
 var clamp = (scale) => Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
 function useImageViewport() {
   const viewportRef = useRef(null);
-  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
+  const [view, setView] = useState2({ x: 0, y: 0, scale: 1 });
   const current = useRef(view);
   const pointers = useRef(/* @__PURE__ */ new Map());
   const baseline = useRef(null);
   const moved = useRef(false);
-  const [dragging, setDragging] = useState(false);
+  const [dragging, setDragging] = useState2(false);
   const commit = (next) => {
     current.current = next;
     setView(next);
@@ -1124,7 +1153,7 @@ function ZoomableImage({
 }) {
   const { locale: i18nLocale } = useI18n();
   const triggerRef = useRef2(null);
-  const [open, setOpen] = useState2(false);
+  const [open, setOpen] = useState3(false);
   const insideLink = useContext(MarkdownImageLinkContext);
   const dimension = (value) => typeof value === "number" ? value : value && /^\d+(?:\.\d+)?%?$/.test(value) ? value.endsWith("%") ? value : Number(value) : void 0;
   const imageStyle = { width: dimension(width), height: dimension(height) };
@@ -1161,7 +1190,7 @@ function ZoomableImage({
 function WorkspaceImagePreview({ src, alt }) {
   useI18n();
   const { viewportRef, scale, dragging, transform, reset, updateScale, handlers } = useImageViewport();
-  const [open, setOpen] = useState2(false);
+  const [open, setOpen] = useState3(false);
   return /* @__PURE__ */ jsxs4("div", { className: "workspace-image-preview", children: [
     /* @__PURE__ */ jsxs4("div", { className: "workspace-image-controls", role: "toolbar", "aria-label": translate("files.imageZoomControls"), children: [
       /* @__PURE__ */ jsx6("button", { type: "button", onClick: () => updateScale(scale - 0.25), disabled: scale <= IMAGE_LIGHTBOX_MIN_SCALE, "aria-label": translate("files.zoomOut"), children: /* @__PURE__ */ jsx6(Minus, { size: 14 }) }),
@@ -1311,13 +1340,13 @@ var schema = {
 var markdownHtmlPlugins = [rehypeRaw, [rehypeSanitize, schema]];
 
 // src/components/WorkspaceFileLink.tsx
-import { useEffect as useEffect4, useRef as useRef3, useState as useState3 } from "react";
+import { useEffect as useEffect4, useRef as useRef3, useState as useState4 } from "react";
 import { createPortal as createPortal4 } from "react-dom";
 import { Fragment as Fragment2, jsx as jsx7, jsxs as jsxs5 } from "react/jsx-runtime";
 function WorkspaceFileLink({ path, line, children, onOpen, className = "thread-inline-link" }) {
   useI18n();
-  const [menu, setMenu] = useState3(null);
-  const [copyError, setCopyError] = useState3(false);
+  const [menu, setMenu] = useState4(null);
+  const [copyError, setCopyError] = useState4(false);
   const menuRef = useRef3(null);
   const displayPath = path.startsWith("/") || /^[a-z]:/i.test(path) ? path : `./${path.replace(/^\.\//, "")}`;
   const address = displayPath + (line ? `#L${line}` : "");
@@ -1385,6 +1414,7 @@ export {
   RenameDialog,
   FilePanelContext,
   useFilePanel,
+  useTabScrollEdges,
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,
